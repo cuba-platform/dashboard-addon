@@ -50,6 +50,9 @@ cuba {
     tomcat {
         dir = "$project.rootDir/build/tomcat"
     }
+    ide {
+        copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.'''
+    }
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
