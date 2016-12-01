@@ -1,0 +1,5 @@
+@import "halo-ext";
+
+@mixin com_audimex_dashboard {
+  @include com_audimex_dashboard-halo-ext;
+}

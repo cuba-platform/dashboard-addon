@@ -1,0 +1,11 @@
+@import "halo-defaults";
+@import "com.audimex.dashboard/halo-ext-defaults";
+@import "app-components";
+@import "com.audimex.dashboard/halo-ext";
+
+.halo {
+  // include auto-generated app components SCSS
+  @include app_components;
+  
+  @include com_audimex_dashboard-halo-ext;
+}
