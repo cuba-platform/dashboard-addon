@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.audimex.dashboard.web.palette.PaletteWindow"
+        messagesPack="com.audimex.dashboard.web.palette">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <hbox id="mainLayout"
+              expand="dropLayout"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <vbox height="100%" width="300px">
+                <vbox id="containers"
+                      height="100%"/>
+                <vbox id="treeLayout"
+                      height="100%"/>
+            </vbox>
+            <vbox id="dropLayout"
+                  spacing="true"
+                  height="100%"/>
+        </hbox>
+    </layout>
+</window>

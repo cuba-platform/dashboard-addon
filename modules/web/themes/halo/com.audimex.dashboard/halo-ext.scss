@@ -1,4 +1,6 @@
 /* Define your theme modifications inside next mixin */
 @mixin com_audimex_dashboard-halo-ext {
-
+    .dd-bordering {
+        box-shadow: inset 0 0 10px #e0e0e0;
+    }
 }
