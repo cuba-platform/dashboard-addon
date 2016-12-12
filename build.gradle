@@ -3,10 +3,10 @@ buildscript {
     ext.cubaVersion = '6.3.4'
     repositories {
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
         maven {
@@ -16,16 +16,12 @@ buildscript {
                 password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
             }
         }
-        
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
-
         classpath "com.haulmont.cuba:cuba-global:$cubaVersion"
-        classpath "com.haulmont.reports:reports-global:$cubaVersion"
         classpath "com.haulmont.charts:charts-global:$cubaVersion"
-
-        
+        classpath "com.haulmont.reports:reports-global:$cubaVersion"
     }
 }
 
@@ -36,7 +32,6 @@ def guiModule = project(':app-gui')
 def webModule = project(':app-web')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
-
 
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
@@ -52,6 +47,7 @@ cuba {
     }
     ide {
         copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.'''
+        vcs = 'Git'
     }
 }
 
