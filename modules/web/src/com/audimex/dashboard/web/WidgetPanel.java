@@ -6,9 +6,6 @@ package com.audimex.dashboard.web;
 
 import com.vaadin.ui.*;
 
-/**
- * Created by petunin on 07.12.2016.
- */
 public class WidgetPanel extends CssLayout {
     protected String caption;
     protected VerticalLayout contentLayout = new VerticalLayout();

@@ -4,9 +4,6 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
-/**
- * Created by petunin on 09.12.2016.
- */
 public interface StructureChangeListener {
     void structureChanged();
 }

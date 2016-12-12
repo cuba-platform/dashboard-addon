@@ -4,7 +4,6 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
-import com.audimex.dashboard.web.ComponentStructure;
 import com.audimex.dashboard.web.WidgetPanel;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.server.ClientConnector;
@@ -18,22 +17,16 @@ import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.drophandlers.DefaultHorizontalLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
-/**
- * Created by petunin on 07.12.2016.
- */
 public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHandler {
-    protected ComponentStructure componentStructure;
     protected StructureChangeListener structureChangeListener;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDHorizontalLayout.HorizontalLayoutTargetDetails details = (DDHorizontalLayout.HorizontalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
-        Component source = event.getTransferable().getSourceComponent();
+        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
+        DDHorizontalLayout.HorizontalLayoutTargetDetails details =
+                (DDHorizontalLayout.HorizontalLayoutTargetDetails) event.getTargetDetails();
+        AbstractOrderedLayout layout =
+                (AbstractOrderedLayout) details.getTarget();
         int idx = (details).getOverIndex();
         Component comp = transferable.getComponent();
 
@@ -58,26 +51,28 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 comp = new DDVerticalLayout();
                 comp.setSizeFull();
                 comp.setStyleName("dd-bordering");
-                ((DDVerticalLayout) comp).setDragMode(LayoutDragMode.CLONE);
-                ((DDVerticalLayout) comp).setSpacing(true);
-                ((DDVerticalLayout) comp).setDropHandler(new DDVerticalLayoutDropHandler());
-                ((DDVerticalLayoutDropHandler) ((DDVerticalLayout) comp).getDropHandler())
-                        .setStructure(new ComponentStructure(comp, details.getTarget()));
-                ((DDVerticalLayoutDropHandler) ((DDVerticalLayout) comp).getDropHandler())
+
+                DDVerticalLayout ddVerticalLayout = (DDVerticalLayout) comp;
+                ddVerticalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddVerticalLayout.setSpacing(true);
+                ddVerticalLayout.setMargin(true);
+                ddVerticalLayout.setDropHandler(new DDVerticalLayoutDropHandler());
+
+                ((DDVerticalLayoutDropHandler) ddVerticalLayout.getDropHandler())
                         .addStructureChangeListener(structureChangeListener);
-                ((DDVerticalLayout) comp).setMargin(true);
             } else if (dragComponent.getId().equals("horizontalLayout")) {
                 comp = new DDHorizontalLayout();
                 comp.setSizeFull();
                 comp.setStyleName("dd-bordering");
-                ((DDHorizontalLayout) comp).setDragMode(LayoutDragMode.CLONE);
-                ((DDHorizontalLayout) comp).setSpacing(true);
-                ((DDHorizontalLayout) comp).setDropHandler(DDHorizontalLayoutDropHandler.this);
-                ((DDHorizontalLayoutDropHandler) ((DDHorizontalLayout) comp).getDropHandler())
-                        .setStructure(new ComponentStructure(comp, details.getTarget()));
-                ((DDHorizontalLayoutDropHandler) ((DDHorizontalLayout) comp).getDropHandler())
+
+                DDHorizontalLayout ddHorizontalLayout = (DDHorizontalLayout) comp;
+                ddHorizontalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddHorizontalLayout.setSpacing(true);
+                ddHorizontalLayout.setMargin(true);
+                ddHorizontalLayout.setDropHandler(DDHorizontalLayoutDropHandler.this);
+
+                ((DDHorizontalLayoutDropHandler) ddHorizontalLayout.getDropHandler())
                         .addStructureChangeListener(structureChangeListener);
-                ((DDHorizontalLayout) comp).setMargin(true);
             } else if (dragComponent.getId().equals("widgetPanel")) {
                 comp = new WidgetPanel("Panel");
                 comp.setSizeFull();
@@ -89,19 +84,10 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 ((AbstractOrderedLayout) details.getTarget()).addComponent(comp);
             }
             comp.addDetachListener((ClientConnector.DetachListener) event1 -> structureChangeListener.structureChanged());
-            handleReordering(comp);
+            structureChangeListener.structureChanged();
         } else {
             ((AbstractOrderedLayout) details.getTarget()).addComponent(transferable.getComponent());
         }
-    }
-
-    public void setStructure(ComponentStructure componentStructure) {
-        this.componentStructure = componentStructure;
-    }
-
-    protected void handleReordering(Component newComponent) {
-        componentStructure.addChild(newComponent);
-        structureChangeListener.structureChanged();
     }
 
     protected void addStructureChangeListener(StructureChangeListener structureChangeListener) {

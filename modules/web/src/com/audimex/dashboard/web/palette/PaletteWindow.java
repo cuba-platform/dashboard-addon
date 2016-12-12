@@ -3,17 +3,20 @@
  */
 package com.audimex.dashboard.web.palette;
 
-import com.audimex.dashboard.web.ComponentStructure;
+import com.audimex.dashboard.entity.ComponentType;
+import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
+import com.haulmont.bali.datastruct.Node;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
-import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PaletteWindow extends AbstractWindow {
@@ -28,6 +31,8 @@ public class PaletteWindow extends AbstractWindow {
     private VBoxLayout treeLayout;
 
     protected Tree tree;
+    protected com.haulmont.bali.datastruct.Tree<ComponentDescriptor> componentStructureTree = new com.haulmont.bali.datastruct.Tree<>();
+    protected DDVerticalLayout dropDraggableLayout = new DDVerticalLayout();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -41,7 +46,6 @@ public class PaletteWindow extends AbstractWindow {
         containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
         containersDraggableLayout.setSpacing(true);
 
-        DDVerticalLayout dropDraggableLayout = new DDVerticalLayout();
         dropDraggableLayout.setDragMode(LayoutDragMode.CLONE);
 
         tree = new Tree();
@@ -50,14 +54,15 @@ public class PaletteWindow extends AbstractWindow {
         dropDraggableLayout.setSpacing(true);
         dropDraggableLayout.setMargin(true);
         dropDraggableLayout.setDropHandler(new DDVerticalLayoutDropHandler());
-        drawTree(dropDraggableLayout, null);
 
-        ComponentStructure componentStructure = new ComponentStructure(dropDraggableLayout, null);
+        buildStructure();
+        drawTreeComponent(componentStructureTree.getRootNodes());
 
-        ((DDVerticalLayoutDropHandler) dropDraggableLayout.getDropHandler()).setStructure(componentStructure);
         ((DDVerticalLayoutDropHandler) dropDraggableLayout.getDropHandler()).addStructureChangeListener(() -> {
             tree.removeAllItems();
-            drawTree(dropDraggableLayout, null);
+
+            buildStructure();
+            drawTreeComponent(componentStructureTree.getRootNodes());
         });
         dropDraggableLayout.setSizeFull();
         dropDraggableLayout.setStyleName("dd-bordering");
@@ -84,35 +89,82 @@ public class PaletteWindow extends AbstractWindow {
         treeLayoutContainer.addComponent(tree);
     }
 
-    private void drawTree(Component component, Component parent) {
-        tree.addItem(component.toString());
+    private void buildStructure() {
+        List<Node<ComponentDescriptor>> nodeList = getChildNodesFromLayout(dropDraggableLayout);
+        componentStructureTree.setRootNodes(nodeList);
+    }
 
-        if (parent != null) {
-            tree.setParent(component.toString(), parent.toString());
-        }
-        tree.expandItem(component.toString());
+    private List<Node<ComponentDescriptor>> getChildNodesFromLayout(AbstractOrderedLayout rootComponent) {
+        List<Node<ComponentDescriptor>> nodeList = new ArrayList<>();
 
-        if (component instanceof DDVerticalLayout) {
-            tree.setItemCaption(component.toString(), "Vertical");
-        } else if (component instanceof DDHorizontalLayout) {
-            tree.setItemCaption(component.toString(), "Horizontal");
-        } else {
-            tree.setItemCaption(component.toString(), "Widget");
-        }
+        for (int i=0; i<rootComponent.getComponentCount(); i++) {
+            Component component = rootComponent.getComponent(i);
+            ComponentType componentType;
 
-        if (component instanceof AbstractOrderedLayout) {
-            tree.setChildrenAllowed(component.toString(),
-                    (((AbstractOrderedLayout) component).getComponentCount() != 0)
-            );
+            if (component instanceof AbstractOrderedLayout) {
+                if (component instanceof DDVerticalLayout) {
+                    componentType = ComponentType.VERTICAL_LAYOUT;
+                } else {
+                    componentType = ComponentType.HORIZONTAL_LAYOUT;
+                }
+            } else {
+                componentType = ComponentType.WIDGET;
+            }
 
-            int count = ((AbstractOrderedLayout) component).getComponentCount();
-            if (count != 0) {
-                for (int i=0; i<count; i++) {
-                    drawTree(((AbstractOrderedLayout) component).getComponent(i), component);
+            ComponentDescriptor componentDescriptor = new ComponentDescriptor(component, componentType);
+            List<Node<ComponentDescriptor>> childNodeList = new ArrayList<>();
+            Node node = new Node(componentDescriptor);
+
+            if (component instanceof AbstractOrderedLayout) {
+                if (((AbstractOrderedLayout) component).getComponentCount() > 0) {
+                    childNodeList = getChildNodesFromLayout((AbstractOrderedLayout) component);
+                    node.setChildren(childNodeList);
                 }
             }
-        } else {
-            tree.setChildrenAllowed(component.toString(), false);
+
+            node.setData(componentDescriptor);
+            nodeList.add(node);
+        }
+
+        return nodeList;
+    }
+
+    private void drawTreeComponent(List<Node<ComponentDescriptor>> nodeList) {
+        for (Node node : nodeList) {
+            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+            ComponentDescriptor componentDescriptor = (ComponentDescriptor) node.getData();
+            ComponentDescriptor parent = null;
+
+            tree.addItem(component.toString());
+
+            if (node.getParent() != null) {
+                parent = (ComponentDescriptor) node.getParent().getData();
+                tree.setParent(component.toString(), parent.getOwnComponent().toString());
+            }
+            tree.expandItem(component.toString());
+
+            switch (componentDescriptor.getComponentType()) {
+                case VERTICAL_LAYOUT:
+                    tree.setItemCaption(component.toString(), "Vertical");
+                    break;
+                case HORIZONTAL_LAYOUT:
+                    tree.setItemCaption(component.toString(), "Horizontal");
+                    break;
+                case WIDGET:
+                    tree.setItemCaption(component.toString(), "Widget");
+                    break;
+            }
+
+            if (component instanceof AbstractOrderedLayout) {
+                int count = node.getChildren().size();
+                tree.setChildrenAllowed(component.toString(), count != 0);
+
+                if (count != 0) {
+                    drawTreeComponent(node.getChildren());
+                }
+            } else {
+                tree.setChildrenAllowed(component.toString(), false);
+            }
         }
     }
 }
