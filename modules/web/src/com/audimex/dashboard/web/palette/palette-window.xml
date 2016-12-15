@@ -11,11 +11,10 @@
               height="100%"
               spacing="true"
               width="100%">
-            <vbox height="100%" width="300px">
-                <vbox id="containers"
-                      height="100%"/>
-                <vbox id="treeLayout"
-                      height="100%"/>
+            <vbox height="100%" width="300px" expand="treeLayout" spacing="true">
+                <vbox id="containers"/>
+                <checkBox caption="Allow edit" id="allowEdit"/>
+                <vbox id="treeLayout"/>
             </vbox>
             <vbox id="dropLayout"
                   spacing="true"

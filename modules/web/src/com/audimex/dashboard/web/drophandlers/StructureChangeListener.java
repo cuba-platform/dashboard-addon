@@ -4,6 +4,9 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
+import com.audimex.dashboard.entity.DropTarget;
+import com.haulmont.bali.datastruct.Tree;
+
 public interface StructureChangeListener {
-    void structureChanged();
+    void structureChanged(Tree tree, DropTarget dropTarget);
 }

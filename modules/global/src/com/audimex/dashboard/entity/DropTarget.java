@@ -8,26 +8,25 @@ import com.haulmont.chile.core.datatypes.impl.EnumClass;
 import javax.annotation.Nullable;
 
 
-public enum ComponentType implements EnumClass<String> {
+public enum DropTarget implements EnumClass<Integer> {
 
-    VERTICAL_LAYOUT("VERTICAL_LAYOUT"),
-    HORIZONTAL_LAYOUT("HORIZONTAL_LAYOUT"),
-    WIDGET("WIDGET"),
-    GRID_LAYOUT("GRID_LAYOUT");
+    LAYOUT(1),
+    TREE(2),
+    REORDER(3);
 
-    private String id;
+    private Integer id;
 
-    ComponentType(String value) {
+    DropTarget(Integer value) {
         this.id = value;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     @Nullable
-    public static ComponentType fromId(String id) {
-        for (ComponentType at : ComponentType.values()) {
+    public static DropTarget fromId(Integer id) {
+        for (DropTarget at : DropTarget.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }
