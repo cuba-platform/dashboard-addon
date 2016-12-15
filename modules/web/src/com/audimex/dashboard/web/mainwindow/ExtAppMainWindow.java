@@ -24,7 +24,7 @@ public class ExtAppMainWindow extends AppMainWindow {
             }
 
             @Override
-            protected void handleHTML5Drop(DragAndDropEvent event) {
+            protected void handleDropFromAbsoluteParentLayout(DragAndDropEvent event) {
                 // disabled
             }
         });
