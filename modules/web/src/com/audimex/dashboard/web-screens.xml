@@ -3,4 +3,6 @@
     <include file="com/audimex/dashboard/screens.xml"/>
     <screen id="palette-window"
             template="com/audimex/dashboard/web/palette/palette-window.xml"/>
+    <screen id="mainWindow"
+            template="com/audimex/dashboard/web/mainwindow/ext-mainwindow.xml"/>
 </screen-config>
