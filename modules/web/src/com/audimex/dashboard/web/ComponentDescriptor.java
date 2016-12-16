@@ -13,6 +13,10 @@ import com.vaadin.ui.Component;
 public class ComponentDescriptor {
     protected Component ownComponent;
     protected ComponentType componentType;
+    protected int column;
+    protected int row;
+    protected int colSpan;
+    protected int rowSpan;
 
     public Component getOwnComponent() {
         return ownComponent;
@@ -28,6 +32,38 @@ public class ComponentDescriptor {
 
     public void setComponentType(ComponentType componentType) {
         this.componentType = componentType;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColSpan() {
+        return colSpan;
+    }
+
+    public void setColSpan(int colSpan) {
+        this.colSpan = colSpan;
+    }
+
+    public int getRowSpan() {
+        return rowSpan;
+    }
+
+    public void setRowSpan(int rowSpan) {
+        this.rowSpan = rowSpan;
     }
 
     public ComponentDescriptor(Component ownComponent, ComponentType componentType) {

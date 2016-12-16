@@ -5,8 +5,18 @@
     }
     .dd-palette-button {
         background: none;
-        border: 1px dashed black;
-        border-radius: 0;
+        border: 2px dashed #b5b5b5;
+        color: #4e4e4e;
+        border-radius: 4px;
+        text-align: left;
+        font-size: 24px;
+        box-shadow: none;
+    }
+    .dd-palette-button:after {
+        border: none;
+    }
+    .dd-palette-button .v-icon {
+        width: 30px;
     }
     .dd-palette-button:focus:after {
         border: none;
@@ -19,6 +29,6 @@
         background: none;
     }
     .dd-container-disabled .v-button:active:after {
-            background: none;
-        }
+        background: none;
+    }
 }

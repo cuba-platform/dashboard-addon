@@ -16,10 +16,8 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.*;
+import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
@@ -73,6 +71,25 @@ public class TreeDropHandler implements DropHandler {
                 ddHorizontalLayoutDropHandler.setGridDropListener(gridDropListener);
                 ddHorizontalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
                 ddHorizontalLayout.setDropHandler(ddHorizontalLayoutDropHandler);
+            } else if (dragComponent.getId().equals("gridLayout")) {
+                newComponent = new DDGridLayout();
+                newComponent.setSizeFull();
+                newComponent.setStyleName("dd-bordering");
+
+                DDGridLayout gridLayout = (DDGridLayout) newComponent;
+                gridLayout.setSpacing(true);
+                gridLayout.setMargin(true);
+                gridLayout.setColumns(1);
+                gridLayout.setRows(1);
+                gridLayout.setDragMode(LayoutDragMode.CLONE);
+
+                DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
+                ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
+                ddGridLayoutDropHandler.setStructureChangeListener(structureChangeListener);
+                ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
+                gridLayout.setDropHandler(ddGridLayoutDropHandler);
+
+                gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
                 newComponent = new WidgetPanel("Panel");
                 newComponent.setSizeFull();
@@ -103,6 +120,8 @@ public class TreeDropHandler implements DropHandler {
                 tree.setItemCaption(newComponent.toString(), "Vertical");
             } else if (newComponent instanceof DDHorizontalLayout) {
                 tree.setItemCaption(newComponent.toString(), "Horizontal");
+            } else if (newComponent instanceof DDGridLayout) {
+                tree.setItemCaption(newComponent.toString(), "Grid");
             } else {
                 tree.setItemCaption(newComponent.toString(), "Widget");
             }
@@ -119,13 +138,15 @@ public class TreeDropHandler implements DropHandler {
         for (Node node : nodeList) {
             Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
             if (component.toString().equals(parentId)) {
-                if (component instanceof AbstractOrderedLayout) {
+                if (component instanceof AbstractLayout) {
                     List<Node> childList = node.getChildren();
                     ComponentType componentType;
                     if (newComponent instanceof DDVerticalLayout) {
                         componentType = ComponentType.VERTICAL_LAYOUT;
                     } else if (newComponent instanceof DDHorizontalLayout) {
                         componentType = ComponentType.HORIZONTAL_LAYOUT;
+                    } else if (newComponent instanceof DDGridLayout) {
+                        componentType = ComponentType.GRID_LAYOUT;
                     } else {
                         componentType = ComponentType.WIDGET;
                     }
@@ -139,7 +160,15 @@ public class TreeDropHandler implements DropHandler {
                         position = getPosition(childList, siblingPosition);
                     }
 
-                    childList.add(position, new Node(new ComponentDescriptor(newComponent, componentType)));
+                    Node newNode = new Node(new ComponentDescriptor(newComponent, componentType));
+                    if (component instanceof DDGridLayout) {
+                        int[] coordinates = findGridPosition((GridLayout) component);
+                        if (coordinates[0] >= 0 && coordinates[1] >= 0) {
+                            ((ComponentDescriptor) newNode.getData()).setColumn(coordinates[0]);
+                            ((ComponentDescriptor) newNode.getData()).setRow(coordinates[1]);
+                        }
+                    }
+                    childList.add(position, newNode);
                     node.setChildren(childList);
                     return;
                 }
@@ -149,6 +178,20 @@ public class TreeDropHandler implements DropHandler {
                 insertComponent(node.getChildren(), parentId, newComponent, siblingPosition);
             }
         }
+    }
+
+    protected int[] findGridPosition(GridLayout gridLayout) {
+        int[] coordinates = {-1, -1};
+        for (int i = 0; i < gridLayout.getRows(); i++) {
+            for (int j = 0; j < gridLayout.getRows(); j++) {
+                if (gridLayout.getComponent(i, j) == null) {
+                    coordinates[0] = i;
+                    coordinates[1] = j;
+                    return coordinates;
+                }
+            }
+        }
+        return coordinates;
     }
 
     protected int getPosition(List<Node> nodeList, String siblingPosition) {

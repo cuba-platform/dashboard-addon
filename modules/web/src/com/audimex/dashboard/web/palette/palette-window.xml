@@ -11,7 +11,7 @@
               height="100%"
               spacing="true"
               width="100%">
-            <vbox height="100%" width="300px" expand="treeLayout" spacing="true">
+            <vbox height="100%" width="200px" expand="treeLayout" spacing="true">
                 <vbox id="containers"/>
                 <checkBox caption="Allow edit" id="allowEdit"/>
                 <vbox id="treeLayout"/>
