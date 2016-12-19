@@ -142,11 +142,14 @@ public class WidgetPanel extends CssLayout {
         }
 
         if (getParent() instanceof GridLayout) {
-            ((GridLayout) getParent()).removeComponent(this);
+            GridLayout parent = (GridLayout) getParent();
 
-            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(),
+            parent.removeComponent(this);
+
+            // todo remove empty labes
+            parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
-                    componentDescriptor.getRow(), componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
+                    componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
         }
     }
 
@@ -168,9 +171,10 @@ public class WidgetPanel extends CssLayout {
         if (getParent() instanceof GridLayout) {
             ((GridLayout) getParent()).removeComponent(this);
 
-            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(),
+            // todo remove empty labes
+            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
-                    componentDescriptor.getRow(), componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
+                    componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
         }
     }
 

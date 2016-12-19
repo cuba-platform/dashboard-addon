@@ -314,8 +314,9 @@ public class PaletteWindow extends AbstractWindow {
                         container.removeComponent(existingComponent);
                     }
                 }
-                ((GridLayout) container).addComponent(cd.getOwnComponent(), cd.getColumn(),
-                        cd.getColumn() + cd.getColSpan() - 1, cd.getRow(),
+                // todo remove empty labes
+                ((GridLayout) container).addComponent(cd.getOwnComponent(), cd.getColumn(), cd.getRow(),
+                        cd.getColumn() + cd.getColSpan() - 1,
                         cd.getRow() + cd.getRowSpan() - 1);
             } else {
                 container.addComponent(cd.getOwnComponent());
