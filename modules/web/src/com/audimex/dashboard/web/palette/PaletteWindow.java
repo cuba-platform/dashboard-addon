@@ -312,10 +312,10 @@ public class PaletteWindow extends AbstractWindow {
     private void fillGrid(GridLayout gridLayout) {
         for (int i=0; i<gridLayout.getRows(); i++) {
             for (int j=0; j<gridLayout.getColumns(); j++) {
-                if (gridLayout.getComponent(i, j) == null) {
+                if (gridLayout.getComponent(j, i) == null) {
                     Label label = new Label("Drop component here");
                     label.addStyleName("dd-grid-slot");
-                    gridLayout.addComponent(label, i, j);
+                    gridLayout.addComponent(label, j, i);
                     gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
                 }
             }
