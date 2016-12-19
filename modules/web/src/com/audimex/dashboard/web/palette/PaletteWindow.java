@@ -9,17 +9,12 @@ import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.CheckBox;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Tree;
-import com.vaadin.ui.Window;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
@@ -118,14 +113,20 @@ public class PaletteWindow extends AbstractWindow {
             if (allowEdit.getValue()) {
                 containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
                 removeSpacings(rootDashboardPanel, true);
-                containersDraggableLayout.removeStyleName("dd-container-disabled");
                 rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
+
+                containersDraggableLayout.removeStyleName("dd-container-disabled");
+                rootDashboardPanel.removeStyleName("ad-dashboard-disabled");
             } else {
                 containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
                 removeSpacings(rootDashboardPanel, false);
-                containersDraggableLayout.addStyleName("dd-container-disabled");
                 rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
+
+                containersDraggableLayout.addStyleName("dd-container-disabled");
+                rootDashboardPanel.addStyleName("ad-dashboard-disabled");
             }
+
+            removeComponent.setEnabled(allowEdit.getValue());
         });
     }
 
@@ -304,22 +305,28 @@ public class PaletteWindow extends AbstractWindow {
 
     private void buildLayoutFromTree(List<Node<ComponentDescriptor>> nodeList, AbstractLayout container) {
         for (Node<ComponentDescriptor> node : nodeList) {
+            ComponentDescriptor cd = node.getData();
+
             if (container instanceof GridLayout) {
-                Component existingComponent = ((GridLayout) container).getComponent(node.getData().getColumn(), node.getData().getRow());
+                Component existingComponent = ((GridLayout) container).getComponent(cd.getColumn(), cd.getRow());
                 if (existingComponent != null) {
                     if (existingComponent instanceof Label) {
                         container.removeComponent(existingComponent);
                     }
                 }
-                ((GridLayout) container).addComponent(node.getData().getOwnComponent(), node.getData().getColumn(), node.getData().getRow());
+                ((GridLayout) container).addComponent(cd.getOwnComponent(), cd.getColumn(),
+                        cd.getColumn() + cd.getColSpan() - 1, cd.getRow(),
+                        cd.getRow() + cd.getRowSpan() - 1);
             } else {
-                container.addComponent(node.getData().getOwnComponent());
+                container.addComponent(cd.getOwnComponent());
+                ((AbstractOrderedLayout) container).setExpandRatio(cd.getOwnComponent(), cd.getWeight());
             }
-            if (node.getChildren().size() > 0 && node.getData().getComponentType() != ComponentType.WIDGET) {
-                buildLayoutFromTree(node.getChildren(), (AbstractLayout) node.getData().getOwnComponent());
 
-                if (node.getData().getOwnComponent() instanceof GridLayout) {
-                    fillGrid((GridLayout) node.getData().getOwnComponent());
+            if (node.getChildren().size() > 0 && cd.getComponentType() != ComponentType.WIDGET) {
+                buildLayoutFromTree(node.getChildren(), (AbstractLayout) cd.getOwnComponent());
+
+                if (cd.getOwnComponent() instanceof GridLayout) {
+                    fillGrid((GridLayout) cd.getOwnComponent());
                 }
             }
         }

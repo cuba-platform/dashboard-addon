@@ -25,9 +25,10 @@ public class WidgetPanel extends CssLayout {
 
     private Label headerLabel;
 
-    private Integer weight;
-    private Integer colSpan;
-    private Integer rowSpan;
+    private int weight = 1;
+    private int colSpan = 1;
+    private int rowSpan = 1;
+
     private DemoContentType demoContentType;
 
     private ComponentDescriptor componentDescriptor;
@@ -71,21 +72,28 @@ public class WidgetPanel extends CssLayout {
     }
 
     public void setContent(Component c) {
-        if (c == null) {
-            contentLayout.removeAllComponents();
-        } else {
-            c.setSizeFull();
+        contentLayout.removeAllComponents();
 
+        if (c != null) {
+            c.setSizeFull();
             contentLayout.addComponent(c);
         }
     }
 
     public String getHeaderText() {
+        if (componentDescriptor != null) {
+            return componentDescriptor.getCaption();
+        }
+
         return headerLabel.getValue();
     }
 
     public void setHeaderText(String text) {
         headerLabel.setValue(text);
+
+        if (componentDescriptor != null) {
+            componentDescriptor.setCaption(text);
+        }
     }
 
     public Resource getHeaderIcon() {
@@ -94,45 +102,75 @@ public class WidgetPanel extends CssLayout {
 
     public void setHeaderIcon(Resource icon) {
         headerLabel.setIcon(icon);
+
+        // todo save to componentDescriptor
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
+    public int getWeight() {
+        if (componentDescriptor != null) {
+            return componentDescriptor.getWeight();
+        }
 
-    public Integer getWeight() {
         return weight;
     }
 
-    public void setColSpan(Integer colSpan) {
-        this.colSpan = colSpan;
+    public void setWeight(int weight) {
+        this.weight = weight;
+
+        if (componentDescriptor != null) {
+            componentDescriptor.setWeight(weight);
+        }
+
+        if (getParent() instanceof AbstractOrderedLayout) {
+            ((AbstractOrderedLayout) getParent()).setExpandRatio(this, weight);
+        }
     }
 
-    public Integer getColSpan() {
+    public int getColSpan() {
+        if (componentDescriptor != null) {
+            return componentDescriptor.getColSpan();
+        }
+
         return colSpan;
     }
 
-    public void setRowSpan(Integer rowSpan) {
-        this.rowSpan = rowSpan;
+    public void setColSpan(int colSpan) {
+        this.colSpan = colSpan;
+
+        if (componentDescriptor != null) {
+            componentDescriptor.setColSpan(colSpan);
+        }
+
+        if (getParent() instanceof GridLayout) {
+            ((GridLayout) getParent()).removeComponent(this);
+
+            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(),
+                    componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
+                    componentDescriptor.getRow(), componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
+        }
     }
 
-    public Integer getRowSpan() {
+    public int getRowSpan() {
+        if (componentDescriptor != null) {
+            return componentDescriptor.getRowSpan();
+        }
+
         return rowSpan;
     }
 
-    public void setDemoContentType(DemoContentType demoContentType) {
-        this.demoContentType = demoContentType;
+    public void setRowSpan(int rowSpan) {
+        this.rowSpan = rowSpan;
 
-        if (demoContentType == null) {
-            setContent(null);
-        } else {
-            WindowManager windowManager = App.getInstance().getWindowManager();
-            WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
-            WindowInfo windowInfo = windowConfig.getWindowInfo(getWindowInfo(demoContentType));
+        if (componentDescriptor != null) {
+            componentDescriptor.setRowSpan(rowSpan);
+        }
 
-            Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
-            frame.setParent(dashboardContainer);
-            setContent(frame.unwrapComposition(Layout.class));
+        if (getParent() instanceof GridLayout) {
+            ((GridLayout) getParent()).removeComponent(this);
+
+            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(),
+                    componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
+                    componentDescriptor.getRow(), componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
         }
     }
 
@@ -149,7 +187,31 @@ public class WidgetPanel extends CssLayout {
     }
 
     public DemoContentType getDemoContentType() {
+        if (componentDescriptor != null) {
+            return componentDescriptor.getDemoContentType();
+        }
+
         return demoContentType;
+    }
+
+    public void setDemoContentType(DemoContentType demoContentType) {
+        this.demoContentType = demoContentType;
+
+        if (componentDescriptor != null) {
+            componentDescriptor.setDemoContentType(demoContentType);
+        }
+
+        if (demoContentType == null) {
+            setContent(null);
+        } else {
+            WindowManager windowManager = App.getInstance().getWindowManager();
+            WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+            WindowInfo windowInfo = windowConfig.getWindowInfo(getWindowInfo(demoContentType));
+
+            Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
+            frame.setParent(dashboardContainer);
+            setContent(frame.unwrapComposition(Layout.class));
+        }
     }
 
     public ComponentDescriptor getComponentDescriptor() {

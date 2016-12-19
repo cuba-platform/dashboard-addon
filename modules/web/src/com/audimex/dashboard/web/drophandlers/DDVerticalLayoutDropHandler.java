@@ -73,13 +73,12 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDVerticalLayout.VerticalLayoutTargetDetails details =
                 (DDVerticalLayout.VerticalLayoutTargetDetails) event.getTargetDetails();
-        AbstractOrderedLayout layout =
-                (AbstractOrderedLayout) details.getTarget();
+        AbstractOrderedLayout targetLayout = (AbstractOrderedLayout) details.getTarget();
 
         int idx = (details).getOverIndex();
         Component comp = transferable.getComponent();
 
-        Component parent = layout.getParent();
+        Component parent = targetLayout.getParent();
         while (parent != null) {
             if (parent == comp) {
                 return;
@@ -149,11 +148,13 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
 
             if (idx >= 0) {
                 insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, idx);
-                ((AbstractOrderedLayout) details.getTarget()).addComponent(comp, idx);
+                targetLayout.addComponent(comp, idx);
             } else {
                 insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, 0);
-                ((AbstractOrderedLayout) details.getTarget()).addComponent(comp);
+                targetLayout.addComponent(comp);
             }
+
+            targetLayout.setExpandRatio(comp, 1);
 
             structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);
         } else {
@@ -161,11 +162,14 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
 
             if (idx >= 0) {
                 insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, idx);
-                ((AbstractOrderedLayout) details.getTarget()).addComponent(comp, idx);
+                targetLayout.addComponent(comp, idx);
             } else {
                 insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, 0);
-                ((AbstractOrderedLayout) details.getTarget()).addComponent(comp);
+                targetLayout.addComponent(comp);
             }
+
+            targetLayout.setExpandRatio(comp, 1);
+
             structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);
         }
     }

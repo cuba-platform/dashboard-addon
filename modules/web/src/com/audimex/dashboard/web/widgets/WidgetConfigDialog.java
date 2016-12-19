@@ -26,6 +26,7 @@ public class WidgetConfigDialog extends Window {
         layout.setWidthUndefined();
 
         TextField captionTextField = new TextField();
+        captionTextField.setNullRepresentation("");
         captionTextField.setWidth("300px");
         captionTextField.setCaption("Header caption");
         captionTextField.setValue(widget.getHeaderText());
@@ -43,9 +44,9 @@ public class WidgetConfigDialog extends Window {
 
         ComboBox contentTypeComboBox = new ComboBox();
         contentTypeComboBox.setCaption("Content");
+        contentTypeComboBox.setWidth("300px");
         fillDemoContentTypes(contentTypeComboBox);
         contentTypeComboBox.setValue(widget.getDemoContentType());
-        contentTypeComboBox.setWidth("300px");
         layout.addComponent(contentTypeComboBox);
 
         Slider weightSlider = new Slider();
@@ -54,6 +55,7 @@ public class WidgetConfigDialog extends Window {
         weightSlider.setMin(1);
         weightSlider.setMax(10);
         weightSlider.setResolution(0);
+        weightSlider.setValue((double)widget.getWeight());
 
         if (widget.getParent() instanceof AbstractOrderedLayout) {
             layout.addComponent(weightSlider);
@@ -69,15 +71,17 @@ public class WidgetConfigDialog extends Window {
         colSpanSlider.setMin(1);
         colSpanSlider.setMax(10);
         colSpanSlider.setResolution(0);
+        colSpanSlider.setValue((double)widget.getColSpan());
         spanLayout.addComponent(colSpanSlider);
 
-        Slider rowSpanComboSlider = new Slider();
-        rowSpanComboSlider.setCaption("Row span");
-        rowSpanComboSlider.setWidth("100%");
-        rowSpanComboSlider.setMin(1);
-        rowSpanComboSlider.setMax(10);
-        rowSpanComboSlider.setResolution(0);
-        spanLayout.addComponent(rowSpanComboSlider);
+        Slider rowSpanSlider = new Slider();
+        rowSpanSlider.setCaption("Row span");
+        rowSpanSlider.setWidth("100%");
+        rowSpanSlider.setMin(1);
+        rowSpanSlider.setMax(10);
+        rowSpanSlider.setResolution(0);
+        rowSpanSlider.setValue((double)widget.getRowSpan());
+        spanLayout.addComponent(rowSpanSlider);
 
         if (widget.getParent() instanceof GridLayout) {
             layout.addComponent(spanLayout);
@@ -95,7 +99,7 @@ public class WidgetConfigDialog extends Window {
             }
             if (widget.getParent() instanceof GridLayout) {
                 widget.setColSpan(colSpanSlider.getValue().intValue());
-                widget.setRowSpan(rowSpanComboSlider.getValue().intValue());
+                widget.setRowSpan(rowSpanSlider.getValue().intValue());
             }
             widget.setDemoContentType(((DemoContentType) contentTypeComboBox.getValue()));
 

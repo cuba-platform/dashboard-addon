@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web;
 
 import com.audimex.dashboard.entity.ComponentType;
+import com.audimex.dashboard.entity.DemoContentType;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.ui.Component;
 
@@ -12,16 +13,17 @@ public class ComponentDescriptor {
     protected Component ownComponent;
 
     protected ComponentType componentType;
+    protected DemoContentType demoContentType;
 
-    protected int column;
     protected int row;
+    protected int column;
 
-    protected String caption;
-    protected String icon;
+    protected String icon = "";
+    protected String caption = "Widget";
 
-    protected int weight;
-    protected int colSpan;
-    protected int rowSpan;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
 
     public Component getOwnComponent() {
         return ownComponent;
@@ -102,5 +104,13 @@ public class ComponentDescriptor {
         if (this.ownComponent instanceof WidgetPanel) {
             ((WidgetPanel) ownComponent).setComponentDescriptor(this);
         }
+    }
+
+    public void setDemoContentType(DemoContentType demoContentType) {
+        this.demoContentType = demoContentType;
+    }
+
+    public DemoContentType getDemoContentType() {
+        return demoContentType;
     }
 }
