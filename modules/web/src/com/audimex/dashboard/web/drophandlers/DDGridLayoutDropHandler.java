@@ -11,6 +11,8 @@ import com.audimex.dashboard.web.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.event.dd.DragAndDropEvent;
+import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
+import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -180,6 +182,16 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                         componentType = ComponentType.WIDGET;
                     }
 
+                    for (int i=0; i<childList.size(); i++) {
+                        if (childList.get(i) != null) {
+                            ComponentDescriptor existingComponent = childList.get(i).getData();
+                            if (existingComponent.getColumn() == column
+                                    && existingComponent.getRow() == row) {
+                                 return;
+                            }
+                        }
+                    }
+
                     ComponentDescriptor newComponentDescriptor = new ComponentDescriptor(newComponent, componentType);
                     newComponentDescriptor.setRow(row);
                     newComponentDescriptor.setColumn(column);
@@ -205,5 +217,21 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
     public void setGridDropListener(GridDropListener gridDropListener) {
         this.gridDropListener = gridDropListener;
+    }
+
+    @Override
+    public AcceptCriterion getAcceptCriterion() {
+        ServerSideCriterion clientSideCriterion = new ServerSideCriterion() {
+            @Override
+            public boolean accept(DragAndDropEvent dragEvent) {
+                DDGridLayout.GridLayoutTargetDetails targetDetails =
+                        (DDGridLayout.GridLayoutTargetDetails) dragEvent.getTargetDetails();
+                if (targetDetails.getTarget() instanceof WidgetPanel) {
+                    return false;
+                }
+                return true;
+            }
+        };
+        return clientSideCriterion;
     }
 }
