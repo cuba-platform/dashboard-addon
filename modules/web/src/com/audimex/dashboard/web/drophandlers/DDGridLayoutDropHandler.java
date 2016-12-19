@@ -221,7 +221,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
     @Override
     public AcceptCriterion getAcceptCriterion() {
-        ServerSideCriterion clientSideCriterion = new ServerSideCriterion() {
+        ServerSideCriterion serverSideCriterion = new ServerSideCriterion() {
             @Override
             public boolean accept(DragAndDropEvent dragEvent) {
                 DDGridLayout.GridLayoutTargetDetails targetDetails =
@@ -232,6 +232,6 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 return true;
             }
         };
-        return clientSideCriterion;
+        return serverSideCriterion;
     }
 }
