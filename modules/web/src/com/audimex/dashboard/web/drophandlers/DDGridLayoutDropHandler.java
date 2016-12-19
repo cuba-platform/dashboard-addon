@@ -12,7 +12,6 @@ import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
@@ -22,12 +21,8 @@ import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.drophandlers.DefaultGridLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
-import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by petunin on 15.12.2016.
- */
 public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected StructureChangeListener structureChangeListener;
     protected GridDropListener gridDropListener;
@@ -36,30 +31,34 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     //todo
     @Override
     protected void handleComponentReordering(DragAndDropEvent event) {
+        DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
+                .getTargetDetails();
+        DDGridLayout layout = (DDGridLayout) details.getTarget();
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
                 .getTransferable();
-        DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
         Component comp = transferable.getComponent();
-        int oldIndex = layout.getComponentIndex(comp);
+
+        int row = details.getOverRow();
+        int column = details.getOverColumn();
 
         super.handleComponentReordering(event);
 
-        reorderComponent(componentDescriptorTree.getRootNodes(), comp, details.getOverIndex(), oldIndex);
+        reorderComponent(componentDescriptorTree.getRootNodes(), comp, column, row);
         structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);
     }
 
-    protected void reorderComponent(List<Node<ComponentDescriptor>> nodeList, Component component, int idx, int oldIdx) {
+    protected void reorderComponent(List<Node<ComponentDescriptor>> nodeList, Component component, int column, int row) {
         for (Node<ComponentDescriptor> node : nodeList) {
             if (node.getData().getOwnComponent() == component) {
-                Collections.swap(nodeList, idx, oldIdx);
+                int oldColumn = node.getData().getColumn();
+                int oldRow = node.getData().getRow();
+
+//                Collections.swap(nodeList, idx, oldIdx);
                 return;
             }
 
             if (node.getChildren().size() > 0) {
-                reorderComponent(node.getChildren(), component, idx, oldIdx);
+                reorderComponent(node.getChildren(), component, column, row);
             }
         }
     }
@@ -165,11 +164,11 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     }
 
     protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, int idx) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
             if (component.toString().equals(parentId)) {
                 if (component instanceof AbstractLayout) {
-                    List<Node> childList = node.getChildren();
+                    List<Node<ComponentDescriptor>> childList = node.getChildren();
                     ComponentType componentType;
                     if (newComponent instanceof DDVerticalLayout) {
                         componentType = ComponentType.VERTICAL_LAYOUT;
@@ -180,7 +179,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                     } else {
                         componentType = ComponentType.WIDGET;
                     }
-                    childList.add(new Node(new ComponentDescriptor(newComponent, componentType)));
+                    childList.add(new Node<>(new ComponentDescriptor(newComponent, componentType)));
                     node.setChildren(childList);
                     return;
                 }

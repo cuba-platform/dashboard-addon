@@ -31,4 +31,12 @@
     .dd-container-disabled .v-button:active:after {
         background: none;
     }
+    .dd-grid-slot {
+        text-align: center;
+        color: #bdbdbd;
+        font-size: 20px;
+    }
+    .dd-container-disabled .dd-grid-slot {
+        display: none;
+    }
 }

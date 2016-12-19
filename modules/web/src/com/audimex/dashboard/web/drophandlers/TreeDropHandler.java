@@ -130,16 +130,12 @@ public class TreeDropHandler implements DropHandler {
         }
     }
 
-    protected void removeComponent() {
-
-    }
-
     protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, String siblingPosition) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
             if (component.toString().equals(parentId)) {
                 if (component instanceof AbstractLayout) {
-                    List<Node> childList = node.getChildren();
+                    List<Node<ComponentDescriptor>> childList = node.getChildren();
                     ComponentType componentType;
                     if (newComponent instanceof DDVerticalLayout) {
                         componentType = ComponentType.VERTICAL_LAYOUT;
@@ -154,18 +150,20 @@ public class TreeDropHandler implements DropHandler {
                     int position = 0;
                     if (childList.size() > 0) {
                         if (siblingPosition == null) {
-                            siblingPosition = ((ComponentDescriptor) childList.get(childList.size() - 1).getData()).getOwnComponent().toString();
+                            siblingPosition = childList.get(childList.size() - 1).getData().getOwnComponent().toString();
                         }
 
                         position = getPosition(childList, siblingPosition);
                     }
 
-                    Node newNode = new Node(new ComponentDescriptor(newComponent, componentType));
+                    Node<ComponentDescriptor> newNode = new Node<>(new ComponentDescriptor(newComponent, componentType));
                     if (component instanceof DDGridLayout) {
                         int[] coordinates = findGridPosition((GridLayout) component);
                         if (coordinates[0] >= 0 && coordinates[1] >= 0) {
-                            ((ComponentDescriptor) newNode.getData()).setColumn(coordinates[0]);
-                            ((ComponentDescriptor) newNode.getData()).setRow(coordinates[1]);
+                            newNode.getData().setColumn(coordinates[0]);
+                            newNode.getData().setRow(coordinates[1]);
+                        } else {
+                            return;
                         }
                     }
                     childList.add(position, newNode);
@@ -194,11 +192,11 @@ public class TreeDropHandler implements DropHandler {
         return coordinates;
     }
 
-    protected int getPosition(List<Node> nodeList, String siblingPosition) {
+    protected int getPosition(List<Node<ComponentDescriptor>> nodeList, String siblingPosition) {
         int i = 0;
-        for (Node node : nodeList) {
+        for (Node<ComponentDescriptor> node : nodeList) {
             i++;
-            if (((ComponentDescriptor) node.getData()).getOwnComponent().toString().equals(siblingPosition)) {
+            if (node.getData().getOwnComponent().toString().equals(siblingPosition)) {
                 return i;
             }
         }

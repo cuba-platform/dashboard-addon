@@ -165,8 +165,8 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
     }
 
     protected void removeComponent(List<Node<ComponentDescriptor>> nodeList, Component componentToRemove) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
             if (component == componentToRemove) {
                 node.getParent().removeChildAt(node.getNumberOfChildren());
                 return;
@@ -179,11 +179,11 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
     }
 
     protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, int idx) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
             if (component.toString().equals(parentId)) {
                 if (component instanceof AbstractOrderedLayout) {
-                    List<Node> childList = node.getChildren();
+                    List<Node<ComponentDescriptor>> childList = node.getChildren();
                     ComponentType componentType;
                     if (newComponent instanceof DDVerticalLayout) {
                         componentType = ComponentType.VERTICAL_LAYOUT;
@@ -194,7 +194,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                     } else {
                         componentType = ComponentType.WIDGET;
                     }
-                    childList.add(idx, new Node(new ComponentDescriptor(newComponent, componentType)));
+                    childList.add(idx, new Node<>(new ComponentDescriptor(newComponent, componentType)));
                     node.setChildren(childList);
                     return;
                 }

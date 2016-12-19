@@ -19,7 +19,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import fi.jasoft.dragdroplayouts.interfaces.DragImageProvider;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -40,6 +39,9 @@ public class PaletteWindow extends AbstractWindow {
     @Inject
     private CheckBox allowEdit;
 
+    @Inject
+    private com.haulmont.cuba.gui.components.Button removeComponent;
+
     protected Tree tree;
     protected com.haulmont.bali.datastruct.Tree<ComponentDescriptor> componentStructureTree = new com.haulmont.bali.datastruct.Tree<>();
     protected DDVerticalLayout dropDraggableLayout = new DDVerticalLayout();
@@ -56,34 +58,39 @@ public class PaletteWindow extends AbstractWindow {
 
         DDVerticalLayout containersDraggableLayout = new DDVerticalLayout();
         containersDraggableLayout.setDragMode(LayoutDragMode.CLONE_OTHER);
-        containersDraggableLayout.setDragImageProvider(new DragImageProvider() {
-            @Override
-            public Component getDragImage(Component component) {
-                Label label = new Label("");
-                label.setIcon(FontAwesome.ASTERISK);
-                return label;
-            }
+        containersDraggableLayout.setDragImageProvider(component -> {
+            Label label = new Label("");
+            label.setIcon(FontAwesome.ASTERISK);
+            return label;
         });
         containersDraggableLayout.setSpacing(true);
 
         List<Node<ComponentDescriptor>> childNodes = new ArrayList<>();
-        childNodes.add(new Node(new ComponentDescriptor(dropDraggableLayout, ComponentType.VERTICAL_LAYOUT)));
+        childNodes.add(new Node<>(new ComponentDescriptor(dropDraggableLayout, ComponentType.VERTICAL_LAYOUT)));
         componentStructureTree.setRootNodes(childNodes);
         dropDraggableLayout.setDragMode(LayoutDragMode.CLONE);
 
         structureChangeListener = (structure, dropTarget) -> {
             if (dropTarget != DropTarget.LAYOUT) {
                 dropDraggableLayout.removeAllComponents();
+                removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
                 buildLayout(componentStructureTree.getRootNodes());
             }
             if (dropTarget != DropTarget.TREE) {
                 tree.removeAllItems();
                 drawTreeComponent(componentStructureTree.getRootNodes());
             }
+            if (dropTarget != DropTarget.REORDER) {
+                dropDraggableLayout.removeAllComponents();
+                removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
+                buildLayout(componentStructureTree.getRootNodes());
+                tree.removeAllItems();
+                drawTreeComponent(componentStructureTree.getRootNodes());
+            }
         };
 
         gridDropListener = gridLayout -> {
-            Window subWindow = new Window("Add grid");
+            Window subWindow = new Window("Grid settings");
             subWindow.setModal(true);
             VerticalLayout subContent = new VerticalLayout();
             subContent.setSpacing(true);
@@ -107,26 +114,34 @@ public class PaletteWindow extends AbstractWindow {
                 rows.addItem(i);
             }
 
-            cols.setValue(1);
-            rows.setValue(1);
+            cols.setValue(2);
+            rows.setValue(2);
             cols.setCaption("Columns");
             rows.setCaption("Rows");
+            cols.focus();
 
             comboBoxPanel.addComponent(cols);
             comboBoxPanel.addComponent(rows);
             subContent.addComponent(comboBoxPanel);
             subContent.addComponent(buttonsPanel);
 
-            Button closeButton = new Button("Close");
-            Button okButton = new Button("Ok");
-            closeButton.addClickListener(event -> {
-                subWindow.close();
-            });
+            Button closeButton = new Button("Close", FontAwesome.CLOSE);
+            Button okButton = new Button("Ok", FontAwesome.CHECK);
+            closeButton.addClickListener(event -> subWindow.close());
 
             okButton.addClickListener(event -> {
                 if (cols.getValue() != null && rows.getValue() != null) {
                     gridLayout.setColumns(Integer.parseInt(cols.getValue().toString()));
                     gridLayout.setRows(Integer.parseInt(rows.getValue().toString()));
+                    for (int i=0; i<gridLayout.getRows(); i++) {
+                        for (int j=0; j<gridLayout.getColumns(); j++) {
+                            Label label = new Label("Drop component here");
+//                            label.setSizeFull();
+                            label.addStyleName("dd-grid-slot");
+                            gridLayout.addComponent(label);
+                            gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
+                        }
+                    }
                     subWindow.close();
                 }
             });
@@ -147,6 +162,13 @@ public class PaletteWindow extends AbstractWindow {
         treeDropHandler.setComponentDescriptorTree(componentStructureTree);
         treeDropHandler.setGridDropListener(gridDropListener);
         tree.setDropHandler(treeDropHandler);
+        tree.addValueChangeListener(e -> {
+            if (tree.getValue() == null) {
+                removeComponent.setEnabled(false);
+            } else {
+                removeComponent.setEnabled(true);
+            }
+        });
 
         dropDraggableLayout.setSpacing(true);
         dropDraggableLayout.setMargin(true);
@@ -187,8 +209,8 @@ public class PaletteWindow extends AbstractWindow {
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
-        containersDraggableLayout.addComponent(widgetButton);
         containersDraggableLayout.addComponent(gridButton);
+        containersDraggableLayout.addComponent(widgetButton);
 
         dropLayoutContainer.addComponent(dropDraggableLayout);
         containersLayout.addComponent(containersDraggableLayout);
@@ -210,31 +232,44 @@ public class PaletteWindow extends AbstractWindow {
         });
     }
 
+    private void removeAllComponentsFromLayout(List<Node<ComponentDescriptor>> nodeList) {
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
+            if (component instanceof GridLayout) {
+                ((GridLayout) component).removeAllComponents();
+            } else if (component instanceof AbstractOrderedLayout) {
+                ((AbstractOrderedLayout) component).removeAllComponents();
+            }
+
+            if (node.getChildren().size() > 0) {
+                removeAllComponentsFromLayout(node.getChildren());
+            }
+        }
+    }
+
     private void removeSpacings(AbstractLayout component, boolean value) {
-        if (component instanceof AbstractLayout) {
-            if (value) {
-                component.addStyleName("dd-bordering");
-            } else {
-                component.removeStyleName("dd-bordering");
-            }
+        if (value) {
+            component.addStyleName("dd-bordering");
+        } else {
+            component.removeStyleName("dd-bordering");
+        }
 
+        if (component instanceof AbstractOrderedLayout) {
+            ((AbstractOrderedLayout) component).setMargin(value);
+        } else if (component instanceof GridLayout) {
+            ((GridLayout) component).setMargin(value);
+        }
+
+        for (int i=0; i<component.getComponentCount(); i++) {
             if (component instanceof AbstractOrderedLayout) {
-                ((AbstractOrderedLayout) component).setMargin(value);
+                Component child = ((AbstractOrderedLayout) component).getComponent(i);
+                removeSpacings((AbstractLayout) child, value);
             } else if (component instanceof GridLayout) {
-                ((GridLayout) component).setMargin(value);
-            }
-
-            for (int i=0; i<component.getComponentCount(); i++) {
-                if (component instanceof AbstractOrderedLayout) {
-                    Component child = ((AbstractOrderedLayout) component).getComponent(i);
-                    removeSpacings((AbstractLayout) child, value);
-                } else if (component instanceof GridLayout) {
-                    GridLayout grid = (GridLayout) component;
-                    for (int k=0; k < grid.getRows(); k++) {
-                        for (int j=0; j < grid.getColumns(); j++) {
-                            if (grid.getComponent(j, k) instanceof AbstractLayout) {
-                                removeSpacings((AbstractLayout) grid.getComponent(j, k), value);
-                            }
+                GridLayout grid = (GridLayout) component;
+                for (int k=0; k < grid.getRows(); k++) {
+                    for (int j=0; j < grid.getColumns(); j++) {
+                        if (grid.getComponent(j, k) instanceof AbstractLayout) {
+                            removeSpacings((AbstractLayout) grid.getComponent(j, k), value);
                         }
                     }
                 }
@@ -283,7 +318,7 @@ public class PaletteWindow extends AbstractWindow {
 
             ComponentDescriptor componentDescriptor = new ComponentDescriptor(component, componentType);
             List<Node<ComponentDescriptor>> childNodeList = new ArrayList<>();
-            Node node = new Node(componentDescriptor);
+            Node<ComponentDescriptor> node = new Node<>(componentDescriptor);
 
             if (component instanceof AbstractOrderedLayout) {
                 if (((AbstractOrderedLayout) component).getComponentCount() > 0) {
@@ -300,15 +335,15 @@ public class PaletteWindow extends AbstractWindow {
     }
 
     private void drawTreeComponent(List<Node<ComponentDescriptor>> nodeList) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
-            ComponentDescriptor componentDescriptor = (ComponentDescriptor) node.getData();
-            ComponentDescriptor parent = null;
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
+            ComponentDescriptor componentDescriptor = node.getData();
+            ComponentDescriptor parent;
 
             tree.addItem(component.toString());
 
             if (node.getParent() != null) {
-                parent = (ComponentDescriptor) node.getParent().getData();
+                parent = node.getParent().getData();
                 tree.setParent(component.toString(), parent.getOwnComponent().toString());
             }
             tree.expandItem(component.toString());
@@ -337,6 +372,28 @@ public class PaletteWindow extends AbstractWindow {
                 }
             } else {
                 tree.setChildrenAllowed(component.toString(), false);
+            }
+        }
+    }
+
+    public void removeComponent() {
+        if (tree.getParent(tree.getValue()) != null) {
+            findAndRemoveComponent(componentStructureTree.getRootNodes(), tree.getValue().toString());
+            structureChangeListener.structureChanged(componentStructureTree, DropTarget.REORDER);
+        } else {
+            showNotification("You can't remove the root component", NotificationType.HUMANIZED);
+        }
+    }
+
+    private void findAndRemoveComponent(List<Node<ComponentDescriptor>> nodeList, String componentId) {
+        for (Node<ComponentDescriptor> node : nodeList) {
+            if (node.getData().getOwnComponent().toString().equals(componentId)) {
+                nodeList.remove(nodeList.indexOf(node));
+                return;
+            }
+
+            if (node.getChildren().size() > 0) {
+                findAndRemoveComponent(node.getChildren(), componentId);
             }
         }
     }
