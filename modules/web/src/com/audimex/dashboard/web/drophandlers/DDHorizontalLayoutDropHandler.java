@@ -11,6 +11,7 @@ import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
+import com.haulmont.cuba.gui.components.BoxLayout;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.shared.ui.dd.HorizontalDropLocation;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -30,6 +31,12 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
     protected StructureChangeListener structureChangeListener;
     protected GridDropListener gridDropListener;
     protected Tree<ComponentDescriptor> componentDescriptorTree;
+
+    private BoxLayout dashboardContainer;
+
+    public DDHorizontalLayoutDropHandler(BoxLayout dashboardContainer) {
+        this.dashboardContainer = dashboardContainer;
+    }
 
     @Override
     protected void handleComponentReordering(DragAndDropEvent event) {
@@ -98,7 +105,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 ddVerticalLayout.setSpacing(true);
                 ddVerticalLayout.setMargin(true);
 
-                DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
+                DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler(dashboardContainer);
                 ddVerticalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
                 ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
                 ddVerticalLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
@@ -130,7 +137,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 gridLayout.setRows(1);
                 gridLayout.setDragMode(LayoutDragMode.CLONE);
 
-                DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
+                DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dashboardContainer);
                 ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
                 ddGridLayoutDropHandler.setStructureChangeListener(structureChangeListener);
                 ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
@@ -138,15 +145,15 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
 
                 gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
-                comp = new WidgetPanel();
+                comp = new WidgetPanel(dashboardContainer);
                 comp.setSizeFull();
             }
 
             if (idx >= 0) {
-                insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, idx);
+                insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, idx);
                 ((AbstractOrderedLayout) details.getTarget()).addComponent(comp, idx);
             } else {
-                insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, 0);
+                insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, 0);
                 ((AbstractOrderedLayout) details.getTarget()).addComponent(comp);
             }
 
@@ -170,10 +177,10 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
         }
     }
 
-    protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, int idx) {
+    protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, Component parentId, Component newComponent, int idx) {
         for (Node<ComponentDescriptor> node : nodeList) {
             Component component = node.getData().getOwnComponent();
-            if (component.toString().equals(parentId)) {
+            if (component == parentId) {
                 if (component instanceof AbstractOrderedLayout) {
                     List<Node<ComponentDescriptor>> childList = node.getChildren();
 

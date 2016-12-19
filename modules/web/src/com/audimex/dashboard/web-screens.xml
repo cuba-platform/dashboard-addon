@@ -5,4 +5,11 @@
             template="com/audimex/dashboard/web/palette/palette-window.xml"/>
     <screen id="mainWindow"
             template="com/audimex/dashboard/web/mainwindow/ext-mainwindow.xml"/>
+
+    <screen id="demoTableWidget"
+            template="com/audimex/dashboard/web/frames/table/table-frame.xml"/>
+    <screen id="demoReportWidget"
+            template="com/audimex/dashboard/web/frames/report/report-frame.xml"/>
+    <screen id="demoChartWidget"
+            template="com/audimex/dashboard/web/frames/chart/chart-frame.xml"/>
 </screen-config>

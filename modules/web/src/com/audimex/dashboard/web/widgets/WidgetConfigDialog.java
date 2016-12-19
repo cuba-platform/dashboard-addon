@@ -4,15 +4,10 @@
 
 package com.audimex.dashboard.web.widgets;
 
+import com.audimex.dashboard.entity.DemoContentType;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.Window;
-
-import java.awt.*;
 
 public class WidgetConfigDialog extends Window {
 
@@ -46,36 +41,43 @@ public class WidgetConfigDialog extends Window {
         captionIconField.setValue(widget.getHeaderIcon());
         layout.addComponent(captionIconField);
 
-        ComboBox weightComboBox = new ComboBox();
-        weightComboBox.setWidth("300px");
-        weightComboBox.setCaption("Weight in layout");
-        for (int i = 1; i <= 10; i++) {
-            weightComboBox.addItem(i);
-        }
-        weightComboBox.setNullSelectionAllowed(false);
+        ComboBox contentTypeComboBox = new ComboBox();
+        contentTypeComboBox.setCaption("Content");
+        fillDemoContentTypes(contentTypeComboBox);
+        contentTypeComboBox.setValue(widget.getDemoContentType());
+        contentTypeComboBox.setWidth("300px");
+        layout.addComponent(contentTypeComboBox);
+
+        Slider weightSlider = new Slider();
+        weightSlider.setWidth("300px");
+        weightSlider.setCaption("Weight in layout");
+        weightSlider.setMin(1);
+        weightSlider.setMax(10);
+        weightSlider.setResolution(0);
 
         if (widget.getParent() instanceof AbstractOrderedLayout) {
-            layout.addComponent(weightComboBox);
+            layout.addComponent(weightSlider);
         }
 
         HorizontalLayout spanLayout = new HorizontalLayout();
+        spanLayout.setWidth("300px");
         spanLayout.setSpacing(true);
 
-        ComboBox colSpanComboBox = new ComboBox();
-        colSpanComboBox.setCaption("Column span");
-        colSpanComboBox.setWidth("100%");
-        for (int i = 1; i < 10; i++) {
-            colSpanComboBox.addItem(i);
-        }
-        spanLayout.addComponent(colSpanComboBox);
+        Slider colSpanSlider = new Slider();
+        colSpanSlider.setCaption("Column span");
+        colSpanSlider.setWidth("100%");
+        colSpanSlider.setMin(1);
+        colSpanSlider.setMax(10);
+        colSpanSlider.setResolution(0);
+        spanLayout.addComponent(colSpanSlider);
 
-        ComboBox rowSpanComboBox = new ComboBox();
-        rowSpanComboBox.setCaption("Row span");
-        rowSpanComboBox.setWidth("100%");
-        for (int i = 1; i < 10; i++) {
-            rowSpanComboBox.addItem(i);
-        }
-        spanLayout.addComponent(rowSpanComboBox);
+        Slider rowSpanComboSlider = new Slider();
+        rowSpanComboSlider.setCaption("Row span");
+        rowSpanComboSlider.setWidth("100%");
+        rowSpanComboSlider.setMin(1);
+        rowSpanComboSlider.setMax(10);
+        rowSpanComboSlider.setResolution(0);
+        spanLayout.addComponent(rowSpanComboSlider);
 
         if (widget.getParent() instanceof GridLayout) {
             layout.addComponent(spanLayout);
@@ -87,6 +89,15 @@ public class WidgetConfigDialog extends Window {
         okButton.addClickListener((Button.ClickListener) event -> {
             widget.setHeaderText(captionTextField.getValue());
             widget.setHeaderIcon(captionIconField.getItemIcon(captionIconField.getValue()));
+
+            if (widget.getParent() instanceof AbstractOrderedLayout) {
+                widget.setWeight(weightSlider.getValue().intValue());
+            }
+            if (widget.getParent() instanceof GridLayout) {
+                widget.setColSpan(colSpanSlider.getValue().intValue());
+                widget.setRowSpan(rowSpanComboSlider.getValue().intValue());
+            }
+            widget.setDemoContentType(((DemoContentType) contentTypeComboBox.getValue()));
 
             close();
         });
@@ -103,6 +114,20 @@ public class WidgetConfigDialog extends Window {
         setContent(layout);
 
         captionTextField.focus();
+    }
+
+    private void fillDemoContentTypes(ComboBox contentTypeComboBox) {
+        contentTypeComboBox.addItem(DemoContentType.PRODUCTS_TABLE);
+        contentTypeComboBox.setItemCaption(DemoContentType.PRODUCTS_TABLE, "Products table");
+        contentTypeComboBox.setItemIcon(DemoContentType.PRODUCTS_TABLE, FontAwesome.TABLE);
+
+        contentTypeComboBox.addItem(DemoContentType.SALES_CHART);
+        contentTypeComboBox.setItemCaption(DemoContentType.SALES_CHART, "Sales chart");
+        contentTypeComboBox.setItemIcon(DemoContentType.SALES_CHART, FontAwesome.LINE_CHART);
+
+        contentTypeComboBox.addItem(DemoContentType.INVOICE_REPORT);
+        contentTypeComboBox.setItemCaption(DemoContentType.INVOICE_REPORT, "Invoice report");
+        contentTypeComboBox.setItemIcon(DemoContentType.INVOICE_REPORT, FontAwesome.FILE_O);
     }
 
     private void fillCaptionIcons(ComboBox captionIconField) {

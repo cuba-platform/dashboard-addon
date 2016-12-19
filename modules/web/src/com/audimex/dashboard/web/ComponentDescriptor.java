@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web;
 
 import com.audimex.dashboard.entity.ComponentType;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.ui.Component;
 
 public class ComponentDescriptor {
@@ -97,5 +98,9 @@ public class ComponentDescriptor {
     public ComponentDescriptor(Component ownComponent, ComponentType componentType) {
         this.ownComponent = ownComponent;
         this.componentType = componentType;
+
+        if (this.ownComponent instanceof WidgetPanel) {
+            ((WidgetPanel) ownComponent).setComponentDescriptor(this);
+        }
     }
 }

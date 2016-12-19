@@ -76,10 +76,10 @@ public class PaletteWindow extends AbstractWindow {
         tree = new Tree();
         tree.setSizeFull();
 
-        TreeDropHandler treeDropHandler = new TreeDropHandler();
-        treeDropHandler.setStructureChangeListener((structure, dropTarget) -> {
-            onStructureChanged(dropTarget);
-        });
+        TreeDropHandler treeDropHandler = new TreeDropHandler(dropLayout);
+        treeDropHandler.setStructureChangeListener((structure, dropTarget) ->
+                onStructureChanged(dropTarget)
+        );
         treeDropHandler.setComponentDescriptorTree(componentStructureTree);
         treeDropHandler.setGridDropListener(this::onGridDrop);
 
@@ -94,10 +94,10 @@ public class PaletteWindow extends AbstractWindow {
 
         rootDashboardPanel.setSpacing(true);
         rootDashboardPanel.setMargin(true);
-        DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
-        ddVerticalLayoutDropHandler.setStructureChangeListener((structure, dropTarget) -> {
-            onStructureChanged(dropTarget);
-        });
+        DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler(dropLayout);
+        ddVerticalLayoutDropHandler.setStructureChangeListener((structure, dropTarget) ->
+                onStructureChanged(dropTarget)
+        );
         ddVerticalLayoutDropHandler.setGridDropListener(this::onGridDrop);
         ddVerticalLayoutDropHandler.setComponentDescriptorTree(componentStructureTree);
         rootDashboardPanel.setDropHandler(ddVerticalLayoutDropHandler);
@@ -190,8 +190,9 @@ public class PaletteWindow extends AbstractWindow {
 
         okButton.addClickListener(event -> {
             if (cols.getValue() != null && rows.getValue() != null) {
-                gridLayout.setColumns(Integer.parseInt(cols.getValue().toString()));
-                gridLayout.setRows(Integer.parseInt(rows.getValue().toString()));
+                gridLayout.setColumns((Integer) cols.getValue());
+                gridLayout.setRows((Integer) rows.getValue());
+
                 for (int i=0; i<gridLayout.getRows(); i++) {
                     for (int j=0; j<gridLayout.getColumns(); j++) {
                         Label label = new Label("");
@@ -356,12 +357,11 @@ public class PaletteWindow extends AbstractWindow {
             }
 
             ComponentDescriptor componentDescriptor = new ComponentDescriptor(component, componentType);
-            List<Node<ComponentDescriptor>> childNodeList = new ArrayList<>();
             Node<ComponentDescriptor> node = new Node<>(componentDescriptor);
 
             if (component instanceof AbstractOrderedLayout) {
                 if (((AbstractOrderedLayout) component).getComponentCount() > 0) {
-                    childNodeList = getChildNodesFromLayout((AbstractOrderedLayout) component);
+                    List<Node<ComponentDescriptor>> childNodeList = getChildNodesFromLayout((AbstractOrderedLayout) component);
                     node.setChildren(childNodeList);
                 }
             }
@@ -379,45 +379,45 @@ public class PaletteWindow extends AbstractWindow {
             ComponentDescriptor componentDescriptor = node.getData();
             ComponentDescriptor parent;
 
-            tree.addItem(component.toString());
+            tree.addItem(component);
 
             if (node.getParent() != null) {
                 parent = node.getParent().getData();
-                tree.setParent(component.toString(), parent.getOwnComponent().toString());
+                tree.setParent(component, parent.getOwnComponent());
             }
-            tree.expandItem(component.toString());
+            tree.expandItem(component);
 
             switch (componentDescriptor.getComponentType()) {
                 case VERTICAL_LAYOUT:
-                    tree.setItemCaption(component.toString(), "Vertical");
+                    tree.setItemCaption(component, "Vertical");
                     break;
                 case HORIZONTAL_LAYOUT:
-                    tree.setItemCaption(component.toString(), "Horizontal");
+                    tree.setItemCaption(component, "Horizontal");
                     break;
                 case GRID_LAYOUT:
-                    tree.setItemCaption(component.toString(), "Grid");
+                    tree.setItemCaption(component, "Grid");
                     break;
                 case WIDGET:
-                    tree.setItemCaption(component.toString(), "Widget");
+                    tree.setItemCaption(component, "Widget");
                     break;
             }
 
             if (component instanceof AbstractLayout) {
                 int count = node.getChildren().size();
-                tree.setChildrenAllowed(component.toString(), count != 0);
+                tree.setChildrenAllowed(component, count != 0);
 
                 if (count != 0) {
                     drawTreeComponent(node.getChildren());
                 }
             } else {
-                tree.setChildrenAllowed(component.toString(), false);
+                tree.setChildrenAllowed(component, false);
             }
         }
     }
 
     public void removeComponent() {
         if (tree.getParent(tree.getValue()) != null) {
-            findAndRemoveComponent(componentStructureTree.getRootNodes(), tree.getValue().toString());
+            findAndRemoveComponent(componentStructureTree.getRootNodes(), (Component) tree.getValue());
 
             onStructureChanged(DropTarget.REORDER);
         } else {
@@ -425,15 +425,15 @@ public class PaletteWindow extends AbstractWindow {
         }
     }
 
-    private void findAndRemoveComponent(List<Node<ComponentDescriptor>> nodeList, String componentId) {
+    private void findAndRemoveComponent(List<Node<ComponentDescriptor>> nodeList, Component component) {
         for (Node<ComponentDescriptor> node : nodeList) {
-            if (node.getData().getOwnComponent().toString().equals(componentId)) {
+            if (node.getData().getOwnComponent() == component) {
                 nodeList.remove(nodeList.indexOf(node));
                 return;
             }
 
             if (node.getChildren().size() > 0) {
-                findAndRemoveComponent(node.getChildren(), componentId);
+                findAndRemoveComponent(node.getChildren(), component);
             }
         }
     }

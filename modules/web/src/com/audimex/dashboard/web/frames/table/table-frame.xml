@@ -12,10 +12,10 @@
                               refreshMode="NEVER"/>
     </dsContext>
 
-    <layout>
+    <layout expand="table">
         <label value="Best Sellers in December" stylename="h1"/>
 
-        <table width="100%" height="100%">
+        <table id="table" width="100%">
             <columns>
                 <column id="title"/>
                 <column id="description"/>
