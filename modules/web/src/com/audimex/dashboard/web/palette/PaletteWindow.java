@@ -289,12 +289,35 @@ public class PaletteWindow extends AbstractWindow {
     private void buildLayoutFromTree(List<Node<ComponentDescriptor>> nodeList, AbstractLayout container) {
         for (Node<ComponentDescriptor> node : nodeList) {
             if (container instanceof GridLayout) {
+                Component existingComponent = ((GridLayout) container).getComponent(node.getData().getColumn(), node.getData().getRow());
+                if (existingComponent != null) {
+                    if (existingComponent instanceof Label) {
+                        container.removeComponent(existingComponent);
+                    }
+                }
                 ((GridLayout) container).addComponent(node.getData().getOwnComponent(), node.getData().getColumn(), node.getData().getRow());
             } else {
                 container.addComponent(node.getData().getOwnComponent());
             }
             if (node.getChildren().size() > 0 && node.getData().getComponentType() != ComponentType.WIDGET) {
                 buildLayoutFromTree(node.getChildren(), (AbstractLayout) node.getData().getOwnComponent());
+
+                if (node.getData().getOwnComponent() instanceof GridLayout) {
+                    fillGrid((GridLayout) node.getData().getOwnComponent());
+                }
+            }
+        }
+    }
+
+    private void fillGrid(GridLayout gridLayout) {
+        for (int i=0; i<gridLayout.getRows(); i++) {
+            for (int j=0; j<gridLayout.getColumns(); j++) {
+                if (gridLayout.getComponent(i, j) == null) {
+                    Label label = new Label("Drop component here");
+                    label.addStyleName("dd-grid-slot");
+                    gridLayout.addComponent(label, i, j);
+                    gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
+                }
             }
         }
     }

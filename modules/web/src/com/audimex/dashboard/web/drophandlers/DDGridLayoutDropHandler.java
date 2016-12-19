@@ -135,14 +135,14 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 comp.setSizeFull();
             }
 
-            insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, 0);
+            insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, row, column);
             addComponent(event, comp, column, row);
 
             structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);
         } else {
             removeComponent(componentDescriptorTree.getRootNodes(), comp);
 
-            insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, 0);
+            insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget().toString(), comp, row, column);
             addComponent(event, comp, column, row);
 
             structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);
@@ -163,7 +163,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
         }
     }
 
-    protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, int idx) {
+    protected void insertComponent(List<Node<ComponentDescriptor>> nodeList, String parentId, Component newComponent, int row, int column) {
         for (Node<ComponentDescriptor> node : nodeList) {
             Component component = node.getData().getOwnComponent();
             if (component.toString().equals(parentId)) {
@@ -179,14 +179,18 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                     } else {
                         componentType = ComponentType.WIDGET;
                     }
-                    childList.add(new Node<>(new ComponentDescriptor(newComponent, componentType)));
+
+                    ComponentDescriptor newComponentDescriptor = new ComponentDescriptor(newComponent, componentType);
+                    newComponentDescriptor.setRow(row);
+                    newComponentDescriptor.setColumn(column);
+                    childList.add(new Node<>(newComponentDescriptor));
                     node.setChildren(childList);
                     return;
                 }
             }
 
             if (node.getChildren().size() > 0) {
-                insertComponent(node.getChildren(), parentId, newComponent, idx);
+                insertComponent(node.getChildren(), parentId, newComponent, row, column);
             }
         }
     }
