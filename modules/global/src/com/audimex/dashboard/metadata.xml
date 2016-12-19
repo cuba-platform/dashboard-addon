@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
-
-    <metadata-model root-package="com.audimex.dashboard" namespace="amxd"/>
-
+    <metadata-model namespace="amxd"
+                    root-package="com.audimex.dashboard">
+        <class>com.audimex.dashboard.entity.Product</class>
+    </metadata-model>
 </metadata>

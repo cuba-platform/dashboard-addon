@@ -7,8 +7,6 @@ import com.audimex.dashboard.entity.ComponentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
-import com.audimex.dashboard.web.drophandlers.GridDropListener;
-import com.audimex.dashboard.web.drophandlers.StructureChangeListener;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.cuba.gui.components.*;
@@ -48,10 +46,10 @@ public class PaletteWindow extends AbstractWindow {
     private com.haulmont.cuba.gui.components.Button removeComponent;
 
     protected Tree tree;
-    protected com.haulmont.bali.datastruct.Tree<ComponentDescriptor> componentStructureTree = new com.haulmont.bali.datastruct.Tree<>();
-    protected DDVerticalLayout dropDraggableLayout = new DDVerticalLayout();
-    protected StructureChangeListener structureChangeListener;
-    protected GridDropListener gridDropListener;
+    protected com.haulmont.bali.datastruct.Tree<ComponentDescriptor> componentStructureTree =
+            new com.haulmont.bali.datastruct.Tree<>();
+
+    protected DDVerticalLayout rootDashboardPanel = new DDVerticalLayout();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -71,101 +69,20 @@ public class PaletteWindow extends AbstractWindow {
         containersDraggableLayout.setSpacing(true);
 
         List<Node<ComponentDescriptor>> childNodes = new ArrayList<>();
-        childNodes.add(new Node<>(new ComponentDescriptor(dropDraggableLayout, ComponentType.VERTICAL_LAYOUT)));
+        childNodes.add(new Node<>(new ComponentDescriptor(rootDashboardPanel, ComponentType.VERTICAL_LAYOUT)));
         componentStructureTree.setRootNodes(childNodes);
-        dropDraggableLayout.setDragMode(LayoutDragMode.CLONE);
-
-        structureChangeListener = (structure, dropTarget) -> {
-            if (dropTarget != DropTarget.LAYOUT) {
-                dropDraggableLayout.removeAllComponents();
-                removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
-                buildLayout(componentStructureTree.getRootNodes());
-            }
-            if (dropTarget != DropTarget.TREE) {
-                tree.removeAllItems();
-                drawTreeComponent(componentStructureTree.getRootNodes());
-            }
-            if (dropTarget != DropTarget.REORDER) {
-                dropDraggableLayout.removeAllComponents();
-                removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
-                buildLayout(componentStructureTree.getRootNodes());
-                tree.removeAllItems();
-                drawTreeComponent(componentStructureTree.getRootNodes());
-            }
-        };
-
-        gridDropListener = gridLayout -> {
-            Window subWindow = new Window("Grid settings");
-            subWindow.setModal(true);
-            VerticalLayout subContent = new VerticalLayout();
-            subContent.setSpacing(true);
-            subWindow.setContent(subContent);
-
-            HorizontalLayout buttonsPanel = new HorizontalLayout();
-            HorizontalLayout comboBoxPanel = new HorizontalLayout();
-            buttonsPanel.setSpacing(true);
-            comboBoxPanel.setSpacing(true);
-            ComboBox cols = new ComboBox();
-            ComboBox rows = new ComboBox();
-
-            cols.setNullSelectionAllowed(false);
-            rows.setNullSelectionAllowed(false);
-
-            for (int i=1; i<=10; i++) {
-                cols.addItem(i);
-            }
-
-            for (int i=1; i<=10; i++) {
-                rows.addItem(i);
-            }
-
-            cols.setValue(2);
-            rows.setValue(2);
-            cols.setCaption("Columns");
-            rows.setCaption("Rows");
-            cols.focus();
-
-            comboBoxPanel.addComponent(cols);
-            comboBoxPanel.addComponent(rows);
-            subContent.addComponent(comboBoxPanel);
-            subContent.addComponent(buttonsPanel);
-
-            Button closeButton = new Button("Close", FontAwesome.CLOSE);
-            Button okButton = new Button("Ok", FontAwesome.CHECK);
-            closeButton.addClickListener(event -> subWindow.close());
-
-            okButton.addClickListener(event -> {
-                if (cols.getValue() != null && rows.getValue() != null) {
-                    gridLayout.setColumns(Integer.parseInt(cols.getValue().toString()));
-                    gridLayout.setRows(Integer.parseInt(rows.getValue().toString()));
-                    for (int i=0; i<gridLayout.getRows(); i++) {
-                        for (int j=0; j<gridLayout.getColumns(); j++) {
-                            Label label = new Label("");
-                            label.setSizeFull();
-                            label.addStyleName("dd-grid-slot");
-                            gridLayout.addComponent(label);
-                            gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
-                        }
-                    }
-                    subWindow.close();
-                }
-            });
-
-            buttonsPanel.addComponent(okButton);
-            buttonsPanel.addComponent(closeButton);
-            buttonsPanel.setComponentAlignment(closeButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
-            buttonsPanel.setComponentAlignment(okButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
-
-            subWindow.center();
-            UI.getCurrent().addWindow(subWindow);
-        };
+        rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
 
         tree = new Tree();
         tree.setSizeFull();
+
         TreeDropHandler treeDropHandler = new TreeDropHandler();
-        treeDropHandler.setStructureChangeListener(structureChangeListener);
+        treeDropHandler.setStructureChangeListener((structure, dropTarget) -> {
+            onStructureChanged(dropTarget);
+        });
         treeDropHandler.setComponentDescriptorTree(componentStructureTree);
-        treeDropHandler.setGridDropListener(gridDropListener);
+        treeDropHandler.setGridDropListener(this::onGridDrop);
+
         tree.setDropHandler(treeDropHandler);
         tree.addValueChangeListener(e -> {
             if (tree.getValue() == null) {
@@ -175,19 +92,129 @@ public class PaletteWindow extends AbstractWindow {
             }
         });
 
-        dropDraggableLayout.setSpacing(true);
-        dropDraggableLayout.setMargin(true);
+        rootDashboardPanel.setSpacing(true);
+        rootDashboardPanel.setMargin(true);
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
-        ddVerticalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
-        ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
+        ddVerticalLayoutDropHandler.setStructureChangeListener((structure, dropTarget) -> {
+            onStructureChanged(dropTarget);
+        });
+        ddVerticalLayoutDropHandler.setGridDropListener(this::onGridDrop);
         ddVerticalLayoutDropHandler.setComponentDescriptorTree(componentStructureTree);
-        dropDraggableLayout.setDropHandler(ddVerticalLayoutDropHandler);
+        rootDashboardPanel.setDropHandler(ddVerticalLayoutDropHandler);
 
         drawTreeComponent(componentStructureTree.getRootNodes());
 
-        dropDraggableLayout.setSizeFull();
-        dropDraggableLayout.setStyleName("dd-bordering");
+        rootDashboardPanel.setSizeFull();
+        rootDashboardPanel.setStyleName("dd-bordering");
 
+        setupWidgetsPalette(containersDraggableLayout);
+
+        dropLayoutContainer.addComponent(rootDashboardPanel);
+        containersLayout.addComponent(containersDraggableLayout);
+        treeLayoutContainer.addComponent(tree);
+
+        allowEdit.setValue(true);
+        allowEdit.addValueChangeListener(e -> {
+            if (allowEdit.getValue()) {
+                containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
+                removeSpacings(rootDashboardPanel, true);
+                containersDraggableLayout.removeStyleName("dd-container-disabled");
+                rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
+            } else {
+                containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
+                removeSpacings(rootDashboardPanel, false);
+                containersDraggableLayout.addStyleName("dd-container-disabled");
+                rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
+            }
+        });
+    }
+
+    private void onStructureChanged(DropTarget dropTarget) {
+        if (dropTarget != DropTarget.LAYOUT) {
+            rootDashboardPanel.removeAllComponents();
+            removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
+            buildLayout(componentStructureTree.getRootNodes());
+        }
+        if (dropTarget != DropTarget.TREE) {
+            tree.removeAllItems();
+            drawTreeComponent(componentStructureTree.getRootNodes());
+        }
+        if (dropTarget != DropTarget.REORDER) {
+            rootDashboardPanel.removeAllComponents();
+            removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
+            buildLayout(componentStructureTree.getRootNodes());
+            tree.removeAllItems();
+            drawTreeComponent(componentStructureTree.getRootNodes());
+        }
+    }
+
+    private void onGridDrop(GridLayout gridLayout) {
+        Window subWindow = new Window("Grid settings");
+        subWindow.setModal(true);
+        VerticalLayout subContent = new VerticalLayout();
+        subContent.setSpacing(true);
+        subWindow.setContent(subContent);
+
+        HorizontalLayout buttonsPanel = new HorizontalLayout();
+        HorizontalLayout comboBoxPanel = new HorizontalLayout();
+        buttonsPanel.setSpacing(true);
+        comboBoxPanel.setSpacing(true);
+        ComboBox cols = new ComboBox();
+        ComboBox rows = new ComboBox();
+
+        cols.setNullSelectionAllowed(false);
+        rows.setNullSelectionAllowed(false);
+
+        for (int i=1; i<=10; i++) {
+            cols.addItem(i);
+        }
+
+        for (int i=1; i<=10; i++) {
+            rows.addItem(i);
+        }
+
+        cols.setValue(2);
+        rows.setValue(2);
+        cols.setCaption("Columns");
+        rows.setCaption("Rows");
+        cols.focus();
+
+        comboBoxPanel.addComponent(cols);
+        comboBoxPanel.addComponent(rows);
+        subContent.addComponent(comboBoxPanel);
+        subContent.addComponent(buttonsPanel);
+
+        Button closeButton = new Button("Close", FontAwesome.CLOSE);
+        Button okButton = new Button("Ok", FontAwesome.CHECK);
+        closeButton.addClickListener(event -> subWindow.close());
+
+        okButton.addClickListener(event -> {
+            if (cols.getValue() != null && rows.getValue() != null) {
+                gridLayout.setColumns(Integer.parseInt(cols.getValue().toString()));
+                gridLayout.setRows(Integer.parseInt(rows.getValue().toString()));
+                for (int i=0; i<gridLayout.getRows(); i++) {
+                    for (int j=0; j<gridLayout.getColumns(); j++) {
+                        Label label = new Label("");
+                        label.setSizeFull();
+                        label.addStyleName("dd-grid-slot");
+                        gridLayout.addComponent(label);
+                        gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
+                    }
+                }
+                subWindow.close();
+            }
+        });
+
+        buttonsPanel.addComponent(okButton);
+        buttonsPanel.addComponent(closeButton);
+        buttonsPanel.setComponentAlignment(closeButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
+        buttonsPanel.setComponentAlignment(okButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
+
+        subWindow.center();
+        UI.getCurrent().addWindow(subWindow);
+    }
+
+    private void setupWidgetsPalette(DDVerticalLayout containersDraggableLayout) {
         Button verticalLayoutButton = new Button("Vertical", FontAwesome.ARROWS_V);
         verticalLayoutButton.setId("verticalLayout");
         verticalLayoutButton.setWidth("100%");
@@ -200,41 +227,22 @@ public class PaletteWindow extends AbstractWindow {
         horizontalLayoutButton.setHeight("50px");
         horizontalLayoutButton.setStyleName("dd-palette-button");
 
-        Button widgetButton = new Button("Widget", FontAwesome.ASTERISK);
-        widgetButton.setId("widgetPanel");
-        widgetButton.setWidth("100%");
-        widgetButton.setHeight("50px");
-        widgetButton.setStyleName("dd-palette-button");
-
         Button gridButton = new Button("Grid", FontAwesome.TH);
         gridButton.setId("gridLayout");
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
         gridButton.setStyleName("dd-palette-button");
 
+        Button widgetButton = new Button("Widget", FontAwesome.BAR_CHART);
+        widgetButton.setId("widgetPanel");
+        widgetButton.setWidth("100%");
+        widgetButton.setHeight("50px");
+        widgetButton.setStyleName("dd-palette-button");
+
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
         containersDraggableLayout.addComponent(gridButton);
         containersDraggableLayout.addComponent(widgetButton);
-
-        dropLayoutContainer.addComponent(dropDraggableLayout);
-        containersLayout.addComponent(containersDraggableLayout);
-        treeLayoutContainer.addComponent(tree);
-
-        allowEdit.setValue(true);
-        allowEdit.addValueChangeListener(e -> {
-            if (allowEdit.getValue()) {
-                containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
-                removeSpacings(dropDraggableLayout, true);
-                containersDraggableLayout.removeStyleName("dd-container-disabled");
-                dropDraggableLayout.setDragMode(LayoutDragMode.CLONE);
-            } else {
-                containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
-                removeSpacings(dropDraggableLayout, false);
-                containersDraggableLayout.addStyleName("dd-container-disabled");
-                dropDraggableLayout.setDragMode(LayoutDragMode.NONE);
-            }
-        });
     }
 
     private void removeAllComponentsFromLayout(List<Node<ComponentDescriptor>> nodeList) {
@@ -285,12 +293,12 @@ public class PaletteWindow extends AbstractWindow {
     }
 
     private void buildStructure() {
-        List<Node<ComponentDescriptor>> nodeList = getChildNodesFromLayout(dropDraggableLayout);
+        List<Node<ComponentDescriptor>> nodeList = getChildNodesFromLayout(rootDashboardPanel);
         componentStructureTree.setRootNodes(nodeList);
     }
 
     private void buildLayout(List<Node<ComponentDescriptor>> nodeList) {
-        buildLayoutFromTree(nodeList.get(0).getChildren(), dropDraggableLayout);
+        buildLayoutFromTree(nodeList.get(0).getChildren(), rootDashboardPanel);
     }
 
     private void buildLayoutFromTree(List<Node<ComponentDescriptor>> nodeList, AbstractLayout container) {
@@ -410,7 +418,8 @@ public class PaletteWindow extends AbstractWindow {
     public void removeComponent() {
         if (tree.getParent(tree.getValue()) != null) {
             findAndRemoveComponent(componentStructureTree.getRootNodes(), tree.getValue().toString());
-            structureChangeListener.structureChanged(componentStructureTree, DropTarget.REORDER);
+
+            onStructureChanged(DropTarget.REORDER);
         } else {
             showNotification("You can't remove the root component", NotificationType.HUMANIZED);
         }

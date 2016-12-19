@@ -7,14 +7,18 @@ package com.audimex.dashboard.web;
 import com.audimex.dashboard.entity.ComponentType;
 import com.vaadin.ui.Component;
 
-/**
- * Created by petunin on 07.12.2016.
- */
 public class ComponentDescriptor {
     protected Component ownComponent;
+
     protected ComponentType componentType;
+
     protected int column;
     protected int row;
+
+    protected String caption;
+    protected String icon;
+
+    protected int weight;
     protected int colSpan;
     protected int rowSpan;
 
@@ -64,6 +68,30 @@ public class ComponentDescriptor {
 
     public void setRowSpan(int rowSpan) {
         this.rowSpan = rowSpan;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public ComponentDescriptor(Component ownComponent, ComponentType componentType) {

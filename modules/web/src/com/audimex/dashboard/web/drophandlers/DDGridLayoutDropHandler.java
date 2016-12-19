@@ -7,7 +7,8 @@ package com.audimex.dashboard.web.drophandlers;
 import com.audimex.dashboard.entity.ComponentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
-import com.audimex.dashboard.web.WidgetPanel;
+import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.event.dd.DragAndDropEvent;
@@ -65,10 +66,8 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
-                .getTargetDetails();
+        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
+        DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event.getTargetDetails();
         DDGridLayout layout = (DDGridLayout) details.getTarget();
 
         int row = details.getOverRow();
@@ -131,7 +130,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
                 gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
-                comp = new WidgetPanel("Panel");
+                comp = new WidgetPanel();
                 comp.setSizeFull();
             }
 
@@ -150,8 +149,8 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     }
 
     protected void removeComponent(List<Node<ComponentDescriptor>> nodeList, Component componentToRemove) {
-        for (Node node : nodeList) {
-            Component component = ((ComponentDescriptor) node.getData()).getOwnComponent();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            Component component = node.getData().getOwnComponent();
             if (component == componentToRemove) {
                 node.getParent().removeChildAt(node.getNumberOfChildren());
                 return;
@@ -169,23 +168,15 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             if (component.toString().equals(parentId)) {
                 if (component instanceof AbstractLayout) {
                     List<Node<ComponentDescriptor>> childList = node.getChildren();
-                    ComponentType componentType;
-                    if (newComponent instanceof DDVerticalLayout) {
-                        componentType = ComponentType.VERTICAL_LAYOUT;
-                    } else if (newComponent instanceof DDHorizontalLayout) {
-                        componentType = ComponentType.HORIZONTAL_LAYOUT;
-                    } else if (newComponent instanceof DDGridLayout) {
-                        componentType = ComponentType.GRID_LAYOUT;
-                    } else {
-                        componentType = ComponentType.WIDGET;
-                    }
 
-                    for (int i=0; i<childList.size(); i++) {
-                        if (childList.get(i) != null) {
-                            ComponentDescriptor existingComponent = childList.get(i).getData();
+                    ComponentType componentType = DashboardUtils.getTypeByComponent(newComponent);
+
+                    for (Node<ComponentDescriptor> aChildList : childList) {
+                        if (aChildList != null) {
+                            ComponentDescriptor existingComponent = aChildList.getData();
                             if (existingComponent.getColumn() == column
                                     && existingComponent.getRow() == row) {
-                                 return;
+                                return;
                             }
                         }
                     }

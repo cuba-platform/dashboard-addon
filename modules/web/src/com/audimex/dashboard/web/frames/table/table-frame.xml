@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2016 Haulmont. All rights reserved.
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.frames.table.TableDemoFrame">
+    <dsContext>
+        <collectionDatasource id="productsDs"
+                              class="com.audimex.dashboard.entity.Product"
+                              allowCommit="false"
+                              refreshMode="NEVER"/>
+    </dsContext>
+
+    <layout>
+        <label value="Best Sellers in December" stylename="h1"/>
+
+        <table width="100%" height="100%">
+            <columns>
+                <column id="title"/>
+                <column id="description"/>
+                <column id="price"/>
+            </columns>
+            <rows datasource="productsDs"/>
+        </table>
+    </layout>
+</window>

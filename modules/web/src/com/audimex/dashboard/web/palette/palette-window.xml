@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption"
+        icon="font-icon:DASHBOARD"
         class="com.audimex.dashboard.web.palette.PaletteWindow"
         messagesPack="com.audimex.dashboard.web.palette">
     <dialogMode height="600"

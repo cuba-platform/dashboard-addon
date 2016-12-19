@@ -34,4 +34,21 @@
     .dd-grid-slot {
         box-shadow: inset 0 0 10px #e0e0e0;
     }
+    .ad-header-options-icon:focus:after {
+        box-shadow: none;
+    }
+
+    .v-slot-ad-header-icon {
+        & > .v-widget {
+            white-space: nowrap;
+
+            .v-caption {
+                margin-right: 7px;
+                display: inline-block;
+                padding-top: 0;
+                padding-bottom: 0;
+                line-height: 30px;
+            }
+        }
+    }
 }

@@ -7,7 +7,7 @@ package com.audimex.dashboard.web.drophandlers;
 import com.audimex.dashboard.entity.ComponentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
-import com.audimex.dashboard.web.WidgetPanel;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -91,7 +91,7 @@ public class TreeDropHandler implements DropHandler {
 
                 gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
-                newComponent = new WidgetPanel("Panel");
+                newComponent = new WidgetPanel();
                 newComponent.setSizeFull();
             } else {
                 newComponent = new Label();

@@ -7,7 +7,8 @@ package com.audimex.dashboard.web.drophandlers;
 import com.audimex.dashboard.entity.ComponentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
-import com.audimex.dashboard.web.WidgetPanel;
+import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.event.dd.DragAndDropEvent;
@@ -137,7 +138,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
 
                 gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
-                comp = new WidgetPanel("Panel");
+                comp = new WidgetPanel();
                 comp.setSizeFull();
             }
 
@@ -175,16 +176,9 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
             if (component.toString().equals(parentId)) {
                 if (component instanceof AbstractOrderedLayout) {
                     List<Node<ComponentDescriptor>> childList = node.getChildren();
-                    ComponentType componentType;
-                    if (newComponent instanceof DDVerticalLayout) {
-                        componentType = ComponentType.VERTICAL_LAYOUT;
-                    } else if (newComponent instanceof DDHorizontalLayout) {
-                        componentType = ComponentType.HORIZONTAL_LAYOUT;
-                    } else if (newComponent instanceof DDGridLayout) {
-                        componentType = ComponentType.GRID_LAYOUT;
-                    } else {
-                        componentType = ComponentType.WIDGET;
-                    }
+
+                    ComponentType componentType = DashboardUtils.getTypeByComponent(newComponent);
+
                     childList.add(idx, new Node<>(new ComponentDescriptor(newComponent, componentType)));
                     node.setChildren(childList);
                     return;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2016 Haulmont. All rights reserved.
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        xmlns:charts="http://schemas.haulmont.com/charts/charts.xsd">
+    <layout>
+        <charts:pieChart width="100%" height="100%">
+            <charts:nativeJson>
+
+            </charts:nativeJson>
+        </charts:pieChart>
+    </layout>
+</window>
