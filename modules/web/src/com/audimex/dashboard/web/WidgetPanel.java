@@ -10,12 +10,7 @@ public class WidgetPanel extends CssLayout {
     protected String caption;
     protected VerticalLayout contentLayout = new VerticalLayout();
 
-    public WidgetPanel() {
-        this("");
-    }
-
     public WidgetPanel(String caption) {
-        super();
         this.caption = caption;
         buildComponent();
     }
