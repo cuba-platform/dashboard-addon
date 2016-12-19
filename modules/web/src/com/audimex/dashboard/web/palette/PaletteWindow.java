@@ -270,6 +270,8 @@ public class PaletteWindow extends AbstractWindow {
                     for (int j=0; j < grid.getColumns(); j++) {
                         if (grid.getComponent(j, k) instanceof AbstractLayout) {
                             removeSpacings((AbstractLayout) grid.getComponent(j, k), value);
+                        } else if (grid.getComponent(j, k) instanceof Label) {
+                            grid.getComponent(j, k).setVisible(value);
                         }
                     }
                 }
