@@ -15,6 +15,7 @@ import com.vaadin.shared.ui.dd.HorizontalDropLocation;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
@@ -116,6 +117,25 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 ddHorizontalLayoutDropHandler.setGridDropListener(gridDropListener);
                 ddHorizontalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
                 ddHorizontalLayout.setDropHandler(ddHorizontalLayoutDropHandler);
+            } else if (dragComponent.getId().equals("gridLayout")) {
+                comp = new DDGridLayout();
+                comp.setSizeFull();
+                comp.setStyleName("dd-bordering");
+
+                DDGridLayout gridLayout = (DDGridLayout) comp;
+                gridLayout.setSpacing(true);
+                gridLayout.setMargin(true);
+                gridLayout.setColumns(1);
+                gridLayout.setRows(1);
+                gridLayout.setDragMode(LayoutDragMode.CLONE);
+
+                DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
+                ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
+                ddGridLayoutDropHandler.setStructureChangeListener(structureChangeListener);
+                ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
+                gridLayout.setDropHandler(ddGridLayoutDropHandler);
+
+                gridDropListener.gridDropped(gridLayout);
             } else if (dragComponent.getId().equals("widgetPanel")) {
                 comp = new WidgetPanel("Panel");
                 comp.setSizeFull();
@@ -160,6 +180,8 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                         componentType = ComponentType.VERTICAL_LAYOUT;
                     } else if (newComponent instanceof DDHorizontalLayout) {
                         componentType = ComponentType.HORIZONTAL_LAYOUT;
+                    } else if (newComponent instanceof DDGridLayout) {
+                        componentType = ComponentType.GRID_LAYOUT;
                     } else {
                         componentType = ComponentType.WIDGET;
                     }

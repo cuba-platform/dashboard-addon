@@ -11,12 +11,17 @@ import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.drophandlers.StructureChangeListener;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
-import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Tree;
+import com.vaadin.ui.Window;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
@@ -135,8 +140,8 @@ public class PaletteWindow extends AbstractWindow {
                     gridLayout.setRows(Integer.parseInt(rows.getValue().toString()));
                     for (int i=0; i<gridLayout.getRows(); i++) {
                         for (int j=0; j<gridLayout.getColumns(); j++) {
-                            Label label = new Label("Drop component here");
-//                            label.setSizeFull();
+                            Label label = new Label("");
+                            label.setSizeFull();
                             label.addStyleName("dd-grid-slot");
                             gridLayout.addComponent(label);
                             gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
@@ -315,8 +320,9 @@ public class PaletteWindow extends AbstractWindow {
         for (int i=0; i<gridLayout.getRows(); i++) {
             for (int j=0; j<gridLayout.getColumns(); j++) {
                 if (gridLayout.getComponent(j, i) == null) {
-                    Label label = new Label("Drop component here");
+                    Label label = new Label("");
                     label.addStyleName("dd-grid-slot");
+                    label.setSizeFull();
                     gridLayout.addComponent(label, j, i);
                     gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
                 }

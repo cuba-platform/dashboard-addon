@@ -13,9 +13,7 @@ import com.haulmont.bali.datastruct.Tree;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
+import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
@@ -226,7 +224,9 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             public boolean accept(DragAndDropEvent dragEvent) {
                 DDGridLayout.GridLayoutTargetDetails targetDetails =
                         (DDGridLayout.GridLayoutTargetDetails) dragEvent.getTargetDetails();
-                if (targetDetails.getTarget() instanceof WidgetPanel) {
+                Component insideComponent = ((GridLayout) targetDetails.getTarget())
+                                                .getComponent(targetDetails.getOverColumn(), targetDetails.getOverRow());
+                if (insideComponent != null && !(insideComponent instanceof Label)) {
                     return false;
                 }
                 return true;
