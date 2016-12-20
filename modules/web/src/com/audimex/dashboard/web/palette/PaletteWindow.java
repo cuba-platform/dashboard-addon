@@ -4,19 +4,36 @@
 package com.audimex.dashboard.web.palette;
 
 import com.audimex.dashboard.entity.ComponentType;
+import com.audimex.dashboard.entity.DemoContentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
+import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
+import com.audimex.dashboard.web.drophandlers.DDHorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
+import com.haulmont.cuba.core.global.ClientType;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.CheckBox;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.settings.Settings;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.security.app.UserSettingService;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Tree;
+import com.vaadin.ui.Window;
+import fi.jasoft.dragdroplayouts.DDGridLayout;
+import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import org.json.JSONArray;
@@ -43,6 +60,9 @@ public class PaletteWindow extends AbstractWindow {
 
     @Inject
     private CheckBox allowEdit;
+
+    @Inject
+    private VBoxLayout palette;
 
     @Inject
     private com.haulmont.cuba.gui.components.Button removeComponent;
@@ -117,20 +137,22 @@ public class PaletteWindow extends AbstractWindow {
                 containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 removeSpacings(rootDashboardPanel, true);
                 rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
-
+                palette.setVisible(true);
                 containersDraggableLayout.removeStyleName("dd-container-disabled");
                 rootDashboardPanel.removeStyleName("ad-dashboard-disabled");
             } else {
                 containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
                 removeSpacings(rootDashboardPanel, false);
                 rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
-
+                palette.setVisible(false);
                 containersDraggableLayout.addStyleName("dd-container-disabled");
                 rootDashboardPanel.addStyleName("ad-dashboard-disabled");
             }
 
             removeComponent.setEnabled(allowEdit.getValue());
         });
+
+        loadSettings();
     }
 
     private void onStructureChanged(DropTarget dropTarget) {
@@ -304,6 +326,7 @@ public class PaletteWindow extends AbstractWindow {
                     }
                 }
 
+                DashboardUtils.removeEmptyLabels(((GridLayout) container));
                 ((GridLayout) container).addComponent(cd.getOwnComponent(), cd.getColumn(), cd.getRow(),
                         cd.getColumn() + cd.getColSpan() - 1,
                         cd.getRow() + cd.getRowSpan() - 1);
@@ -439,24 +462,224 @@ public class PaletteWindow extends AbstractWindow {
         }
     }
 
-    private String convertToJson(List<Node<ComponentDescriptor>> nodeList) {
+    private JSONArray convertToJson(List<Node<ComponentDescriptor>> nodeList) {
         JSONArray ja = new JSONArray();
         for (Node<ComponentDescriptor> node : nodeList) {
             JSONObject jo = new JSONObject();
-            jo.put("component", "component");
+            jo.put("component", convertComponentToJSON(node.getData()));
             if (node.getChildren().size() > 0) {
                 jo.put("children", convertToJson(node.getChildren()));
             }
             ja.put(jo);
         }
-        return ja.toString();
+        return ja;
+    }
+
+    private JSONObject convertComponentToJSON(ComponentDescriptor componentDescriptor) {
+        JSONObject jo = new JSONObject();
+        switch (componentDescriptor.getComponentType()) {
+            case VERTICAL_LAYOUT:
+                jo.put("component_type", "vertical");
+                break;
+            case HORIZONTAL_LAYOUT:
+                jo.put("component_type", "horizontal");
+                break;
+            case WIDGET:
+                jo.put("component_type", "widget");
+                break;
+            case GRID_LAYOUT:
+                jo.put("component_type", "grid");
+                break;
+        }
+
+        jo.put("column", componentDescriptor.getColumn());
+        jo.put("row", componentDescriptor.getRow());
+        jo.put("caption", componentDescriptor.getCaption());
+        jo.put("colspan", componentDescriptor.getColSpan());
+        jo.put("rowspan", componentDescriptor.getRowSpan());
+        jo.put("icon", componentDescriptor.getIcon());
+        jo.put("weight", componentDescriptor.getWeight());
+        if (componentDescriptor.getOwnComponent() instanceof WidgetPanel
+                && componentDescriptor.getDemoContentType() != null) {
+            switch (componentDescriptor.getDemoContentType()) {
+                case PRODUCTS_TABLE:
+                    jo.put("contentType", "table");
+                    break;
+                case SALES_CHART:
+                    jo.put("contentType", "chart");
+                    break;
+                case INVOICE_REPORT:
+                    jo.put("contentType", "report");
+                    break;
+            }
+        }
+
+        if (componentDescriptor.getOwnComponent() instanceof GridLayout) {
+            jo.put("columnCount", ((GridLayout) componentDescriptor.getOwnComponent()).getColumns());
+            jo.put("rowCount", ((GridLayout) componentDescriptor.getOwnComponent()).getColumns());
+        }
+        return jo;
+    }
+
+    private List<Node<ComponentDescriptor>> convertJsonToTree(JSONArray jsonArray) {
+        List<Node<ComponentDescriptor>> nodeList = new ArrayList<>();
+        for (int i = 0; i< jsonArray.length(); i++) {
+            Node<ComponentDescriptor> node = new Node<>();
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            JSONObject jsonComponent = (JSONObject) jsonObject.get("component");
+            ComponentType componentType = null;
+            Component component = null;
+            switch ((String) jsonComponent.get("component_type")) {
+                case "vertical":
+                    componentType = ComponentType.VERTICAL_LAYOUT;
+                    DDVerticalLayout ddVerticalLayout = new DDVerticalLayout();
+                    ddVerticalLayout.setMargin(true);
+                    ddVerticalLayout.setSpacing(true);
+                    ddVerticalLayout.setSizeFull();
+                    ddVerticalLayout.setStyleName("dd-bordering");
+                    ddVerticalLayout.setDragMode(LayoutDragMode.CLONE);
+
+                    DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler(dropLayout);
+                    ddVerticalLayoutDropHandler.setStructureChangeListener((structure, dropTarget) ->
+                            onStructureChanged(dropTarget)
+                    );
+                    ddVerticalLayoutDropHandler.setGridDropListener(this::onGridDrop);
+                    ddVerticalLayoutDropHandler.setComponentDescriptorTree(componentStructureTree);
+                    ddVerticalLayout.setDropHandler(ddVerticalLayoutDropHandler);
+
+                    component = ddVerticalLayout;
+                    break;
+                case "horizontal":
+                    componentType = ComponentType.HORIZONTAL_LAYOUT;
+                    DDHorizontalLayout ddHorizontalLayout = new DDHorizontalLayout();
+                    ddHorizontalLayout.setMargin(true);
+                    ddHorizontalLayout.setSpacing(true);
+                    ddHorizontalLayout.setSizeFull();
+                    ddHorizontalLayout.setStyleName("dd-bordering");
+                    ddHorizontalLayout.setDragMode(LayoutDragMode.CLONE);
+
+                    DDHorizontalLayoutDropHandler ddHorizontalLayoutDropHandler = new DDHorizontalLayoutDropHandler(dropLayout);
+                    ddHorizontalLayoutDropHandler.setStructureChangeListener((structure, dropTarget) ->
+                            onStructureChanged(dropTarget)
+                    );
+                    ddHorizontalLayoutDropHandler.setGridDropListener(this::onGridDrop);
+                    ddHorizontalLayoutDropHandler.setComponentDescriptorTree(componentStructureTree);
+                    ddHorizontalLayout.setDropHandler(ddHorizontalLayoutDropHandler);
+
+                    component = ddHorizontalLayout;
+                    break;
+                case "widget":
+                    componentType = ComponentType.WIDGET;
+                    WidgetPanel widgetPanel = new WidgetPanel(dropLayout);
+                    widgetPanel.setHeaderIcon(DashboardUtils.iconNames.inverse().get((String) jsonComponent.get("icon")));
+                    widgetPanel.setHeaderText((String) jsonComponent.get("caption"));
+                    if (jsonComponent.has("contentType")) {
+                        switch ((String) jsonComponent.get("contentType")) {
+                            case "table":
+                                widgetPanel.setDemoContentType(DemoContentType.PRODUCTS_TABLE);
+                                break;
+                            case "chart":
+                                widgetPanel.setDemoContentType(DemoContentType.SALES_CHART);
+                                break;
+                            case "report":
+                                widgetPanel.setDemoContentType(DemoContentType.INVOICE_REPORT);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    component = widgetPanel;
+                    break;
+                case "grid":
+                    componentType = ComponentType.GRID_LAYOUT;
+                    DDGridLayout ddGridLayout = new DDGridLayout();
+                    ddGridLayout.setMargin(true);
+                    ddGridLayout.setSpacing(true);
+                    ddGridLayout.setSizeFull();
+                    ddGridLayout.setStyleName("dd-bordering");
+                    ddGridLayout.setDragMode(LayoutDragMode.CLONE);
+                    ddGridLayout.setColumns((Integer) jsonComponent.get("columnCount"));
+                    ddGridLayout.setRows((Integer) jsonComponent.get("rowCount"));
+
+                    DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dropLayout);
+                    ddGridLayoutDropHandler.setComponentDescriptorTree(componentStructureTree);
+                    ddGridLayoutDropHandler.setStructureChangeListener((structure, dropTarget) ->
+                            onStructureChanged(dropTarget)
+                    );
+                    ddGridLayoutDropHandler.setGridDropListener(this::onGridDrop);
+                    ddGridLayout.setDropHandler(ddGridLayoutDropHandler);
+
+                    component = ddGridLayout;
+                    break;
+            }
+            ComponentDescriptor cd = new ComponentDescriptor(component, componentType);
+            cd.setColumn((Integer) jsonComponent.get("column"));
+            cd.setRow((Integer) jsonComponent.get("row"));
+            cd.setCaption((String) jsonComponent.get("caption"));
+            cd.setColSpan((Integer) jsonComponent.get("colspan"));
+            cd.setRowSpan((Integer) jsonComponent.get("rowspan"));
+            cd.setIcon((String) jsonComponent.get("icon"));
+            cd.setWeight((Integer) jsonComponent.get("weight"));
+            if (componentType == ComponentType.WIDGET) {
+                if (jsonComponent.has("contentType")) {
+                    switch ((String) jsonComponent.get("contentType")) {
+                        case "table":
+                            cd.setDemoContentType(DemoContentType.PRODUCTS_TABLE);
+                            break;
+                        case "chart":
+                            cd.setDemoContentType(DemoContentType.SALES_CHART);
+                            break;
+                        case "report":
+                            cd.setDemoContentType(DemoContentType.INVOICE_REPORT);
+                            break;
+                    }
+                }
+            }
+
+            if (jsonObject.has("children")) {
+                node.setChildren(convertJsonToTree((JSONArray) jsonObject.get("children")));
+            }
+            node.setData(cd);
+            nodeList.add(node);
+        }
+        return nodeList;
+    }
+
+    private void loadSettings() {
+        if (userSettingService.loadSetting("componentStructureTree") != null) {
+            JSONArray jsonArray = new JSONArray(userSettingService.loadSetting("componentStructureTree"));
+            componentStructureTree.setRootNodes(convertJsonToTree(jsonArray));
+            onStructureChanged(DropTarget.REORDER);
+        }
+    }
+
+    public void clearAll() {
+        showOptionDialog("Are you sure?",
+                "All components will be removed",
+                MessageType.CONFIRMATION,
+                new Action[]{
+                new DialogAction(DialogAction.Type.YES) {
+                    @Override
+                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                        List<Node<ComponentDescriptor>> childNodes = new ArrayList<>();
+                        childNodes.add(new Node<>(new ComponentDescriptor(rootDashboardPanel, ComponentType.VERTICAL_LAYOUT)));
+                        componentStructureTree.setRootNodes(childNodes);
+                        onStructureChanged(DropTarget.REORDER);
+                        userSettingService.saveSetting("componentStructureTree", null);
+                    }
+                },
+                new DialogAction(DialogAction.Type.NO) {
+                    @Override
+                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                    }
+                }
+        });
     }
 
     @Override
-    public void saveSettings() {
-        String json = convertToJson(componentStructureTree.getRootNodes());
-        userSettingService.saveSetting("componentStructureTree", json);
-
-        super.saveSettings();
+    protected boolean preClose(String actionId) {
+        JSONArray json = convertToJson(componentStructureTree.getRootNodes());
+        userSettingService.saveSetting("componentStructureTree", json.toString());
+        return super.preClose(actionId);
     }
 }

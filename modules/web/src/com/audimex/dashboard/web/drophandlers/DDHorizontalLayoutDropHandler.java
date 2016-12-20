@@ -202,7 +202,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
         }
     }
 
-    protected void setStructureChangeListener(StructureChangeListener structureChangeListener) {
+    public void setStructureChangeListener(StructureChangeListener structureChangeListener) {
         this.structureChangeListener = structureChangeListener;
     }
 
