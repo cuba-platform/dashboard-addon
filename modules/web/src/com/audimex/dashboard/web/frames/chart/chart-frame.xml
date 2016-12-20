@@ -20,10 +20,8 @@
                         valueField="value"
                         width="100%">
             <chart:legend autoMargins="false"
-                          marginRight="80"
                           markerType="CIRCLE"
                           position="BOTTOM"/>
-            <chart:balloon fixedPosition="true"/>
             <chart:export/>
         </chart:pieChart>
     </layout>
