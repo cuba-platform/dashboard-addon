@@ -8,6 +8,7 @@ import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
+import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
@@ -202,16 +203,7 @@ public class PaletteWindow extends AbstractWindow {
             if (cols.getValue() != null && rows.getValue() != null) {
                 gridLayout.setColumns((Integer) cols.getValue());
                 gridLayout.setRows((Integer) rows.getValue());
-
-                for (int i=0; i<gridLayout.getRows(); i++) {
-                    for (int j=0; j<gridLayout.getColumns(); j++) {
-                        Label label = new Label("");
-                        label.setSizeFull();
-                        label.addStyleName("dd-grid-slot");
-                        gridLayout.addComponent(label);
-                        gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
-                    }
-                }
+                DashboardUtils.addEmptyLabels(gridLayout);
                 subWindow.close();
             }
         });

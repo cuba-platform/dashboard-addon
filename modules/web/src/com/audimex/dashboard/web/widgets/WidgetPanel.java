@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.entity.DemoContentType;
 import com.audimex.dashboard.web.ComponentDescriptor;
+import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.BoxLayout;
@@ -146,10 +147,11 @@ public class WidgetPanel extends CssLayout {
 
             parent.removeComponent(this);
 
-            // todo remove empty labes
+            parent = DashboardUtils.removeEmptyLabels(parent);
             parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
                     componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
+            DashboardUtils.addEmptyLabels(parent);
         }
     }
 
@@ -169,12 +171,14 @@ public class WidgetPanel extends CssLayout {
         }
 
         if (getParent() instanceof GridLayout) {
-            ((GridLayout) getParent()).removeComponent(this);
+            GridLayout parent = (GridLayout) getParent();
+            parent.removeComponent(this);
 
-            // todo remove empty labes
-            ((GridLayout) getParent()).addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
+            parent = DashboardUtils.removeEmptyLabels(parent);
+            parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
                     componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
+            DashboardUtils.addEmptyLabels(parent);
         }
     }
 
