@@ -4,7 +4,6 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
-import com.audimex.dashboard.entity.ComponentType;
 import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.utils.DashboardUtils;
@@ -16,15 +15,16 @@ import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class TreeDropHandler implements DropHandler {
                     newComponent.setStyleName("dd-bordering");
 
                     DDVerticalLayout ddVerticalLayout = (DDVerticalLayout) newComponent;
-                    ddVerticalLayout.setDragMode(LayoutDragMode.CLONE);
+                    ddVerticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                     ddVerticalLayout.setSpacing(true);
                     ddVerticalLayout.setMargin(true);
 
@@ -74,7 +74,7 @@ public class TreeDropHandler implements DropHandler {
                     newComponent.setStyleName("dd-bordering");
 
                     DDHorizontalLayout ddHorizontalLayout = (DDHorizontalLayout) newComponent;
-                    ddHorizontalLayout.setDragMode(LayoutDragMode.CLONE);
+                    ddHorizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                     ddHorizontalLayout.setSpacing(true);
                     ddHorizontalLayout.setMargin(true);
 
@@ -93,7 +93,7 @@ public class TreeDropHandler implements DropHandler {
                     gridLayout.setMargin(true);
                     gridLayout.setColumns(2);
                     gridLayout.setRows(2);
-                    gridLayout.setDragMode(LayoutDragMode.CLONE);
+                    gridLayout.setDragMode(DashboardUtils.getDefaultDragMode());
 
                     DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dashboardContainer);
                     ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);

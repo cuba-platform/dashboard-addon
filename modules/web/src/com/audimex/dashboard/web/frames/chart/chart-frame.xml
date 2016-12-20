@@ -22,7 +22,7 @@
             <chart:legend autoMargins="false"
                           marginRight="80"
                           markerType="CIRCLE"
-                          position="RIGHT"/>
+                          position="BOTTOM"/>
             <chart:balloon fixedPosition="true"/>
             <chart:export/>
         </chart:pieChart>

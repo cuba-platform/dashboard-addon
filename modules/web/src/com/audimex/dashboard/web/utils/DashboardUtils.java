@@ -11,6 +11,7 @@ import com.vaadin.ui.Label;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
+import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 public class DashboardUtils {
     private DashboardUtils() {
@@ -59,5 +60,9 @@ public class DashboardUtils {
         }
 
         return gridLayout;
+    }
+
+    public static LayoutDragMode getDefaultDragMode() {
+        return LayoutDragMode.CLONE;
     }
 }

@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.frames.table;
 
 import com.audimex.dashboard.entity.Product;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.inject.Inject;
@@ -16,12 +17,16 @@ import java.util.UUID;
 public class TableDemoFrame extends AbstractFrame {
     @Inject
     protected CollectionDatasource<Product, UUID> productsDs;
+    @Inject
+    protected Table<Product> table;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
 
         productsDs.refresh();
+
+        table.setSettingsEnabled(false);
 
         addProduct("Echo", "All-New Echo Dot", "39.99");
         addProduct("Fire TV Stick", "TV Stick with Alexa Voice Remote", "42.99");

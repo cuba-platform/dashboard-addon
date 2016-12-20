@@ -98,7 +98,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 comp.setStyleName("dd-bordering");
 
                 DDVerticalLayout ddVerticalLayout = (DDVerticalLayout) comp;
-                ddVerticalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddVerticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 ddVerticalLayout.setSpacing(true);
                 ddVerticalLayout.setMargin(true);
                 DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler(dashboardContainer);
@@ -112,7 +112,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 comp.setStyleName("dd-bordering");
 
                 DDHorizontalLayout ddHorizontalLayout = (DDHorizontalLayout) comp;
-                ddHorizontalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddHorizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 ddHorizontalLayout.setSpacing(true);
                 ddHorizontalLayout.setMargin(true);
                 DDHorizontalLayoutDropHandler ddHorizontalLayoutDropHandler = new DDHorizontalLayoutDropHandler(dashboardContainer);
@@ -130,7 +130,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 gridLayout.setMargin(true);
                 gridLayout.setRows(2);
 
-                gridLayout.setDragMode(LayoutDragMode.CLONE);
+                gridLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 DDGridLayoutDropHandler ddGridLayoutDropHandler = DDGridLayoutDropHandler.this;
                 ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
                 ddGridLayoutDropHandler.setStructureChangeListener(structureChangeListener);

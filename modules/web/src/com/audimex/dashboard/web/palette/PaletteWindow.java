@@ -10,26 +10,19 @@ import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.CheckBox;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.security.app.UserSettingService;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Tree;
-import com.vaadin.ui.Window;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import javafx.scene.shape.DrawMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,18 +62,13 @@ public class PaletteWindow extends AbstractWindow {
         Layout treeLayoutContainer = (Layout) WebComponentsHelper.unwrap(treeLayout);
 
         DDVerticalLayout containersDraggableLayout = new DDVerticalLayout();
-        containersDraggableLayout.setDragMode(LayoutDragMode.CLONE_OTHER);
-        containersDraggableLayout.setDragImageProvider(component -> {
-            Label label = new Label("");
-            label.setIcon(FontAwesome.ASTERISK);
-            return label;
-        });
+        containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
         containersDraggableLayout.setSpacing(true);
 
         List<Node<ComponentDescriptor>> childNodes = new ArrayList<>();
         childNodes.add(new Node<>(new ComponentDescriptor(rootDashboardPanel, ComponentType.VERTICAL_LAYOUT)));
         componentStructureTree.setRootNodes(childNodes);
-        rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
+        rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
 
         tree = new Tree();
         tree.setSizeFull();
@@ -126,9 +114,9 @@ public class PaletteWindow extends AbstractWindow {
         allowEdit.setValue(true);
         allowEdit.addValueChangeListener(e -> {
             if (allowEdit.getValue()) {
-                containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
+                containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 removeSpacings(rootDashboardPanel, true);
-                rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
+                rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
 
                 containersDraggableLayout.removeStyleName("dd-container-disabled");
                 rootDashboardPanel.removeStyleName("ad-dashboard-disabled");

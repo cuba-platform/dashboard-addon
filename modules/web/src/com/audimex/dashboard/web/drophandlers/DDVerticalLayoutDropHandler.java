@@ -20,7 +20,6 @@ import com.vaadin.ui.Component;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.drophandlers.DefaultVerticalLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
@@ -101,7 +100,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 comp.setStyleName("dd-bordering");
 
                 DDVerticalLayout ddVerticalLayout = (DDVerticalLayout) comp;
-                ddVerticalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddVerticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 ddVerticalLayout.setSpacing(true);
                 ddVerticalLayout.setMargin(true);
                 DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = DDVerticalLayoutDropHandler.this;
@@ -115,7 +114,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 comp.setStyleName("dd-bordering");
 
                 DDHorizontalLayout ddHorizontalLayout = (DDHorizontalLayout) comp;
-                ddHorizontalLayout.setDragMode(LayoutDragMode.CLONE);
+                ddHorizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
                 ddHorizontalLayout.setSpacing(true);
                 ddHorizontalLayout.setMargin(true);
                 DDHorizontalLayoutDropHandler ddHorizontalLayoutDropHandler = new DDHorizontalLayoutDropHandler(dashboardContainer);
@@ -133,7 +132,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 gridLayout.setMargin(true);
                 gridLayout.setColumns(2);
                 gridLayout.setRows(2);
-                gridLayout.setDragMode(LayoutDragMode.CLONE);
+                gridLayout.setDragMode(DashboardUtils.getDefaultDragMode());
 
                 DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dashboardContainer);
                 ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
