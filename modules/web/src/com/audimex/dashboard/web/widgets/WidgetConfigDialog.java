@@ -26,6 +26,7 @@ public class WidgetConfigDialog extends Window {
         layout.setWidthUndefined();
 
         TextField captionTextField = new TextField();
+        captionTextField.setImmediate(true);
         captionTextField.setNullRepresentation("");
         captionTextField.setWidth("300px");
         captionTextField.setCaption("Header caption");
@@ -34,6 +35,7 @@ public class WidgetConfigDialog extends Window {
         layout.addComponent(captionTextField);
 
         ComboBox captionIconField = new ComboBox();
+        captionIconField.setImmediate(true);
         captionIconField.setWidth("300px");
         captionIconField.setCaption("Header icon");
         captionIconField.setItemCaptionMode(ItemCaptionMode.EXPLICIT_DEFAULTS_ID);
@@ -43,6 +45,7 @@ public class WidgetConfigDialog extends Window {
         layout.addComponent(captionIconField);
 
         ComboBox contentTypeComboBox = new ComboBox();
+        contentTypeComboBox.setImmediate(true);
         contentTypeComboBox.setCaption("Content");
         contentTypeComboBox.setWidth("300px");
         fillDemoContentTypes(contentTypeComboBox);
@@ -50,6 +53,7 @@ public class WidgetConfigDialog extends Window {
         layout.addComponent(contentTypeComboBox);
 
         Slider weightSlider = new Slider();
+        weightSlider.setImmediate(true);
         weightSlider.setWidth("300px");
         weightSlider.setCaption("Weight in layout");
         weightSlider.setMin(1);
@@ -66,6 +70,7 @@ public class WidgetConfigDialog extends Window {
         spanLayout.setSpacing(true);
 
         Slider colSpanSlider = new Slider();
+        colSpanSlider.setImmediate(true);
         colSpanSlider.setCaption("Column span");
         colSpanSlider.setWidth("100%");
         colSpanSlider.setMin(1);
@@ -75,6 +80,7 @@ public class WidgetConfigDialog extends Window {
         spanLayout.addComponent(colSpanSlider);
 
         Slider rowSpanSlider = new Slider();
+        rowSpanSlider.setImmediate(true);
         rowSpanSlider.setCaption("Row span");
         rowSpanSlider.setWidth("100%");
         rowSpanSlider.setMin(1);
