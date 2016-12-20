@@ -4,12 +4,27 @@
   -->
 
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        xmlns:charts="http://schemas.haulmont.com/charts/charts.xsd">
-    <layout>
-        <charts:pieChart width="100%" height="100%">
-            <charts:nativeJson>
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd"
+        class="com.audimex.dashboard.web.frames.chart.ChartDemoFrame">
+    <dsContext>
+        <collectionDatasource id="countryDataDs"
+                              class="com.audimex.dashboard.entity.CountryData"
+                              refreshMode="NEVER" allowCommit="false"/>
+    </dsContext>
+    <layout expand="pieChart">
+        <label stylename="h1" value="Sales distribution"/>
 
-            </charts:nativeJson>
-        </charts:pieChart>
+        <chart:pieChart id="pieChart"
+                        datasource="countryDataDs"
+                        titleField="country"
+                        valueField="value"
+                        width="100%">
+            <chart:legend autoMargins="false"
+                          marginRight="80"
+                          markerType="CIRCLE"
+                          position="RIGHT"/>
+            <chart:balloon fixedPosition="true"/>
+            <chart:export/>
+        </chart:pieChart>
     </layout>
 </window>

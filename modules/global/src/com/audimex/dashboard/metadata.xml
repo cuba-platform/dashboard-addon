@@ -3,5 +3,6 @@
     <metadata-model namespace="amxd"
                     root-package="com.audimex.dashboard">
         <class>com.audimex.dashboard.entity.Product</class>
+        <class>com.audimex.dashboard.entity.CountryData</class>
     </metadata-model>
 </metadata>

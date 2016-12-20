@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2016-2016 Haulmont. All rights reserved.
+  -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        td,
+        tr,
+        th,
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .amount {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice report</h1>
+
+    <h2>Date: 12/12/2016</h2>
+
+    <table style="width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Project creation</td>
+                <td>Initial project presale</td>
+                <td class="amount">2200.00 $</td>
+            </tr>
+            <tr>
+                <td>Development</td>
+                <td>Web site development</td>
+                <td class="amount">8500.00 $</td>
+            </tr>
+            <tr>
+                <td>Support</td>
+                <td>Support via e-mail</td>
+                <td class="amount">1500.00 $</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Total: 12 200.00 $</h2>
+</body>
+</html>
