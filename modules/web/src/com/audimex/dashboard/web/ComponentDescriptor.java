@@ -18,7 +18,7 @@ public class ComponentDescriptor {
     protected int row;
     protected int column;
 
-    protected String icon = "";
+    protected String icon = "ROCKET";
     protected String caption = "Widget";
 
     protected int weight = 1;

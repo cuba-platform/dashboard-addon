@@ -98,13 +98,20 @@ public class WidgetPanel extends CssLayout {
     }
 
     public Resource getHeaderIcon() {
+        if (componentDescriptor != null) {
+            return DashboardUtils.iconNames.inverse().get(componentDescriptor.getIcon());
+        }
+
         return headerLabel.getIcon();
     }
 
     public void setHeaderIcon(Resource icon) {
         headerLabel.setIcon(icon);
 
-        // todo save to componentDescriptor
+        if (componentDescriptor != null) {
+            String iconName = DashboardUtils.iconNames.get(icon);
+            componentDescriptor.setIcon(iconName);
+        }
     }
 
     public int getWeight() {

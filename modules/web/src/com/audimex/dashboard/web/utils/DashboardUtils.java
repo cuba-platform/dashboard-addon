@@ -5,6 +5,10 @@
 package com.audimex.dashboard.web.utils;
 
 import com.audimex.dashboard.entity.ComponentType;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -14,6 +18,15 @@ import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 public class DashboardUtils {
+
+    public static BiMap<Resource, String> iconNames = ImmutableBiMap.of(
+        FontAwesome.ROCKET, "ROCKET",
+        FontAwesome.MAGIC, "MAGIC",
+        FontAwesome.DOLLAR, "DOLLAR",
+        FontAwesome.BUILDING, "BUILDING",
+        FontAwesome.BOOKMARK_O, "BOOKMARK_O"
+    );
+
     private DashboardUtils() {
     }
 
