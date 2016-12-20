@@ -125,8 +125,10 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 comp.setStyleName("dd-bordering");
 
                 DDGridLayout gridLayout = (DDGridLayout) comp;
-                gridLayout.setColumns(1);
-                gridLayout.setRows(1);
+                gridLayout.setColumns(2);
+                gridLayout.setSpacing(true);
+                gridLayout.setMargin(true);
+                gridLayout.setRows(2);
 
                 gridLayout.setDragMode(LayoutDragMode.CLONE);
                 DDGridLayoutDropHandler ddGridLayoutDropHandler = DDGridLayoutDropHandler.this;
@@ -141,6 +143,9 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             }
 
             insertComponent(componentDescriptorTree.getRootNodes(), details.getTarget(), comp, row, column);
+            if (layout.getComponent(column, row) instanceof Label) {
+                layout.removeComponent(column, row);
+            }
             addComponent(event, comp, column, row);
 
             structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.LAYOUT);

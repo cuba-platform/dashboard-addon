@@ -131,8 +131,8 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 DDGridLayout gridLayout = (DDGridLayout) comp;
                 gridLayout.setSpacing(true);
                 gridLayout.setMargin(true);
-                gridLayout.setColumns(1);
-                gridLayout.setRows(1);
+                gridLayout.setColumns(2);
+                gridLayout.setRows(2);
                 gridLayout.setDragMode(LayoutDragMode.CLONE);
 
                 DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dashboardContainer);

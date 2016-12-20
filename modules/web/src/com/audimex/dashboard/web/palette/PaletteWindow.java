@@ -9,16 +9,26 @@ import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
-import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.security.app.UserSettingService;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Tree;
+import com.vaadin.ui.Window;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
+import javafx.scene.shape.DrawMode;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +37,9 @@ public class PaletteWindow extends AbstractWindow {
 
     @Inject
     private VBoxLayout containers;
+
+    @Inject
+    private UserSettingService userSettingService;
 
     @Inject
     private VBoxLayout dropLayout;
@@ -86,6 +99,7 @@ public class PaletteWindow extends AbstractWindow {
                 removeComponent.setEnabled(true);
             }
         });
+        tree.setDragMode(Tree.TreeDragMode.NODE);
 
         rootDashboardPanel.setSpacing(true);
         rootDashboardPanel.setMargin(true);
@@ -131,19 +145,14 @@ public class PaletteWindow extends AbstractWindow {
     }
 
     private void onStructureChanged(DropTarget dropTarget) {
-        if (dropTarget != DropTarget.LAYOUT) {
+        if (dropTarget == DropTarget.TREE || dropTarget == DropTarget.REORDER) {
             rootDashboardPanel.removeAllComponents();
             removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
             buildLayout(componentStructureTree.getRootNodes());
-        }
-        if (dropTarget != DropTarget.TREE) {
             tree.removeAllItems();
             drawTreeComponent(componentStructureTree.getRootNodes());
         }
-        if (dropTarget != DropTarget.REORDER) {
-            rootDashboardPanel.removeAllComponents();
-            removeAllComponentsFromLayout(componentStructureTree.getRootNodes());
-            buildLayout(componentStructureTree.getRootNodes());
+        if (dropTarget == DropTarget.LAYOUT) {
             tree.removeAllItems();
             drawTreeComponent(componentStructureTree.getRootNodes());
         }
@@ -314,13 +323,17 @@ public class PaletteWindow extends AbstractWindow {
                         container.removeComponent(existingComponent);
                     }
                 }
-                // todo remove empty labes
+
                 ((GridLayout) container).addComponent(cd.getOwnComponent(), cd.getColumn(), cd.getRow(),
                         cd.getColumn() + cd.getColSpan() - 1,
                         cd.getRow() + cd.getRowSpan() - 1);
             } else {
                 container.addComponent(cd.getOwnComponent());
                 ((AbstractOrderedLayout) container).setExpandRatio(cd.getOwnComponent(), cd.getWeight());
+            }
+
+            if (cd.getOwnComponent() instanceof GridLayout) {
+                fillGrid((GridLayout) cd.getOwnComponent());
             }
 
             if (node.getChildren().size() > 0 && cd.getComponentType() != ComponentType.WIDGET) {
@@ -444,5 +457,26 @@ public class PaletteWindow extends AbstractWindow {
                 findAndRemoveComponent(node.getChildren(), component);
             }
         }
+    }
+
+    private String convertToJson(List<Node<ComponentDescriptor>> nodeList) {
+        JSONArray ja = new JSONArray();
+        for (Node<ComponentDescriptor> node : nodeList) {
+            JSONObject jo = new JSONObject();
+            jo.put("component", "component");
+            if (node.getChildren().size() > 0) {
+                jo.put("children", convertToJson(node.getChildren()));
+            }
+            ja.put(jo);
+        }
+        return ja.toString();
+    }
+
+    @Override
+    public void saveSettings() {
+        String json = convertToJson(componentStructureTree.getRootNodes());
+        userSettingService.saveSetting("componentStructureTree", json);
+
+        super.saveSettings();
     }
 }
