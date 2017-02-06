@@ -8,4 +8,6 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.audimex.dashboard"/>
 
+    <bean id="amxd_WidgetRepository"
+          class="com.audimex.dashboard.web.repo.WidgetRepositoryImpl"/>
 </beans>
