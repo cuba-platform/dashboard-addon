@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption"
+        class="com.audimex.dashboard.web.palette.PaletteFrame"
         icon="font-icon:DASHBOARD"
-        class="com.audimex.dashboard.web.palette.PaletteWindow"
         messagesPack="com.audimex.dashboard.web.palette">
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="mainLayout" spacing="true">
-        <hbox id="controlLayout" spacing="true">
-
+    <layout expand="mainLayout"
+            spacing="true">
+        <hbox id="controlLayout"
+              spacing="true">
             <checkBox id="allowEdit"
                       align="MIDDLE_LEFT"
                       caption="Designer mode"/>
@@ -17,19 +18,22 @@
               expand="dropLayout"
               spacing="true"
               width="100%">
-            <vbox expand="treeLayout"
+            <vbox id="palette"
+                  expand="treeLayout"
                   height="100%"
-                  id="palette"
                   spacing="true"
                   width="200px">
                 <vbox id="containers"/>
-                <hbox spacing="true" width="100%">
+                <hbox spacing="true"
+                      width="100%">
                     <button id="removeComponent"
-                            invoke="removeComponent"
-                            width="100%"
+                            caption="Remove"
                             enable="false"
-                            caption="Remove"/>
-                    <button caption="Clear all" width="100%" invoke="clearAll"/>
+                            invoke="removeComponent"
+                            width="100%"/>
+                    <button caption="Clear all"
+                            invoke="clearAll"
+                            width="100%"/>
                 </hbox>
                 <vbox id="treeLayout"/>
             </vbox>

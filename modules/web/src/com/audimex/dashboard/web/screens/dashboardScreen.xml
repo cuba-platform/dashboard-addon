@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.audimex.dashboard.web.screens.DashboardScreen"
+        messagesPack="com.audimex.dashboard.web.screens">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <frame id="paletteFrame"
+               height="100%"
+               screen="palette-frame"/>
+    </layout>
+</window>

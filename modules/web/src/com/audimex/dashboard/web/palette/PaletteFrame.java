@@ -14,14 +14,8 @@ import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.cuba.core.global.ClientType;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.components.BoxLayout;
-import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.CheckBox;
-import com.haulmont.cuba.gui.components.actions.BaseAction;
-import com.haulmont.cuba.gui.settings.Settings;
-import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.security.app.UserSettingService;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
@@ -44,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PaletteWindow extends AbstractWindow {
+public class PaletteFrame extends AbstractFrame {
 
     @Inject
     private VBoxLayout containers;
@@ -676,10 +670,10 @@ public class PaletteWindow extends AbstractWindow {
         });
     }
 
-    @Override
-    protected boolean preClose(String actionId) {
-        JSONArray json = convertToJson(componentStructureTree.getRootNodes());
-        userSettingService.saveSetting("componentStructureTree", json.toString());
-        return super.preClose(actionId);
-    }
+//    @Override
+//    protected boolean preClose(String actionId) {
+//        JSONArray json = convertToJson(componentStructureTree.getRootNodes());
+//        userSettingService.saveSetting("componentStructureTree", json.toString());
+//        return super.preClose(actionId);
+//    }
 }

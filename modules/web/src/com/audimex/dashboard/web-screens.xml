@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <include file="com/audimex/dashboard/screens.xml"/>
-    <screen id="palette-window"
-            template="com/audimex/dashboard/web/palette/palette-window.xml"/>
     <screen id="mainWindow"
             template="com/audimex/dashboard/web/mainwindow/ext-mainwindow.xml"/>
     <screen id="demoTableWidget"
@@ -13,4 +11,8 @@
             template="com/audimex/dashboard/web/frames/chart/chart-frame.xml"/>
     <screen id="map-frame"
             template="com/audimex/dashboard/web/frames/map/map-frame.xml"/>
+    <screen id="dashboardScreen"
+            template="com/audimex/dashboard/web/screens/dashboardScreen.xml"/>
+    <screen id="palette-frame"
+            template="com/audimex/dashboard/web/palette/palette-frame.xml"/>
 </screen-config>
