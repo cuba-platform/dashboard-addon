@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.entity.DemoContentType;
 import com.audimex.dashboard.web.ComponentDescriptor;
+import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
@@ -18,11 +19,13 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import fi.jasoft.dragdroplayouts.DDVerticalLayout;
+import fi.jasoft.dragdroplayouts.interfaces.DragAnchorFilter;
 
 public class WidgetPanel extends CssLayout {
     public static final String LAYOUT_CARD_HEADER = "v-panel-caption";
 
-    private VerticalLayout contentLayout = new VerticalLayout();
+    private DDVerticalLayout contentLayout = new DDVerticalLayout();
 
     private Label headerLabel;
 
@@ -32,12 +35,15 @@ public class WidgetPanel extends CssLayout {
 
     private DemoContentType demoContentType;
 
+    protected DashboardSettings dashboardSettings;
+
     private ComponentDescriptor componentDescriptor;
     private BoxLayout dashboardContainer;
 
     public WidgetPanel(BoxLayout dashboardContainer) {
         this.dashboardContainer = dashboardContainer;
 
+        dashboardSettings = AppBeans.get(DashboardSettings.class);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setWidth("100%");
         horizontalLayout.setStyleName(LAYOUT_CARD_HEADER);
@@ -226,6 +232,8 @@ public class WidgetPanel extends CssLayout {
             Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
             frame.setParent(dashboardContainer);
             setContent(frame.unwrapComposition(Layout.class));
+            contentLayout.setDragAnchorFilter((DragAnchorFilter) component ->
+                    dashboardSettings.isComponentDraggable(component));
         }
     }
 
