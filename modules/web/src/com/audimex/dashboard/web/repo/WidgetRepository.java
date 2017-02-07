@@ -5,12 +5,12 @@
 package com.audimex.dashboard.web.repo;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.List;
 
 public interface WidgetRepository {
     String NAME = "amxd_WidgetRepository";
 
-    Map<String, Widget> getWidgets();
+    List<Widget> getWidgets();
 
     class Widget implements Serializable {
         protected String id;

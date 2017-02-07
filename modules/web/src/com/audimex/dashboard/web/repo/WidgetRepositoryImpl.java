@@ -10,7 +10,8 @@ import com.haulmont.cuba.core.global.Resources;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrTokenizer;
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +20,15 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component(WidgetRepository.NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
     protected volatile boolean initialized = false;
-    protected Map<String, Widget> widgetMap = new LinkedHashMap<>(); // widget map, LinkedHashMap
-    protected Logger log = LoggerFactory.getLogger(getClass());
+    protected List<Widget> widgetMap;
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Inject
     protected WidgetConfig widgetConfig;
@@ -34,7 +37,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     protected Resources resources;
 
     @Override
-    public Map<String, Widget> getWidgets() {
+    public List<Widget> getWidgets() {
         checkInitialized();
         return widgetMap;
     }
@@ -55,16 +58,16 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         String paths = widgetConfig.getWidgetConfigPaths();
         if (StringUtils.isNotBlank(paths)) {
             StrTokenizer stringTokenizer = new StrTokenizer(paths);
-            Map<String, Widget> widgets = new LinkedHashMap<>();
+            List<Widget> widgets = new ArrayList<>();
 
             for (String fileName : stringTokenizer.getTokenArray()) {
-                Map<String, Widget> widgetsFromFile = readFile(fileName);
-                widgets.putAll(widgetsFromFile);
+                List<Widget> widgetsFromFile = readFile(fileName);
+                widgets.addAll(widgetsFromFile);
             }
 
-            widgetMap = Collections.unmodifiableMap(widgets);
+            widgetMap = Collections.unmodifiableList(widgets);
         } else {
-            widgetMap = Collections.emptyMap();
+            widgetMap = Collections.emptyList();
         }
     }
 
@@ -99,7 +102,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         return widget;
     }
 
-    protected Map<String, Widget> readFile(String fileName) {
+    protected List<Widget> readFile(String fileName) {
         log.debug("Deploying widgets config: " + fileName);
 
         InputStream stream = null;
@@ -112,17 +115,17 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             SAXReader reader = new SAXReader();
             Document doc;
             try {
-                doc = reader.read(new InputStreamReader(stream));
-            } catch (DocumentException e) {
+                doc = reader.read(new InputStreamReader(stream, "UTF-8"));
+            } catch (Exception e) {
                 throw new RuntimeException("Unable to parse view file " + fileName, e);
             }
             Element rootElem = doc.getRootElement();
 
-            Map<String, Widget> widgets = new LinkedHashMap<>();
+            List<Widget> widgets = new ArrayList<>();
 
             for (Element viewElem : Dom4j.elements(rootElem, "widget")) {
                 Widget widget = createWidget(viewElem);
-                widgets.put(widget.getId(), widget);
+                widgets.add(widget);
             }
 
             return widgets;
