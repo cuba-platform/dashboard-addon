@@ -11,6 +11,7 @@ import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.DDHorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
+import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
@@ -30,6 +31,8 @@ import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
+import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
+import fi.jasoft.dragdroplayouts.interfaces.DragGrabFilter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -59,6 +62,9 @@ public class PaletteFrame extends AbstractFrame {
     private VBoxLayout palette;
 
     @Inject
+    private DashboardSettings dashboardSettings;
+
+    @Inject
     private com.haulmont.cuba.gui.components.Button removeComponent;
 
     protected Tree tree;
@@ -83,6 +89,8 @@ public class PaletteFrame extends AbstractFrame {
         childNodes.add(new Node<>(new ComponentDescriptor(rootDashboardPanel, ComponentType.VERTICAL_LAYOUT)));
         componentStructureTree.setRootNodes(childNodes);
         rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
+
+        rootDashboardPanel.setDragGrabFilter((DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component));
 
         tree = new Tree();
         tree.setSizeFull();

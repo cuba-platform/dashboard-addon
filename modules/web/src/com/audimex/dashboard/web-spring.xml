@@ -7,10 +7,4 @@
 
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.audimex.dashboard"/>
-
-    <bean id="amxd_WidgetRepository"
-          class="com.audimex.dashboard.web.repo.WidgetRepositoryImpl"/>
-
-    <bean id="amxd_DashboardSettings"
-          class="com.audimex.dashboard.web.settings.DashboardSettingsImpl"/>
 </beans>

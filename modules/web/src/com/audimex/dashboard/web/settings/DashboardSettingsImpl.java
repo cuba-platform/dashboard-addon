@@ -4,15 +4,14 @@
 
 package com.audimex.dashboard.web.settings;
 
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Field;
-import com.vaadin.ui.Table;
+import com.haulmont.charts.gui.components.map.GoogleMapViewer;
+import com.vaadin.ui.*;
+import org.vaadin.hene.popupbutton.PopupButton;
 
+@org.springframework.stereotype.Component(DashboardSettings.NAME)
 public class DashboardSettingsImpl implements DashboardSettings {
     @Override
     public boolean isComponentDraggable(Component component) {
-        //todo add more
         if (component instanceof Table) {
             return false;
         }
@@ -20,6 +19,21 @@ public class DashboardSettingsImpl implements DashboardSettings {
             return false;
         }
         if (component instanceof Button) {
+            return false;
+        }
+        if (component instanceof GoogleMapViewer) {
+            return false;
+        }
+        if (component instanceof Tree) {
+            return false;
+        }
+        if (component instanceof Embedded) {
+            return false;
+        }
+        if (component instanceof Calendar) {
+            return false;
+        }
+        if (component instanceof PopupButton) {
             return false;
         }
         return true;

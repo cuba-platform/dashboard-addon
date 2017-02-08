@@ -19,13 +19,11 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.interfaces.DragAnchorFilter;
 
 public class WidgetPanel extends CssLayout {
     public static final String LAYOUT_CARD_HEADER = "v-panel-caption";
 
-    private DDVerticalLayout contentLayout = new DDVerticalLayout();
+    private VerticalLayout contentLayout = new VerticalLayout();
 
     private Label headerLabel;
 
@@ -232,8 +230,6 @@ public class WidgetPanel extends CssLayout {
             Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
             frame.setParent(dashboardContainer);
             setContent(frame.unwrapComposition(Layout.class));
-            contentLayout.setDragAnchorFilter((DragAnchorFilter) component ->
-                    dashboardSettings.isComponentDraggable(component));
         }
     }
 
