@@ -4,12 +4,13 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
-import com.audimex.dashboard.entity.DropTarget;
 import com.audimex.dashboard.web.ComponentDescriptor;
+import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.utils.LayoutUtils;
+import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.bali.datastruct.Node;
-import com.haulmont.bali.datastruct.Tree;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.Transferable;
@@ -18,27 +19,20 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 import java.util.List;
+import java.util.Map;
 
 public class TreeDropHandler implements DropHandler {
-    private Tree<ComponentDescriptor> componentDescriptorTree;
-    private StructureChangeListener structureChangeListener;
+    private Tree componentDescriptorTree;
     private GridDropListener gridDropListener;
 
-    private BoxLayout dashboardContainer;
-
-    public TreeDropHandler(BoxLayout dashboardContainer) {
-        this.dashboardContainer = dashboardContainer;
-    }
+    private TreeChangeListener treeChangeListener;
 
     @Override
     public void drop(DragAndDropEvent event) {
@@ -51,85 +45,30 @@ public class TreeDropHandler implements DropHandler {
 
             if (transferable.getComponent() instanceof Button) {
                 Button dragComponent = (Button) transferable.getComponent();
-                Component newComponent;
+                Component component;
 
                 if (dragComponent.getId().equals("verticalLayout")) {
-                    newComponent = new DDVerticalLayout();
-                    newComponent.setSizeFull();
-                    newComponent.setStyleName("dd-bordering");
-
-                    DDVerticalLayout ddVerticalLayout = (DDVerticalLayout) newComponent;
-                    ddVerticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
-                    ddVerticalLayout.setSpacing(true);
-                    ddVerticalLayout.setMargin(true);
-
-                    DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler(dashboardContainer);
-                    ddVerticalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
-                    ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
-                    ddVerticalLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
-                    ddVerticalLayout.setDropHandler(ddVerticalLayoutDropHandler);
+                    component = LayoutUtils.createVerticalDropLayout(componentDescriptorTree, gridDropListener);
                 } else if (dragComponent.getId().equals("horizontalLayout")) {
-                    newComponent = new DDHorizontalLayout();
-                    newComponent.setSizeFull();
-                    newComponent.setStyleName("dd-bordering");
-
-                    DDHorizontalLayout ddHorizontalLayout = (DDHorizontalLayout) newComponent;
-                    ddHorizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
-                    ddHorizontalLayout.setSpacing(true);
-                    ddHorizontalLayout.setMargin(true);
-
-                    DDHorizontalLayoutDropHandler ddHorizontalLayoutDropHandler = new DDHorizontalLayoutDropHandler(dashboardContainer);
-                    ddHorizontalLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
-                    ddHorizontalLayoutDropHandler.setGridDropListener(gridDropListener);
-                    ddHorizontalLayoutDropHandler.setStructureChangeListener(structureChangeListener);
-                    ddHorizontalLayout.setDropHandler(ddHorizontalLayoutDropHandler);
+                    component = LayoutUtils.createHorizontalDropLayout(componentDescriptorTree, gridDropListener);
                 } else if (dragComponent.getId().equals("gridLayout")) {
-                    newComponent = new DDGridLayout();
-                    newComponent.setSizeFull();
-                    newComponent.setStyleName("dd-bordering");
-
-                    DDGridLayout gridLayout = (DDGridLayout) newComponent;
-                    gridLayout.setSpacing(true);
-                    gridLayout.setMargin(true);
-                    gridLayout.setColumns(2);
-                    gridLayout.setRows(2);
-                    gridLayout.setDragMode(DashboardUtils.getDefaultDragMode());
-
-                    DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler(dashboardContainer);
-                    ddGridLayoutDropHandler.setComponentDescriptorTree(componentDescriptorTree);
-                    ddGridLayoutDropHandler.setStructureChangeListener(structureChangeListener);
-                    ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
-                    gridLayout.setDropHandler(ddGridLayoutDropHandler);
-
-                    gridDropListener.gridDropped(gridLayout);
+                    component = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
+                    gridDropListener.gridDropped((GridLayout) component);
                 } else if (dragComponent.getId().equals("widgetPanel")) {
-                    newComponent = new WidgetPanel(dashboardContainer);
+                    component = new WidgetPanel();
+                    ((WidgetPanel) component).setContent((Map<String, Object>) dragComponent.getData());
                 } else {
-                    newComponent = new Label();
+                    component = new Label();
                 }
 
+                Object parentId = tree.getParent(target.getItemIdOver());
                 if (location == VerticalDropLocation.MIDDLE) {
-                    insertComponent(newComponent, target.getItemIdOver(), null, location);
+                    TreeUtils.addComponent(componentDescriptorTree, (Component) target.getItemIdOver(), component, 0);
                 } else if (location == VerticalDropLocation.BOTTOM) {
-                    Object parentId = tree.getParent(target.getItemIdOver());
-                    insertComponent(newComponent, parentId, target.getItemIdOver(), location);
+                    TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
                 } else {
-                    Object parentId = tree.getParent(target.getItemIdOver());
-                    insertComponent(newComponent, parentId, target.getItemIdOver(), location);
+                    TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
                 }
-
-                tree.setChildrenAllowed(newComponent, false);
-                if (newComponent instanceof DDVerticalLayout) {
-                    tree.setItemCaption(newComponent, "Vertical");
-                } else if (newComponent instanceof DDHorizontalLayout) {
-                    tree.setItemCaption(newComponent, "Horizontal");
-                } else if (newComponent instanceof DDGridLayout) {
-                    tree.setItemCaption(newComponent, "Grid");
-                } else {
-                    tree.setItemCaption(newComponent, "Widget");
-                }
-
-                structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.TREE);
             }
         } else {
             Transferable t = event.getTransferable();
@@ -141,47 +80,26 @@ public class TreeDropHandler implements DropHandler {
             Object sourceItemId = t.getData("itemId");
             Object targetItemId = target.getItemIdOver();
 
-            HierarchicalContainer container = (HierarchicalContainer)
-                    tree.getContainerDataSource();
-
             if (location == VerticalDropLocation.MIDDLE) {
-                tree.setParent(sourceItemId, targetItemId);
-                moveComponent(sourceItemId, targetItemId, null, location);
+                TreeUtils.moveComponent(tree, targetItemId, sourceItemId, 0);
             } else if (location == VerticalDropLocation.TOP) {
-                Object parentId = container.getParent(targetItemId);
-                container.setParent(sourceItemId, parentId);
-                container.moveAfterSibling(sourceItemId, targetItemId);
-                container.moveAfterSibling(targetItemId, sourceItemId);
-                moveComponent(sourceItemId, parentId, targetItemId, location);
+                int position = TreeUtils.calculatePosition(tree, targetItemId);
+                TreeUtils.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
             } else if (location == VerticalDropLocation.BOTTOM) {
-                Object parentId = container.getParent(targetItemId);
-                container.setParent(sourceItemId, parentId);
-                container.moveAfterSibling(sourceItemId, targetItemId);
-                container.getItemIds().indexOf(sourceItemId);
-                container.getChildren(parentId);
-                moveComponent(sourceItemId, parentId, targetItemId, location);
+                int position = TreeUtils.calculatePosition(tree, targetItemId) + 1;
+                TreeUtils.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
             }
-            structureChangeListener.structureChanged(componentDescriptorTree, DropTarget.TREE);
         }
+
+        treeChangeListener.treeChanged();
     }
 
-    protected void moveComponent(Object sourceItemId, Object parentId, Object siblingId, VerticalDropLocation location) {
-        Node<ComponentDescriptor> oldNode = searchNode(componentDescriptorTree.getRootNodes(), sourceItemId);
-        Node<ComponentDescriptor> newParentNode = searchNode(componentDescriptorTree.getRootNodes(), parentId);
-        Node<ComponentDescriptor> siblingNode;
+    public void setTreeChangeListener(TreeChangeListener treeChangeListener) {
+        this.treeChangeListener = treeChangeListener;
+    }
 
-        int pos = 0;
-        if (siblingId != null) {
-            siblingNode = searchNode(componentDescriptorTree.getRootNodes(), siblingId);
-
-            if (siblingNode != null) {
-                pos = siblingNode.getParent().getChildren().indexOf(siblingNode);
-            }
-        }
-
-        oldNode.getParent().getChildren().remove(oldNode);
-        newParentNode.getChildren().add(pos, oldNode);
-        oldNode.parent = newParentNode;
+    public TreeChangeListener getTreeChangeListener() {
+        return treeChangeListener;
     }
 
     protected Node<ComponentDescriptor> searchNode(List<Node<ComponentDescriptor>> nodeList, Object compId) {
@@ -197,59 +115,6 @@ public class TreeDropHandler implements DropHandler {
             }
         }
         return null;
-    }
-
-    protected void insertComponent(Component newComponent, Object parentId, Object siblingId, VerticalDropLocation location) {
-        Node<ComponentDescriptor> newNode = new Node<>(new ComponentDescriptor(newComponent, DashboardUtils.getTypeByComponent(newComponent)));
-        Node<ComponentDescriptor> newParentNode = searchNode(componentDescriptorTree.getRootNodes(), parentId);
-        Node<ComponentDescriptor> siblingNode;
-
-        int pos = 0;
-        if (siblingId != null) {
-            siblingNode = searchNode(componentDescriptorTree.getRootNodes(), siblingId);
-
-            if (siblingNode != null) {
-                if (siblingNode.getParent() != null) {
-                    pos = siblingNode.getParent().getChildren().indexOf(siblingNode);
-                } else {
-                    pos = componentDescriptorTree.getRootNodes().indexOf(siblingNode);
-                }
-                if (location == VerticalDropLocation.BOTTOM) {
-                    pos++;
-                }
-            }
-        }
-
-        if (newParentNode.getData().getOwnComponent() instanceof GridLayout) {
-            int[] coor = findGridPosition((GridLayout) newParentNode.getData().getOwnComponent());
-            if (coor[0] == -1 || coor[1] == -1) {
-                return;
-            }
-            newNode.getData().setRow(coor[0]);
-            newNode.getData().setColumn(coor[1]);
-        }
-
-        if (parentId != null) {
-            newParentNode.getChildren().add(pos, newNode);
-            newNode.parent = newParentNode;
-        } else {
-            componentDescriptorTree.getRootNodes().add(pos, newNode);
-        }
-    }
-
-    protected int[] findGridPosition(GridLayout gridLayout) {
-        int[] coordinates = {-1, -1};
-        for (int i = 0; i < gridLayout.getRows(); i++) {
-            for (int j = 0; j < gridLayout.getColumns(); j++) {
-                if (gridLayout.getComponent(j, i) != null
-                        && gridLayout.getComponent(j, i) instanceof Label) {
-                    coordinates[0] = i;
-                    coordinates[1] = j;
-                    return coordinates;
-                }
-            }
-        }
-        return coordinates;
     }
 
     @Override
@@ -275,7 +140,11 @@ public class TreeDropHandler implements DropHandler {
                         return true;
                     }
                 }
-                if (targetDetails.getTarget().getParent(targetDetails.getItemIdInto()) == null
+                if (targetDetails.getTarget().getParent(targetDetails.getItemIdOver()) == null
+                        && location != VerticalDropLocation.MIDDLE) {
+                    return false;
+                }
+                if (targetDetails.getTarget().getParent(targetDetails.getItemIdAfter()) == null
                         && location != VerticalDropLocation.MIDDLE) {
                     return false;
                 }
@@ -285,12 +154,8 @@ public class TreeDropHandler implements DropHandler {
         return serverSideCriterion;
     }
 
-    public void setComponentDescriptorTree(Tree<ComponentDescriptor> componentDescriptorTree) {
+    public void setComponentDescriptorTree(Tree componentDescriptorTree) {
         this.componentDescriptorTree = componentDescriptorTree;
-    }
-
-    public void setStructureChangeListener(StructureChangeListener structureChangeListener) {
-        this.structureChangeListener = structureChangeListener;
     }
 
     public void setGridDropListener(GridDropListener gridDropListener) {

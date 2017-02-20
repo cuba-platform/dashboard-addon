@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.entity.DemoContentType;
 import com.audimex.dashboard.web.ComponentDescriptor;
+import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -19,6 +20,8 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Map;
 
 public class WidgetPanel extends CssLayout {
     public static final String LAYOUT_CARD_HEADER = "v-panel-caption";
@@ -36,11 +39,8 @@ public class WidgetPanel extends CssLayout {
     protected DashboardSettings dashboardSettings;
 
     private ComponentDescriptor componentDescriptor;
-    private BoxLayout dashboardContainer;
 
-    public WidgetPanel(BoxLayout dashboardContainer) {
-        this.dashboardContainer = dashboardContainer;
-
+    public WidgetPanel() {
         dashboardSettings = AppBeans.get(DashboardSettings.class);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setWidth("100%");
@@ -74,6 +74,19 @@ public class WidgetPanel extends CssLayout {
         addComponent(contentLayout);
 
         setSizeFull();
+    }
+
+    public void setContent(Map<String, Object> widgetMap) {
+        WidgetRepository.Widget widget = (WidgetRepository.Widget) widgetMap.get("widget");
+        Frame parentFrame = (Frame) widgetMap.get("frame");
+        WindowManager windowManager = App.getInstance().getWindowManager();
+        WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+        WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
+
+
+        Frame frame = windowManager.openFrame(parentFrame, null, windowInfo);
+        frame.setParent(parentFrame);
+        setContent(frame.unwrapComposition(Layout.class));
     }
 
     public void setContent(Component c) {
@@ -162,7 +175,7 @@ public class WidgetPanel extends CssLayout {
             parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
                     componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
-            DashboardUtils.addEmptyLabels(parent);
+//            DashboardUtils.addEmptyLabels(parent);
         }
     }
 
@@ -189,7 +202,7 @@ public class WidgetPanel extends CssLayout {
             parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
                     componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
                     componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
-            DashboardUtils.addEmptyLabels(parent);
+//            DashboardUtils.addEmptyLabels(parent);
         }
     }
 
@@ -221,15 +234,15 @@ public class WidgetPanel extends CssLayout {
         }
 
         if (demoContentType == null) {
-            setContent(null);
+//            setContent(null);
         } else {
             WindowManager windowManager = App.getInstance().getWindowManager();
             WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
             WindowInfo windowInfo = windowConfig.getWindowInfo(getWindowInfo(demoContentType));
 
-            Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
-            frame.setParent(dashboardContainer);
-            setContent(frame.unwrapComposition(Layout.class));
+//            Frame frame = windowManager.openFrame(dashboardContainer.getFrame(), null, windowInfo);
+//            frame.setParent(dashboardContainer);
+//            setContent(frame.unwrapComposition(Layout.class));
         }
     }
 

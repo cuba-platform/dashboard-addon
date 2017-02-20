@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2017 Haulmont. All rights reserved.
+  -->
+
+<widgets xmlns="http://schemas.haulmont.com/audimex/dashboards/widget-descriptor.xsd">
+    <widget id="table" caption="mainMsg://table" frameId="demoTableWidget" icon="icons/move.png"/>
+    <widget id="report" caption="mainMsg://report" frameId="demoReportWidget" icon="icons/pin.png"/>
+    <widget id="chart" caption="mainMsg://chart" frameId="demoChartWidget" icon="icons/ok.png"/>
+    <!--<widget id="users" caption="Users" frameId="sec$User.browse" icon="icons/user.png"/>-->
+</widgets>

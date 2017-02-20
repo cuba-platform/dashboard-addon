@@ -5,6 +5,8 @@
 package com.audimex.dashboard.web.utils;
 
 import com.audimex.dashboard.entity.ComponentType;
+import com.audimex.dashboard.web.widgets.GridCell;
+import com.audimex.dashboard.web.widgets.GridRow;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.vaadin.server.FontAwesome;
@@ -12,6 +14,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
@@ -58,16 +61,18 @@ public class DashboardUtils {
         return gridLayout;
     }
 
-    public static GridLayout addEmptyLabels(GridLayout gridLayout) {
+    public static GridLayout addEmptyLabels(GridLayout gridLayout, Tree tree) {
         for (int i=0; i<gridLayout.getRows(); i++) {
             for (int j=0; j<gridLayout.getColumns(); j++) {
+                GridRow gridRow = LayoutUtils.getGridRow(i, tree, gridLayout);
                 Component innerComponent = gridLayout.getComponent(j, i);
                 if (innerComponent == null) {
-                    Label label = new Label("");
-                    label.addStyleName("dd-grid-slot");
-                    label.setSizeFull();
-                    gridLayout.addComponent(label, j, i);
-                    gridLayout.setComponentAlignment(label, com.vaadin.ui.Alignment.MIDDLE_CENTER);
+                    GridCell gridCell = LayoutUtils.createGridCell(j, i, tree);
+                    gridLayout.addComponent(gridCell, j, i);
+                    tree.addItem(gridCell);
+                    tree.setItemCaption(gridCell, TreeUtils.getTreeItemCaption(gridCell));
+                    tree.setChildrenAllowed(gridCell, false);
+                    tree.setParent(gridCell, gridRow);
                 }
             }
         }
