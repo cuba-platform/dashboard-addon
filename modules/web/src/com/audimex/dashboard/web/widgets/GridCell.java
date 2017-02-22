@@ -11,6 +11,7 @@ public class GridCell extends DDVerticalLayout {
     private int row = 0;
     private int colspan = 1;
     private int rowspan = 1;
+    private boolean available = true;
 
     private GridCell() {
     }
@@ -50,5 +51,13 @@ public class GridCell extends DDVerticalLayout {
 
     public void setRowspan(int rowspan) {
         this.rowspan = rowspan;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

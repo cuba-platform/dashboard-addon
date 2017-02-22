@@ -18,25 +18,31 @@
               expand="dropLayout"
               spacing="true"
               width="100%">
-            <vbox id="palette"
-                  expand="treeLayout"
-                  height="100%"
-                  spacing="true"
-                  width="200px">
-                <vbox id="containers"/>
-                <hbox spacing="true"
-                      width="100%">
-                    <button id="removeComponent"
-                            caption="Remove"
-                            enable="false"
-                            invoke="removeComponent"
-                            width="100%"/>
-                    <button caption="Clear all"
-                            invoke="clearAll"
-                            width="100%"/>
-                </hbox>
-                <vbox id="treeLayout"/>
-            </vbox>
+            <split id="palette"
+                   height="100%"
+                   orientation="vertical"
+                   width="300px">
+                <vbox>
+                    <vbox id="containers"/>
+                </vbox>
+                <vbox expand="treeLayout"
+                      height="100%"
+                      spacing="true">
+                    <hbox margin="true,false,false,false"
+                          spacing="true"
+                          width="100%">
+                        <button id="removeComponent"
+                                caption="Remove"
+                                enable="false"
+                                invoke="removeComponent"
+                                width="100%"/>
+                        <button caption="Clear all"
+                                invoke="clearAll"
+                                width="100%"/>
+                    </hbox>
+                    <vbox id="treeLayout"/>
+                </vbox>
+            </split>
             <vbox id="dropLayout"
                   height="100%"
                   spacing="true"/>

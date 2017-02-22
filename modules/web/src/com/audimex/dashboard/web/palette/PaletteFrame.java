@@ -4,21 +4,23 @@
 package com.audimex.dashboard.web.palette;
 
 import com.audimex.dashboard.entity.ComponentType;
-import com.audimex.dashboard.entity.DemoContentType;
-import com.audimex.dashboard.entity.DropTarget;
+import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.ComponentDescriptor;
-import com.audimex.dashboard.web.drophandlers.*;
+import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
+import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
-import com.audimex.dashboard.web.widgets.WidgetPanel;
+import com.audimex.dashboard.web.widgets.GridCell;
+import com.audimex.dashboard.web.widgets.GridRow;
 import com.haulmont.bali.datastruct.Node;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.security.app.UserSettingService;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.data.util.HierarchicalContainer;
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -27,20 +29,15 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.Window;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
-import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
+import fi.jasoft.dragdroplayouts.DDCssLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.DragCaption;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import fi.jasoft.dragdroplayouts.interfaces.DragCaptionProvider;
-import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 import fi.jasoft.dragdroplayouts.interfaces.DragGrabFilter;
-import org.apache.commons.collections.map.HashedMap;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +59,7 @@ public class PaletteFrame extends AbstractFrame {
     private CheckBox allowEdit;
 
     @Inject
-    private VBoxLayout palette;
+    private SplitPanel palette;
 
     @Inject
     private DashboardSettings dashboardSettings;
@@ -76,6 +73,7 @@ public class PaletteFrame extends AbstractFrame {
     protected Tree tree;
 
     protected DDVerticalLayout rootDashboardPanel = new DDVerticalLayout();
+    protected Component treeComponent;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -85,9 +83,8 @@ public class PaletteFrame extends AbstractFrame {
         Layout dropLayoutContainer = (Layout) WebComponentsHelper.unwrap(dropLayout);
         Layout treeLayoutContainer = (Layout) WebComponentsHelper.unwrap(treeLayout);
 
-        DDVerticalLayout containersDraggableLayout = new DDVerticalLayout();
+        DDCssLayout containersDraggableLayout = new DDCssLayout();
         containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
-        containersDraggableLayout.setSpacing(true);
         containersDraggableLayout.setDragCaptionProvider(
                 component -> new DragCaption(component.getCaption(), component.getIcon())
         );
@@ -95,7 +92,6 @@ public class PaletteFrame extends AbstractFrame {
         List<Node<ComponentDescriptor>> childNodes = new ArrayList<>();
         childNodes.add(new Node<>(new ComponentDescriptor(rootDashboardPanel, ComponentType.VERTICAL_LAYOUT)));
         rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
-
         rootDashboardPanel.setDragGrabFilter((DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component));
 
         tree = new Tree();
@@ -108,11 +104,42 @@ public class PaletteFrame extends AbstractFrame {
 
         tree.setDropHandler(treeDropHandler);
         tree.addValueChangeListener(e -> {
+            if (treeComponent != null) {
+                treeComponent.removeStyleName("tree-selected");
+            }
+
             if (tree.getValue() == null) {
                 removeComponent.setEnabled(false);
             } else {
                 removeComponent.setEnabled(true);
+                Object treeObject = tree.getValue();
+                if (treeObject instanceof Component) {
+                    if (treeObject instanceof GridCell) {
+                        Collection<?> gridCellChild = tree.getChildren(treeObject);
+                        if (gridCellChild != null) {
+                            treeComponent = (Component) gridCellChild.iterator().next();
+                        } else {
+                            treeComponent = ((GridCell) treeObject).getParent();
+                        }
+                    } else {
+                        treeComponent = (Component) treeObject;
+                    }
+                } else if (treeObject instanceof GridRow) {
+                    treeComponent = (Component) tree.getParent(treeObject);
+                }
+
+                treeComponent.addStyleName("tree-selected");
             }
+        });
+        tree.setItemStyleGenerator((Tree.ItemStyleGenerator) (source, itemId) -> {
+            if (itemId instanceof GridCell) {
+                if (!((GridCell) itemId).isAvailable()) {
+                    if (source.getChildren(itemId) == null) {
+                        return "not-available";
+                    }
+                }
+            }
+            return null;
         });
         tree.setDragMode(Tree.TreeDragMode.NODE);
         tree.addItem(rootDashboardPanel);
@@ -126,7 +153,10 @@ public class PaletteFrame extends AbstractFrame {
         ddVerticalLayoutDropHandler.setGridDropListener(this::onGridDrop);
         ddVerticalLayoutDropHandler.setComponentDescriptorTree(tree);
         rootDashboardPanel.setDropHandler(ddVerticalLayoutDropHandler);
-
+        rootDashboardPanel.addLayoutClickListener(
+                (LayoutEvents.LayoutClickListener) e ->
+                        tree.setValue(e.getClickedComponent())
+        );
         rootDashboardPanel.setSizeFull();
         rootDashboardPanel.setStyleName("dd-bordering");
 
@@ -169,22 +199,17 @@ public class PaletteFrame extends AbstractFrame {
         HorizontalLayout comboBoxPanel = new HorizontalLayout();
         buttonsPanel.setSpacing(true);
         comboBoxPanel.setSpacing(true);
-        ComboBox cols = new ComboBox();
-        ComboBox rows = new ComboBox();
+        Slider cols = new Slider();
+        Slider rows = new Slider();
 
-        cols.setNullSelectionAllowed(false);
-        rows.setNullSelectionAllowed(false);
+        cols.setMin(1);
+        cols.setMax(10);
 
-        for (int i=1; i<=10; i++) {
-            cols.addItem(i);
-        }
+        rows.setMin(1);
+        rows.setMax(10);
 
-        for (int i=1; i<=10; i++) {
-            rows.addItem(i);
-        }
-
-        cols.setValue(2);
-        rows.setValue(2);
+        cols.setValue((double) 2);
+        rows.setValue((double) 2);
         cols.setCaption("Columns");
         rows.setCaption("Rows");
         cols.focus();
@@ -200,8 +225,9 @@ public class PaletteFrame extends AbstractFrame {
 
         okButton.addClickListener(event -> {
             if (cols.getValue() != null && rows.getValue() != null) {
-                gridLayout.setColumns((Integer) cols.getValue());
-                gridLayout.setRows((Integer) rows.getValue());
+                DashboardUtils.removeEmptyLabels(gridLayout, tree);
+                gridLayout.setColumns(cols.getValue().intValue());
+                gridLayout.setRows(rows.getValue().intValue());
                 DashboardUtils.addEmptyLabels(gridLayout, tree);
                 subWindow.close();
             }
@@ -216,21 +242,21 @@ public class PaletteFrame extends AbstractFrame {
         UI.getCurrent().addWindow(subWindow);
     }
 
-    private void setupWidgetsPalette(DDVerticalLayout containersDraggableLayout) {
-        Button verticalLayoutButton = new Button("Vertical", FontAwesome.ARROWS_V);
-        verticalLayoutButton.setId("verticalLayout");
+    private void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
+        PaletteButton verticalLayoutButton = new PaletteButton("Vertical", FontAwesome.ARROWS_V);
+        verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
         verticalLayoutButton.setStyleName("dd-palette-button");
 
-        Button horizontalLayoutButton = new Button("Horizontal", FontAwesome.ARROWS_H);
-        horizontalLayoutButton.setId("horizontalLayout");
+        PaletteButton horizontalLayoutButton = new PaletteButton("Horizontal", FontAwesome.ARROWS_H);
+        horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
         horizontalLayoutButton.setStyleName("dd-palette-button");
 
-        Button gridButton = new Button("Grid", FontAwesome.TH);
-        gridButton.setId("gridLayout");
+        PaletteButton gridButton = new PaletteButton("Grid", FontAwesome.TH);
+        gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
         gridButton.setStyleName("dd-palette-button");
@@ -240,20 +266,18 @@ public class PaletteFrame extends AbstractFrame {
         containersDraggableLayout.addComponent(gridButton);
 
         for (WidgetRepository.Widget widget : widgetRepository.getWidgets()) {
-            Button widgetButton = new Button(
+            PaletteButton paletteButton = new PaletteButton(
                     messages.getTools().loadString(widget.getCaption()), // todo msg://
                     WebComponentsHelper.getIcon(widget.getIcon())
             );
 
-            widgetButton.setId("widgetPanel"); // todo do not use Ids
-            widgetButton.setWidth("100%");
-            widgetButton.setHeight("50px");
-            widgetButton.setStyleName("dd-palette-button");
-            Map<String, Object> widgetMap = new HashedMap(); // todo ?
-            widgetMap.put("frame", getFrame());
-            widgetMap.put("widget", widget);
-            widgetButton.setData(widgetMap);
-            containersDraggableLayout.addComponent(widgetButton);
+            paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
+            paletteButton.setWidth("100%");
+            paletteButton.setHeight("50px");
+            paletteButton.setStyleName("dd-palette-button");
+            paletteButton.setDropFrame(getFrame());
+            paletteButton.setWidget(widget);
+            containersDraggableLayout.addComponent(paletteButton);
         }
     }
 

@@ -94,4 +94,15 @@
             visibility: hidden;
         }
     }
+
+    .v-tree-node-not-available span {
+        color: #b7b7b7;
+        text-decoration: line-through;
+    }
+
+    .tree-selected {
+        border: 2px solid $v-selection-color;
+        border-radius: 3px;
+        box-shadow: 0 0 5px $v-selection-color;
+    }
 }

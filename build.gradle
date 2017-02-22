@@ -215,6 +215,7 @@ configure(webToolkitModule) {
     
     task buildWidgetSet(type: CubaWidgetSetBuilding) {
         widgetSetClass = 'com.audimex.dashboard.web.toolkit.ui.AppWidgetSet'
+        style = 'DETAILED'
     }
     
     task debugWidgetSet(type: CubaWidgetSetDebug) {

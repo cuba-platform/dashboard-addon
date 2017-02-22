@@ -9,9 +9,9 @@ import com.audimex.dashboard.web.ComponentDescriptor;
 import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
@@ -21,12 +21,11 @@ import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.Map;
-
 public class WidgetPanel extends CssLayout {
     public static final String LAYOUT_CARD_HEADER = "v-panel-caption";
 
     private VerticalLayout contentLayout = new VerticalLayout();
+    private Tree tree;
 
     private Label headerLabel;
 
@@ -40,7 +39,8 @@ public class WidgetPanel extends CssLayout {
 
     private ComponentDescriptor componentDescriptor;
 
-    public WidgetPanel() {
+    public WidgetPanel(Tree tree) {
+        this.tree = tree;
         dashboardSettings = AppBeans.get(DashboardSettings.class);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setWidth("100%");
@@ -59,7 +59,7 @@ public class WidgetPanel extends CssLayout {
         optionsButton.addStyleName("ad-header-options-icon");
         optionsButton.setIcon(FontAwesome.COG);
         optionsButton.addClickListener((Button.ClickListener) (event) -> {
-            WidgetConfigDialog dialog = new WidgetConfigDialog(this);
+            WidgetConfigDialog dialog = new WidgetConfigDialog(this, tree);
             getUI().addWindow(dialog);
         });
         horizontalLayout.addComponent(optionsButton);
@@ -76,9 +76,7 @@ public class WidgetPanel extends CssLayout {
         setSizeFull();
     }
 
-    public void setContent(Map<String, Object> widgetMap) {
-        WidgetRepository.Widget widget = (WidgetRepository.Widget) widgetMap.get("widget");
-        Frame parentFrame = (Frame) widgetMap.get("frame");
+    public void setContent(WidgetRepository.Widget widget, Frame parentFrame) {
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
@@ -161,21 +159,22 @@ public class WidgetPanel extends CssLayout {
 
     public void setColSpan(int colSpan) {
         this.colSpan = colSpan;
+        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
 
-        if (componentDescriptor != null) {
-            componentDescriptor.setColSpan(colSpan);
+        if (gridCell != null) {
+            gridCell.setColspan(colSpan);
         }
 
         if (getParent() instanceof GridLayout) {
             GridLayout parent = (GridLayout) getParent();
-
             parent.removeComponent(this);
 
-            parent = DashboardUtils.removeEmptyLabels(parent);
-            parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
-                    componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
-                    componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
-//            DashboardUtils.addEmptyLabels(parent);
+            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                    gridCell.getColumn() + gridCell.getColspan() - 1,
+                    gridCell.getRow() + gridCell.getRowspan() - 1);
+            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
+            DashboardUtils.lockGridCells(parent, tree);
         }
     }
 
@@ -189,20 +188,26 @@ public class WidgetPanel extends CssLayout {
 
     public void setRowSpan(int rowSpan) {
         this.rowSpan = rowSpan;
+        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
 
-        if (componentDescriptor != null) {
-            componentDescriptor.setRowSpan(rowSpan);
+        if (gridCell != null) {
+            gridCell.setRowspan(rowSpan);
         }
 
         if (getParent() instanceof GridLayout) {
             GridLayout parent = (GridLayout) getParent();
+
+            int availableColspan = parent.getColumns() - gridCell.getColumn();
+            int availableRowspan = parent.getRows() - gridCell.getRowspan();
+
             parent.removeComponent(this);
 
-            parent = DashboardUtils.removeEmptyLabels(parent);
-            parent.addComponent(this, componentDescriptor.getColumn(), componentDescriptor.getRow(),
-                    componentDescriptor.getColumn() + componentDescriptor.getColSpan() - 1,
-                    componentDescriptor.getRow() + componentDescriptor.getRowSpan() - 1);
-//            DashboardUtils.addEmptyLabels(parent);
+            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                    gridCell.getColumn() + gridCell.getColspan() - 1,
+                    gridCell.getRow() + gridCell.getRowspan() - 1);
+            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
+            DashboardUtils.lockGridCells(parent, tree);
         }
     }
 

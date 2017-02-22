@@ -4,16 +4,17 @@
 
 package com.audimex.dashboard.web.utils;
 
-import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.data.util.HierarchicalContainer;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 import java.util.Collection;
 
@@ -27,6 +28,7 @@ public class TreeUtils {
             for (int i=0; i<((GridLayout) component).getRows(); i++) {
                 LayoutUtils.createNewGridRow((GridLayout) component, tree, i);
             }
+            tree.expandItem(component);
         } else {
             tree.setChildrenAllowed(component, false);
         }
@@ -115,8 +117,8 @@ public class TreeUtils {
     }
 
     public static void reorder(Tree tree, Component parent, Component component, int position) {
-        tree.removeItem(component);
         Object parentId = tree.getParent(component);
+        tree.removeItem(component);
         if (tree.getChildren(parentId) == null) {
             tree.setChildrenAllowed(parentId, false);
         }
@@ -135,15 +137,40 @@ public class TreeUtils {
         for (Object component : chlidren) {
             if (component instanceof GridCell) {
                 GridLayout grid = ((GridRow) layout).getGridLayout();
+                GridCell gridCell = (GridCell) component;
+                DashboardUtils.removeEmptyLabelsForSpan(grid, gridCell);
                 grid.removeComponent(
                         ((GridCell) component).getColumn(),
                         ((GridCell) component).getRow()
                 );
-                grid.addComponent(
-                        getGridCellComponent(tree, ((GridCell) component)),
-                        ((GridCell) component).getColumn(),
-                        ((GridCell) component).getRow()
-                );
+                Component cellComponent = getGridCellComponent(tree, gridCell);
+                if (cellComponent instanceof GridCell) {
+                    ((GridCell) cellComponent).setColspan(1);
+                    ((GridCell) cellComponent).setRowspan(1);
+                    Component gridCellComponent = grid.getComponent(gridCell.getColumn(), gridCell.getRow());
+                    if (gridCellComponent == null) {
+                        grid.addComponent(
+                                cellComponent,
+                                gridCell.getColumn(),
+                                gridCell.getRow(),
+                                gridCell.getColumn()+gridCell.getColspan()-1,
+                                gridCell.getRow()+gridCell.getRowspan()-1
+                        );
+                    }
+                } else {
+                    if (cellComponent instanceof WidgetPanel) {
+                        ((WidgetPanel) cellComponent).setColSpan(gridCell.getColspan());
+                        ((WidgetPanel) cellComponent).setRowSpan(gridCell.getRowspan());
+                    }
+                    grid.addComponent(
+                            cellComponent,
+                            gridCell.getColumn(),
+                            gridCell.getRow(),
+                            gridCell.getColumn()+gridCell.getColspan()-1,
+                            gridCell.getRow()+gridCell.getRowspan()-1
+                    );
+                }
+
             } else if (!(component instanceof GridRow)) {
                 ((AbstractOrderedLayout) layout).addComponent((Component) component);
             }
@@ -171,5 +198,26 @@ public class TreeUtils {
         } else {
             return gridCell;
         }
+    }
+
+    public static void markGridCells(Tree tree, GridLayout gridLayout,
+                                     int row, int column, int rowspan, int colspan) {
+        Collection<?> rows = tree.getChildren(gridLayout);
+        for (Object gridRow : rows) {
+            Collection<?> cells = tree.getChildren(gridRow);
+            for (Object gridCell : cells) {
+                GridCell currentCell = (GridCell) gridCell;
+                if (currentCell.getRow() >= row
+                        && currentCell.getRow() < row+rowspan
+                        && currentCell.getColumn() >= column
+                        && currentCell.getColumn() < column+colspan) {
+                    currentCell.setAvailable(false);
+                } else {
+                    currentCell.setAvailable(true);
+                }
+            }
+        }
+
+        tree.markAsDirty();
     }
 }

@@ -10,6 +10,7 @@ import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
@@ -129,5 +130,66 @@ public class LayoutUtils {
         component.setMargin(true);
 
         return component;
+    }
+
+    public static GridCell getWidgetCell(Tree tree, WidgetPanel widgetPanel) {
+        return (GridCell) tree.getParent(widgetPanel);
+    }
+
+    public static GridCell getGridCell(Tree tree, Collection<?> rows, int columnIndex, int rowIndex) {
+        for (Object row : rows) {
+            Collection<?> cells = tree.getChildren(row);
+            for (Object cell : cells) {
+                GridCell gridCell = (GridCell) cell;
+                if (gridCell.getColumn() == columnIndex && gridCell.getRow() == rowIndex) {
+                    return gridCell;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static int availableColumns(GridLayout gridLayout, GridCell gridCell) {
+        int availableColumns = gridCell.getColspan();
+        for (int column = gridCell.getColumn() + gridCell.getColspan(); column < gridLayout.getColumns(); column++) {
+            Component gridLayoutComponent = gridLayout.getComponent(column, gridCell.getRow());
+            if (!(gridLayoutComponent instanceof GridCell)) {
+                break;
+            }
+            availableColumns++;
+        }
+        return availableColumns;
+    }
+
+    public static int availableRows(GridLayout gridLayout, GridCell gridCell) {
+        int availableRows = gridCell.getRowspan();
+        for (int row = gridCell.getRow() + gridCell.getRowspan(); row < gridLayout.getRows(); row++) {
+            Component gridLayoutComponent = gridLayout.getComponent(gridCell.getColumn(), row);
+            if (!(gridLayoutComponent instanceof GridCell)) {
+                break;
+            }
+            availableRows++;
+        }
+        return availableRows;
+    }
+
+    public static boolean validateSpan(GridLayout gridLayout, Tree tree, WidgetPanel widgetPanel, int colspan, int rowspan) {
+        GridCell gridCell = getWidgetCell(tree, widgetPanel);
+        int availableRowSpan = availableRows(gridLayout, gridCell);
+        int availableColSpan = availableColumns(gridLayout, gridCell);
+
+        if (availableRowSpan >= 0 && availableRowSpan >= rowspan && availableColSpan >= colspan && availableColSpan >= 0) {
+            for (int row = gridCell.getRow(); row < gridCell.getRow() + rowspan; row++) {
+                for (int column = gridCell.getColumn(); column < gridCell.getColumn() + colspan; column++) {
+                    Component component = gridLayout.getComponent(column, row);
+                    if (!(component instanceof GridCell) && !component.equals(widgetPanel)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

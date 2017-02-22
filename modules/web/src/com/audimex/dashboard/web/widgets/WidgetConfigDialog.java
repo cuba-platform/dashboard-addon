@@ -5,13 +5,17 @@
 package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.entity.DemoContentType;
+import com.audimex.dashboard.web.utils.LayoutUtils;
+import com.audimex.dashboard.web.utils.TreeUtils;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
-import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 
 public class WidgetConfigDialog extends Window {
 
-    public WidgetConfigDialog(WidgetPanel widget) {
+    public WidgetConfigDialog(WidgetPanel widget, Tree tree) {
         setCaption("Widget configuration");
         setIcon(FontAwesome.COGS);
         setResizable(false);
@@ -24,33 +28,6 @@ public class WidgetConfigDialog extends Window {
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
         layout.setWidthUndefined();
-
-        TextField captionTextField = new TextField();
-        captionTextField.setImmediate(true);
-        captionTextField.setNullRepresentation("");
-        captionTextField.setWidth("300px");
-        captionTextField.setCaption("Header caption");
-        captionTextField.setValue(widget.getHeaderText());
-        captionTextField.setRequired(true);
-        layout.addComponent(captionTextField);
-
-        ComboBox captionIconField = new ComboBox();
-        captionIconField.setImmediate(true);
-        captionIconField.setWidth("300px");
-        captionIconField.setCaption("Header icon");
-        captionIconField.setItemCaptionMode(ItemCaptionMode.EXPLICIT_DEFAULTS_ID);
-        fillCaptionIcons(captionIconField);
-        captionIconField.setNullSelectionAllowed(false);
-        captionIconField.setValue(widget.getHeaderIcon());
-        layout.addComponent(captionIconField);
-
-        ComboBox contentTypeComboBox = new ComboBox();
-        contentTypeComboBox.setImmediate(true);
-        contentTypeComboBox.setCaption("Content");
-        contentTypeComboBox.setWidth("300px");
-        fillDemoContentTypes(contentTypeComboBox);
-        contentTypeComboBox.setValue(widget.getDemoContentType());
-        layout.addComponent(contentTypeComboBox);
 
         Slider weightSlider = new Slider();
         weightSlider.setImmediate(true);
@@ -74,8 +51,12 @@ public class WidgetConfigDialog extends Window {
         colSpanSlider.setCaption("Column span");
         colSpanSlider.setWidth("100%");
         colSpanSlider.setMin(1);
-        colSpanSlider.setMax(10);
+        colSpanSlider.setMax(LayoutUtils.availableColumns(
+                (GridLayout) widget.getParent(),
+                LayoutUtils.getWidgetCell(tree, widget))
+        );
         colSpanSlider.setResolution(0);
+
         colSpanSlider.setValue((double)widget.getColSpan());
         spanLayout.addComponent(colSpanSlider);
 
@@ -84,7 +65,10 @@ public class WidgetConfigDialog extends Window {
         rowSpanSlider.setCaption("Row span");
         rowSpanSlider.setWidth("100%");
         rowSpanSlider.setMin(1);
-        rowSpanSlider.setMax(10);
+        rowSpanSlider.setMax(LayoutUtils.availableRows(
+                (GridLayout) widget.getParent(),
+                LayoutUtils.getWidgetCell(tree, widget))
+        );
         rowSpanSlider.setResolution(0);
         rowSpanSlider.setValue((double)widget.getRowSpan());
         spanLayout.addComponent(rowSpanSlider);
@@ -96,20 +80,43 @@ public class WidgetConfigDialog extends Window {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.setSpacing(true);
         Button okButton = new Button("Ok", FontAwesome.CHECK);
+
         okButton.addClickListener((Button.ClickListener) event -> {
-            widget.setHeaderText(captionTextField.getValue());
-            widget.setHeaderIcon(captionIconField.getItemIcon(captionIconField.getValue()));
+            boolean isValid = LayoutUtils.validateSpan(
+                    (GridLayout) widget.getParent(),
+                    tree,
+                    widget,
+                    colSpanSlider.getValue().intValue(),
+                    rowSpanSlider.getValue().intValue()
+            );
 
-            if (widget.getParent() instanceof AbstractOrderedLayout) {
-                widget.setWeight(weightSlider.getValue().intValue());
-            }
-            if (widget.getParent() instanceof GridLayout) {
-                widget.setColSpan(colSpanSlider.getValue().intValue());
-                widget.setRowSpan(rowSpanSlider.getValue().intValue());
-            }
-            widget.setDemoContentType(((DemoContentType) contentTypeComboBox.getValue()));
+            if (isValid) {
+                if (widget.getParent() instanceof AbstractOrderedLayout) {
+                    widget.setWeight(weightSlider.getValue().intValue());
+                }
+                if (widget.getParent() instanceof GridLayout) {
+                    int colSpan = colSpanSlider.getValue().intValue();
+                    int rowSpan = rowSpanSlider.getValue().intValue();
 
-            close();
+                    widget.setColSpan(colSpan);
+                    widget.setRowSpan(rowSpan);
+
+                    GridCell gridCell = LayoutUtils.getWidgetCell(tree, widget);
+                    TreeUtils.markGridCells(tree,
+                            (GridLayout) widget.getParent(),
+                            gridCell.getRow(),
+                            gridCell.getColumn(),
+                            rowSpan,
+                            colSpan);
+                }
+
+                close();
+            } else {
+                Messages messages = AppBeans.get(Messages.class);
+                Notification validationError = new Notification(messages.getTools().loadString("notValidated"),
+                        Notification.Type.ERROR_MESSAGE); //todo messagepack
+                validationError.show(Page.getCurrent());
+            }
         });
         buttonsLayout.addComponent(okButton);
 
@@ -122,8 +129,6 @@ public class WidgetConfigDialog extends Window {
         layout.addComponent(buttonsLayout);
 
         setContent(layout);
-
-        captionTextField.focus();
     }
 
     private void fillDemoContentTypes(ComboBox contentTypeComboBox) {
