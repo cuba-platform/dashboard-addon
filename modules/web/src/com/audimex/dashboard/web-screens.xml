@@ -15,4 +15,6 @@
             template="com/audimex/dashboard/web/screens/dashboardScreen.xml"/>
     <screen id="palette-frame"
             template="com/audimex/dashboard/web/palette/palette-frame.xml"/>
+    <screen id="dashboardElementConfig"
+            template="com/audimex/dashboard/web/screens/dashboardElementConfig.xml"/>
 </screen-config>

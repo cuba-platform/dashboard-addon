@@ -13,7 +13,7 @@ import com.haulmont.cuba.core.config.defaults.Default;
 @Source(type = SourceType.APP)
 public interface WidgetConfig extends Config {
 
-    @Property("amxd.widgets.path")
+    @Property("amxd.dashboard.widgetsConfig")
     @Default("")
     String getWidgetConfigPaths();
     void setWidgetConfigPaths(String paths);

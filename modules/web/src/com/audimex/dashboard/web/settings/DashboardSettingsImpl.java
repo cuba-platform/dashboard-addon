@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.settings;
 
+import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.charts.gui.components.map.GoogleMapViewer;
 import com.vaadin.ui.*;
 import org.vaadin.hene.popupbutton.PopupButton;
@@ -34,6 +35,9 @@ public class DashboardSettingsImpl implements DashboardSettings {
             return false;
         }
         if (component instanceof PopupButton) {
+            return false;
+        }
+        if (component instanceof GridCell) {
             return false;
         }
         return true;

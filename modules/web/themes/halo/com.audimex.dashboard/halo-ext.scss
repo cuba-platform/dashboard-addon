@@ -2,6 +2,7 @@
 @mixin com_audimex_dashboard-halo-ext {
     .dd-bordering {
         box-shadow: inset 0 0 10px #e0e0e0;
+        border: 2px solid transparent;
     }
 
     .dd-palette-button {
@@ -43,24 +44,6 @@
         box-shadow: inset 0 0 10px #e0e0e0;
     }
 
-    .ad-header-options-icon:focus:after {
-        box-shadow: none;
-    }
-
-    .v-slot-ad-header-icon {
-        & > .v-widget {
-            white-space: nowrap;
-
-            .v-caption {
-                margin-right: 7px;
-                display: inline-block;
-                padding-top: 0;
-                padding-bottom: 0;
-                line-height: 30px;
-            }
-        }
-    }
-
     .v-csslayout-card {
         padding-top: 30px;
         font-size: 0;
@@ -89,9 +72,59 @@
         margin-top: 10px;
     }
 
-    .ad-dashboard-disabled {
-        .ad-header-options-icon {
-            visibility: hidden;
-        }
+    .v-tree-node-not-available span {
+        color: #b7b7b7;
+        text-decoration: line-through;
+    }
+
+    .tree-selected {
+        border: 2px solid $v-selection-color;
+        border-radius: 3px;
+        box-shadow: 0 0 5px $v-selection-color;
+    }
+
+    .ad-dashboard-disabled .tree-selected {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .ad-dashboard-disabled .dd-bordering {
+        box-shadow: none;
+        border: none;
+    }
+
+    .dd-layout-controls {
+        position: absolute;
+        right: 0;
+        background: black;
+        border-bottom-left-radius: 5px;
+        opacity: 0.7;
+        z-index: 10;
+        display: none;
+    }
+
+    .tree-selected > .dd-layout-controls {
+        display: inline-block;
+    }
+
+    .v-csslayout.dd-bordering {
+        position: relative;
+    }
+
+    .dd-layout-controls .v-button {
+        color: white;
+        border: none;
+        box-shadow: none;
+        background: none;
+    }
+
+    .v-tree-node-caption.v-drag-element {
+        padding: 2px 0px 0px 14px;
+        width: initial !important;
+    }
+
+    .v-tree-node-caption.v-drag-element>div:before {
+        content: none;
     }
 }
