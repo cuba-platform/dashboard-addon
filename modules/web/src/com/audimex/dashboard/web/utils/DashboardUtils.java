@@ -55,7 +55,7 @@ public class DashboardUtils {
                 GridRow gridRow = LayoutUtils.getGridRow(i, tree, gridLayout);
                 Component innerComponent = gridLayout.getComponent(j, i);
 
-                GridCell gridCell = LayoutUtils.createGridCell(j, i, tree, gridLayout);
+                GridCell gridCell = LayoutUtils.createGridCell(j, i);
                 if (innerComponent == null) {
                     gridLayout.addComponent(gridCell, j, i);
                 }

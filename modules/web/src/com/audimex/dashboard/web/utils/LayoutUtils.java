@@ -53,17 +53,11 @@ public class LayoutUtils {
         return component;
     }
 
-    public static GridCell createGridCell(int column, int row, Tree tree, GridLayout gridLayout) {
+    public static GridCell createGridCell(int column, int row) {
         GridCell gridCell = new GridCell(column, row);
         gridCell.setSizeFull();
         gridCell.setStyleName("dd-bordering");
-        DDVerticalLayoutDropHandler dropHandler = new DDVerticalLayoutDropHandler();
-        if (gridLayout instanceof DDGridLayout) {
-            DDGridLayout ddGridLayout = (DDGridLayout) gridLayout;
-            DDGridLayoutDropHandler gridDropHandler = (DDGridLayoutDropHandler) ddGridLayout.getDropHandler();
-            dropHandler.setGridDropListener(gridDropHandler.getGridDropListener());
-        }
-        dropHandler.setTree(tree);
+
         return gridCell;
     }
 
@@ -91,7 +85,7 @@ public class LayoutUtils {
         tree.setParent(gridRow, component);
 
         for (int column = 0; column < component.getColumns(); column++) {
-            GridCell gridCell = LayoutUtils.createGridCell(column, row, tree, component);
+            GridCell gridCell = LayoutUtils.createGridCell(column, row);
             gridRow.addGridCell(gridCell);
 
             component.addComponent(gridCell, column, row);

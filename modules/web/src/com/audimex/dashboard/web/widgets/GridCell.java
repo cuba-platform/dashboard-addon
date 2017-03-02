@@ -4,9 +4,9 @@
 
 package com.audimex.dashboard.web.widgets;
 
-import fi.jasoft.dragdroplayouts.DDCssLayout;
+import com.vaadin.ui.CssLayout;
 
-public class GridCell extends DDCssLayout {
+public class GridCell extends CssLayout {
     private int column = 0;
     private int row = 0;
     private int colspan = 1;
