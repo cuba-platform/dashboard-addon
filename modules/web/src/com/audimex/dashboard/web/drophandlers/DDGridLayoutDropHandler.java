@@ -10,6 +10,7 @@ import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.palette.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.dd.DragAndDropEvent;
@@ -100,7 +101,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                         (DDGridLayout.GridLayoutTargetDetails) dragEvent.getTargetDetails();
                 Component insideComponent = ((GridLayout) targetDetails.getTarget())
                                                 .getComponent(targetDetails.getOverColumn(), targetDetails.getOverRow());
-                if (insideComponent != null && !(insideComponent instanceof Label)) {
+                if (insideComponent != null && !(insideComponent instanceof GridCell)) {
                     return false;
                 }
                 return true;

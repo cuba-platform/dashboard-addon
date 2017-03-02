@@ -77,6 +77,10 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, 0);
             }
         } else {
+            if (comp == targetLayout) {
+                return;
+            }
+
             if (idx >= 0) {
                 if (targetLayout instanceof DashboardVerticalLayout) {
                     ((DashboardVerticalLayout) targetLayout).addComponent(comp, idx);

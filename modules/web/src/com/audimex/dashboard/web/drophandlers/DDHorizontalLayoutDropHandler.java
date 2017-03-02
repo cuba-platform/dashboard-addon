@@ -78,7 +78,25 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, 0);
             }
         } else {
+            if (comp == targetLayout) {
+                return;
+            }
+
+            if (idx >= 0) {
+                if (targetLayout instanceof DashboardHorizontalLayout) {
+                    ((DashboardHorizontalLayout) targetLayout).addComponent(comp, idx);
+                } else if (targetLayout instanceof AbstractOrderedLayout) {
+                    ((AbstractOrderedLayout) targetLayout).addComponent(comp, idx);
+                }
+            } else {
+                targetLayout.addComponent(comp);
+            }
+
             TreeUtils.reorder(componentDescriptorTree, details.getTarget(), comp, 0);
+
+            if (targetLayout instanceof DashboardHorizontalLayout) {
+                ((DashboardHorizontalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);
+            }
         }
 
         ((TreeDropHandler) componentDescriptorTree.getDropHandler()).getTreeChangeListener().treeChanged();
