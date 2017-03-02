@@ -4,7 +4,7 @@
   -->
 
 <widgets xmlns="http://schemas.haulmont.com/audimex/dashboards/widget-descriptor.xsd">
-    <widget id="table" caption="mainMsg://dashboardWidget.table" frameId="demoTableWidget" icon="icons/move.png"/>
-    <widget id="report" caption="mainMsg://dashboardWidget.report" frameId="demoReportWidget" icon="icons/pin.png"/>
-    <widget id="chart" caption="mainMsg://dashboardWidget.chart" frameId="demoChartWidget" icon="icons/ok.png"/>
+    <widget id="table" caption="dashboardWidget.table" frameId="demoTableWidget" icon="icons/move.png"/>
+    <widget id="report" caption="dashboardWidget.report" frameId="demoReportWidget" icon="icons/pin.png"/>
+    <widget id="chart" caption="dashboardWidget.chart" frameId="demoChartWidget" icon="icons/ok.png"/>
 </widgets>

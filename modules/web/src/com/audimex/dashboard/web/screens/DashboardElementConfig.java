@@ -8,13 +8,10 @@ import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 
 import javax.inject.Inject;
@@ -42,7 +39,7 @@ public class DashboardElementConfig extends AbstractWindow {
             weightSlider = new Slider();
             weightSlider.setImmediate(true);
             weightSlider.setWidth("300px");
-            weightSlider.setCaption("Weight in layout");
+            weightSlider.setCaption(getMessage("weightInLayout"));
             weightSlider.setMin(1);
             weightSlider.setMax(10);
             weightSlider.setResolution(0);
@@ -57,7 +54,7 @@ public class DashboardElementConfig extends AbstractWindow {
         if (widget.getParent() instanceof GridLayout) {
             colSpanSlider = new Slider();
             colSpanSlider.setImmediate(true);
-            colSpanSlider.setCaption("Column span");
+            colSpanSlider.setCaption(getMessage("columnSpan"));
             colSpanSlider.setWidth("100%");
             colSpanSlider.setMin(1);
 
@@ -72,7 +69,7 @@ public class DashboardElementConfig extends AbstractWindow {
 
             rowSpanSlider = new Slider();
             rowSpanSlider.setImmediate(true);
-            rowSpanSlider.setCaption("Row span");
+            rowSpanSlider.setCaption(getMessage("rowSpan"));
             rowSpanSlider.setWidth("100%");
             rowSpanSlider.setMin(1);
             if (widget.getParent() instanceof GridLayout) {
@@ -90,7 +87,7 @@ public class DashboardElementConfig extends AbstractWindow {
 
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.setSpacing(true);
-        Button okButton = new Button("Ok", FontAwesome.CHECK);
+        Button okButton = new Button(getMessage("ok"), FontAwesome.CHECK);
 
         okButton.addClickListener((Button.ClickListener) event -> {
             if (widget.getParent() instanceof AbstractOrderedLayout) {
@@ -120,17 +117,14 @@ public class DashboardElementConfig extends AbstractWindow {
                             rowSpan,
                             colSpan);
                 } else {
-                    Messages messages = AppBeans.get(Messages.class);
-                    Notification validationError = new Notification(messages.getTools().loadString("notValidated"),
-                            Notification.Type.ERROR_MESSAGE); //todo messagepack
-                    validationError.show(Page.getCurrent());
+                    showNotification(getMessage("notValidated"), NotificationType.ERROR);
                 }
             }
             close("");
         });
         buttonsLayout.addComponent(okButton);
 
-        Button cancelButton = new Button("Cancel", FontAwesome.TIMES);
+        Button cancelButton = new Button(getMessage("cancel"), FontAwesome.TIMES);
         cancelButton.addClickListener((Button.ClickListener) event ->
                 close("")
         );

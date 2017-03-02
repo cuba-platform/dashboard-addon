@@ -158,7 +158,7 @@ public class PaletteFrame extends AbstractFrame {
         rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop);
 
         tree.addItem(rootDashboardPanel);
-        tree.setItemCaption(rootDashboardPanel, "Root container");
+        tree.setItemCaption(rootDashboardPanel, getMessage("rootContainer"));
         tree.setItemIcon(rootDashboardPanel, FontAwesome.ASTERISK);
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
@@ -182,7 +182,7 @@ public class PaletteFrame extends AbstractFrame {
         );
 
         rootDashboardPanel.setDragCaptionProvider(
-                component -> new DragCaption("test", null)
+                component -> new DragCaption("Component", null)
         );
 
         rootDashboardPanel.setSizeFull();
@@ -217,7 +217,7 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     private void onGridDrop(GridLayout gridLayout) {
-        Window subWindow = new Window("Grid settings");
+        Window subWindow = new Window(getMessage("gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
         subWindow.setWidth(300, Sizeable.Unit.PIXELS);
@@ -243,8 +243,8 @@ public class PaletteFrame extends AbstractFrame {
         rows.setValue((double) 2);
         cols.setWidth(100, Sizeable.Unit.PERCENTAGE);
         rows.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        cols.setCaption("Columns");
-        rows.setCaption("Rows");
+        cols.setCaption(getMessage("columns"));
+        rows.setCaption(getMessage("rows"));
         cols.focus();
 
         comboBoxPanel.addComponent(cols);
@@ -252,9 +252,13 @@ public class PaletteFrame extends AbstractFrame {
         subContent.addComponent(comboBoxPanel);
         subContent.addComponent(buttonsPanel);
 
-        Button closeButton = new Button("Close", FontAwesome.CLOSE);
-        Button okButton = new Button("Ok", FontAwesome.CHECK);
-        closeButton.addClickListener(event -> subWindow.close());
+        Button cancelButton = new Button(getMessage("cancel"), FontAwesome.CLOSE);
+        Button okButton = new Button(getMessage("ok"), FontAwesome.CHECK);
+        cancelButton.addClickListener(event -> {
+            tree.removeItem(gridLayout);
+            treeDropHandler.getTreeChangeListener().accept(tree);
+            subWindow.close();
+        });
 
         okButton.addClickListener(event -> {
             if (cols.getValue() != null && rows.getValue() != null) {
@@ -267,8 +271,8 @@ public class PaletteFrame extends AbstractFrame {
         });
 
         buttonsPanel.addComponent(okButton);
-        buttonsPanel.addComponent(closeButton);
-        buttonsPanel.setComponentAlignment(closeButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
+        buttonsPanel.addComponent(cancelButton);
+        buttonsPanel.setComponentAlignment(cancelButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
         buttonsPanel.setComponentAlignment(okButton, com.vaadin.ui.Alignment.MIDDLE_RIGHT);
 
         subWindow.center();
@@ -276,21 +280,21 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     private void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
-        PaletteButton verticalLayoutButton = new PaletteButton("Vertical", FontAwesome.ARROWS_V);
+        PaletteButton verticalLayoutButton = new PaletteButton(getMessage("vertical"), FontAwesome.ARROWS_V);
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
         verticalLayoutButton.setDropFrame(getFrame());
         verticalLayoutButton.setStyleName("dd-palette-button");
 
-        PaletteButton horizontalLayoutButton = new PaletteButton("Horizontal", FontAwesome.ARROWS_H);
+        PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("horizontal"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
         horizontalLayoutButton.setDropFrame(getFrame());
         horizontalLayoutButton.setStyleName("dd-palette-button");
 
-        PaletteButton gridButton = new PaletteButton("Grid", FontAwesome.TH);
+        PaletteButton gridButton = new PaletteButton(getMessage("grid"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
@@ -303,7 +307,7 @@ public class PaletteFrame extends AbstractFrame {
 
         for (WidgetRepository.Widget widget : widgetRepository.getWidgets()) {
             PaletteButton paletteButton = new PaletteButton(
-                    messages.getTools().loadString(widget.getCaption()), // todo msg://
+                    messages.getMainMessage(widget.getCaption()),
                     WebComponentsHelper.getIcon(widget.getIcon())
             );
 
