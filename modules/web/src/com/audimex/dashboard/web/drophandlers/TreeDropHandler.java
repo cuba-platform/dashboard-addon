@@ -66,13 +66,6 @@ public class TreeDropHandler implements DropHandler {
                     component = new Label();
                 }
 
-                if (component instanceof LayoutEvents.LayoutClickNotifier) {
-                    ((LayoutEvents.LayoutClickNotifier) component).addLayoutClickListener(
-                            (LayoutEvents.LayoutClickListener) event1 ->
-                                    componentDescriptorTree.setValue(event1.getChildComponent())
-                    );
-                }
-
                 if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
                     Object parentId = tree.getParent(target.getItemIdOver());
                     if (location == VerticalDropLocation.MIDDLE) {

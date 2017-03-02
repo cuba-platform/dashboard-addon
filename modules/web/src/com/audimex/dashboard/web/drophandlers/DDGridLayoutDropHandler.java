@@ -65,13 +65,6 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 framePanel.setContent(dragComponent.getWidget().getFrameId());
             }
 
-            if (component instanceof LayoutEvents.LayoutClickNotifier) {
-                ((LayoutEvents.LayoutClickNotifier) component).addLayoutClickListener(
-                        (LayoutEvents.LayoutClickListener) event1 ->
-                                tree.setValue(event1.getChildComponent())
-                );
-            }
-
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
                 Component target = null;
                 if (details.getTarget() instanceof GridLayout) {

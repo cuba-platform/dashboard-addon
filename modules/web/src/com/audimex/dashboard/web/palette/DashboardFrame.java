@@ -175,18 +175,25 @@ public class DashboardFrame extends AbstractFrame {
                 (DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component)
         );
 
-        rootDashboardPanel.addLayoutClickListener(
-                (LayoutEvents.LayoutClickListener) e -> {
-                        Component component = e.getClickedComponent();
-                        if (component != null) {
-                            if (component.getParent() instanceof HasMainLayout) {
-                                tree.setValue(component.getParent());
-                            } else {
-                                tree.setValue(component);
-                            }
-                        }
+        rootDashboardPanel.addLayoutClickListener((LayoutEvents.LayoutClickListener) e -> {
+            Component component = e.getClickedComponent();
+            if (component != null) {
+                if (component.getParent() instanceof HasMainLayout) {
+                    tree.setValue(component.getParent());
+                } if (component instanceof GridLayout) {
+                    tree.setValue(component);
+                } else if (e.getChildComponent() instanceof FramePanel) {
+                    tree.setValue(e.getChildComponent());
+                } else {
+                    Component framePanel = getFramePanel(component);
+                    if (framePanel != null) {
+                        tree.setValue(framePanel);
+                    } else {
+                        tree.setValue(component);
+                    }
                 }
-        );
+            }
+        });
 
         rootDashboardPanel.setDragCaptionProvider(
                 component -> new DragCaption("Component", null)
@@ -224,6 +231,19 @@ public class DashboardFrame extends AbstractFrame {
 
         mode = (DashboardMode) params.get("mode");
         enableViewMode();
+    }
+
+    public FramePanel getFramePanel(Component component) {
+        Component parent = component.getParent();
+        if (parent instanceof FramePanel) {
+            return (FramePanel) parent;
+        }
+
+        if (parent.getParent() != null) {
+            return getFramePanel(parent);
+        } else {
+            return null;
+        }
     }
 
     private void enableViewMode() {
