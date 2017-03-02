@@ -10,8 +10,8 @@ import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.palette.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
-import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
@@ -66,9 +66,9 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 comp = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
                 gridDropListener.gridDropped((GridLayout) comp);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                comp = new WidgetPanel(componentDescriptorTree);
-                ((WidgetPanel) comp).setParentFrame(dragComponent.getDropFrame());
-                ((WidgetPanel) comp).setContent(dragComponent.getWidget());
+                comp = new FramePanel(componentDescriptorTree);
+                ((FramePanel) comp).setParentFrame(dragComponent.getDropFrame());
+                ((FramePanel) comp).setContent(dragComponent.getWidget().getFrameId());
             }
 
             if (idx >= 0) {

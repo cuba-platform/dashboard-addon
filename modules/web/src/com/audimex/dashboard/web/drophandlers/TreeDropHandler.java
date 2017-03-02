@@ -10,7 +10,9 @@ import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.palette.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
-import com.audimex.dashboard.web.widgets.WidgetPanel;
+import com.audimex.dashboard.web.widgets.FramePanel;
+import com.audimex.dashboard.web.widgets.GridCell;
+import com.audimex.dashboard.web.widgets.GridRow;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
@@ -50,9 +52,9 @@ public class TreeDropHandler implements DropHandler {
                     component = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
                     gridDropListener.gridDropped((GridLayout) component);
                 } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                    component = new WidgetPanel(componentDescriptorTree);
-                    ((WidgetPanel) component).setParentFrame(dragComponent.getDropFrame());
-                    ((WidgetPanel) component).setContent(dragComponent.getWidget());
+                    component = new FramePanel(componentDescriptorTree);
+                    ((FramePanel) component).setParentFrame(dragComponent.getDropFrame());
+                    ((FramePanel) component).setContent(dragComponent.getWidget().getFrameId());
                 } else {
                     component = new Label();
                 }
@@ -116,7 +118,7 @@ public class TreeDropHandler implements DropHandler {
                 if (targetDetails.getItemIdOver() == null) {
                     return false;
                 }
-                if (targetDetails.getItemIdOver().toString().contains("WidgetPanel")) {
+                if (targetDetails.getItemIdOver() instanceof FramePanel) {
                     if (location == VerticalDropLocation.MIDDLE) {
                         return false;
                     } else {
@@ -124,11 +126,20 @@ public class TreeDropHandler implements DropHandler {
                     }
                 }
                 if (targetDetails.getItemIdInto() != null
-                        && targetDetails.getItemIdInto().toString().contains("Grid")) {
-                    if (location != VerticalDropLocation.MIDDLE) {
-                        return false;
+                        && targetDetails.getItemIdInto() instanceof GridLayout) {
+                    return false;
+                }
+                if (targetDetails.getItemIdInto() != null
+                        && targetDetails.getItemIdInto() instanceof GridRow) {
+                    if (targetDetails.getItemIdOver() != null
+                            && targetDetails.getItemIdOver() instanceof GridCell) {
+                        if (location == VerticalDropLocation.MIDDLE) {
+                            return true;
+                        } else {
+                            return false;
+                        }
                     } else {
-                        return true;
+                        return false;
                     }
                 }
                 if (targetDetails.getTarget().getParent(targetDetails.getItemIdOver()) == null
@@ -151,5 +162,9 @@ public class TreeDropHandler implements DropHandler {
 
     public void setGridDropListener(GridDropListener gridDropListener) {
         this.gridDropListener = gridDropListener;
+    }
+
+    public GridDropListener getGridDropListener() {
+        return gridDropListener;
     }
 }

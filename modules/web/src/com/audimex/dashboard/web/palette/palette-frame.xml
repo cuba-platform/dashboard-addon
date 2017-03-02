@@ -13,6 +13,8 @@
             <checkBox id="allowEdit"
                       align="MIDDLE_LEFT"
                       caption="Designer mode"/>
+            <button invoke="convertToModel" caption="save"/>
+            <button invoke="convertToTree" caption="load"/>
         </hbox>
         <hbox id="mainLayout"
               expand="dropLayout"

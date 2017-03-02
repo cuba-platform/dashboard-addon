@@ -1,8 +1,9 @@
+/*
+ * Copyright (c) 2016-2016 Haulmont. All rights reserved.
+ */
+
 package com.audimex.dashboard.web.layouts;
 
-/**
- * Created by petunin on 27.02.2017.
- */
 public interface HasGridSpan {
     void setColSpan(int colSpan);
     int getColSpan();

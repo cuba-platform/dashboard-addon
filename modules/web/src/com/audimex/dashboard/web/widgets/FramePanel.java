@@ -8,7 +8,6 @@ import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
-import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
@@ -25,7 +24,7 @@ import com.vaadin.ui.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WidgetPanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
+public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
     private VerticalLayout contentLayout = new VerticalLayout();
     private Tree tree;
 
@@ -35,8 +34,9 @@ public class WidgetPanel extends CssLayout implements HasWeight, HasGridSpan, Ha
 
     protected DashboardSettings dashboardSettings;
     private Frame parentFrame = null;
+    private String frameId;
 
-    public WidgetPanel(Tree tree) {
+    public FramePanel(Tree tree) {
         this.tree = tree;
         dashboardSettings = AppBeans.get(DashboardSettings.class);
 
@@ -76,15 +76,23 @@ public class WidgetPanel extends CssLayout implements HasWeight, HasGridSpan, Ha
         this.parentFrame = parentFrame;
     }
 
-    public void setContent(WidgetRepository.Widget widget) {
+    public void setContent(String frameId) {
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
-        WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
-
+        WindowInfo windowInfo = windowConfig.getWindowInfo(frameId);
+        setFrameId(frameId);
 
         Frame frame = windowManager.openFrame(parentFrame, null, windowInfo);
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));
+    }
+
+    public String getFrameId() {
+        return frameId;
+    }
+
+    public void setFrameId(String frameId) {
+        this.frameId = frameId;
     }
 
     public void setContent(Component c) {

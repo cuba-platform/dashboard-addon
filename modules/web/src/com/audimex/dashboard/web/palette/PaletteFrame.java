@@ -4,16 +4,21 @@
 package com.audimex.dashboard.web.palette;
 
 import com.audimex.dashboard.entity.WidgetType;
+import com.audimex.dashboard.web.drophandlers.GridDropListener;
+import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
+import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
 import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
-import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
+import com.audimex.dashboard.web.model.DashboardModel;
+import com.audimex.dashboard.web.model.WidgetModel;
 import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
+import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
-import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
@@ -35,7 +40,9 @@ import fi.jasoft.dragdroplayouts.interfaces.DragGrabFilter;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class PaletteFrame extends AbstractFrame {
@@ -68,6 +75,9 @@ public class PaletteFrame extends AbstractFrame {
 
     protected DashboardVerticalLayout rootDashboardPanel = null;
     protected Component treeComponent;
+    protected DashboardModel dashboardModel;
+    private TreeDropHandler treeDropHandler = null;
+    private GridDropListener gridDropListener = null;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -86,9 +96,10 @@ public class PaletteFrame extends AbstractFrame {
         tree = new Tree();
         tree.setSizeFull();
 
-        TreeDropHandler treeDropHandler = new TreeDropHandler();
+        gridDropListener = gridLayout -> onGridDrop(gridLayout);
+        treeDropHandler = new TreeDropHandler();
         treeDropHandler.setComponentDescriptorTree(tree);
-        treeDropHandler.setGridDropListener(this::onGridDrop);
+        treeDropHandler.setGridDropListener(gridDropListener);
         treeDropHandler.setTreeChangeListener(() -> TreeUtils.redrawLayout(tree, rootDashboardPanel));
 
         tree.setDropHandler(treeDropHandler);
@@ -335,7 +346,7 @@ public class PaletteFrame extends AbstractFrame {
 
         for (int i = 0; i < component.getComponentCount(); i++) {
             if (component instanceof CssLayout) {
-                if (!(component instanceof WidgetPanel)) {
+                if (!(component instanceof FramePanel)) {
                     Component child = ((CssLayout) component).getComponent(i);
                     if (child instanceof AbstractLayout) {
                         removeSpacings((AbstractLayout) child, value);
@@ -386,5 +397,148 @@ public class PaletteFrame extends AbstractFrame {
                             }
                         }
                 });
+    }
+
+    public void convertToModel() {
+        DashboardModel dashboardModel = new DashboardModel();
+        dashboardModel.setWidgets(containerToModel(rootDashboardPanel));
+        this.dashboardModel = dashboardModel;
+    }
+
+    private List<WidgetModel> containerToModel(Object parent) {
+        Collection<?> children = tree.getChildren(parent);
+        List<WidgetModel> widgetModels = new ArrayList<>();
+        if (children != null) {
+            for (Object child : children) {
+                WidgetModel widgetModel = new WidgetModel();
+                if (child instanceof DashboardVerticalLayout) {
+                    DashboardVerticalLayout layout = (DashboardVerticalLayout) child;
+
+                    widgetModel.setType(WidgetType.VERTICAL_LAYOUT);
+                    widgetModel.setWeight(layout.getWeight());
+                } else if (child instanceof DashboardHorizontalLayout) {
+                    DashboardHorizontalLayout layout = (DashboardHorizontalLayout) child;
+
+                    widgetModel.setType(WidgetType.HORIZONTAL_LAYOUT);
+                    widgetModel.setWeight(layout.getWeight());
+                } else if (child instanceof GridLayout) {
+                    GridLayout layout = (GridLayout) child;
+                    widgetModel.setType(WidgetType.GRID_LAYOUT);
+                    widgetModel.setColumns(layout.getColumns());
+                    widgetModel.setRows(layout.getRows());
+                    widgetModel.setWeight(1);
+                } else if (child instanceof FramePanel) {
+                    FramePanel framePanel = (FramePanel) child;
+
+                    widgetModel.setType(WidgetType.FRAME_PANEL);
+                    widgetModel.setFrameId(framePanel.getFrameId());
+                    widgetModel.setWeight(framePanel.getWeight());
+                } else if (child instanceof GridRow) {
+                    GridRow gridRow = (GridRow) child;
+                    widgetModel.setType(WidgetType.GRID_ROW);
+                } else if (child instanceof GridCell) {
+                    GridCell gridCell = (GridCell) child;
+
+                    widgetModel.setType(WidgetType.GRID_CELL);
+                    widgetModel.setColumn(gridCell.getColumn());
+                    widgetModel.setRow(gridCell.getRow());
+                    widgetModel.setColspan(gridCell.getColspan());
+                    widgetModel.setRowspan(gridCell.getRowspan());
+                }
+
+                if (tree.getChildren(child) != null) {
+                    widgetModel.setChildren(containerToModel(child));
+                }
+
+                widgetModels.add(widgetModel);
+            }
+        }
+
+        return widgetModels;
+    }
+
+    public void convertToTree() {
+        removeAllComponents();
+
+        modelToContainer(
+                dashboardModel.getWidgets(),
+                rootDashboardPanel,
+                gridDropListener
+        );
+
+        TreeUtils.redrawLayout(tree, rootDashboardPanel);
+    }
+
+    private void modelToContainer(List<WidgetModel> widgetModels,
+                                          Object parent, GridDropListener gridDropListener) {
+        int idx = 0;
+        for (WidgetModel widgetModel : widgetModels) {
+            Object component = null;
+            boolean isNew = false;
+            switch (widgetModel.getType()) {
+                case VERTICAL_LAYOUT:
+                    DashboardVerticalLayout verticalLayout =
+                            (DashboardVerticalLayout) LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
+
+                    verticalLayout.setWeight(widgetModel.getWeight());
+                    component = verticalLayout;
+                    isNew = true;
+                    break;
+                case HORIZONTAL_LAYOUT:
+                    DashboardHorizontalLayout horizontalLayout =
+                            (DashboardHorizontalLayout) LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
+
+                    horizontalLayout.setWeight(widgetModel.getWeight());
+                    component = horizontalLayout;
+                    isNew = true;
+                    break;
+                case FRAME_PANEL:
+                    FramePanel framePanel = new FramePanel(tree);
+                    framePanel.setParentFrame(getFrame());
+                    framePanel.setContent(widgetModel.getFrameId());
+                    framePanel.setSizeFull();
+
+                    component = framePanel;
+                    isNew = true;
+                    break;
+                case GRID_LAYOUT:
+                    GridLayout gridLayout = (GridLayout) LayoutUtils.createGridDropLayout(tree, gridDropListener);
+                    gridLayout.setColumns(widgetModel.getColumns());
+                    gridLayout.setRows(widgetModel.getRows());
+
+                    component = gridLayout;
+                    isNew = true;
+                    break;
+                case GRID_ROW:
+                    GridRow gridRow = LayoutUtils.getGridRow(idx, tree, (GridLayout) parent);
+                    component = gridRow;
+                    break;
+                case GRID_CELL:
+                    GridLayout parentGrid = ((GridRow) parent).getGridLayout();
+                    GridCell gridCell = LayoutUtils.getGridCell(
+                            tree,
+                            tree.getChildren(parentGrid),
+                            widgetModel.getColumn(),
+                            widgetModel.getRow()
+                    );
+
+                    gridCell.setColspan(widgetModel.getColspan());
+                    gridCell.setRowspan(widgetModel.getRowspan());
+                    component = gridCell;
+                    break;
+                default:
+                    break;
+            }
+
+            if (isNew) {
+                TreeUtils.addComponent(tree, parent, component, idx);
+            }
+
+            if (!widgetModel.getChildren().isEmpty()) {
+                modelToContainer(widgetModel.getChildren(), component, gridDropListener);
+            }
+
+            idx++;
+        }
     }
 }

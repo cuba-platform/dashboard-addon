@@ -8,9 +8,9 @@ import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
 import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
+import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
-import com.audimex.dashboard.web.widgets.WidgetPanel;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
@@ -20,7 +20,7 @@ import fi.jasoft.dragdroplayouts.interfaces.HasDragCaptionProvider;
 import java.util.Collection;
 
 public class TreeUtils {
-    public static void addComponent(Tree tree, Component parentId, Component component, int position) {
+    public static void addComponent(Tree tree, Object parentId, Object component, int position) {
         tree.addItem(component);
         tree.setItemCaption(component, getTreeItemCaption(component));
         HierarchicalContainer container = (HierarchicalContainer) tree.getContainerDataSource();
@@ -120,7 +120,7 @@ public class TreeUtils {
     }
 
     public static String getTreeItemCaption(Object component) {
-        if (component instanceof WidgetPanel) {
+        if (component instanceof FramePanel) {
             return "Widget";
         } else if (component instanceof GridCell) {
             return "Cell";
@@ -182,9 +182,9 @@ public class TreeUtils {
                         );
                     }
                 } else {
-                    if (cellComponent instanceof WidgetPanel) {
-                        ((WidgetPanel) cellComponent).setColSpan(gridCell.getColspan());
-                        ((WidgetPanel) cellComponent).setRowSpan(gridCell.getRowspan());
+                    if (cellComponent instanceof FramePanel) {
+                        ((FramePanel) cellComponent).setColSpan(gridCell.getColspan());
+                        ((FramePanel) cellComponent).setRowSpan(gridCell.getRowspan());
                     }
 
                     grid.addComponent(
@@ -199,7 +199,7 @@ public class TreeUtils {
                 ((AbstractLayout) layout).addComponent((Component) component);
 
                 if (component instanceof HasMainLayout
-                        && !(component instanceof WidgetPanel)) {
+                        && !(component instanceof FramePanel)) {
                     ((HasMainLayout) component).getMainLayout().removeAllComponents();
                 }
 
