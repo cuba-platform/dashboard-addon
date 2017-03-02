@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.widgets;
 
+import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
@@ -11,6 +12,7 @@ import com.audimex.dashboard.web.repo.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
+import com.audimex.dashboard.web.utils.TreeUtils;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
@@ -39,14 +41,20 @@ public class WidgetPanel extends CssLayout implements HasWeight, HasGridSpan, Ha
         dashboardSettings = AppBeans.get(DashboardSettings.class);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
-        Button button = new Button(FontAwesome.GEARS);
-        button.addClickListener((Button.ClickListener) (event) -> {
+        Button configButton = new Button(FontAwesome.GEARS);
+        configButton.addClickListener((Button.ClickListener) (event) -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
             parentFrame.openWindow("dashboardElementConfig", WindowManager.OpenType.DIALOG, params);
         });
-        buttonsPanel.addComponent(button);
+        Button removeButton = new Button(FontAwesome.TRASH);
+        removeButton.addClickListener((Button.ClickListener) event -> {
+            TreeUtils.removeComponent(tree, tree.getValue());
+            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+        });
+        buttonsPanel.addComponent(configButton);
+        buttonsPanel.addComponent(removeButton);
         buttonsPanel.addStyleName("dd-layout-controls");
 
         contentLayout.setSizeFull();

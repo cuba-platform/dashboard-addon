@@ -2,8 +2,10 @@ package com.audimex.dashboard.web.layouts;
 
 import com.audimex.dashboard.web.drophandlers.DDHorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
+import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
+import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
@@ -30,14 +32,20 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
     public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener) {
         this.tree = tree;
         HorizontalLayout buttonsPanel = new HorizontalLayout();
-        Button button = new Button(FontAwesome.GEARS);
-        button.addClickListener((Button.ClickListener) (event) -> {
+        Button configButton = new Button(FontAwesome.GEARS);
+        configButton.addClickListener((Button.ClickListener) (event) -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
             parentFrame.openWindow("dashboardElementConfig", WindowManager.OpenType.DIALOG, params);
         });
-        buttonsPanel.addComponent(button);
+        Button removeButton = new Button(FontAwesome.TRASH);
+        removeButton.addClickListener((Button.ClickListener) event -> {
+            TreeUtils.removeComponent(tree, tree.getValue());
+            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+        });
+        buttonsPanel.addComponent(configButton);
+        buttonsPanel.addComponent(removeButton);
         buttonsPanel.addStyleName("dd-layout-controls");
 
         horizontalLayout = new DDHorizontalLayout();
