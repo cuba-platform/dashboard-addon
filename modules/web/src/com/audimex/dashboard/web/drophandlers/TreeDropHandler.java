@@ -23,11 +23,13 @@ import com.vaadin.shared.ui.dd.VerticalDropLocation;
 import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
+import java.util.function.Consumer;
+
 public class TreeDropHandler implements DropHandler {
     private Tree componentDescriptorTree;
     private GridDropListener gridDropListener;
 
-    private TreeChangeListener treeChangeListener;
+    private Consumer<Tree> treeChangeListener;
 
     @Override
     public void drop(DragAndDropEvent event) {
@@ -96,14 +98,14 @@ public class TreeDropHandler implements DropHandler {
             }
         }
 
-        treeChangeListener.treeChanged();
+        treeChangeListener.accept(tree);
     }
 
-    public void setTreeChangeListener(TreeChangeListener treeChangeListener) {
+    public void setTreeChangeListener(Consumer<Tree> treeChangeListener) {
         this.treeChangeListener = treeChangeListener;
     }
 
-    public TreeChangeListener getTreeChangeListener() {
+    public Consumer<Tree> getTreeChangeListener() {
         return treeChangeListener;
     }
 

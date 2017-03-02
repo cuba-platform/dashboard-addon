@@ -100,7 +100,7 @@ public class PaletteFrame extends AbstractFrame {
         treeDropHandler = new TreeDropHandler();
         treeDropHandler.setComponentDescriptorTree(tree);
         treeDropHandler.setGridDropListener(gridDropListener);
-        treeDropHandler.setTreeChangeListener(() -> TreeUtils.redrawLayout(tree, rootDashboardPanel));
+        treeDropHandler.setTreeChangeListener(tree -> TreeUtils.redrawLayout(tree, rootDashboardPanel));
 
         tree.setDropHandler(treeDropHandler);
         tree.addValueChangeListener(e -> {
@@ -317,7 +317,7 @@ public class PaletteFrame extends AbstractFrame {
         hierarchicalContainer.addItem(rootDashboardPanel);
 
         tree.setChildrenAllowed(rootDashboardPanel, false);
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
     }
 
     private void removeSpacings(AbstractLayout component, boolean value) {
@@ -374,7 +374,7 @@ public class PaletteFrame extends AbstractFrame {
 
     public void removeComponent() {
         boolean removed = TreeUtils.removeComponent(tree, tree.getValue());
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
         if (!removed) {
             showNotification(messages.getMessage(getClass(), "cantRemove"), NotificationType.HUMANIZED);
         }

@@ -16,14 +16,17 @@ import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.drophandlers.DefaultGridLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     private GridDropListener gridDropListener;
-    private Tree componentDescriptorTree;
+    private Tree tree;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
@@ -47,16 +50,16 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                component = LayoutUtils.createVerticalDropLayout(componentDescriptorTree, gridDropListener);
+                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
                 ((DashboardVerticalLayout) component).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                component = LayoutUtils.createHorizontalDropLayout(componentDescriptorTree, gridDropListener);
+                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
                 ((DashboardHorizontalLayout) component).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                component = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
+                component = LayoutUtils.createGridDropLayout(tree, gridDropListener);
                 gridDropListener.gridDropped((GridLayout) component);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                component = new FramePanel(componentDescriptorTree);
+                component = new FramePanel(tree);
                 FramePanel framePanel = (FramePanel) component;
                 framePanel.setParentFrame(dragComponent.getDropFrame());
                 framePanel.setContent(dragComponent.getWidget().getFrameId());
@@ -65,23 +68,32 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             if (component instanceof LayoutEvents.LayoutClickNotifier) {
                 ((LayoutEvents.LayoutClickNotifier) component).addLayoutClickListener(
                         (LayoutEvents.LayoutClickListener) event1 ->
-                                componentDescriptorTree.setValue(event1.getChildComponent())
+                                tree.setValue(event1.getChildComponent())
                 );
             }
 
-            TreeUtils.addComponent(componentDescriptorTree, details.getTarget(), component, 0);
-            if (layout.getComponent(column, row) instanceof Label) {
-                layout.removeComponent(column, row);
+            Component target = null;
+            if (details.getTarget() instanceof GridLayout) {
+                GridLayout gridLayout = (GridLayout) details.getTarget();
+                target = LayoutUtils.getGridCell(
+                        tree,
+                        tree.getChildren(gridLayout),
+                        column,
+                        row);
+            } else {
+                target = details.getTarget();
             }
-            addComponent(event, component, column, row);
+            TreeUtils.addComponent(tree, target, component, 0);
         } else {
-            TreeUtils.addComponent(componentDescriptorTree, details.getTarget(), component, 0);
-            addComponent(event, component, column, row);
+            TreeUtils.addComponent(tree, details.getTarget(), component, 0);
         }
+
+
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
     }
 
-    public void setComponentDescriptorTree(Tree componentDescriptorTree) {
-        this.componentDescriptorTree = componentDescriptorTree;
+    public void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     public void setGridDropListener(GridDropListener gridDropListener) {

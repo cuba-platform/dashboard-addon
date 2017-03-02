@@ -22,7 +22,7 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHandler {
     protected GridDropListener gridDropListener;
-    protected Tree componentDescriptorTree;
+    protected Tree tree;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
@@ -56,16 +56,16 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                comp = LayoutUtils.createVerticalDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
                 ((DashboardVerticalLayout) comp).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                comp = LayoutUtils.createHorizontalDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
                 ((DashboardHorizontalLayout) comp).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                comp = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createGridDropLayout(tree, gridDropListener);
                 gridDropListener.gridDropped((GridLayout) comp);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                comp = new FramePanel(componentDescriptorTree);
+                comp = new FramePanel(tree);
                 FramePanel framePanel = (FramePanel) comp;
                 framePanel.setParentFrame(dragComponent.getDropFrame());
                 framePanel.setContent(dragComponent.getWidget().getFrameId());
@@ -73,9 +73,9 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
             }
 
             if (idx >= 0) {
-                TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, idx);
+                TreeUtils.addComponent(tree, targetLayout, comp, idx);
             } else {
-                TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, 0);
+                TreeUtils.addComponent(tree, targetLayout, comp, 0);
             }
         } else {
             if (comp == targetLayout) {
@@ -92,14 +92,14 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 targetLayout.addComponent(comp);
             }
 
-            TreeUtils.reorder(componentDescriptorTree, details.getTarget(), comp, 0);
+            TreeUtils.reorder(tree, details.getTarget(), comp, 0);
 
             if (targetLayout instanceof DashboardHorizontalLayout) {
                 ((DashboardHorizontalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);
             }
         }
 
-        ((TreeDropHandler) componentDescriptorTree.getDropHandler()).getTreeChangeListener().treeChanged();
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
     }
 
     @Override
@@ -116,8 +116,8 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
         return serverSideCriterion;
     }
 
-    public void setComponentDescriptorTree(Tree componentDescriptorTree) {
-        this.componentDescriptorTree = componentDescriptorTree;
+    public void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     public void setGridDropListener(GridDropListener gridDropListener) {

@@ -4,12 +4,12 @@
 
 package com.audimex.dashboard.web.utils;
 
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
-import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
+import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
+import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
+import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
 import com.vaadin.ui.AbstractLayout;
@@ -17,7 +17,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 import java.util.Collection;
 
@@ -33,7 +32,7 @@ public class LayoutUtils {
         component.setDragMode(DashboardUtils.getDefaultDragMode());
 
         DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
-        ddGridLayoutDropHandler.setComponentDescriptorTree(tree);
+        ddGridLayoutDropHandler.setTree(tree);
         ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
         component.setDropHandler(ddGridLayoutDropHandler);
 
@@ -58,17 +57,13 @@ public class LayoutUtils {
         GridCell gridCell = new GridCell(column, row);
         gridCell.setSizeFull();
         gridCell.setStyleName("dd-bordering");
-        gridCell.setSpacing(true);
-        gridCell.setMargin(true);
-        gridCell.setDragMode(LayoutDragMode.CLONE);
         DDVerticalLayoutDropHandler dropHandler = new DDVerticalLayoutDropHandler();
         if (gridLayout instanceof DDGridLayout) {
             DDGridLayout ddGridLayout = (DDGridLayout) gridLayout;
             DDGridLayoutDropHandler gridDropHandler = (DDGridLayoutDropHandler) ddGridLayout.getDropHandler();
             dropHandler.setGridDropListener(gridDropHandler.getGridDropListener());
         }
-        dropHandler.setComponentDescriptorTree(tree);
-        gridCell.setDropHandler(dropHandler);
+        dropHandler.setTree(tree);
         return gridCell;
     }
 

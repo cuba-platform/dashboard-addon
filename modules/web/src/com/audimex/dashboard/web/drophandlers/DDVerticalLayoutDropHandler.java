@@ -23,7 +23,7 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandler {
     private GridDropListener gridDropListener;
-    private Tree componentDescriptorTree;
+    private Tree tree;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
@@ -57,24 +57,24 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                comp = LayoutUtils.createVerticalDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
                 ((DashboardVerticalLayout) comp).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                comp = LayoutUtils.createHorizontalDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
                 ((DashboardHorizontalLayout) comp).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                comp = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
+                comp = LayoutUtils.createGridDropLayout(tree, gridDropListener);
                 gridDropListener.gridDropped((GridLayout) comp);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                comp = new FramePanel(componentDescriptorTree);
+                comp = new FramePanel(tree);
                 ((FramePanel) comp).setParentFrame(dragComponent.getDropFrame());
                 ((FramePanel) comp).setContent(dragComponent.getWidget().getFrameId());
             }
 
             if (idx >= 0) {
-                TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, idx);
+                TreeUtils.addComponent(tree, targetLayout, comp, idx);
             } else {
-                TreeUtils.addComponent(componentDescriptorTree, targetLayout, comp, 0);
+                TreeUtils.addComponent(tree, targetLayout, comp, 0);
             }
         } else {
             if (comp == targetLayout) {
@@ -91,7 +91,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 targetLayout.addComponent(comp);
             }
 
-            TreeUtils.reorder(componentDescriptorTree, targetLayout, comp, 0);
+            TreeUtils.reorder(tree, targetLayout, comp, 0);
             if (targetLayout instanceof DashboardVerticalLayout) {
                 ((DashboardVerticalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);
             }
@@ -99,7 +99,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             if (targetLayout instanceof GridCell) {
                 GridCell gridCell = (GridCell) targetLayout;
                 TreeUtils.markGridCells(
-                        componentDescriptorTree,
+                        tree,
                         (GridLayout) gridCell.getParent(),
                         gridCell.getRow(),
                         gridCell.getColumn(),
@@ -108,7 +108,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             }
         }
 
-        ((TreeDropHandler) componentDescriptorTree.getDropHandler()).getTreeChangeListener().treeChanged();
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
     }
 
     @Override
@@ -125,8 +125,8 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
         return serverSideCriterion;
     }
 
-    public void setComponentDescriptorTree(Tree componentDescriptorTree) {
-        this.componentDescriptorTree = componentDescriptorTree;
+    public void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     public void setGridDropListener(GridDropListener gridDropListener) {

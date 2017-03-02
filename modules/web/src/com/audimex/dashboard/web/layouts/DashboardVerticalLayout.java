@@ -42,7 +42,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
@@ -51,7 +51,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
-        ddVerticalLayoutDropHandler.setComponentDescriptorTree(tree);
+        ddVerticalLayoutDropHandler.setTree(tree);
 
         verticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
         verticalLayout.setSizeFull();

@@ -42,7 +42,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
@@ -51,7 +51,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         horizontalLayout = new DDHorizontalLayout();
         DDHorizontalLayoutDropHandler ddVerticalLayoutDropHandler = new DDHorizontalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
-        ddVerticalLayoutDropHandler.setComponentDescriptorTree(tree);
+        ddVerticalLayoutDropHandler.setTree(tree);
 
         horizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
         horizontalLayout.setSizeFull();

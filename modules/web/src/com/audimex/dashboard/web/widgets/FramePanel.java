@@ -51,7 +51,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().treeChanged();
+            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
