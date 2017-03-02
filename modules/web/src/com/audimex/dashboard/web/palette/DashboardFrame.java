@@ -467,8 +467,8 @@ public class DashboardFrame extends AbstractFrame {
                 } else if (child instanceof GridLayout) {
                     GridLayout layout = (GridLayout) child;
                     widgetModel.setType(WidgetType.GRID_LAYOUT);
-                    widgetModel.setColumns(layout.getColumns());
-                    widgetModel.setRows(layout.getRows());
+                    widgetModel.setGridColumnCount(layout.getColumns());
+                    widgetModel.setGridRowCount(layout.getRows());
                     widgetModel.setWeight(1);
                 } else if (child instanceof FramePanel) {
                     FramePanel framePanel = (FramePanel) child;
@@ -546,8 +546,8 @@ public class DashboardFrame extends AbstractFrame {
                     break;
                 case GRID_LAYOUT:
                     GridLayout gridLayout = (GridLayout) LayoutUtils.createGridDropLayout(tree, gridDropListener);
-                    gridLayout.setColumns(widgetModel.getColumns());
-                    gridLayout.setRows(widgetModel.getRows());
+                    gridLayout.setColumns(widgetModel.getGridColumnCount());
+                    gridLayout.setRows(widgetModel.getGridRowCount());
 
                     component = gridLayout;
                     isNew = true;

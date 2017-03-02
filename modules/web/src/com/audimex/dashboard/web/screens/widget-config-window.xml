@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.audimex.dashboard.web.screens.WidgetConfigWindow"
+        messagesPack="com.audimex.dashboard.web.screens">
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout margin="true">
+        <hbox id="sliderLayout"
+              width="300px"
+              spacing="true"/>
+        <hbox id="buttonsLayout"
+              spacing="true">
+            <button id="okButton" caption="msg://ok" icon="icons/ok.png"/>
+            <button id="cancelButton" caption="msg://cancel" icon="icons/cancel.png"/>
+        </hbox>
+    </layout>
+</window>

@@ -37,7 +37,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
-            parentFrame.openWindow("dashboardElementConfig", WindowManager.OpenType.DIALOG, params);
+            parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {

@@ -17,8 +17,8 @@ public class WidgetModel implements Serializable {
     private int rowspan = 1;
     private int column = 1;
     private int row = 1;
-    private int columns = 2;
-    private int rows = 2;
+    private int gridColumnCount = 1;
+    private int gridRowCount = 1;
     private List<WidgetModel> children = new ArrayList<>();
     private WidgetType type;
 
@@ -86,19 +86,19 @@ public class WidgetModel implements Serializable {
         this.type = type;
     }
 
-    public int getColumns() {
-        return columns;
+    public int getGridColumnCount() {
+        return gridColumnCount;
     }
 
-    public void setColumns(int columns) {
-        this.columns = columns;
+    public void setGridColumnCount(int gridColumnCount) {
+        this.gridColumnCount = gridColumnCount;
     }
 
-    public int getRows() {
-        return rows;
+    public int getGridRowCount() {
+        return gridRowCount;
     }
 
-    public void setRows(int rows) {
-        this.rows = rows;
+    public void setGridRowCount(int gridRowCount) {
+        this.gridRowCount = gridRowCount;
     }
 }
