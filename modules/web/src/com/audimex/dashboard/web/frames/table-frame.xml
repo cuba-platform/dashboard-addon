@@ -2,20 +2,19 @@
 <!--
   ~ Copyright (c) 2016-2016 Haulmont. All rights reserved.
   -->
-
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.frames.table.TableDemoFrame">
+        class="com.audimex.dashboard.web.frames.TableFrame">
     <dsContext>
         <collectionDatasource id="productsDs"
-                              class="com.audimex.dashboard.entity.Product"
                               allowCommit="false"
+                              class="com.audimex.dashboard.entity.Product"
                               refreshMode="NEVER"/>
     </dsContext>
-
     <layout expand="table">
-        <label value="Best Sellers in December" stylename="h1"/>
-
-        <table id="table" width="100%">
+        <label stylename="h1"
+               value="Best Sellers in December"/>
+        <table id="table"
+               width="100%">
             <columns>
                 <column id="title"/>
                 <column id="description"/>

@@ -5,6 +5,4 @@
 
 <widgets xmlns="http://schemas.haulmont.com/audimex/dashboards/widget-descriptor.xsd">
     <widget id="table" caption="dashboardWidget.table" frameId="demoTableWidget" icon="icons/move.png"/>
-    <widget id="report" caption="dashboardWidget.report" frameId="demoReportWidget" icon="icons/pin.png"/>
-    <widget id="chart" caption="dashboardWidget.chart" frameId="demoChartWidget" icon="icons/ok.png"/>
 </widgets>

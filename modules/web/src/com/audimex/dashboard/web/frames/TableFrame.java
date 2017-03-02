@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2016 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.frames.table;
+package com.audimex.dashboard.web.frames;
 
 import com.audimex.dashboard.entity.Product;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.UUID;
 
-public class TableDemoFrame extends AbstractFrame {
+public class TableFrame extends AbstractFrame {
     @Inject
     protected CollectionDatasource<Product, UUID> productsDs;
     @Inject
