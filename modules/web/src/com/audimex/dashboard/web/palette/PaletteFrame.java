@@ -25,6 +25,7 @@ import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -218,6 +219,8 @@ public class PaletteFrame extends AbstractFrame {
     private void onGridDrop(GridLayout gridLayout) {
         Window subWindow = new Window("Grid settings");
         subWindow.setModal(true);
+        subWindow.setResizable(false);
+        subWindow.setWidth(300, Sizeable.Unit.PIXELS);
         VerticalLayout subContent = new VerticalLayout();
         subContent.setSpacing(true);
         subWindow.setContent(subContent);
@@ -226,6 +229,7 @@ public class PaletteFrame extends AbstractFrame {
         HorizontalLayout comboBoxPanel = new HorizontalLayout();
         buttonsPanel.setSpacing(true);
         comboBoxPanel.setSpacing(true);
+        comboBoxPanel.setWidth(100, Sizeable.Unit.PERCENTAGE);
         Slider cols = new Slider();
         Slider rows = new Slider();
 
@@ -237,6 +241,8 @@ public class PaletteFrame extends AbstractFrame {
 
         cols.setValue((double) 2);
         rows.setValue((double) 2);
+        cols.setWidth(100, Sizeable.Unit.PERCENTAGE);
+        rows.setWidth(100, Sizeable.Unit.PERCENTAGE);
         cols.setCaption("Columns");
         rows.setCaption("Rows");
         cols.focus();
