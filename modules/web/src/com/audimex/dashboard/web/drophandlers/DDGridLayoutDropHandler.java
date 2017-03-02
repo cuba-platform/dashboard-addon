@@ -57,7 +57,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 ((DashboardHorizontalLayout) component).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
                 component = LayoutUtils.createGridDropLayout(tree, gridDropListener);
-                gridDropListener.gridDropped((GridLayout) component);
+                gridDropListener.gridDropped((GridLayout) component, layout, 0);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
                 component = new FramePanel(tree);
                 FramePanel framePanel = (FramePanel) component;
@@ -72,18 +72,20 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 );
             }
 
-            Component target = null;
-            if (details.getTarget() instanceof GridLayout) {
-                GridLayout gridLayout = (GridLayout) details.getTarget();
-                target = LayoutUtils.getGridCell(
-                        tree,
-                        tree.getChildren(gridLayout),
-                        column,
-                        row);
-            } else {
-                target = details.getTarget();
+            if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
+                Component target = null;
+                if (details.getTarget() instanceof GridLayout) {
+                    GridLayout gridLayout = (GridLayout) details.getTarget();
+                    target = LayoutUtils.getGridCell(
+                            tree,
+                            tree.getChildren(gridLayout),
+                            column,
+                            row);
+                } else {
+                    target = details.getTarget();
+                }
+                TreeUtils.addComponent(tree, target, component, 0);
             }
-            TreeUtils.addComponent(tree, target, component, 0);
         } else {
             TreeUtils.addComponent(tree, details.getTarget(), component, 0);
         }

@@ -52,7 +52,12 @@ public class TreeDropHandler implements DropHandler {
                     ((DashboardHorizontalLayout) component).setParentFrame(dragComponent.getDropFrame());
                 } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
                     component = LayoutUtils.createGridDropLayout(componentDescriptorTree, gridDropListener);
-                    gridDropListener.gridDropped((GridLayout) component);
+                    Object parentId = tree.getParent(target.getItemIdOver());
+                    if (location == VerticalDropLocation.MIDDLE) {
+                        gridDropListener.gridDropped((GridLayout) component, target.getItemIdOver(), 0);
+                    } else {
+                        gridDropListener.gridDropped((GridLayout) component, parentId, 0);
+                    }
                 } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
                     component = new FramePanel(componentDescriptorTree);
                     ((FramePanel) component).setParentFrame(dragComponent.getDropFrame());
@@ -68,13 +73,15 @@ public class TreeDropHandler implements DropHandler {
                     );
                 }
 
-                Object parentId = tree.getParent(target.getItemIdOver());
-                if (location == VerticalDropLocation.MIDDLE) {
-                    TreeUtils.addComponent(componentDescriptorTree, (Component) target.getItemIdOver(), component, 0);
-                } else if (location == VerticalDropLocation.BOTTOM) {
-                    TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
-                } else {
-                    TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
+                if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
+                    Object parentId = tree.getParent(target.getItemIdOver());
+                    if (location == VerticalDropLocation.MIDDLE) {
+                        TreeUtils.addComponent(componentDescriptorTree, (Component) target.getItemIdOver(), component, 0);
+                    } else if (location == VerticalDropLocation.BOTTOM) {
+                        TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
+                    } else {
+                        TreeUtils.addComponent(componentDescriptorTree, (Component) parentId, component, 0);
+                    }
                 }
             }
         } else {

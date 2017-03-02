@@ -63,7 +63,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 ((DashboardHorizontalLayout) comp).setParentFrame(dragComponent.getDropFrame());
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
                 comp = LayoutUtils.createGridDropLayout(tree, gridDropListener);
-                gridDropListener.gridDropped((GridLayout) comp);
+                gridDropListener.gridDropped((GridLayout) comp, targetLayout, idx);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
                 comp = new FramePanel(tree);
                 FramePanel framePanel = (FramePanel) comp;
@@ -72,10 +72,12 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 comp.setSizeFull();
             }
 
-            if (idx >= 0) {
-                TreeUtils.addComponent(tree, targetLayout, comp, idx);
-            } else {
-                TreeUtils.addComponent(tree, targetLayout, comp, 0);
+            if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
+                if (idx >= 0) {
+                    TreeUtils.addComponent(tree, targetLayout, comp, idx);
+                } else {
+                    TreeUtils.addComponent(tree, targetLayout, comp, 0);
+                }
             }
         } else {
             if (comp == targetLayout) {

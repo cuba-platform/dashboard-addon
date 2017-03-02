@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption"
-        class="com.audimex.dashboard.web.palette.PaletteFrame"
+        class="com.audimex.dashboard.web.palette.DashboardFrame"
         icon="font-icon:DASHBOARD"
         messagesPack="com.audimex.dashboard.web.palette">
     <dialogMode height="600"
@@ -13,8 +13,6 @@
             <checkBox id="allowEdit"
                       align="MIDDLE_LEFT"
                       caption="Designer mode"/>
-            <button invoke="convertToModel" caption="save"/>
-            <button invoke="convertToTree" caption="load"/>
         </hbox>
         <hbox id="mainLayout"
               expand="dropLayout"

@@ -7,8 +7,8 @@
             template="com/audimex/dashboard/web/frames/table-frame.xml"/>
     <screen id="dashboardScreen"
             template="com/audimex/dashboard/web/screens/dashboardScreen.xml"/>
-    <screen id="palette-frame"
-            template="com/audimex/dashboard/web/palette/palette-frame.xml"/>
     <screen id="dashboardElementConfig"
             template="com/audimex/dashboard/web/screens/dashboardElementConfig.xml"/>
+    <screen id="dashboard-frame"
+            template="com/audimex/dashboard/web/palette/dashboard-frame.xml"/>
 </screen-config>

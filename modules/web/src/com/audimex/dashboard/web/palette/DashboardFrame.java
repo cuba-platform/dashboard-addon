@@ -46,7 +46,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class PaletteFrame extends AbstractFrame {
+public class DashboardFrame extends AbstractFrame {
 
     @Inject
     private VBoxLayout containers;
@@ -79,6 +79,13 @@ public class PaletteFrame extends AbstractFrame {
     protected DashboardModel dashboardModel;
     private TreeDropHandler treeDropHandler = null;
     private GridDropListener gridDropListener = null;
+    private DDCssLayout containersDraggableLayout = null;
+    private DashboardMode mode;
+
+    public enum DashboardMode {
+        DESIGNER,
+        VIEW
+    }
 
     @Override
     public void init(Map<String, Object> params) {
@@ -88,7 +95,7 @@ public class PaletteFrame extends AbstractFrame {
         Layout dropLayoutContainer = (Layout) WebComponentsHelper.unwrap(dropLayout);
         Layout treeLayoutContainer = (Layout) WebComponentsHelper.unwrap(treeLayout);
 
-        DDCssLayout containersDraggableLayout = new DDCssLayout();
+        containersDraggableLayout = new DDCssLayout();
         containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
         containersDraggableLayout.setDragCaptionProvider(
                 component -> new DragCaption(component.getCaption(), component.getIcon())
@@ -97,7 +104,7 @@ public class PaletteFrame extends AbstractFrame {
         tree = new Tree();
         tree.setSizeFull();
 
-        gridDropListener = gridLayout -> onGridDrop(gridLayout);
+        gridDropListener = (gridLayout, targetLayout, idx) -> onGridDrop(gridLayout, targetLayout, idx);
         treeDropHandler = new TreeDropHandler();
         treeDropHandler.setComponentDescriptorTree(tree);
         treeDropHandler.setGridDropListener(gridDropListener);
@@ -214,9 +221,35 @@ public class PaletteFrame extends AbstractFrame {
 
             removeComponent.setEnabled(allowEdit.getValue());
         });
+
+        mode = (DashboardMode) params.get("mode");
+        enableViewMode();
     }
 
-    private void onGridDrop(GridLayout gridLayout) {
+    private void enableViewMode() {
+        if (mode == DashboardMode.VIEW) {
+            allowEdit.setVisible(false);
+            containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
+            rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
+            removeSpacings(rootDashboardPanel, false);
+            palette.setVisible(false);
+            containersDraggableLayout.addStyleName("dd-container-disabled");
+            rootDashboardPanel.addStyleName("ad-dashboard-disabled");
+        }
+    }
+
+    public DashboardModel getDashboardModel() {
+        convertToModel();
+        return dashboardModel;
+    }
+
+    public void setDashboardModel(DashboardModel dashboardModel) {
+        this.dashboardModel = dashboardModel;
+        convertToTree();
+        enableViewMode();
+    }
+
+    private void onGridDrop(GridLayout gridLayout, Object targetLayout, int idx) {
         Window subWindow = new Window(getMessage("gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
@@ -255,18 +288,18 @@ public class PaletteFrame extends AbstractFrame {
         Button cancelButton = new Button(getMessage("cancel"), FontAwesome.CLOSE);
         Button okButton = new Button(getMessage("ok"), FontAwesome.CHECK);
         cancelButton.addClickListener(event -> {
-            tree.removeItem(gridLayout);
-            treeDropHandler.getTreeChangeListener().accept(tree);
             subWindow.close();
         });
 
         okButton.addClickListener(event -> {
             if (cols.getValue() != null && rows.getValue() != null) {
+                TreeUtils.addComponent(tree, targetLayout, gridLayout, idx);
                 DashboardUtils.removeEmptyLabels(gridLayout, tree);
                 gridLayout.setColumns(cols.getValue().intValue());
                 gridLayout.setRows(rows.getValue().intValue());
                 DashboardUtils.addEmptyLabels(gridLayout, tree);
                 subWindow.close();
+                treeDropHandler.getTreeChangeListener().accept(tree);
             }
         });
 

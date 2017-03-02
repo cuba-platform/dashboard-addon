@@ -8,6 +8,6 @@
     <layout>
         <frame id="paletteFrame"
                height="100%"
-               screen="palette-frame"/>
+               screen="dashboard-frame"/>
     </layout>
 </window>
