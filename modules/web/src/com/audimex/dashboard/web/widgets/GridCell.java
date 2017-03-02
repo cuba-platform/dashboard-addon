@@ -7,13 +7,13 @@ package com.audimex.dashboard.web.widgets;
 import com.vaadin.ui.CssLayout;
 
 public class GridCell extends CssLayout {
-    private int column = 0;
-    private int row = 0;
-    private int colspan = 1;
-    private int rowspan = 1;
-    private boolean available = true;
+    protected int column = 0;
+    protected int row = 0;
+    protected int colspan = 1;
+    protected int rowspan = 1;
+    protected boolean available = true;
 
-    private GridCell() {
+    protected GridCell() {
     }
 
     public GridCell(int column, int row) {

@@ -37,7 +37,7 @@ public class LayoutUtils {
         component.setDropHandler(ddGridLayoutDropHandler);
 
         component.setSizeFull();
-        component.setStyleName("dd-bordering");
+        component.setStyleName(DashboardUtils.AMXD_BORDERING);
         component.setSpacing(true);
         component.setMargin(true);
 
@@ -56,7 +56,7 @@ public class LayoutUtils {
     public static GridCell createGridCell(int column, int row) {
         GridCell gridCell = new GridCell(column, row);
         gridCell.setSizeFull();
-        gridCell.setStyleName("dd-bordering");
+        gridCell.setStyleName(DashboardUtils.AMXD_BORDERING);
 
         return gridCell;
     }
@@ -99,9 +99,9 @@ public class LayoutUtils {
         return gridRow;
     }
 
-    private static Component configLayout(AbstractLayout component) {
+    protected static Component configLayout(AbstractLayout component) {
         component.setSizeFull();
-        component.setStyleName("dd-bordering");
+        component.setStyleName(DashboardUtils.AMXD_BORDERING);
 
         return component;
     }

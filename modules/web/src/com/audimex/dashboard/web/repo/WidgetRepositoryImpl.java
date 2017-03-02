@@ -26,7 +26,7 @@ import java.util.List;
 
 @Component(WidgetRepository.NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
-    private final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
+    protected final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
 
     protected volatile boolean initialized = false;
     protected List<Widget> widgetMap;

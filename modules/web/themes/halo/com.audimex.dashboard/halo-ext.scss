@@ -1,11 +1,11 @@
 /* Define your theme modifications inside next mixin */
 @mixin com_audimex_dashboard-halo-ext {
-    .dd-bordering {
+    .amxd-bordering {
         box-shadow: inset 0 0 10px #e0e0e0;
         border: 2px solid transparent;
     }
 
-    .dd-palette-button {
+    .amxd-palette-button {
         background: none;
         border: 2px dashed #b5b5b5;
         color: #4e4e4e;
@@ -15,33 +15,29 @@
         box-shadow: none;
     }
 
-    .dd-palette-button:after {
+    .amxd-palette-button:after {
         border: none;
     }
 
-    .dd-palette-button .v-icon {
+    .amxd-palette-button .v-icon {
         width: 30px;
     }
 
-    .dd-palette-button:focus:after {
+    .amxd-palette-button:focus:after {
         border: none;
         box-shadow: none;
     }
 
-    .dd-container-disabled {
+    .amxd-container-disabled {
         opacity: 0.7;
     }
 
-    .dd-container-disabled .v-button:hover:after {
+    .amxd-container-disabled .v-button:hover:after {
         background: none;
     }
 
-    .dd-container-disabled .v-button:active:after {
+    .amxd-container-disabled .v-button:active:after {
         background: none;
-    }
-
-    .dd-grid-slot {
-        box-shadow: inset 0 0 10px #e0e0e0;
     }
 
     .v-csslayout-card {
@@ -53,16 +49,16 @@
             margin-top: -30px;
         }
 
-        & > .ad-widget-content.v-margin-left {
+        & > .amxd-widget-content.v-margin-left {
             padding-left: 5px;
         }
-        & > .ad-widget-content.v-margin-bottom {
+        & > .amxd-widget-content.v-margin-bottom {
             padding-bottom: 5px;
         }
-        & > .ad-widget-content.v-margin-right {
+        & > .amxd-widget-content.v-margin-right {
             padding-right: 5px;
         }
-        & > .ad-widget-content.v-margin-top {
+        & > .amxd-widget-content.v-margin-top {
             padding-top: 5px;
         }
     }
@@ -77,24 +73,24 @@
         text-decoration: line-through;
     }
 
-    .tree-selected {
+    .amxd-tree-selected {
         border: 2px solid $v-selection-color;
         border-radius: 3px;
         box-shadow: 0 0 5px $v-selection-color;
     }
 
-    .ad-dashboard-disabled .tree-selected {
+    .amxd-dashboard-disabled .amxd-tree-selected {
         border: none;
         border-radius: 0;
         box-shadow: none;
     }
 
-    .ad-dashboard-disabled .dd-bordering {
+    .amxd-dashboard-disabled .amxd-bordering {
         box-shadow: none;
         border: none;
     }
 
-    .dd-layout-controls {
+    .amxd-layout-controls {
         position: absolute;
         right: 0;
         background: black;
@@ -104,15 +100,15 @@
         display: none;
     }
 
-    .tree-selected > .dd-layout-controls {
+    .amxd-tree-selected > .amxd-layout-controls {
         display: inline-block;
     }
 
-    .v-csslayout.dd-bordering {
+    .v-csslayout.amxd-bordering {
         position: relative;
     }
 
-    .dd-layout-controls .v-button {
+    .amxd-layout-controls .v-button {
         color: white;
         border: none;
         box-shadow: none;

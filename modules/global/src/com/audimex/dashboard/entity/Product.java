@@ -12,7 +12,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Product")
 public class Product extends AbstractNotPersistentEntity {
-    private static final long serialVersionUID = 9088685337080694843L;
+    protected static final long serialVersionUID = 9088685337080694843L;
 
     @MetaProperty
     protected String title;

@@ -22,8 +22,8 @@ import fi.jasoft.dragdroplayouts.drophandlers.DefaultVerticalLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandler {
-    private GridDropListener gridDropListener;
-    private Tree tree;
+    protected GridDropListener gridDropListener;
+    protected Tree tree;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {

@@ -70,7 +70,7 @@ public class TreeUtils {
         moveToIndex(container, component, container.getChildren(parentId), position);
     }
 
-    private static void moveToIndex(HierarchicalContainer container, Object component, Collection<?> components, int position) {
+    protected static void moveToIndex(HierarchicalContainer container, Object component, Collection<?> components, int position) {
         if (position > 0) {
             int index = 0;
             for (Object childItemId : components) {
@@ -154,7 +154,7 @@ public class TreeUtils {
         }
     }
 
-    private static void drawComponents(Tree tree, Object layout, Collection chlidren) {
+    protected static void drawComponents(Tree tree, Object layout, Collection chlidren) {
         for (Object component : chlidren) {
             if (component instanceof GridCell) {
                 GridLayout grid = ((GridRow) layout).getGridLayout();
@@ -230,7 +230,7 @@ public class TreeUtils {
         }
     }
 
-    private static Component getGridCellComponent(Tree tree, GridCell gridCell) {
+    protected static Component getGridCellComponent(Tree tree, GridCell gridCell) {
         Collection<?> children = tree.getChildren(gridCell);
         if (children != null) {
             return (Component) tree.getChildren(gridCell).iterator().next();

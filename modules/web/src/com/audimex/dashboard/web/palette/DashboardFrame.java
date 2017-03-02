@@ -47,40 +47,39 @@ import java.util.List;
 import java.util.Map;
 
 public class DashboardFrame extends AbstractFrame {
+    @Inject
+    protected VBoxLayout containers;
 
     @Inject
-    private VBoxLayout containers;
+    protected VBoxLayout dropLayout;
 
     @Inject
-    private VBoxLayout dropLayout;
+    protected VBoxLayout treeLayout;
 
     @Inject
-    private VBoxLayout treeLayout;
+    protected CheckBox allowEdit;
 
     @Inject
-    private CheckBox allowEdit;
+    protected SplitPanel palette;
 
     @Inject
-    private SplitPanel palette;
+    protected DashboardSettings dashboardSettings;
 
     @Inject
-    private DashboardSettings dashboardSettings;
+    protected WidgetRepository widgetRepository;
 
     @Inject
-    private WidgetRepository widgetRepository;
-
-    @Inject
-    private com.haulmont.cuba.gui.components.Button removeComponent;
+    protected com.haulmont.cuba.gui.components.Button removeComponent;
 
     protected Tree tree;
 
     protected DashboardVerticalLayout rootDashboardPanel = null;
     protected Component treeComponent;
     protected DashboardModel dashboardModel;
-    private TreeDropHandler treeDropHandler = null;
-    private GridDropListener gridDropListener = null;
-    private DDCssLayout containersDraggableLayout = null;
-    private DashboardMode mode;
+    protected TreeDropHandler treeDropHandler = null;
+    protected GridDropListener gridDropListener = null;
+    protected DDCssLayout containersDraggableLayout = null;
+    protected DashboardMode mode;
 
     public enum DashboardMode {
         DESIGNER,
@@ -114,7 +113,7 @@ public class DashboardFrame extends AbstractFrame {
         tree.addValueChangeListener(e -> {
             if (allowEdit.getValue()) {
                 if (treeComponent != null) {
-                    treeComponent.removeStyleName("tree-selected");
+                    treeComponent.removeStyleName(DashboardUtils.AMXD_TREE_SELECTED);
                 }
 
                 if (tree.getValue() == null) {
@@ -145,7 +144,7 @@ public class DashboardFrame extends AbstractFrame {
                     }
 
                     if (treeComponent != null) {
-                        treeComponent.addStyleName("tree-selected");
+                        treeComponent.addStyleName(DashboardUtils.AMXD_TREE_SELECTED);
                     }
                 }
             }
@@ -200,7 +199,7 @@ public class DashboardFrame extends AbstractFrame {
         );
 
         rootDashboardPanel.setSizeFull();
-        rootDashboardPanel.setStyleName("dd-bordering");
+        rootDashboardPanel.setStyleName(DashboardUtils.AMXD_BORDERING);
 
         setupWidgetsPalette(containersDraggableLayout);
 
@@ -215,15 +214,15 @@ public class DashboardFrame extends AbstractFrame {
                 rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
                 removeSpacings(rootDashboardPanel, true);
                 palette.setVisible(true);
-                containersDraggableLayout.removeStyleName("dd-container-disabled");
-                rootDashboardPanel.removeStyleName("ad-dashboard-disabled");
+                containersDraggableLayout.removeStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.removeStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
             } else {
                 containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
                 rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
                 removeSpacings(rootDashboardPanel, false);
                 palette.setVisible(false);
-                containersDraggableLayout.addStyleName("dd-container-disabled");
-                rootDashboardPanel.addStyleName("ad-dashboard-disabled");
+                containersDraggableLayout.addStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.addStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
             }
 
             removeComponent.setEnabled(allowEdit.getValue());
@@ -246,15 +245,15 @@ public class DashboardFrame extends AbstractFrame {
         }
     }
 
-    private void enableViewMode() {
+    protected void enableViewMode() {
         if (mode == DashboardMode.VIEW) {
             allowEdit.setVisible(false);
             containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
             rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
             removeSpacings(rootDashboardPanel, false);
             palette.setVisible(false);
-            containersDraggableLayout.addStyleName("dd-container-disabled");
-            rootDashboardPanel.addStyleName("ad-dashboard-disabled");
+            containersDraggableLayout.addStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
+            rootDashboardPanel.addStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
         }
     }
 
@@ -269,7 +268,7 @@ public class DashboardFrame extends AbstractFrame {
         enableViewMode();
     }
 
-    private void onGridDrop(GridLayout gridLayout, Object targetLayout, int idx) {
+    protected void onGridDrop(GridLayout gridLayout, Object targetLayout, int idx) {
         Window subWindow = new Window(getMessage("gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
@@ -332,27 +331,27 @@ public class DashboardFrame extends AbstractFrame {
         UI.getCurrent().addWindow(subWindow);
     }
 
-    private void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
+    protected void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
         PaletteButton verticalLayoutButton = new PaletteButton(getMessage("vertical"), FontAwesome.ARROWS_V);
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
         verticalLayoutButton.setDropFrame(getFrame());
-        verticalLayoutButton.setStyleName("dd-palette-button");
+        verticalLayoutButton.setStyleName("amxd-palette-button");
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("horizontal"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
         horizontalLayoutButton.setDropFrame(getFrame());
-        horizontalLayoutButton.setStyleName("dd-palette-button");
+        horizontalLayoutButton.setStyleName("amxd-palette-button");
 
         PaletteButton gridButton = new PaletteButton(getMessage("grid"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
         gridButton.setDropFrame(getFrame());
-        gridButton.setStyleName("dd-palette-button");
+        gridButton.setStyleName("amxd-palette-button");
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
@@ -367,14 +366,14 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
-            paletteButton.setStyleName("dd-palette-button");
+            paletteButton.setStyleName("amxd-palette-button");
             paletteButton.setDropFrame(getFrame());
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }
     }
 
-    private void removeAllComponents() {
+    protected void removeAllComponents() {
         HierarchicalContainer hierarchicalContainer = (HierarchicalContainer) tree.getContainerDataSource();
         hierarchicalContainer.removeItemRecursively(rootDashboardPanel);
         hierarchicalContainer.addItem(rootDashboardPanel);
@@ -383,13 +382,13 @@ public class DashboardFrame extends AbstractFrame {
         ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
     }
 
-    private void removeSpacings(AbstractLayout component, boolean value) {
+    protected void removeSpacings(AbstractLayout component, boolean value) {
         if (!(component instanceof HorizontalLayout
                 || component instanceof VerticalLayout)) {
             if (value) {
-                component.addStyleName("dd-bordering");
+                component.addStyleName(DashboardUtils.AMXD_BORDERING);
             } else {
-                component.removeStyleName("dd-bordering");
+                component.removeStyleName(DashboardUtils.AMXD_BORDERING);
             }
 
             if (component instanceof HasMainLayout) {
@@ -468,7 +467,7 @@ public class DashboardFrame extends AbstractFrame {
         this.dashboardModel = dashboardModel;
     }
 
-    private List<WidgetModel> containerToModel(Object parent) {
+    protected List<WidgetModel> containerToModel(Object parent) {
         Collection<?> children = tree.getChildren(parent);
         List<WidgetModel> widgetModels = new ArrayList<>();
         if (children != null) {
@@ -532,7 +531,7 @@ public class DashboardFrame extends AbstractFrame {
         TreeUtils.redrawLayout(tree, rootDashboardPanel);
     }
 
-    private void modelToContainer(List<WidgetModel> widgetModels,
+    protected void modelToContainer(List<WidgetModel> widgetModels,
                                           Object parent, GridDropListener gridDropListener) {
         int idx = 0;
         for (WidgetModel widgetModel : widgetModels) {

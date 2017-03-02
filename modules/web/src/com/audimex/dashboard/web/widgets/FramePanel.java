@@ -25,16 +25,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
-    private VerticalLayout contentLayout = new VerticalLayout();
-    private Tree tree;
+    protected VerticalLayout contentLayout = new VerticalLayout();
+    protected Tree tree;
 
-    private int weight = 1;
-    private int colSpan = 1;
-    private int rowSpan = 1;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
 
     protected DashboardSettings dashboardSettings;
-    private Frame parentFrame = null;
-    private String frameId;
+    protected Frame parentFrame = null;
+    protected String frameId;
 
     public FramePanel(Tree tree) {
         this.tree = tree;
@@ -55,17 +55,17 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName("dd-layout-controls");
+        buttonsPanel.addStyleName(DashboardUtils.AMXD_LAYOUT_CONTROLS);
 
         contentLayout.setSizeFull();
-        contentLayout.setStyleName("ad-widget-content");
+        contentLayout.setStyleName("amxd-widget-content");
         contentLayout.setMargin(true);
 
         addComponent(buttonsPanel);
         addComponent(contentLayout);
 
         setSizeFull();
-        addStyleName("dd-bordering");
+        addStyleName(DashboardUtils.AMXD_BORDERING);
     }
 
     public Frame getParentFrame() {

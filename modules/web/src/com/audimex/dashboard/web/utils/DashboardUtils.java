@@ -16,8 +16,13 @@ import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 public class DashboardUtils {
+    public static final String AMXD_DASHBOARD_DISABLED = "amxd-dashboard-disabled";
+    public static final String AMXD_CONTAINER_DISABLED = "amxd-container-disabled";
+    public static final String AMXD_TREE_SELECTED = "amxd-tree-selected";
+    public static final String AMXD_BORDERING = "amxd-bordering";
+    public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
 
-    private DashboardUtils() {
+    protected DashboardUtils() {
     }
 
     public static ComponentType getTypeByComponent(Component component) {

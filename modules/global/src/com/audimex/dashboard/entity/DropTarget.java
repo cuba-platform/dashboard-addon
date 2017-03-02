@@ -14,7 +14,7 @@ public enum DropTarget implements EnumClass<Integer> {
     TREE(2),
     REORDER(3);
 
-    private Integer id;
+    protected Integer id;
 
     DropTarget(Integer value) {
         this.id = value;

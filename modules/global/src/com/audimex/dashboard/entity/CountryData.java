@@ -9,7 +9,7 @@ import com.haulmont.cuba.core.entity.AbstractNotPersistentEntity;
 
 @MetaClass(name = "amxd$CountryData")
 public class CountryData extends AbstractNotPersistentEntity {
-    private static final long serialVersionUID = -9186888583289273362L;
+    protected static final long serialVersionUID = -9186888583289273362L;
 
     @MetaProperty
     protected String country;

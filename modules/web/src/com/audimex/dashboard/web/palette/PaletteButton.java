@@ -12,9 +12,9 @@ import com.vaadin.ui.Button;
 
 public class PaletteButton extends Button {
 
-    private WidgetType widgetType;
-    private WidgetRepository.Widget widget;
-    private Frame dropFrame;
+    protected WidgetType widgetType;
+    protected WidgetRepository.Widget widget;
+    protected Frame dropFrame;
 
     public PaletteButton(String caption) {
         super(caption);

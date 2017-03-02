@@ -18,25 +18,28 @@ import javax.inject.Inject;
 import java.util.Map;
 
 public class WidgetConfigWindow extends AbstractWindow {
-    private Slider weightSlider = null;
-    private Slider colSpanSlider = null;
-    private Slider rowSpanSlider = null;
+    protected Slider weightSlider = null;
+    protected Slider colSpanSlider = null;
+    protected Slider rowSpanSlider = null;
 
     @Inject
-    private HBoxLayout sliderLayout;
+    protected HBoxLayout sliderLayout;
 
     @Inject
-    private com.haulmont.cuba.gui.components.Button okButton;
+    protected com.haulmont.cuba.gui.components.Button okButton;
 
     @Inject
-    private com.haulmont.cuba.gui.components.Button cancelButton;
+    protected com.haulmont.cuba.gui.components.Button cancelButton;
+
+    Component widget = null;
+    Tree tree = null;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        Component widget = (Component) params.get("widget");
-        Tree tree = (Tree) params.get("tree");
+        widget = (Component) params.get("widget");
+        tree = (Tree) params.get("tree");
 
         Layout layout = (Layout) WebComponentsHelper.unwrap(sliderLayout);
 
@@ -84,64 +87,58 @@ public class WidgetConfigWindow extends AbstractWindow {
 
             layout.addComponent(rowSpanSlider);
         }
+    }
 
-        cancelButton.setAction(new BaseAction("cancel") {
-            @Override
-            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                close("");
-            }
-        });
+    public void cancel() {
+        close("");
+    }
 
-        okButton.setAction(new BaseAction("ok") {
-            @Override
-            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                if (widget.getParent() instanceof AbstractOrderedLayout) {
-                    ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());
-                }
-                if (widget.getParent() instanceof GridLayout) {
-                    GridCell gridCell = LayoutUtils.getWidgetCell(tree, widget);
-                    int availableRowSpan = LayoutUtils.availableRows((GridLayout) widget.getParent(), gridCell);
-                    int availableColSpan = LayoutUtils.availableColumns((GridLayout) widget.getParent(), gridCell);
-                    int colspan = colSpanSlider.getValue().intValue();
-                    int rowspan = rowSpanSlider.getValue().intValue();
-                    boolean isValid = true;
+    public void save() {
+        if (widget.getParent() instanceof AbstractOrderedLayout) {
+            ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());
+        }
+        if (widget.getParent() instanceof GridLayout) {
+            GridCell gridCell = LayoutUtils.getWidgetCell(tree, widget);
+            int availableRowSpan = LayoutUtils.availableRows((GridLayout) widget.getParent(), gridCell);
+            int availableColSpan = LayoutUtils.availableColumns((GridLayout) widget.getParent(), gridCell);
+            int colspan = colSpanSlider.getValue().intValue();
+            int rowspan = rowSpanSlider.getValue().intValue();
+            boolean isValid = true;
 
-                    if (availableRowSpan >= 0
-                            && availableRowSpan >= rowspan
-                            && availableColSpan >= colspan
-                            && availableColSpan >= 0) {
-                        for (int row = gridCell.getRow(); row < gridCell.getRow() + rowspan; row++) {
-                            for (int column = gridCell.getColumn(); column < gridCell.getColumn() + colspan; column++) {
-                                Component gridComponent = ((GridLayout) widget.getParent()).getComponent(column, row);
-                                if (!(gridComponent instanceof GridCell) && !gridComponent.equals(widget)) {
-                                    isValid = false;
-                                }
-                            }
+            if (availableRowSpan >= 0
+                    && availableRowSpan >= rowspan
+                    && availableColSpan >= colspan
+                    && availableColSpan >= 0) {
+                for (int row = gridCell.getRow(); row < gridCell.getRow() + rowspan; row++) {
+                    for (int column = gridCell.getColumn(); column < gridCell.getColumn() + colspan; column++) {
+                        Component gridComponent = ((GridLayout) widget.getParent()).getComponent(column, row);
+                        if (!(gridComponent instanceof GridCell) && !gridComponent.equals(widget)) {
+                            isValid = false;
                         }
-                    } else {
-                        isValid = false;
-                    }
-
-                    if (isValid) {
-                        int colSpan = colSpanSlider.getValue().intValue();
-                        int rowSpan = rowSpanSlider.getValue().intValue();
-
-                        ((HasGridSpan) widget).setColSpan(colSpan);
-                        ((HasGridSpan) widget).setRowSpan(rowSpan);
-
-                        GridCell gridCellComponent = LayoutUtils.getWidgetCell(tree, widget);
-                        TreeUtils.markGridCells(tree,
-                                (GridLayout) widget.getParent(),
-                                gridCellComponent.getRow(),
-                                gridCellComponent.getColumn(),
-                                rowSpan,
-                                colSpan);
-                    } else {
-                        showNotification(getMessage("notValidated"), NotificationType.ERROR);
                     }
                 }
-                close("");
+            } else {
+                isValid = false;
             }
-        });
+
+            if (isValid) {
+                int colSpan = colSpanSlider.getValue().intValue();
+                int rowSpan = rowSpanSlider.getValue().intValue();
+
+                ((HasGridSpan) widget).setColSpan(colSpan);
+                ((HasGridSpan) widget).setRowSpan(rowSpan);
+
+                GridCell gridCellComponent = LayoutUtils.getWidgetCell(tree, widget);
+                TreeUtils.markGridCells(tree,
+                        (GridLayout) widget.getParent(),
+                        gridCellComponent.getRow(),
+                        gridCellComponent.getColumn(),
+                        rowSpan,
+                        colSpan);
+            } else {
+                showNotification(getMessage("notValidated"), NotificationType.ERROR);
+            }
+        }
+        close("");
     }
 }

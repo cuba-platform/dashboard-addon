@@ -15,7 +15,7 @@ public enum ComponentType implements EnumClass<String> {
     WIDGET("WIDGET"),
     GRID_LAYOUT("GRID_LAYOUT");
 
-    private String id;
+    protected String id;
 
     ComponentType(String value) {
         this.id = value;

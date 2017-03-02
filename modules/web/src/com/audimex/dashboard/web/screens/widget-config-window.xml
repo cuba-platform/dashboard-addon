@@ -13,8 +13,8 @@
               spacing="true"/>
         <hbox id="buttonsLayout"
               spacing="true">
-            <button id="okButton" caption="msg://ok" icon="icons/ok.png"/>
-            <button id="cancelButton" caption="msg://cancel" icon="icons/cancel.png"/>
+            <button id="okButton" caption="msg://ok" icon="icons/ok.png" invoke="save"/>
+            <button id="cancelButton" caption="msg://cancel" icon="icons/cancel.png" invoke="cancel"/>
         </hbox>
     </layout>
 </window>

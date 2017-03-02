@@ -22,12 +22,12 @@ import java.util.Map;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
         DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
-    private int weight = 1;
-    private int colSpan = 1;
-    private int rowSpan = 1;
-    private Tree tree = null;
-    private DDVerticalLayout verticalLayout = null;
-    private Frame parentFrame = null;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
+    protected Tree tree = null;
+    protected DDVerticalLayout verticalLayout = null;
+    protected Frame parentFrame = null;
 
     public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener) {
         this.tree = tree;
@@ -46,7 +46,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName("dd-layout-controls");
+        buttonsPanel.addStyleName(DashboardUtils.AMXD_LAYOUT_CONTROLS);
 
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
@@ -58,7 +58,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
         verticalLayout.setDropHandler(ddVerticalLayoutDropHandler);
-        verticalLayout.addStyleName("dd-layout-content");
+        verticalLayout.addStyleName("amxd-layout-content");
 
         super.addComponent(buttonsPanel);
         super.addComponent(verticalLayout);

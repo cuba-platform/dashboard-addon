@@ -14,7 +14,7 @@ public enum DemoContentType implements EnumClass<Integer> {
     SALES_CHART(20),
     INVOICE_REPORT(30);
 
-    private Integer id;
+    protected Integer id;
 
     DemoContentType(Integer value) {
         this.id = value;
