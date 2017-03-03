@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
+               dependsOn="com.haulmont.cuba">
+    <module blocks="*"
+            name="global">
+        <artifact appJar="true"
+                  name="dashboard-global"/>
+        <property name="cuba.persistenceConfig"
+                  value="+com/audimex/dashboard/persistence.xml"/>
+        <property name="cuba.metadataConfig"
+                  value="+com/audimex/dashboard/metadata.xml"/>
+        <property name="cuba.viewsConfig"
+                  value="+com/audimex/dashboard/views.xml"/>
+    </module>
+    <module blocks="core"
+            dependsOn="global"
+            name="core">
+        <artifact appJar="true"
+                  name="dashboard-core"/>
+        <property name="cuba.springContextConfig"
+                  value="+com/audimex/dashboard/spring.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+com.audimex.dashboard.core"/>
+    </module>
+    <module blocks="web,desktop"
+            dependsOn="global"
+            name="gui">
+        <artifact appJar="true"
+                  name="dashboard-gui"/>
+    </module>
+    <module blocks="web"
+            dependsOn="gui"
+            name="web">
+        <artifact appJar="true"
+                  name="dashboard-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="dashboard-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="dashboard-web-toolkit"
+                  skipIfExists="web-toolkit"/>
+        <artifact configuration="themes"
+                  name="dashboard-web-themes"/>
+        <property name="cuba.springContextConfig"
+                  value="+com/audimex/dashboard/web-spring.xml"/>
+        <property name="cuba.dispatcherSpringContextConfig"
+                  value="+com/audimex/dashboard/web-dispatcher-spring.xml"/>
+        <property name="cuba.windowConfig"
+                  value="+com/audimex/dashboard/web-screens.xml"/>
+        <property name="cuba.menuConfig"
+                  value="+com/audimex/dashboard/web-menu.xml"/>
+        <property name="cuba.permissionConfig"
+                  value="+com/audimex/dashboard/web-permissions.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+com.audimex.dashboard.gui com.audimex.dashboard.web"/>
+        <property name="cuba.web.widgetSet"
+                  value="com.audimex.dashboard.web.toolkit.ui.AppWidgetSet"/>
+    </module>
+    <module dependsOn="web"
+            name="web-toolkit">
+        <artifact name="dashboard-web-toolkit"/>
+    </module>
+    <module name="web-themes">
+        <artifact name="dashboard-web-themes"/>
+    </module>
+</app-component>

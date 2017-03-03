@@ -5,11 +5,10 @@ buildscript {
         maven {
             url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
             }
         }
-        
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -72,6 +71,13 @@ configure([globalModule, coreModule, guiModule, webModule, webToolkitModule]) {
 
 configure(globalModule) {
     task enhance(type: CubaEnhancing)
+
+    jar {
+        manifest {
+            attributes('App-Component-Id': cuba.artifact.group)
+            attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
+        }
+    }
     
     
 }
