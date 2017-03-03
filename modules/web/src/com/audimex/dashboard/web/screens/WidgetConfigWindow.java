@@ -31,8 +31,8 @@ public class WidgetConfigWindow extends AbstractWindow {
     @Inject
     private com.haulmont.cuba.gui.components.Button cancelButton;
 
-    Component widget = null;
-    Tree tree = null;
+    private Component widget = null;
+    private Tree tree = null;
 
     @Override
     public void init(Map<String, Object> params) {
