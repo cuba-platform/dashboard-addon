@@ -26,12 +26,12 @@ import java.util.Map;
 
 public class DashboardHorizontalLayout extends CssLayout implements HasMainLayout, HasWeight,
         HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
-    protected DDHorizontalLayout horizontalLayout = null;
-    protected int weight = 1;
-    protected int colSpan = 1;
-    protected int rowSpan = 1;
-    protected Tree tree = null;
-    protected Frame parentFrame = null;
+    private DDHorizontalLayout horizontalLayout = null;
+    private int weight = 1;
+    private int colSpan = 1;
+    private int rowSpan = 1;
+    private Tree tree = null;
+    private Frame parentFrame = null;
 
     public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
         this.tree = tree;

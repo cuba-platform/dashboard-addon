@@ -24,11 +24,11 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 import java.util.function.Consumer;
 
 public class TreeDropHandler implements DropHandler {
-    protected Tree tree;
-    protected GridDropListener gridDropListener;
+    private Tree tree;
+    private GridDropListener gridDropListener;
     private Frame frame;
 
-    protected Consumer<Tree> treeChangeListener;
+    private Consumer<Tree> treeChangeListener;
 
     @Override
     public void drop(DragAndDropEvent event) {

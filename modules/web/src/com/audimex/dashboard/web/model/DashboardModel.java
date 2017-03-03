@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardModel implements Serializable {
-    protected String title;
-    protected List<WidgetModel> widgets = new ArrayList<>();
+    private String title;
+    private List<WidgetModel> widgets = new ArrayList<>();
 
     public String getTitle() {
         return title;

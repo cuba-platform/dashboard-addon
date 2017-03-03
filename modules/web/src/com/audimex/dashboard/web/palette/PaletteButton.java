@@ -11,8 +11,8 @@ import com.vaadin.ui.Button;
 
 public class PaletteButton extends Button {
 
-    protected WidgetType widgetType;
-    protected WidgetRepository.Widget widget;
+    private WidgetType widgetType;
+    private WidgetRepository.Widget widget;
 
     public PaletteButton(String caption) {
         super(caption);

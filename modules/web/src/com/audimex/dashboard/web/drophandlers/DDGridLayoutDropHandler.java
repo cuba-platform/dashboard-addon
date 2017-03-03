@@ -23,8 +23,8 @@ import fi.jasoft.dragdroplayouts.drophandlers.DefaultGridLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
-    protected GridDropListener gridDropListener;
-    protected Tree tree;
+    private GridDropListener gridDropListener;
+    private Tree tree;
     private Frame frame;
 
     @Override

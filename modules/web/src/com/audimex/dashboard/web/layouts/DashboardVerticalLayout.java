@@ -26,11 +26,11 @@ import java.util.Map;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
         DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
-    protected int weight = 1;
-    protected int colSpan = 1;
-    protected int rowSpan = 1;
-    protected Tree tree = null;
-    protected DDVerticalLayout verticalLayout = null;
+    private int weight = 1;
+    private int colSpan = 1;
+    private int rowSpan = 1;
+    private Tree tree = null;
+    private DDVerticalLayout verticalLayout = null;
 
     public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
         this.tree = tree;

@@ -25,20 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
-    protected VerticalLayout contentLayout = new VerticalLayout();
-    protected Tree tree;
+    private VerticalLayout contentLayout = new VerticalLayout();
+    private Tree tree;
 
-    protected int weight = 1;
-    protected int colSpan = 1;
-    protected int rowSpan = 1;
+    private int weight = 1;
+    private int colSpan = 1;
+    private int rowSpan = 1;
 
-    protected DashboardSettings dashboardSettings;
     private String frameId;
 
     public FramePanel(Tree tree, String frameId, Frame parentFrame) {
         this.tree = tree;
         this.frameId = frameId;
-        dashboardSettings = AppBeans.get(DashboardSettings.class);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);

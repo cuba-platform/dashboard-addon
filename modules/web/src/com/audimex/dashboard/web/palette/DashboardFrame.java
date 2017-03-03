@@ -48,38 +48,38 @@ import java.util.Map;
 
 public class DashboardFrame extends AbstractFrame {
     @Inject
-    protected VBoxLayout containers;
+    private VBoxLayout containers;
 
     @Inject
-    protected VBoxLayout dropLayout;
+    private VBoxLayout dropLayout;
 
     @Inject
-    protected VBoxLayout treeLayout;
+    private VBoxLayout treeLayout;
 
     @Inject
-    protected CheckBox allowEdit;
+    private CheckBox allowEdit;
 
     @Inject
-    protected SplitPanel palette;
+    private SplitPanel palette;
 
     @Inject
-    protected DashboardSettings dashboardSettings;
+    private DashboardSettings dashboardSettings;
 
     @Inject
-    protected WidgetRepository widgetRepository;
+    private WidgetRepository widgetRepository;
 
     @Inject
-    protected com.haulmont.cuba.gui.components.Button removeComponent;
+    private com.haulmont.cuba.gui.components.Button removeComponent;
 
-    protected Tree tree;
+    private Tree tree;
 
-    protected DashboardVerticalLayout rootDashboardPanel = null;
-    protected Component treeComponent;
-    protected DashboardModel dashboardModel;
-    protected TreeDropHandler treeDropHandler = null;
-    protected GridDropListener gridDropListener = null;
-    protected DDCssLayout containersDraggableLayout = null;
-    protected DashboardMode mode;
+    private DashboardVerticalLayout rootDashboardPanel = null;
+    private Component treeComponent;
+    private DashboardModel dashboardModel;
+    private TreeDropHandler treeDropHandler = null;
+    private GridDropListener gridDropListener = null;
+    private DDCssLayout containersDraggableLayout = null;
+    private DashboardMode mode;
 
     public enum DashboardMode {
         DESIGNER,

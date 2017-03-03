@@ -13,11 +13,11 @@ public interface WidgetRepository {
     List<Widget> getWidgets();
 
     class Widget implements Serializable {
-        protected String id;
-        protected String caption;
-        protected String icon;
-        protected String description;
-        protected String frameId;
+        private String id;
+        private String caption;
+        private String icon;
+        private String description;
+        private String frameId;
 
         public String getId() {
             return id;

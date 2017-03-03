@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GridRow implements Serializable {
-    protected List<GridCell> gridCells = new ArrayList<>();
-    protected GridLayout gridLayout;
+    private List<GridCell> gridCells = new ArrayList<>();
+    private GridLayout gridLayout;
 
     public GridRow(GridLayout gridLayout) {
         this.gridLayout = gridLayout;

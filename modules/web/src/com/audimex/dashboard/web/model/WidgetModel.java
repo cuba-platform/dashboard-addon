@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WidgetModel implements Serializable {
-    protected String frameId;
-    protected int weight = 1;
-    protected int colspan = 1;
-    protected int rowspan = 1;
-    protected int column = 1;
-    protected int row = 1;
-    protected int gridColumnCount = 1;
-    protected int gridRowCount = 1;
-    protected List<WidgetModel> children = new ArrayList<>();
-    protected WidgetType type;
+    private String frameId;
+    private int weight = 1;
+    private int colspan = 1;
+    private int rowspan = 1;
+    private int column = 1;
+    private int row = 1;
+    private int gridColumnCount = 1;
+    private int gridRowCount = 1;
+    private List<WidgetModel> children = new ArrayList<>();
+    private WidgetType type;
 
     public String getFrameId() {
         return frameId;

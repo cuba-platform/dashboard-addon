@@ -18,7 +18,7 @@ public enum WidgetType implements EnumClass<String> {
     GRID_CELL("GRID_CELL"),
     GRID_ROW("GRID_ROW");
 
-    protected String id;
+    private String id;
 
     WidgetType(String value) {
         this.id = value;

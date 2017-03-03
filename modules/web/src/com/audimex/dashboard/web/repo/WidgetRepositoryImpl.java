@@ -26,16 +26,16 @@ import java.util.List;
 
 @Component(WidgetRepository.NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
-    protected final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
+    private final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
 
-    protected volatile boolean initialized = false;
-    protected List<Widget> widgetMap;
-
-    @Inject
-    protected WidgetConfig widgetConfig;
+    private volatile boolean initialized = false;
+    private List<Widget> widgetMap;
 
     @Inject
-    protected Resources resources;
+    private WidgetConfig widgetConfig;
+
+    @Inject
+    private Resources resources;
 
     @Override
     public List<Widget> getWidgets() {
