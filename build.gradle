@@ -20,12 +20,12 @@ buildscript {
     }
 }
 
-def globalModule = project(':app-global')
-def coreModule = project(':app-core')
-def guiModule = project(':app-gui')
-def webModule = project(':app-web')
-def webToolkitModule = project(':app-web-toolkit')
-def webThemesModule= project(':app-web-themes')
+def globalModule = project(':dashboard-global')
+def coreModule = project(':dashboard-core')
+def guiModule = project(':dashboard-gui')
+def webModule = project(':dashboard-web')
+def webToolkitModule = project(':dashboard-web-toolkit')
+def webThemesModule= project(':dashboard-web-themes')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
@@ -92,7 +92,7 @@ configure(coreModule) {
     }
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/app-core')
+        def dir = new File(cuba.tomcat.dir, '/conf/dashboard-core')
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -101,8 +101,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app-core'
-        appJars('app-global', 'app-core')
+        appName = 'dashboard-core'
+        appJars('dashboard-global', 'dashboard-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -131,7 +131,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/audimex/dashboard/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/dashboard"
     }
 }
 
@@ -167,16 +167,16 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/audimex/dashboard/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/dashboard"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'app'
+        appName = 'dashboard'
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/app')
+        def dir = new File(cuba.tomcat.dir, '/conf/dashboard')
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -185,8 +185,8 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app'
-        appJars('app-global', 'app-gui', 'app-web')
+        appName = 'dashboard'
+        appJars('dashboard-global', 'dashboard-gui', 'dashboard-web')
     }
     task buildScssThemes(type: CubaWebScssThemeCreation)
     task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
@@ -223,11 +223,11 @@ configure(webToolkitModule) {
 
     task deploy(dependsOn: buildWidgetSet) << {
         delete {
-            "$cuba.tomcat.dir/webapps/app/VAADIN/widgetsets"
+            "$cuba.tomcat.dir/webapps/dashboard/VAADIN/widgetsets"
         }
         copy {
             from "$buildDir/web"
-            into "$cuba.tomcat.dir/webapps/app"
+            into "$cuba.tomcat.dir/webapps/dashboard"
         }
     }
 }
@@ -257,13 +257,13 @@ configure(webThemesModule) {
 }
 
 
-task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ':dashboard-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/app-core")
-    delete("$cuba.tomcat.dir/webapps/app")
+    delete("$cuba.tomcat.dir/webapps/dashboard-core")
+    delete("$cuba.tomcat.dir/webapps/dashboard")
 }
 
-task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-web-toolkit:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deploy', ':dashboard-web-toolkit:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')

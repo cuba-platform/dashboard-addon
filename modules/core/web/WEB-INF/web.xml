@@ -9,7 +9,7 @@
         <param-value>classpath:cuba-app.properties
             classpath:com/audimex/dashboard/app.properties
             /WEB-INF/local.app.properties
-            "file:${catalina.home}/conf/app-core/local.app.properties"</param-value>
+            "file:${catalina.home}/conf/dashboard-core/local.app.properties"</param-value>
     </context-param>
     <!--Application components-->
     <context-param>
