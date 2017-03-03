@@ -3,6 +3,10 @@
         caption="msg://caption"
         class="com.audimex.dashboard.web.screens.WidgetConfigWindow"
         messagesPack="com.audimex.dashboard.web.screens">
+    <actions>
+        <action id="save" invoke="save" shortcut="CTRL-ENTER"/>
+        <action id="cancel" invoke="cancel" shortcut="ESCAPE"/>
+    </actions>
     <dialogMode forceDialog="true"
                 height="AUTO"
                 modal="true"
@@ -13,8 +17,8 @@
               spacing="true"/>
         <hbox id="buttonsLayout"
               spacing="true">
-            <button id="okButton" caption="msg://ok" icon="icons/ok.png" invoke="save"/>
-            <button id="cancelButton" caption="msg://cancel" icon="icons/cancel.png" invoke="cancel"/>
+            <button id="okButton" caption="msg://ok" icon="icons/ok.png" action="save"/>
+            <button id="cancelButton" caption="msg://cancel" icon="icons/cancel.png" action="cancel"/>
         </hbox>
     </layout>
 </window>

@@ -53,6 +53,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             weightSlider.setResolution(0);
             weightSlider.setValue((double) ((HasWeight) widget).getWeight());
             layout.addComponent(weightSlider);
+            weightSlider.focus();
         }
 
         if (widget.getParent() instanceof GridLayout) {
@@ -70,6 +71,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             colSpanSlider.setResolution(0);
             colSpanSlider.setValue((double) ((HasGridSpan) widget).getColSpan());
             layout.addComponent(colSpanSlider);
+            colSpanSlider.focus();
 
             rowSpanSlider = new Slider();
             rowSpanSlider.setImmediate(true);
