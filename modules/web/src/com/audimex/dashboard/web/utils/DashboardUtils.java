@@ -4,15 +4,11 @@
 
 package com.audimex.dashboard.web.utils;
 
-import com.audimex.dashboard.entity.ComponentType;
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Tree;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 public class DashboardUtils {
@@ -23,21 +19,6 @@ public class DashboardUtils {
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
 
     protected DashboardUtils() {
-    }
-
-    public static ComponentType getTypeByComponent(Component component) {
-        ComponentType componentType;
-        if (component instanceof DashboardVerticalLayout) {
-            componentType = ComponentType.VERTICAL_LAYOUT;
-        } else if (component instanceof DashboardHorizontalLayout) {
-            componentType = ComponentType.HORIZONTAL_LAYOUT;
-        } else if (component instanceof DDGridLayout) {
-            componentType = ComponentType.GRID_LAYOUT;
-        } else {
-            componentType = ComponentType.WIDGET;
-        }
-
-        return componentType;
     }
 
     public static GridLayout removeEmptyLabels(GridLayout gridLayout, Tree tree) {
