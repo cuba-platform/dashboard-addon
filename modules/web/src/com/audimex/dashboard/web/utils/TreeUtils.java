@@ -187,12 +187,16 @@ public class TreeUtils {
                         ((FramePanel) cellComponent).setRowSpan(gridCell.getRowspan());
                     }
 
+                    if (grid.getComponent(gridCell.getColumn(), gridCell.getRow()) != null) {
+                        grid.removeComponent(gridCell.getColumn(), gridCell.getRow());
+                    }
+
                     grid.addComponent(
                             cellComponent,
                             gridCell.getColumn(),
                             gridCell.getRow(),
-                            gridCell.getColumn()+gridCell.getColspan()-1,
-                            gridCell.getRow()+gridCell.getRowspan()-1
+                            gridCell.getColumn() + gridCell.getColspan() - 1,
+                            gridCell.getRow() + gridCell.getRowspan() - 1
                     );
                 }
             } else if (!(component instanceof GridRow)) {

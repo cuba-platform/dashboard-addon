@@ -28,6 +28,28 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     private Frame frame;
 
     @Override
+    protected void handleComponentReordering(DragAndDropEvent event) {
+        DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
+                .getTargetDetails();
+        DDGridLayout layout = (DDGridLayout) details.getTarget();
+        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
+                .getTransferable();
+        Component comp = transferable.getComponent();
+
+        int row = details.getOverRow();
+        int column = details.getOverColumn();
+
+        super.handleComponentReordering(event);
+
+        GridCell gridCell = LayoutUtils.getGridCell(tree, tree.getChildren(layout), column, row);
+        if (gridCell != null) {
+            TreeUtils.moveComponent(tree, gridCell, comp, 0);
+        }
+
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+    }
+
+    @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event.getTargetDetails();
@@ -74,7 +96,10 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 TreeUtils.addComponent(tree, target, component, 0);
             }
         } else {
-            TreeUtils.addComponent(tree, details.getTarget(), component, 0);
+            GridCell gridCell = LayoutUtils.getGridCell(tree, tree.getChildren(layout), column, row);
+            if (gridCell != null) {
+                TreeUtils.moveComponent(tree, gridCell, component, 0);
+            }
         }
 
 

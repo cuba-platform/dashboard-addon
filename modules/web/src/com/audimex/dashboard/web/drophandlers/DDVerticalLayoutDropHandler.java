@@ -27,6 +27,22 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
     private Frame frame;
 
     @Override
+    protected void handleComponentReordering(DragAndDropEvent event) {
+        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
+                .getTransferable();
+        DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
+                .getTargetDetails();
+        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
+                .getTarget();
+
+        Component comp = transferable.getComponent();
+        int idx = details.getOverIndex();
+
+        TreeUtils.reorder(tree, layout.getParent(), comp, idx);
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+    }
+
+    @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDVerticalLayout.VerticalLayoutTargetDetails details =
@@ -37,7 +53,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             targetLayout = (DashboardVerticalLayout) targetLayout.getParent();
         }
 
-        int idx = (details).getOverIndex();
+        int idx = details.getOverIndex();
         Component comp = transferable.getComponent();
 
         Component parent = targetLayout.getParent();
@@ -88,9 +104,10 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 }
             } else {
                 targetLayout.addComponent(comp);
+                idx = 0;
             }
 
-            TreeUtils.reorder(tree, targetLayout, comp, 0);
+            TreeUtils.reorder(tree, targetLayout, comp, idx);
             if (targetLayout instanceof DashboardVerticalLayout) {
                 ((DashboardVerticalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);
             }

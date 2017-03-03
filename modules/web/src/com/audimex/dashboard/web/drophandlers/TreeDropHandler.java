@@ -91,6 +91,17 @@ public class TreeDropHandler implements DropHandler {
                 int position = TreeUtils.calculatePosition(tree, targetItemId) + 1;
                 TreeUtils.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
             }
+
+            if (targetItemId instanceof GridCell) {
+                GridCell gridCell = (GridCell) targetItemId;
+                TreeUtils.markGridCells(
+                        tree,
+                        (GridLayout) gridCell.getParent(),
+                        gridCell.getRow(),
+                        gridCell.getColumn(),
+                        1,
+                        1);
+            }
         }
 
         treeChangeListener.accept(tree);

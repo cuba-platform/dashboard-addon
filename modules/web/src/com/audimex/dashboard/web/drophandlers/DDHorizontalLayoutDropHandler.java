@@ -26,6 +26,21 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
     private Frame frame;
 
     @Override
+    protected void handleComponentReordering(DragAndDropEvent event) {
+        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
+                .getTransferable();
+        DDHorizontalLayout.HorizontalLayoutTargetDetails details =
+                (DDHorizontalLayout.HorizontalLayoutTargetDetails) event.getTargetDetails();
+        AbstractOrderedLayout layout = (AbstractOrderedLayout) details.getTarget();
+
+        Component comp = transferable.getComponent();
+        int idx = details.getOverIndex();
+
+        TreeUtils.reorder(tree, layout.getParent(), comp, idx);
+        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+    }
+
+    @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDHorizontalLayout.HorizontalLayoutTargetDetails details =
@@ -36,7 +51,7 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
             targetLayout = (DashboardHorizontalLayout) targetLayout.getParent();
         }
 
-        int idx = (details).getOverIndex();
+        int idx = details.getOverIndex();
         Component comp = transferable.getComponent();
 
         Component parent = targetLayout.getParent();
@@ -87,9 +102,10 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 }
             } else {
                 targetLayout.addComponent(comp);
+                idx = 0;
             }
 
-            TreeUtils.reorder(tree, details.getTarget(), comp, 0);
+            TreeUtils.reorder(tree, details.getTarget().getParent(), comp, idx);
 
             if (targetLayout instanceof DashboardHorizontalLayout) {
                 ((DashboardHorizontalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);

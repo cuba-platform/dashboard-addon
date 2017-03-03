@@ -86,8 +86,16 @@ public class LayoutUtils {
         tree.setParent(gridRow, component);
 
         for (int column = 0; column < component.getColumns(); column++) {
-            GridCell gridCell = LayoutUtils.createGridCell(column, row);
+            GridCell gridCell = LayoutUtils.getGridCell(tree, tree.getChildren(component), column, row);
+            if (gridCell == null) {
+                gridCell = LayoutUtils.createGridCell(column, row);
+            }
+
             gridRow.addGridCell(gridCell);
+
+            if (component.getComponent(column, row) != null) {
+                component.removeComponent(column, row);
+            }
 
             component.addComponent(gridCell, column, row);
             tree.addItem(gridCell);
@@ -114,6 +122,9 @@ public class LayoutUtils {
     public static GridCell getGridCell(Tree tree, Collection<?> rows, int columnIndex, int rowIndex) {
         for (Object row : rows) {
             Collection<?> cells = tree.getChildren(row);
+            if (cells == null) {
+                return null;
+            }
             for (Object cell : cells) {
                 GridCell gridCell = (GridCell) cell;
                 if (gridCell.getColumn() == columnIndex && gridCell.getRow() == rowIndex) {
