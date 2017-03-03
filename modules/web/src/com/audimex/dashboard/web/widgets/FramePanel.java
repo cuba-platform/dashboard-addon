@@ -33,11 +33,11 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     protected int rowSpan = 1;
 
     protected DashboardSettings dashboardSettings;
-    protected Frame parentFrame = null;
-    protected String frameId;
+    private String frameId;
 
-    public FramePanel(Tree tree) {
+    public FramePanel(Tree tree, String frameId, Frame parentFrame) {
         this.tree = tree;
+        this.frameId = frameId;
         dashboardSettings = AppBeans.get(DashboardSettings.class);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
@@ -66,33 +66,14 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         setSizeFull();
         addStyleName(DashboardUtils.AMXD_BORDERING);
-    }
 
-    public Frame getParentFrame() {
-        return parentFrame;
-    }
-
-    public void setParentFrame(Frame parentFrame) {
-        this.parentFrame = parentFrame;
-    }
-
-    public void setContent(String frameId) {
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(frameId);
-        setFrameId(frameId);
 
         Frame frame = windowManager.openFrame(parentFrame, null, windowInfo);
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));
-    }
-
-    public String getFrameId() {
-        return frameId;
-    }
-
-    public void setFrameId(String frameId) {
-        this.frameId = frameId;
     }
 
     public void setContent(Component c) {
@@ -102,6 +83,10 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             c.setSizeFull();
             contentLayout.addComponent(c);
         }
+    }
+
+    public String getFrameId() {
+        return frameId;
     }
 
     @Override

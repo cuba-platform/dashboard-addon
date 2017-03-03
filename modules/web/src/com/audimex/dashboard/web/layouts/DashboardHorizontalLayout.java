@@ -7,8 +7,12 @@ import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
+import com.haulmont.cuba.gui.config.WindowConfig;
+import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.web.App;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.server.FontAwesome;
@@ -29,7 +33,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
     protected Tree tree = null;
     protected Frame parentFrame = null;
 
-    public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener) {
+    public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
         this.tree = tree;
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
@@ -37,7 +41,11 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
-            parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
+
+            WindowManager windowManager = App.getInstance().getWindowManager();
+            WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+            WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
+            windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
@@ -51,6 +59,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         horizontalLayout = new DDHorizontalLayout();
         DDHorizontalLayoutDropHandler ddVerticalLayoutDropHandler = new DDHorizontalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
+        ddVerticalLayoutDropHandler.setFrame(frame);
         ddVerticalLayoutDropHandler.setTree(tree);
 
         horizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());

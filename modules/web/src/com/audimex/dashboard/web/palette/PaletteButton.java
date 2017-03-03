@@ -6,7 +6,6 @@ package com.audimex.dashboard.web.palette;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.repo.WidgetRepository;
-import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 
@@ -14,7 +13,6 @@ public class PaletteButton extends Button {
 
     protected WidgetType widgetType;
     protected WidgetRepository.Widget widget;
-    protected Frame dropFrame;
 
     public PaletteButton(String caption) {
         super(caption);
@@ -38,13 +36,5 @@ public class PaletteButton extends Button {
 
     public void setWidget(WidgetRepository.Widget widget) {
         this.widget = widget;
-    }
-
-    public Frame getDropFrame() {
-        return dropFrame;
-    }
-
-    public void setDropFrame(Frame dropFrame) {
-        this.dropFrame = dropFrame;
     }
 }

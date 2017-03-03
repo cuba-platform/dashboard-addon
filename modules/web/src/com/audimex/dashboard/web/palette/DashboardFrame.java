@@ -105,8 +105,9 @@ public class DashboardFrame extends AbstractFrame {
 
         gridDropListener = (gridLayout, targetLayout, idx) -> onGridDrop(gridLayout, targetLayout, idx);
         treeDropHandler = new TreeDropHandler();
-        treeDropHandler.setComponentDescriptorTree(tree);
+        treeDropHandler.setTree(tree);
         treeDropHandler.setGridDropListener(gridDropListener);
+        treeDropHandler.setFrame(getFrame());
         treeDropHandler.setTreeChangeListener(tree -> TreeUtils.redrawLayout(tree, rootDashboardPanel));
 
         tree.setDropHandler(treeDropHandler);
@@ -161,14 +162,13 @@ public class DashboardFrame extends AbstractFrame {
         });
         tree.setDragMode(Tree.TreeDragMode.NODE);
 
-        rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop);
+        rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop, getFrame());
 
         tree.addItem(rootDashboardPanel);
         tree.setItemCaption(rootDashboardPanel, getMessage("rootContainer"));
         tree.setItemIcon(rootDashboardPanel, FontAwesome.ASTERISK);
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
-        rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
         rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
         rootDashboardPanel.setDragGrabFilter(
                 (DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component)
@@ -336,21 +336,18 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
-        verticalLayoutButton.setDropFrame(getFrame());
         verticalLayoutButton.setStyleName("amxd-palette-button");
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("horizontal"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
-        horizontalLayoutButton.setDropFrame(getFrame());
         horizontalLayoutButton.setStyleName("amxd-palette-button");
 
         PaletteButton gridButton = new PaletteButton(getMessage("grid"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
-        gridButton.setDropFrame(getFrame());
         gridButton.setStyleName("amxd-palette-button");
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
@@ -367,7 +364,6 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
             paletteButton.setStyleName("amxd-palette-button");
-            paletteButton.setDropFrame(getFrame());
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }
@@ -539,32 +535,29 @@ public class DashboardFrame extends AbstractFrame {
             boolean isNew = false;
             switch (widgetModel.getType()) {
                 case VERTICAL_LAYOUT:
-                    DashboardVerticalLayout verticalLayout =
-                            (DashboardVerticalLayout) LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
+                    DashboardVerticalLayout verticalLayout = (DashboardVerticalLayout) LayoutUtils
+                            .createVerticalDropLayout(tree, gridDropListener, getFrame());
 
                     verticalLayout.setWeight(widgetModel.getWeight());
                     component = verticalLayout;
                     isNew = true;
                     break;
                 case HORIZONTAL_LAYOUT:
-                    DashboardHorizontalLayout horizontalLayout =
-                            (DashboardHorizontalLayout) LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
+                    DashboardHorizontalLayout horizontalLayout = (DashboardHorizontalLayout) LayoutUtils
+                            .createHorizontalDropLayout(tree, gridDropListener, getFrame());
 
                     horizontalLayout.setWeight(widgetModel.getWeight());
                     component = horizontalLayout;
                     isNew = true;
                     break;
                 case FRAME_PANEL:
-                    FramePanel framePanel = new FramePanel(tree);
-                    framePanel.setParentFrame(getFrame());
-                    framePanel.setContent(widgetModel.getFrameId());
-                    framePanel.setSizeFull();
-
+                    FramePanel framePanel = new FramePanel(tree, widgetModel.getFrameId(), getFrame());
                     component = framePanel;
                     isNew = true;
                     break;
                 case GRID_LAYOUT:
-                    GridLayout gridLayout = (GridLayout) LayoutUtils.createGridDropLayout(tree, gridDropListener);
+                    GridLayout gridLayout = (GridLayout) LayoutUtils
+                            .createGridDropLayout(tree, gridDropListener, getFrame());
                     gridLayout.setColumns(widgetModel.getGridColumnCount());
                     gridLayout.setRows(widgetModel.getGridRowCount());
 

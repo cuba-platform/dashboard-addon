@@ -5,14 +5,12 @@
 package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.palette.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
-import com.vaadin.event.LayoutEvents;
+import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
@@ -27,6 +25,7 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected GridDropListener gridDropListener;
     protected Tree tree;
+    private Frame frame;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
@@ -50,19 +49,14 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
-                ((DashboardVerticalLayout) component).setParentFrame(dragComponent.getDropFrame());
+                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame);
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
-                ((DashboardHorizontalLayout) component).setParentFrame(dragComponent.getDropFrame());
+                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame);
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                component = LayoutUtils.createGridDropLayout(tree, gridDropListener);
+                component = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame);
                 gridDropListener.gridDropped((GridLayout) component, layout, 0);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                component = new FramePanel(tree);
-                FramePanel framePanel = (FramePanel) component;
-                framePanel.setParentFrame(dragComponent.getDropFrame());
-                framePanel.setContent(dragComponent.getWidget().getFrameId());
+                component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame);
             }
 
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
@@ -97,6 +91,14 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
     public GridDropListener getGridDropListener() {
         return gridDropListener;
+    }
+
+    public Frame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(Frame frame) {
+        this.frame = frame;
     }
 
     @Override

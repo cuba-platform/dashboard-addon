@@ -5,13 +5,13 @@
 package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
 import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.palette.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
@@ -24,6 +24,7 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandler {
     protected GridDropListener gridDropListener;
     protected Tree tree;
+    private Frame frame;
 
     @Override
     protected void handleDropFromLayout(DragAndDropEvent event) {
@@ -57,18 +58,14 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                comp = LayoutUtils.createVerticalDropLayout(tree, gridDropListener);
-                ((DashboardVerticalLayout) comp).setParentFrame(dragComponent.getDropFrame());
+                comp = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame);
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                comp = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener);
-                ((DashboardHorizontalLayout) comp).setParentFrame(dragComponent.getDropFrame());
+                comp = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame);
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                comp = LayoutUtils.createGridDropLayout(tree, gridDropListener);
+                comp = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame);
                 gridDropListener.gridDropped((GridLayout) comp, targetLayout, idx);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                comp = new FramePanel(tree);
-                ((FramePanel) comp).setParentFrame(dragComponent.getDropFrame());
-                ((FramePanel) comp).setContent(dragComponent.getWidget().getFrameId());
+                comp = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame);
             }
 
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
@@ -125,6 +122,14 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
             }
         };
         return serverSideCriterion;
+    }
+
+    public Frame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(Frame frame) {
+        this.frame = frame;
     }
 
     public void setTree(Tree tree) {

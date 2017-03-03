@@ -5,13 +5,13 @@
 package com.audimex.dashboard.web.utils;
 
 import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
-import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
 import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
@@ -21,19 +21,20 @@ import fi.jasoft.dragdroplayouts.DDGridLayout;
 import java.util.Collection;
 
 public class LayoutUtils {
-    public static Component createHorizontalDropLayout(Tree tree, GridDropListener gridDropListener) {
-        DashboardHorizontalLayout component = new DashboardHorizontalLayout(tree, gridDropListener);
+    public static Component createHorizontalDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
+        DashboardHorizontalLayout component = new DashboardHorizontalLayout(tree, gridDropListener, frame);
         configLayout(component);
         return component;
     }
 
-    public static Component createGridDropLayout(Tree tree, GridDropListener gridDropListener) {
+    public static Component createGridDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
         DDGridLayout component = new DDGridLayout();
         component.setDragMode(DashboardUtils.getDefaultDragMode());
 
         DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
         ddGridLayoutDropHandler.setTree(tree);
         ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
+        ddGridLayoutDropHandler.setFrame(frame);
         component.setDropHandler(ddGridLayoutDropHandler);
 
         component.setSizeFull();
@@ -47,8 +48,8 @@ public class LayoutUtils {
         return component;
     }
 
-    public static Component createVerticalDropLayout(Tree tree, GridDropListener gridDropListener) {
-        DashboardVerticalLayout component = new DashboardVerticalLayout(tree, gridDropListener);
+    public static Component createVerticalDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
+        DashboardVerticalLayout component = new DashboardVerticalLayout(tree, gridDropListener, frame);
         configLayout(component);
         return component;
     }

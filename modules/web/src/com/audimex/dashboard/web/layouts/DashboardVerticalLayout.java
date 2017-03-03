@@ -7,8 +7,12 @@ import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
+import com.haulmont.cuba.gui.config.WindowConfig;
+import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.web.App;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.server.FontAwesome;
@@ -27,9 +31,8 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
     protected int rowSpan = 1;
     protected Tree tree = null;
     protected DDVerticalLayout verticalLayout = null;
-    protected Frame parentFrame = null;
 
-    public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener) {
+    public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
         this.tree = tree;
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
@@ -37,7 +40,11 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
-            parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
+
+            WindowManager windowManager = App.getInstance().getWindowManager();
+            WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+            WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
+            windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
@@ -51,6 +58,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
+        ddVerticalLayoutDropHandler.setFrame(frame);
         ddVerticalLayoutDropHandler.setTree(tree);
 
         verticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
@@ -91,14 +99,6 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         if (getParent() instanceof AbstractOrderedLayout) {
             ((AbstractOrderedLayout) getParent()).setExpandRatio(this, weight);
         }
-    }
-
-    public Frame getParentFrame() {
-        return parentFrame;
-    }
-
-    public void setParentFrame(Frame parentFrame) {
-        this.parentFrame = parentFrame;
     }
 
     @Override
