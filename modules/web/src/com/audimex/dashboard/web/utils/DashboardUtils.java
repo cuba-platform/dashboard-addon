@@ -15,7 +15,7 @@ public class DashboardUtils {
     public static final String AMXD_DASHBOARD_DISABLED = "amxd-dashboard-disabled";
     public static final String AMXD_CONTAINER_DISABLED = "amxd-container-disabled";
     public static final String AMXD_TREE_SELECTED = "amxd-tree-selected";
-    public static final String AMXD_BORDERING = "amxd-bordering";
+    public static final String AMXD_BORDERING = "amxd-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
 
     protected DashboardUtils() {
