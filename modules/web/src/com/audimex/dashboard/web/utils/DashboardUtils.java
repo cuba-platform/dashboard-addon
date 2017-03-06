@@ -17,6 +17,7 @@ public class DashboardUtils {
     public static final String AMXD_TREE_SELECTED = "amxd-tree-selected";
     public static final String AMXD_BORDERING = "amxd-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
+    public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
 
     protected DashboardUtils() {
     }

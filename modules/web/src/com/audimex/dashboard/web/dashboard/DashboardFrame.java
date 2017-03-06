@@ -339,19 +339,19 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
-        verticalLayoutButton.setStyleName("amxd-dashboard-button");
+        verticalLayoutButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
-        horizontalLayoutButton.setStyleName("amxd-dashboard-button");
+        horizontalLayoutButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
-        gridButton.setStyleName("amxd-dashboard-button");
+        gridButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
@@ -366,7 +366,7 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
-            paletteButton.setStyleName("amxd-dashboard-button");
+            paletteButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }

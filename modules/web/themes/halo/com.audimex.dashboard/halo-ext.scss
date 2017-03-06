@@ -5,7 +5,7 @@
         border: 2px solid transparent;
     }
 
-    .amxd-palette-button {
+    .amxd-dashboard-button {
         background: none;
         border: 2px dashed #b5b5b5;
         color: #4e4e4e;
@@ -15,15 +15,15 @@
         box-shadow: none;
     }
 
-    .amxd-palette-button:after {
+    .amxd-dashboard-button:after {
         border: none;
     }
 
-    .amxd-palette-button .v-icon {
+    .amxd-dashboard-button .v-icon {
         width: 30px;
     }
 
-    .amxd-palette-button:focus:after {
+    .amxd-dashboard-button:focus:after {
         border: none;
         box-shadow: none;
     }
