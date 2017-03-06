@@ -4,6 +4,9 @@
         class="com.audimex.dashboard.web.dashboard.DashboardFrame"
         icon="font-icon:DASHBOARD"
         messagesPack="com.audimex.dashboard.web.dashboard">
+    <actions>
+        <action id="removeComponent" shortcut="DELETE" invoke="removeComponent"/>
+    </actions>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="mainLayout"
