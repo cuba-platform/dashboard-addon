@@ -31,6 +31,7 @@ public class DashboardTools {
     public static final String AMXD_BORDERING = "amxd-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
+    public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
 
     public GridLayout addEmptyLabels(GridLayout gridLayout, Tree tree) {
         for (int i = 0; i < gridLayout.getRows(); i++) {
@@ -320,7 +321,7 @@ public class DashboardTools {
         }
     }
 
-    public synchronized boolean removeComponent(Tree tree, Object itemId) {
+    public boolean removeComponent(Tree tree, Object itemId) {
         if (itemId instanceof GridCell || itemId instanceof GridRow) {
             return false;
         }

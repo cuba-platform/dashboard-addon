@@ -157,12 +157,8 @@ public class DashboardFrame extends AbstractFrame {
             }
         });
         tree.setItemStyleGenerator((Tree.ItemStyleGenerator) (source, itemId) -> {
-            if (itemId instanceof GridCell) {
-                if (!((GridCell) itemId).isAvailable()) {
-                    if (source.getChildren(itemId) == null) {
-                        return "not-available";
-                    }
-                }
+            if (itemId instanceof GridCell && source.getChildren(itemId) == null && !((GridCell) itemId).isAvailable()) {
+                return DashboardTools.AMXD_NOT_AVAILABLE;
             }
             return null;
         });
