@@ -8,6 +8,7 @@ import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
@@ -30,15 +31,15 @@ public class WidgetConfigWindow extends AbstractWindow {
     @Inject
     protected com.haulmont.cuba.gui.components.Button cancelButton;
 
-    protected Component widget = null;
-    protected Tree tree = null;
+    @WindowParam(name = "widget")
+    protected Component widget;
+
+    @WindowParam(name = "tree")
+    protected Tree tree;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
-        widget = (Component) params.get("widget");
-        tree = (Tree) params.get("tree");
 
         Layout layout = (Layout) WebComponentsHelper.unwrap(sliderLayout);
 
