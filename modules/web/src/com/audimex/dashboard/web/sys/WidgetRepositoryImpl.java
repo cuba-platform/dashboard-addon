@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2017 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.repo;
+package com.audimex.dashboard.web.sys;
 
 import com.audimex.dashboard.web.WidgetConfig;
 import com.haulmont.bali.util.Dom4j;

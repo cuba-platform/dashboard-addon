@@ -11,7 +11,7 @@ import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.model.DashboardModel;
 import com.audimex.dashboard.web.model.WidgetModel;
-import com.audimex.dashboard.web.repo.WidgetRepository;
+import com.audimex.dashboard.web.sys.WidgetRepository;
 import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;

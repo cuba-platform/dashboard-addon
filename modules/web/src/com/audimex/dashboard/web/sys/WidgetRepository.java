@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2017 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.repo;
+package com.audimex.dashboard.web.sys;
 
 import java.io.Serializable;
 import java.util.List;
