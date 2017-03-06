@@ -168,7 +168,7 @@ public class DashboardFrame extends AbstractFrame {
         rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop, getFrame(), treeHandler);
 
         tree.addItem(rootDashboardPanel);
-        tree.setItemCaption(rootDashboardPanel, getMessage("rootContainer"));
+        tree.setItemCaption(rootDashboardPanel, getMessage("dashboard.rootContainer"));
         tree.setItemIcon(rootDashboardPanel, FontAwesome.ASTERISK);
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
@@ -272,7 +272,7 @@ public class DashboardFrame extends AbstractFrame {
     }
 
     protected void onGridDrop(GridLayout gridLayout, Object targetLayout, int idx) {
-        Window subWindow = new Window(getMessage("gridSettings"));
+        Window subWindow = new Window(getMessage("dashboard.gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
         subWindow.setWidth(300, Sizeable.Unit.PIXELS);
@@ -298,8 +298,8 @@ public class DashboardFrame extends AbstractFrame {
         rows.setValue((double) 2);
         cols.setWidth(100, Sizeable.Unit.PERCENTAGE);
         rows.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        cols.setCaption(getMessage("columns"));
-        rows.setCaption(getMessage("rows"));
+        cols.setCaption(getMessage("dashboard.gridColumnCount"));
+        rows.setCaption(getMessage("dashboard.gridRowCount"));
         cols.focus();
 
         comboBoxPanel.addComponent(cols);
@@ -307,8 +307,8 @@ public class DashboardFrame extends AbstractFrame {
         subContent.addComponent(comboBoxPanel);
         subContent.addComponent(buttonsPanel);
 
-        Button cancelButton = new Button(getMessage("cancel"), FontAwesome.CLOSE);
-        Button okButton = new Button(getMessage("ok"), FontAwesome.CHECK);
+        Button cancelButton = new Button(getMessage("dashboard.cancelButtonCaption"), FontAwesome.CLOSE);
+        Button okButton = new Button(getMessage("dashboard.okButtonCaption"), FontAwesome.CHECK);
         cancelButton.addClickListener(event -> {
             subWindow.close();
         });
@@ -335,19 +335,19 @@ public class DashboardFrame extends AbstractFrame {
     }
 
     protected void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
-        PaletteButton verticalLayoutButton = new PaletteButton(getMessage("vertical"), FontAwesome.ARROWS_V);
+        PaletteButton verticalLayoutButton = new PaletteButton(getMessage("dashboard.verticalLayout"), FontAwesome.ARROWS_V);
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
         verticalLayoutButton.setStyleName("amxd-palette-button");
 
-        PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("horizontal"), FontAwesome.ARROWS_H);
+        PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
         horizontalLayoutButton.setStyleName("amxd-palette-button");
 
-        PaletteButton gridButton = new PaletteButton(getMessage("grid"), FontAwesome.TH);
+        PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
@@ -437,13 +437,13 @@ public class DashboardFrame extends AbstractFrame {
         boolean removed = TreeUtils.removeComponent(tree, tree.getValue());
         treeHandler.accept(tree);
         if (!removed) {
-            showNotification(messages.getMessage(getClass(), "cantRemove"), NotificationType.HUMANIZED);
+            showNotification(messages.getMessage(getClass(), "dashboard.cantRemove"), NotificationType.HUMANIZED);
         }
     }
 
     public void clearAll() {
-        showOptionDialog(messages.getMessage(getClass(), "areYouSure"),
-                messages.getMessage(getClass(), "allComponentsWillBeRemoved"),
+        showOptionDialog(messages.getMessage(getClass(), "dashboard.areYouSure"),
+                messages.getMessage(getClass(), "dashboard.allComponentsWillBeRemoved"),
                 MessageType.CONFIRMATION,
                 new Action[]{
                         new DialogAction(DialogAction.Type.YES) {

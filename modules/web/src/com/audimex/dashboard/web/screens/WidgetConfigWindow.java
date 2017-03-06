@@ -10,7 +10,6 @@ import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
 
@@ -47,7 +46,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             weightSlider = new Slider();
             weightSlider.setImmediate(true);
             weightSlider.setWidth("300px");
-            weightSlider.setCaption(getMessage("weightInLayout"));
+            weightSlider.setCaption(getMessage("dashboard.weightInLayout"));
             weightSlider.setMin(1);
             weightSlider.setMax(10);
             weightSlider.setResolution(0);
@@ -59,7 +58,7 @@ public class WidgetConfigWindow extends AbstractWindow {
         if (widget.getParent() instanceof GridLayout) {
             colSpanSlider = new Slider();
             colSpanSlider.setImmediate(true);
-            colSpanSlider.setCaption(getMessage("columnSpan"));
+            colSpanSlider.setCaption(getMessage("dashboard.columnSpan"));
             colSpanSlider.setWidth("100%");
             colSpanSlider.setMin(1);
 
@@ -75,7 +74,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
             rowSpanSlider = new Slider();
             rowSpanSlider.setImmediate(true);
-            rowSpanSlider.setCaption(getMessage("rowSpan"));
+            rowSpanSlider.setCaption(getMessage("dashboard.rowSpan"));
             rowSpanSlider.setWidth("100%");
             rowSpanSlider.setMin(1);
             if (widget.getParent() instanceof GridLayout) {
@@ -138,7 +137,7 @@ public class WidgetConfigWindow extends AbstractWindow {
                         rowSpan,
                         colSpan);
             } else {
-                showNotification(getMessage("notValidated"), NotificationType.ERROR);
+                showNotification(getMessage("dashboard.notValidated"), NotificationType.ERROR);
             }
         }
         close("");

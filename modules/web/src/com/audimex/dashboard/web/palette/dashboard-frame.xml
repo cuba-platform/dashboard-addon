@@ -24,7 +24,7 @@
                    width="300px">
                 <vbox spacing="true">
                     <label htmlEnabled="true"
-                           value="msg://palette"/>
+                           value="msg://dashboard.palette"/>
                     <vbox id="containers"/>
                 </vbox>
                 <vbox expand="treeLayout"
@@ -32,7 +32,7 @@
                       margin="true,false,false,false"
                       spacing="true">
                     <label htmlEnabled="true"
-                           value="msg://componentTree"/>
+                           value="msg://dashboard.componentTree"/>
                     <hbox spacing="true"
                           width="100%">
                         <button id="removeComponent"
