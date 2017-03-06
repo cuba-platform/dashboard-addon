@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <include file="com/audimex/dashboard/screens.xml"/>
-    <screen id="mainWindow"
-            template="com/audimex/dashboard/web/mainwindow/ext-mainwindow.xml"/>
     <screen id="dashboard-frame"
             template="com/audimex/dashboard/web/dashboard/dashboard-frame.xml"/>
     <screen id="widgetConfigWindow"

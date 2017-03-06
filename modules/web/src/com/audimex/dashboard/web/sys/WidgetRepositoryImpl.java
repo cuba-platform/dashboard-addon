@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web.sys;
 
 import com.audimex.dashboard.web.WidgetConfig;
+import com.audimex.dashboard.web.WidgetRepository;
 import com.haulmont.bali.util.Dom4j;
 import com.haulmont.cuba.core.global.Resources;
 import org.apache.commons.io.IOUtils;

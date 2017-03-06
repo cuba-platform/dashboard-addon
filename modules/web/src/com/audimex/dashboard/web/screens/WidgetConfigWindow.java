@@ -5,8 +5,7 @@ package com.audimex.dashboard.web.screens;
 
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractWindow;
@@ -37,6 +36,9 @@ public class WidgetConfigWindow extends AbstractWindow {
     @WindowParam(name = "tree")
     protected Tree tree;
 
+    @Inject
+    protected DashboardTools dashboardTools;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -63,9 +65,9 @@ public class WidgetConfigWindow extends AbstractWindow {
             colSpanSlider.setWidth("100%");
             colSpanSlider.setMin(1);
 
-            colSpanSlider.setMax(LayoutUtils.availableColumns(
+            colSpanSlider.setMax(dashboardTools.availableColumns(
                     (GridLayout) widget.getParent(),
-                    LayoutUtils.getWidgetCell(tree, widget))
+                    dashboardTools.getWidgetCell(tree, widget))
             );
 
             colSpanSlider.setResolution(0);
@@ -79,9 +81,9 @@ public class WidgetConfigWindow extends AbstractWindow {
             rowSpanSlider.setWidth("100%");
             rowSpanSlider.setMin(1);
             if (widget.getParent() instanceof GridLayout) {
-                rowSpanSlider.setMax(LayoutUtils.availableRows(
+                rowSpanSlider.setMax(dashboardTools.availableRows(
                         (GridLayout) widget.getParent(),
-                        LayoutUtils.getWidgetCell(tree, widget))
+                        dashboardTools.getWidgetCell(tree, widget))
                 );
             }
             rowSpanSlider.setResolution(0);
@@ -100,9 +102,9 @@ public class WidgetConfigWindow extends AbstractWindow {
             ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());
         }
         if (widget.getParent() instanceof GridLayout) {
-            GridCell gridCell = LayoutUtils.getWidgetCell(tree, widget);
-            int availableRowSpan = LayoutUtils.availableRows((GridLayout) widget.getParent(), gridCell);
-            int availableColSpan = LayoutUtils.availableColumns((GridLayout) widget.getParent(), gridCell);
+            GridCell gridCell = dashboardTools.getWidgetCell(tree, widget);
+            int availableRowSpan = dashboardTools.availableRows((GridLayout) widget.getParent(), gridCell);
+            int availableColSpan = dashboardTools.availableColumns((GridLayout) widget.getParent(), gridCell);
             int colspan = colSpanSlider.getValue().intValue();
             int rowspan = rowSpanSlider.getValue().intValue();
             boolean isValid = true;
@@ -130,8 +132,8 @@ public class WidgetConfigWindow extends AbstractWindow {
                 ((HasGridSpan) widget).setColSpan(colSpan);
                 ((HasGridSpan) widget).setRowSpan(rowSpan);
 
-                GridCell gridCellComponent = LayoutUtils.getWidgetCell(tree, widget);
-                TreeUtils.markGridCells(tree,
+                GridCell gridCellComponent = dashboardTools.getWidgetCell(tree, widget);
+                dashboardTools.markGridCells(tree,
                         (GridLayout) widget.getParent(),
                         gridCellComponent.getRow(),
                         gridCellComponent.getColumn(),

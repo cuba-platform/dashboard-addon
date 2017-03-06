@@ -6,10 +6,10 @@ package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
-import com.audimex.dashboard.web.widgets.FramePanel;
+import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
@@ -30,6 +30,9 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected Frame frame;
     protected Consumer<Tree> treeHandler;
 
+    protected DashboardTools dashboardTools = AppBeans.get(DashboardTools.NAME);
+    protected DashboardWidgetsFactory dashboardWidgetsFactory = AppBeans.get(DashboardWidgetsFactory.NAME);
+
     @Override
     protected void handleComponentReordering(DragAndDropEvent event) {
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
@@ -44,9 +47,9 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
         super.handleComponentReordering(event);
 
-        GridCell gridCell = LayoutUtils.getGridCell(tree, tree.getChildren(layout), column, row);
+        GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout), column, row);
         if (gridCell != null) {
-            TreeUtils.moveComponent(tree, gridCell, comp, 0);
+            dashboardTools.moveComponent(tree, gridCell, comp, 0);
         }
 
         treeHandler.accept(tree);
@@ -72,23 +75,15 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
         if (transferable.getComponent() instanceof Button) {
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
-            // Add component
-            if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame, treeHandler);
-            } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame, treeHandler);
-            } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                component = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame, treeHandler);
-                gridDropListener.gridDropped((GridLayout) component, layout, 0);
-            } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame, treeHandler);
-            }
+
+            component = dashboardWidgetsFactory.createWidgetOnDrop(dragComponent, tree, gridDropListener,
+                    frame, treeHandler, layout);
 
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
                 Component target = null;
                 if (details.getTarget() instanceof GridLayout) {
                     GridLayout gridLayout = (GridLayout) details.getTarget();
-                    target = LayoutUtils.getGridCell(
+                    target = dashboardTools.getGridCell(
                             tree,
                             tree.getChildren(gridLayout),
                             column,
@@ -96,12 +91,12 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 } else {
                     target = details.getTarget();
                 }
-                TreeUtils.addComponent(tree, target, component, 0);
+                dashboardTools.addComponent(tree, target, component, 0);
             }
         } else {
-            GridCell gridCell = LayoutUtils.getGridCell(tree, tree.getChildren(layout), column, row);
+            GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout), column, row);
             if (gridCell != null) {
-                TreeUtils.moveComponent(tree, gridCell, component, 0);
+                dashboardTools.moveComponent(tree, gridCell, component, 0);
             }
         }
 

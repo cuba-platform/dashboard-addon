@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.settings;
 
+import com.audimex.dashboard.web.DashboardSettings;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.web.gui.components.WebPopupButton;
 import com.vaadin.ui.*;

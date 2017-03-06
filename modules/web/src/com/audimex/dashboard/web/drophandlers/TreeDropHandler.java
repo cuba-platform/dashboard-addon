@@ -6,11 +6,12 @@ package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
@@ -18,7 +19,10 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 import java.util.function.Consumer;
@@ -27,8 +31,10 @@ public class TreeDropHandler implements DropHandler {
     protected Tree tree;
     protected GridDropListener gridDropListener;
     protected Frame frame;
-
     protected Consumer<Tree> treeHandler;
+
+    protected DashboardTools dashboardTools = AppBeans.get(DashboardTools.NAME);
+    protected DashboardWidgetsFactory dashboardWidgetsFactory = AppBeans.get(DashboardWidgetsFactory.NAME);
 
     @Override
     public void drop(DragAndDropEvent event) {
@@ -43,32 +49,22 @@ public class TreeDropHandler implements DropHandler {
                 PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
                 Component component;
 
-                if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                    component = LayoutUtils.createVerticalDropLayout(this.tree, gridDropListener, frame, treeHandler);
-                } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                    component = LayoutUtils.createHorizontalDropLayout(this.tree, gridDropListener, frame, treeHandler);
-                } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                    component = LayoutUtils.createGridDropLayout(this.tree, gridDropListener, frame, treeHandler);
-                    Object parentId = tree.getParent(target.getItemIdOver());
-                    if (location == VerticalDropLocation.MIDDLE) {
-                        gridDropListener.gridDropped((GridLayout) component, target.getItemIdOver(), 0);
-                    } else {
-                        gridDropListener.gridDropped((GridLayout) component, parentId, 0);
-                    }
-                } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                    component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame, treeHandler);
+                if (location == VerticalDropLocation.MIDDLE) {
+                    component = dashboardWidgetsFactory.createWidgetOnDrop(dragComponent, tree, gridDropListener,
+                            frame, treeHandler, target.getItemIdOver());
                 } else {
-                    component = new Label();
+                    component = dashboardWidgetsFactory.createWidgetOnDrop(dragComponent, tree, gridDropListener,
+                            frame, treeHandler, tree.getParent(target.getItemIdOver()));
                 }
 
                 if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
                     Object parentId = tree.getParent(target.getItemIdOver());
                     if (location == VerticalDropLocation.MIDDLE) {
-                        TreeUtils.addComponent(this.tree, target.getItemIdOver(), component, 0);
+                        dashboardTools.addComponent(this.tree, target.getItemIdOver(), component, 0);
                     } else if (location == VerticalDropLocation.BOTTOM) {
-                        TreeUtils.addComponent(this.tree, parentId, component, 0);
+                        dashboardTools.addComponent(this.tree, parentId, component, 0);
                     } else {
-                        TreeUtils.addComponent(this.tree, parentId, component, 0);
+                        dashboardTools.addComponent(this.tree, parentId, component, 0);
                     }
                 }
             }
@@ -83,18 +79,18 @@ public class TreeDropHandler implements DropHandler {
             Object targetItemId = target.getItemIdOver();
 
             if (location == VerticalDropLocation.MIDDLE) {
-                TreeUtils.moveComponent(tree, targetItemId, sourceItemId, 0);
+                dashboardTools.moveComponent(tree, targetItemId, sourceItemId, 0);
             } else if (location == VerticalDropLocation.TOP) {
-                int position = TreeUtils.calculatePosition(tree, targetItemId);
-                TreeUtils.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
+                int position = dashboardTools.calculatePosition(tree, targetItemId);
+                dashboardTools.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
             } else if (location == VerticalDropLocation.BOTTOM) {
-                int position = TreeUtils.calculatePosition(tree, targetItemId) + 1;
-                TreeUtils.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
+                int position = dashboardTools.calculatePosition(tree, targetItemId) + 1;
+                dashboardTools.moveComponent(tree, tree.getParent(targetItemId), sourceItemId, position);
             }
 
             if (targetItemId instanceof GridCell) {
                 GridCell gridCell = (GridCell) targetItemId;
-                TreeUtils.markGridCells(
+                dashboardTools.markGridCells(
                         tree,
                         (GridLayout) gridCell.getParent(),
                         gridCell.getRow(),

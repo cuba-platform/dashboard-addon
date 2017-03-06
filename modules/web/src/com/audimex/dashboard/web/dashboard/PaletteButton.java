@@ -5,7 +5,7 @@
 package com.audimex.dashboard.web.dashboard;
 
 import com.audimex.dashboard.entity.WidgetType;
-import com.audimex.dashboard.web.sys.WidgetRepository;
+import com.audimex.dashboard.web.WidgetRepository;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 

@@ -2,10 +2,7 @@ package com.audimex.dashboard.web.layouts;
 
 import com.audimex.dashboard.web.drophandlers.DDVerticalLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
-import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
-import com.audimex.dashboard.web.utils.DashboardUtils;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
@@ -33,8 +30,12 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
     protected Tree tree = null;
     protected DDVerticalLayout verticalLayout = null;
 
+    protected DashboardTools dashboardTools;
+
     public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener, Frame frame, Consumer<Tree> treeHandler) {
         this.tree = tree;
+        dashboardTools = AppBeans.get(DashboardTools.NAME);
+
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
         configButton.addClickListener((Button.ClickListener) (event) -> {
@@ -49,12 +50,12 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         });
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
-            TreeUtils.removeComponent(tree, tree.getValue());
+            dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName(DashboardUtils.AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addStyleName(dashboardTools.AMXD_LAYOUT_CONTROLS);
 
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
@@ -63,7 +64,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         ddVerticalLayoutDropHandler.setFrame(frame);
         ddVerticalLayoutDropHandler.setTree(tree);
 
-        verticalLayout.setDragMode(DashboardUtils.getDefaultDragMode());
+        verticalLayout.setDragMode(dashboardTools.getDefaultDragMode());
         verticalLayout.setSizeFull();
         verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
@@ -121,7 +122,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
     @Override
     public void setColSpan(int colSpan) {
         this.colSpan = colSpan;
-        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
+        GridCell gridCell = dashboardTools.getWidgetCell(tree, this);
 
         if (gridCell != null) {
             gridCell.setColspan(colSpan);
@@ -131,12 +132,12 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             GridLayout parent = (GridLayout) getParent();
             parent.removeComponent(this);
 
-            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
             parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
                     gridCell.getColumn() + gridCell.getColspan() - 1,
                     gridCell.getRow() + gridCell.getRowspan() - 1);
-            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
-            DashboardUtils.lockGridCells(parent, tree);
+            dashboardTools.addEmptyLabels(parent, tree);
+            dashboardTools.lockGridCells(parent, tree);
         }
     }
 
@@ -148,7 +149,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
     @Override
     public void setRowSpan(int rowSpan) {
         this.rowSpan = rowSpan;
-        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
+        GridCell gridCell = dashboardTools.getWidgetCell(tree, this);
 
         if (gridCell != null) {
             gridCell.setRowspan(rowSpan);
@@ -162,12 +163,12 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
 
             parent.removeComponent(this);
 
-            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
             parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
                     gridCell.getColumn() + gridCell.getColspan() - 1,
                     gridCell.getRow() + gridCell.getRowspan() - 1);
-            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
-            DashboardUtils.lockGridCells(parent, tree);
+            dashboardTools.addEmptyLabels(parent, tree);
+            dashboardTools.lockGridCells(parent, tree);
         }
     }
 

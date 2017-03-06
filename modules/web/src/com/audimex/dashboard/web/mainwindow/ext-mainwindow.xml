@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.mainwindow.ExtAppMainWindow"
-        extends="/com/haulmont/cuba/web/app/mainwindow/mainwindow.xml"
-        messagesPack="com.audimex.dashboard.web.mainwindow">
-    <layout/>
-</window>

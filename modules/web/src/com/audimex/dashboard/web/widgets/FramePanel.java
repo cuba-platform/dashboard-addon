@@ -4,13 +4,10 @@
 
 package com.audimex.dashboard.web.widgets;
 
-import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
-import com.audimex.dashboard.web.utils.DashboardUtils;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
@@ -34,9 +31,13 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected String frameId;
 
+    protected DashboardTools dashboardTools;
+
     public FramePanel(Tree tree, String frameId, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.frameId = frameId;
+
+        dashboardTools = AppBeans.get(DashboardTools.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
@@ -48,12 +49,12 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         });
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
-            TreeUtils.removeComponent(tree, tree.getValue());
+            dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName(DashboardUtils.AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addStyleName(dashboardTools.AMXD_LAYOUT_CONTROLS);
 
         contentLayout.setSizeFull();
         contentLayout.setStyleName("amxd-widget-content");
@@ -63,7 +64,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         addComponent(contentLayout);
 
         setSizeFull();
-        addStyleName(DashboardUtils.AMXD_BORDERING);
+        addStyleName(dashboardTools.AMXD_BORDERING);
 
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
@@ -109,7 +110,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     @Override
     public void setColSpan(int colSpan) {
         this.colSpan = colSpan;
-        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
+        GridCell gridCell = dashboardTools.getWidgetCell(tree, this);
 
         if (gridCell != null) {
             gridCell.setColspan(colSpan);
@@ -119,12 +120,12 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             GridLayout parent = (GridLayout) getParent();
             parent.removeComponent(this);
 
-            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
             parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
                     gridCell.getColumn() + gridCell.getColspan() - 1,
                     gridCell.getRow() + gridCell.getRowspan() - 1);
-            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
-            DashboardUtils.lockGridCells(parent, tree);
+            dashboardTools.addEmptyLabels(parent, tree);
+            dashboardTools.lockGridCells(parent, tree);
         }
     }
 
@@ -136,7 +137,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     @Override
     public void setRowSpan(int rowSpan) {
         this.rowSpan = rowSpan;
-        GridCell gridCell = LayoutUtils.getWidgetCell(tree, this);
+        GridCell gridCell = dashboardTools.getWidgetCell(tree, this);
 
         if (gridCell != null) {
             gridCell.setRowspan(rowSpan);
@@ -147,12 +148,12 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
             parent.removeComponent(this);
 
-            DashboardUtils.removeEmptyLabelsForSpan(parent, gridCell);
+            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
             parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
                     gridCell.getColumn() + gridCell.getColspan() - 1,
                     gridCell.getRow() + gridCell.getRowspan() - 1);
-            DashboardUtils.addEmptyLabelsToLayout(parent, tree);
-            DashboardUtils.lockGridCells(parent, tree);
+            dashboardTools.addEmptyLabels(parent, tree);
+            dashboardTools.lockGridCells(parent, tree);
         }
     }
 

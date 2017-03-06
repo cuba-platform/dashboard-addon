@@ -4,6 +4,8 @@
 package com.audimex.dashboard.web.dashboard;
 
 import com.audimex.dashboard.entity.WidgetType;
+import com.audimex.dashboard.web.DashboardSettings;
+import com.audimex.dashboard.web.WidgetRepository;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
@@ -11,11 +13,7 @@ import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.model.DashboardModel;
 import com.audimex.dashboard.web.model.WidgetModel;
-import com.audimex.dashboard.web.sys.WidgetRepository;
-import com.audimex.dashboard.web.settings.DashboardSettings;
-import com.audimex.dashboard.web.utils.DashboardUtils;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
@@ -70,6 +68,9 @@ public class DashboardFrame extends AbstractFrame {
     protected WidgetRepository widgetRepository;
 
     @Inject
+    protected DashboardTools dashboardTools;
+
+    @Inject
     protected com.haulmont.cuba.gui.components.Button removeComponent;
 
     protected Tree tree;
@@ -96,7 +97,7 @@ public class DashboardFrame extends AbstractFrame {
         Layout treeLayoutContainer = (Layout) WebComponentsHelper.unwrap(treeLayout);
 
         containersDraggableLayout = new DDCssLayout();
-        containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
+        containersDraggableLayout.setDragMode(dashboardTools.getDefaultDragMode());
         containersDraggableLayout.setDragCaptionProvider(
                 component -> new DragCaption(component.getCaption(), component.getIcon())
         );
@@ -104,7 +105,7 @@ public class DashboardFrame extends AbstractFrame {
         tree = new Tree();
         tree.setSizeFull();
 
-        treeHandler = tree -> TreeUtils.redrawLayout(tree, rootDashboardPanel);
+        treeHandler = tree -> dashboardTools.redrawLayout(tree, rootDashboardPanel);
 
         gridDropListener = (gridLayout, targetLayout, idx) -> onGridDrop(gridLayout, targetLayout, idx);
         treeDropHandler = new TreeDropHandler();
@@ -117,7 +118,7 @@ public class DashboardFrame extends AbstractFrame {
         tree.addValueChangeListener(e -> {
             if (allowEdit.getValue()) {
                 if (treeComponent != null) {
-                    treeComponent.removeStyleName(DashboardUtils.AMXD_TREE_SELECTED);
+                    treeComponent.removeStyleName(dashboardTools.AMXD_TREE_SELECTED);
                 }
 
                 if (tree.getValue() == null) {
@@ -148,7 +149,7 @@ public class DashboardFrame extends AbstractFrame {
                     }
 
                     if (treeComponent != null) {
-                        treeComponent.addStyleName(DashboardUtils.AMXD_TREE_SELECTED);
+                        treeComponent.addStyleName(dashboardTools.AMXD_TREE_SELECTED);
                     }
                 }
             }
@@ -172,7 +173,7 @@ public class DashboardFrame extends AbstractFrame {
         tree.setItemIcon(rootDashboardPanel, FontAwesome.ASTERISK);
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
-        rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
+        rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
         rootDashboardPanel.setDragGrabFilter(
                 (DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component)
         );
@@ -202,7 +203,7 @@ public class DashboardFrame extends AbstractFrame {
         );
 
         rootDashboardPanel.setSizeFull();
-        rootDashboardPanel.setStyleName(DashboardUtils.AMXD_BORDERING);
+        rootDashboardPanel.setStyleName(dashboardTools.AMXD_BORDERING);
 
         setupWidgetsPalette(containersDraggableLayout);
 
@@ -213,19 +214,19 @@ public class DashboardFrame extends AbstractFrame {
         allowEdit.setValue(true);
         allowEdit.addValueChangeListener(e -> {
             if (allowEdit.getValue()) {
-                containersDraggableLayout.setDragMode(DashboardUtils.getDefaultDragMode());
-                rootDashboardPanel.setDragMode(DashboardUtils.getDefaultDragMode());
+                containersDraggableLayout.setDragMode(dashboardTools.getDefaultDragMode());
+                rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
                 removeSpacings(rootDashboardPanel, true);
                 palette.setVisible(true);
-                containersDraggableLayout.removeStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
-                rootDashboardPanel.removeStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
+                containersDraggableLayout.removeStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.removeStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
             } else {
                 containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
                 rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
                 removeSpacings(rootDashboardPanel, false);
                 palette.setVisible(false);
-                containersDraggableLayout.addStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
-                rootDashboardPanel.addStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
+                containersDraggableLayout.addStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.addStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
             }
 
             removeComponent.setEnabled(allowEdit.getValue());
@@ -255,8 +256,8 @@ public class DashboardFrame extends AbstractFrame {
             rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
             removeSpacings(rootDashboardPanel, false);
             palette.setVisible(false);
-            containersDraggableLayout.addStyleName(DashboardUtils.AMXD_CONTAINER_DISABLED);
-            rootDashboardPanel.addStyleName(DashboardUtils.AMXD_DASHBOARD_DISABLED);
+            containersDraggableLayout.addStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
+            rootDashboardPanel.addStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
         }
     }
 
@@ -315,11 +316,21 @@ public class DashboardFrame extends AbstractFrame {
 
         okButton.addClickListener(event -> {
             if (cols.getValue() != null && rows.getValue() != null) {
-                TreeUtils.addComponent(tree, targetLayout, gridLayout, idx);
-                DashboardUtils.removeEmptyLabels(gridLayout, tree);
+                dashboardTools.addComponent(tree, targetLayout, gridLayout, idx);
+
+                for (int i = 0; i < gridLayout.getRows(); i++) {
+                    for (int j = 0; j < gridLayout.getColumns(); j++) {
+                        com.vaadin.ui.Component innerComponent = gridLayout.getComponent(j, i);
+                        if (innerComponent != null && innerComponent instanceof GridCell) {
+                            gridLayout.removeComponent(j, i);
+                            tree.removeItem(innerComponent);
+                        }
+                    }
+                }
+
                 gridLayout.setColumns(cols.getValue().intValue());
                 gridLayout.setRows(rows.getValue().intValue());
-                DashboardUtils.addEmptyLabels(gridLayout, tree);
+                dashboardTools.addEmptyLabels(gridLayout, tree);
                 subWindow.close();
                 treeDropHandler.getTreeHandler().accept(tree);
             }
@@ -339,19 +350,19 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
-        verticalLayoutButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
+        verticalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
-        horizontalLayoutButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
+        horizontalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
-        gridButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
+        gridButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
@@ -366,7 +377,7 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
-            paletteButton.setStyleName(DashboardUtils.AMXD_DASHBOARD_BUTTON);
+            paletteButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }
@@ -385,9 +396,9 @@ public class DashboardFrame extends AbstractFrame {
         if (!(component instanceof HorizontalLayout
                 || component instanceof VerticalLayout)) {
             if (value) {
-                component.addStyleName(DashboardUtils.AMXD_BORDERING);
+                component.addStyleName(dashboardTools.AMXD_BORDERING);
             } else {
-                component.removeStyleName(DashboardUtils.AMXD_BORDERING);
+                component.removeStyleName(dashboardTools.AMXD_BORDERING);
             }
 
             if (component instanceof HasMainLayout) {
@@ -434,7 +445,7 @@ public class DashboardFrame extends AbstractFrame {
     }
 
     public void removeComponent() {
-        boolean removed = TreeUtils.removeComponent(tree, tree.getValue());
+        boolean removed = dashboardTools.removeComponent(tree, tree.getValue());
         treeHandler.accept(tree);
         if (!removed) {
             showNotification(messages.getMessage(getClass(), "dashboard.cantRemove"), NotificationType.HUMANIZED);
@@ -518,7 +529,7 @@ public class DashboardFrame extends AbstractFrame {
         return widgetModels;
     }
 
-    public void convertToTree() {
+    protected void convertToTree() {
         removeAllComponents();
 
         modelToContainer(
@@ -527,7 +538,7 @@ public class DashboardFrame extends AbstractFrame {
                 gridDropListener
         );
 
-        TreeUtils.redrawLayout(tree, rootDashboardPanel);
+        dashboardTools.redrawLayout(tree, rootDashboardPanel);
     }
 
     protected void modelToContainer(List<WidgetModel> widgetModels,
@@ -538,7 +549,7 @@ public class DashboardFrame extends AbstractFrame {
             boolean isNew = false;
             switch (widgetModel.getType()) {
                 case VERTICAL_LAYOUT:
-                    DashboardVerticalLayout verticalLayout = (DashboardVerticalLayout) LayoutUtils
+                    DashboardVerticalLayout verticalLayout = (DashboardVerticalLayout) dashboardTools
                             .createVerticalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     verticalLayout.setWeight(widgetModel.getWeight());
@@ -546,7 +557,7 @@ public class DashboardFrame extends AbstractFrame {
                     isNew = true;
                     break;
                 case HORIZONTAL_LAYOUT:
-                    DashboardHorizontalLayout horizontalLayout = (DashboardHorizontalLayout) LayoutUtils
+                    DashboardHorizontalLayout horizontalLayout = (DashboardHorizontalLayout) dashboardTools
                             .createHorizontalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     horizontalLayout.setWeight(widgetModel.getWeight());
@@ -559,7 +570,7 @@ public class DashboardFrame extends AbstractFrame {
                     isNew = true;
                     break;
                 case GRID_LAYOUT:
-                    GridLayout gridLayout = (GridLayout) LayoutUtils
+                    GridLayout gridLayout = (GridLayout) dashboardTools
                             .createGridDropLayout(tree, gridDropListener, getFrame(), treeHandler);
                     gridLayout.setColumns(widgetModel.getGridColumnCount());
                     gridLayout.setRows(widgetModel.getGridRowCount());
@@ -568,12 +579,12 @@ public class DashboardFrame extends AbstractFrame {
                     isNew = true;
                     break;
                 case GRID_ROW:
-                    GridRow gridRow = LayoutUtils.getGridRow(idx, tree, (GridLayout) parent);
+                    GridRow gridRow = dashboardTools.getGridRow(idx, tree, (GridLayout) parent);
                     component = gridRow;
                     break;
                 case GRID_CELL:
                     GridLayout parentGrid = ((GridRow) parent).getGridLayout();
-                    GridCell gridCell = LayoutUtils.getGridCell(
+                    GridCell gridCell = dashboardTools.getGridCell(
                             tree,
                             tree.getChildren(parentGrid),
                             widgetModel.getColumn(),
@@ -589,7 +600,7 @@ public class DashboardFrame extends AbstractFrame {
             }
 
             if (isNew) {
-                TreeUtils.addComponent(tree, parent, component, idx);
+                dashboardTools.addComponent(tree, parent, component, idx);
             }
 
             if (!widgetModel.getChildren().isEmpty()) {

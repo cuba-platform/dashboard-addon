@@ -5,12 +5,12 @@
 package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
-import com.audimex.dashboard.web.utils.LayoutUtils;
-import com.audimex.dashboard.web.utils.TreeUtils;
-import com.audimex.dashboard.web.widgets.FramePanel;
+import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
+import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
@@ -29,6 +29,9 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
     protected Frame frame;
     protected Consumer<Tree> treeHandler;
 
+    protected DashboardTools dashboardTools = AppBeans.get(DashboardTools.NAME);
+    protected DashboardWidgetsFactory dashboardWidgetsFactory = AppBeans.get(DashboardWidgetsFactory.NAME);
+
     @Override
     protected void handleComponentReordering(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
@@ -41,7 +44,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
         Component comp = transferable.getComponent();
         int idx = details.getOverIndex();
 
-        TreeUtils.reorder(tree, layout.getParent(), comp, idx);
+        dashboardTools.reorder(tree, layout.getParent(), comp, idx);
         treeHandler.accept(tree);
     }
 
@@ -57,11 +60,11 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
         }
 
         int idx = details.getOverIndex();
-        Component comp = transferable.getComponent();
+        Component component = transferable.getComponent();
 
         Component parent = targetLayout.getParent();
         while (parent != null) {
-            if (parent == comp) {
+            if (parent == component) {
                 return;
             }
             parent = parent.getParent();
@@ -75,49 +78,41 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
 
         if (transferable.getComponent() instanceof Button) {
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
-            // Add component
-            if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                comp = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame, treeHandler);
-            } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                comp = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame, treeHandler);
-            } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                comp = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame, treeHandler);
-                gridDropListener.gridDropped((GridLayout) comp, targetLayout, idx);
-            } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                comp = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame, treeHandler);
-            }
+
+            component = dashboardWidgetsFactory.createWidgetOnDrop(dragComponent, tree, gridDropListener,
+                    frame, treeHandler, targetLayout);
 
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
                 if (idx >= 0) {
-                    TreeUtils.addComponent(tree, targetLayout, comp, idx);
+                    dashboardTools.addComponent(tree, targetLayout, component, idx);
                 } else {
-                    TreeUtils.addComponent(tree, targetLayout, comp, 0);
+                    dashboardTools.addComponent(tree, targetLayout, component, 0);
                 }
             }
         } else {
-            if (comp == targetLayout) {
+            if (component == targetLayout) {
                 return;
             }
 
             if (idx >= 0) {
                 if (targetLayout instanceof DashboardVerticalLayout) {
-                    ((DashboardVerticalLayout) targetLayout).addComponent(comp, idx);
+                    ((DashboardVerticalLayout) targetLayout).addComponent(component, idx);
                 } else if (targetLayout instanceof AbstractOrderedLayout) {
-                    ((AbstractOrderedLayout) targetLayout).addComponent(comp, idx);
+                    ((AbstractOrderedLayout) targetLayout).addComponent(component, idx);
                 }
             } else {
-                targetLayout.addComponent(comp);
+                targetLayout.addComponent(component);
                 idx = 0;
             }
 
-            TreeUtils.reorder(tree, targetLayout, comp, idx);
+            dashboardTools.reorder(tree, targetLayout, component, idx);
             if (targetLayout instanceof DashboardVerticalLayout) {
-                ((DashboardVerticalLayout) targetLayout).getMainLayout().setExpandRatio(comp, 1);
+                ((DashboardVerticalLayout) targetLayout).getMainLayout().setExpandRatio(component, 1);
             }
 
             if (targetLayout instanceof GridCell) {
                 GridCell gridCell = (GridCell) targetLayout;
-                TreeUtils.markGridCells(
+                dashboardTools.markGridCells(
                         tree,
                         (GridLayout) gridCell.getParent(),
                         gridCell.getRow(),
