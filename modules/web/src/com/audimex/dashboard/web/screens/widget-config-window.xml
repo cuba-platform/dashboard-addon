@@ -17,8 +17,8 @@
               spacing="true"/>
         <hbox id="buttonsLayout"
               spacing="true">
-            <button id="okButton" caption="msg://dashboard.okButtonCaption" icon="icons/ok.png" action="save"/>
-            <button id="cancelButton" caption="msg://dashboard.cancelButtonCaption" icon="icons/cancel.png" action="cancel"/>
+            <button id="okButton" caption="mainMsg://actions.Ok" icon="icons/ok.png" action="save"/>
+            <button id="cancelButton" caption="mainMsg://actions.Cancel" icon="icons/cancel.png" action="cancel"/>
         </hbox>
     </layout>
 </window>

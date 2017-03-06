@@ -307,8 +307,8 @@ public class DashboardFrame extends AbstractFrame {
         subContent.addComponent(comboBoxPanel);
         subContent.addComponent(buttonsPanel);
 
-        Button cancelButton = new Button(getMessage("dashboard.cancelButtonCaption"), FontAwesome.CLOSE);
-        Button okButton = new Button(getMessage("dashboard.okButtonCaption"), FontAwesome.CHECK);
+        Button cancelButton = new Button(getMessage("actions.Cancel"), FontAwesome.CLOSE);
+        Button okButton = new Button(getMessage("actions.Ok"), FontAwesome.CHECK);
         cancelButton.addClickListener(event -> {
             subWindow.close();
         });

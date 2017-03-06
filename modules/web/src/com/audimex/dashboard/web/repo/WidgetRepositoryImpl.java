@@ -80,7 +80,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             widget.setId(viewId);
         }
 
-        String viewName = viewElem.attributeValue("dashboard.widgetConfigWindowCaption");
+        String viewName = viewElem.attributeValue("caption");
         if (StringUtils.isNotEmpty(viewName)) {
             widget.setCaption(viewName);
         }
