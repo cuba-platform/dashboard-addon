@@ -40,6 +40,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * The dashboard frame contains the palette, canvas and tree of components.
+ * Can be used to build a user interface in the runtime.
+ */
 public class DashboardFrame extends AbstractFrame {
     protected static final String VERTICAL_LAYOUT_ICON = "icons/run.png";
     protected static final String HORIZONTAL_LAYOUT_ICON = "icons/up.png";
@@ -242,7 +246,7 @@ public class DashboardFrame extends AbstractFrame {
         enableViewMode();
     }
 
-    public FramePanel getFramePanel(Component component) {
+    protected FramePanel getFramePanel(Component component) {
         Component parent = component.getParent();
         if (parent instanceof FramePanel) {
             return (FramePanel) parent;
@@ -267,11 +271,18 @@ public class DashboardFrame extends AbstractFrame {
         }
     }
 
+    /**
+     * Returns the component structure hierarchical model.
+     */
     public DashboardModel getDashboardModel() {
         convertToModel();
         return dashboardModel;
     }
 
+    /**
+     * Set the component structure hierarchical model.
+     * After setting, the dashboard will be refreshed.
+     */
     public void setDashboardModel(DashboardModel dashboardModel) {
         this.dashboardModel = dashboardModel;
         convertToTree();
