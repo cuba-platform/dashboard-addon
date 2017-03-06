@@ -23,17 +23,19 @@ import fi.jasoft.dragdroplayouts.interfaces.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DashboardHorizontalLayout extends CssLayout implements HasMainLayout, HasWeight,
         HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
-    private DDHorizontalLayout horizontalLayout = null;
-    private int weight = 1;
-    private int colSpan = 1;
-    private int rowSpan = 1;
-    private Tree tree = null;
-    private Frame parentFrame = null;
+    protected DDHorizontalLayout horizontalLayout = null;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
+    protected Tree tree = null;
+    protected Frame parentFrame = null;
 
-    public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
+    public DashboardHorizontalLayout(Tree tree, GridDropListener gridDropListener,
+                                     Frame frame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
@@ -50,7 +52,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+            treeHandler.accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
@@ -60,6 +62,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         DDHorizontalLayoutDropHandler ddVerticalLayoutDropHandler = new DDHorizontalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
         ddVerticalLayoutDropHandler.setFrame(frame);
+        ddVerticalLayoutDropHandler.setTreeHandler(treeHandler);
         ddVerticalLayoutDropHandler.setTree(tree);
 
         horizontalLayout.setDragMode(DashboardUtils.getDefaultDragMode());

@@ -45,42 +45,43 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DashboardFrame extends AbstractFrame {
     @Inject
-    private VBoxLayout containers;
+    protected VBoxLayout containers;
 
     @Inject
-    private VBoxLayout dropLayout;
+    protected VBoxLayout dropLayout;
 
     @Inject
-    private VBoxLayout treeLayout;
+    protected VBoxLayout treeLayout;
 
     @Inject
-    private CheckBox allowEdit;
+    protected CheckBox allowEdit;
 
     @Inject
-    private SplitPanel palette;
+    protected SplitPanel palette;
 
     @Inject
-    private DashboardSettings dashboardSettings;
+    protected DashboardSettings dashboardSettings;
 
     @Inject
-    private WidgetRepository widgetRepository;
+    protected WidgetRepository widgetRepository;
 
     @Inject
-    private com.haulmont.cuba.gui.components.Button removeComponent;
+    protected com.haulmont.cuba.gui.components.Button removeComponent;
 
-    private Tree tree;
+    protected Tree tree;
 
-    private DashboardVerticalLayout rootDashboardPanel = null;
-    private Component treeComponent;
-    private DashboardModel dashboardModel;
-    private TreeDropHandler treeDropHandler = null;
-    private GridDropListener gridDropListener = null;
-    private DDCssLayout containersDraggableLayout = null;
-    private DashboardMode mode;
-
+    protected DashboardVerticalLayout rootDashboardPanel = null;
+    protected Component treeComponent;
+    protected DashboardModel dashboardModel;
+    protected TreeDropHandler treeDropHandler = null;
+    protected GridDropListener gridDropListener = null;
+    protected DDCssLayout containersDraggableLayout = null;
+    protected DashboardMode mode;
+    protected Consumer<Tree> treeHandler;
     public enum DashboardMode {
         DESIGNER,
         VIEW
@@ -103,12 +104,14 @@ public class DashboardFrame extends AbstractFrame {
         tree = new Tree();
         tree.setSizeFull();
 
+        treeHandler = tree -> TreeUtils.redrawLayout(tree, rootDashboardPanel);
+
         gridDropListener = (gridLayout, targetLayout, idx) -> onGridDrop(gridLayout, targetLayout, idx);
         treeDropHandler = new TreeDropHandler();
         treeDropHandler.setTree(tree);
         treeDropHandler.setGridDropListener(gridDropListener);
         treeDropHandler.setFrame(getFrame());
-        treeDropHandler.setTreeChangeListener(tree -> TreeUtils.redrawLayout(tree, rootDashboardPanel));
+        treeDropHandler.setTreeHandler(treeHandler);
 
         tree.setDropHandler(treeDropHandler);
         tree.addValueChangeListener(e -> {
@@ -162,7 +165,7 @@ public class DashboardFrame extends AbstractFrame {
         });
         tree.setDragMode(Tree.TreeDragMode.NODE);
 
-        rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop, getFrame());
+        rootDashboardPanel = new DashboardVerticalLayout(tree, this::onGridDrop, getFrame(), treeHandler);
 
         tree.addItem(rootDashboardPanel);
         tree.setItemCaption(rootDashboardPanel, getMessage("rootContainer"));
@@ -318,7 +321,7 @@ public class DashboardFrame extends AbstractFrame {
                 gridLayout.setRows(rows.getValue().intValue());
                 DashboardUtils.addEmptyLabels(gridLayout, tree);
                 subWindow.close();
-                treeDropHandler.getTreeChangeListener().accept(tree);
+                treeDropHandler.getTreeHandler().accept(tree);
             }
         });
 
@@ -375,7 +378,7 @@ public class DashboardFrame extends AbstractFrame {
         hierarchicalContainer.addItem(rootDashboardPanel);
 
         tree.setChildrenAllowed(rootDashboardPanel, false);
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+        treeHandler.accept(tree);
     }
 
     protected void removeSpacings(AbstractLayout component, boolean value) {
@@ -432,7 +435,7 @@ public class DashboardFrame extends AbstractFrame {
 
     public void removeComponent() {
         boolean removed = TreeUtils.removeComponent(tree, tree.getValue());
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+        treeHandler.accept(tree);
         if (!removed) {
             showNotification(messages.getMessage(getClass(), "cantRemove"), NotificationType.HUMANIZED);
         }
@@ -536,7 +539,7 @@ public class DashboardFrame extends AbstractFrame {
             switch (widgetModel.getType()) {
                 case VERTICAL_LAYOUT:
                     DashboardVerticalLayout verticalLayout = (DashboardVerticalLayout) LayoutUtils
-                            .createVerticalDropLayout(tree, gridDropListener, getFrame());
+                            .createVerticalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     verticalLayout.setWeight(widgetModel.getWeight());
                     component = verticalLayout;
@@ -544,20 +547,20 @@ public class DashboardFrame extends AbstractFrame {
                     break;
                 case HORIZONTAL_LAYOUT:
                     DashboardHorizontalLayout horizontalLayout = (DashboardHorizontalLayout) LayoutUtils
-                            .createHorizontalDropLayout(tree, gridDropListener, getFrame());
+                            .createHorizontalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     horizontalLayout.setWeight(widgetModel.getWeight());
                     component = horizontalLayout;
                     isNew = true;
                     break;
                 case FRAME_PANEL:
-                    FramePanel framePanel = new FramePanel(tree, widgetModel.getFrameId(), getFrame());
+                    FramePanel framePanel = new FramePanel(tree, widgetModel.getFrameId(), getFrame(), treeHandler);
                     component = framePanel;
                     isNew = true;
                     break;
                 case GRID_LAYOUT:
                     GridLayout gridLayout = (GridLayout) LayoutUtils
-                            .createGridDropLayout(tree, gridDropListener, getFrame());
+                            .createGridDropLayout(tree, gridDropListener, getFrame(), treeHandler);
                     gridLayout.setColumns(widgetModel.getGridColumnCount());
                     gridLayout.setRows(widgetModel.getGridRowCount());
 

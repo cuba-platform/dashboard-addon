@@ -22,10 +22,13 @@ import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.drophandlers.DefaultGridLayoutDropHandler;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
+import java.util.function.Consumer;
+
 public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
-    private GridDropListener gridDropListener;
-    private Tree tree;
-    private Frame frame;
+    protected GridDropListener gridDropListener;
+    protected Tree tree;
+    protected Frame frame;
+    protected Consumer<Tree> treeHandler;
 
     @Override
     protected void handleComponentReordering(DragAndDropEvent event) {
@@ -46,7 +49,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             TreeUtils.moveComponent(tree, gridCell, comp, 0);
         }
 
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+        treeHandler.accept(tree);
     }
 
     @Override
@@ -71,14 +74,14 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
             PaletteButton dragComponent = (PaletteButton) transferable.getComponent();
             // Add component
             if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame);
+                component = LayoutUtils.createVerticalDropLayout(tree, gridDropListener, frame, treeHandler);
             } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame);
+                component = LayoutUtils.createHorizontalDropLayout(tree, gridDropListener, frame, treeHandler);
             } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                component = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame);
+                component = LayoutUtils.createGridDropLayout(tree, gridDropListener, frame, treeHandler);
                 gridDropListener.gridDropped((GridLayout) component, layout, 0);
             } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame);
+                component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame, treeHandler);
             }
 
             if (dragComponent.getWidgetType() != WidgetType.GRID_LAYOUT) {
@@ -103,7 +106,11 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
         }
 
 
-        ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+        treeHandler.accept(tree);
+    }
+
+    public void setTreeHandler(Consumer<Tree> treeHandler) {
+        this.treeHandler = treeHandler;
     }
 
     public void setTree(Tree tree) {

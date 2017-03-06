@@ -104,6 +104,10 @@
         display: inline-block;
     }
 
+    .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls {
+        display: none;
+    }
+
     .v-csslayout.amxd-bordering {
         position: relative;
     }

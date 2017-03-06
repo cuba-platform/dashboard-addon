@@ -28,14 +28,14 @@ import java.util.List;
 public class WidgetRepositoryImpl implements WidgetRepository {
     private final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
 
-    private volatile boolean initialized = false;
-    private List<Widget> widgetMap;
+    protected volatile boolean initialized = false;
+    protected List<Widget> widgetMap;
 
     @Inject
-    private WidgetConfig widgetConfig;
+    protected WidgetConfig widgetConfig;
 
     @Inject
-    private Resources resources;
+    protected Resources resources;
 
     @Override
     public List<Widget> getWidgets() {

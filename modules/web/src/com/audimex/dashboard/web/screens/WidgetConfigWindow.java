@@ -18,21 +18,21 @@ import javax.inject.Inject;
 import java.util.Map;
 
 public class WidgetConfigWindow extends AbstractWindow {
-    private Slider weightSlider = null;
-    private Slider colSpanSlider = null;
-    private Slider rowSpanSlider = null;
+    protected Slider weightSlider = null;
+    protected Slider colSpanSlider = null;
+    protected Slider rowSpanSlider = null;
 
     @Inject
-    private HBoxLayout sliderLayout;
+    protected HBoxLayout sliderLayout;
 
     @Inject
-    private com.haulmont.cuba.gui.components.Button okButton;
+    protected com.haulmont.cuba.gui.components.Button okButton;
 
     @Inject
-    private com.haulmont.cuba.gui.components.Button cancelButton;
+    protected com.haulmont.cuba.gui.components.Button cancelButton;
 
-    private Component widget = null;
-    private Tree tree = null;
+    protected Component widget = null;
+    protected Tree tree = null;
 
     @Override
     public void init(Map<String, Object> params) {

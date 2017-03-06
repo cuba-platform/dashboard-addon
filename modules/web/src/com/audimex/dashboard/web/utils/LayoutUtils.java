@@ -19,15 +19,19 @@ import com.vaadin.ui.Tree;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public class LayoutUtils {
-    public static Component createHorizontalDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
-        DashboardHorizontalLayout component = new DashboardHorizontalLayout(tree, gridDropListener, frame);
+    public static Component createHorizontalDropLayout(Tree tree, GridDropListener gridDropListener,
+                                                       Frame frame, Consumer<Tree> treeHandler) {
+        DashboardHorizontalLayout component =
+                new DashboardHorizontalLayout(tree, gridDropListener, frame, treeHandler);
         configLayout(component);
         return component;
     }
 
-    public static Component createGridDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
+    public static Component createGridDropLayout(Tree tree, GridDropListener gridDropListener,
+                                                 Frame frame, Consumer<Tree> treeHandler) {
         DDGridLayout component = new DDGridLayout();
         component.setDragMode(DashboardUtils.getDefaultDragMode());
 
@@ -35,6 +39,7 @@ public class LayoutUtils {
         ddGridLayoutDropHandler.setTree(tree);
         ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
         ddGridLayoutDropHandler.setFrame(frame);
+        ddGridLayoutDropHandler.setTreeHandler(treeHandler);
         component.setDropHandler(ddGridLayoutDropHandler);
 
         component.setSizeFull();
@@ -48,8 +53,10 @@ public class LayoutUtils {
         return component;
     }
 
-    public static Component createVerticalDropLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
-        DashboardVerticalLayout component = new DashboardVerticalLayout(tree, gridDropListener, frame);
+    public static Component createVerticalDropLayout(Tree tree, GridDropListener gridDropListener,
+                                                     Frame frame, Consumer<Tree> treeHandler) {
+        DashboardVerticalLayout component =
+                new DashboardVerticalLayout(tree, gridDropListener, frame, treeHandler);
         configLayout(component);
         return component;
     }

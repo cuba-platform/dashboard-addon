@@ -8,7 +8,6 @@ import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
-import com.audimex.dashboard.web.settings.DashboardSettings;
 import com.audimex.dashboard.web.utils.DashboardUtils;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
@@ -23,18 +22,19 @@ import com.vaadin.ui.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
-    private VerticalLayout contentLayout = new VerticalLayout();
-    private Tree tree;
+    protected VerticalLayout contentLayout = new VerticalLayout();
+    protected Tree tree;
 
-    private int weight = 1;
-    private int colSpan = 1;
-    private int rowSpan = 1;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
 
-    private String frameId;
+    protected String frameId;
 
-    public FramePanel(Tree tree, String frameId, Frame parentFrame) {
+    public FramePanel(Tree tree, String frameId, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.frameId = frameId;
 
@@ -49,7 +49,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+            treeHandler.accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);

@@ -14,10 +14,6 @@ public class PaletteButton extends Button {
     private WidgetType widgetType;
     private WidgetRepository.Widget widget;
 
-    public PaletteButton(String caption) {
-        super(caption);
-    }
-
     public PaletteButton(String caption, Resource icon) {
         super(caption, icon);
     }

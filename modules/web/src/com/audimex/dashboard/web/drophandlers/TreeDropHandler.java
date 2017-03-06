@@ -24,11 +24,11 @@ import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 import java.util.function.Consumer;
 
 public class TreeDropHandler implements DropHandler {
-    private Tree tree;
-    private GridDropListener gridDropListener;
-    private Frame frame;
+    protected Tree tree;
+    protected GridDropListener gridDropListener;
+    protected Frame frame;
 
-    private Consumer<Tree> treeChangeListener;
+    protected Consumer<Tree> treeHandler;
 
     @Override
     public void drop(DragAndDropEvent event) {
@@ -44,11 +44,11 @@ public class TreeDropHandler implements DropHandler {
                 Component component;
 
                 if (dragComponent.getWidgetType() == WidgetType.VERTICAL_LAYOUT) {
-                    component = LayoutUtils.createVerticalDropLayout(this.tree, gridDropListener, frame);
+                    component = LayoutUtils.createVerticalDropLayout(this.tree, gridDropListener, frame, treeHandler);
                 } else if (dragComponent.getWidgetType() == WidgetType.HORIZONTAL_LAYOUT) {
-                    component = LayoutUtils.createHorizontalDropLayout(this.tree, gridDropListener, frame);
+                    component = LayoutUtils.createHorizontalDropLayout(this.tree, gridDropListener, frame, treeHandler);
                 } else if (dragComponent.getWidgetType() == WidgetType.GRID_LAYOUT) {
-                    component = LayoutUtils.createGridDropLayout(this.tree, gridDropListener, frame);
+                    component = LayoutUtils.createGridDropLayout(this.tree, gridDropListener, frame, treeHandler);
                     Object parentId = tree.getParent(target.getItemIdOver());
                     if (location == VerticalDropLocation.MIDDLE) {
                         gridDropListener.gridDropped((GridLayout) component, target.getItemIdOver(), 0);
@@ -56,7 +56,7 @@ public class TreeDropHandler implements DropHandler {
                         gridDropListener.gridDropped((GridLayout) component, parentId, 0);
                     }
                 } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
-                    component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame);
+                    component = new FramePanel(tree, dragComponent.getWidget().getFrameId(), frame, treeHandler);
                 } else {
                     component = new Label();
                 }
@@ -104,7 +104,7 @@ public class TreeDropHandler implements DropHandler {
             }
         }
 
-        treeChangeListener.accept(tree);
+        treeHandler.accept(tree);
     }
 
     public Frame getFrame() {
@@ -115,12 +115,12 @@ public class TreeDropHandler implements DropHandler {
         this.frame = frame;
     }
 
-    public void setTreeChangeListener(Consumer<Tree> treeChangeListener) {
-        this.treeChangeListener = treeChangeListener;
+    public void setTreeHandler(Consumer<Tree> treeHandler) {
+        this.treeHandler = treeHandler;
     }
 
-    public Consumer<Tree> getTreeChangeListener() {
-        return treeChangeListener;
+    public Consumer<Tree> getTreeHandler() {
+        return treeHandler;
     }
 
     @Override

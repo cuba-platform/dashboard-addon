@@ -23,16 +23,17 @@ import fi.jasoft.dragdroplayouts.interfaces.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
         DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
-    private int weight = 1;
-    private int colSpan = 1;
-    private int rowSpan = 1;
-    private Tree tree = null;
-    private DDVerticalLayout verticalLayout = null;
+    protected int weight = 1;
+    protected int colSpan = 1;
+    protected int rowSpan = 1;
+    protected Tree tree = null;
+    protected DDVerticalLayout verticalLayout = null;
 
-    public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener, Frame frame) {
+    public DashboardVerticalLayout(Tree tree, GridDropListener gridDropListener, Frame frame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(FontAwesome.GEARS);
@@ -49,7 +50,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         Button removeButton = new Button(FontAwesome.TRASH);
         removeButton.addClickListener((Button.ClickListener) event -> {
             TreeUtils.removeComponent(tree, tree.getValue());
-            ((TreeDropHandler) tree.getDropHandler()).getTreeChangeListener().accept(tree);
+            treeHandler.accept(tree);
         });
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
@@ -58,6 +59,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
         ddVerticalLayoutDropHandler.setGridDropListener(gridDropListener);
+        ddVerticalLayoutDropHandler.setTreeHandler(treeHandler);
         ddVerticalLayoutDropHandler.setFrame(frame);
         ddVerticalLayoutDropHandler.setTree(tree);
 
