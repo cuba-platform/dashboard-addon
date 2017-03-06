@@ -5,8 +5,8 @@
 package com.audimex.dashboard.web.settings;
 
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.cuba.web.gui.components.WebPopupButton;
 import com.vaadin.ui.*;
-import org.vaadin.hene.popupbutton.PopupButton;
 
 @org.springframework.stereotype.Component(DashboardSettings.NAME)
 public class DashboardSettingsImpl implements DashboardSettings {
@@ -21,16 +21,13 @@ public class DashboardSettingsImpl implements DashboardSettings {
         if (component instanceof Button) {
             return false;
         }
-        if (component instanceof Tree) {
-            return false;
-        }
         if (component instanceof Embedded) {
             return false;
         }
         if (component instanceof Calendar) {
             return false;
         }
-        if (component instanceof PopupButton) {
+        if (component instanceof WebPopupButton) {
             return false;
         }
         if (component instanceof GridCell) {
