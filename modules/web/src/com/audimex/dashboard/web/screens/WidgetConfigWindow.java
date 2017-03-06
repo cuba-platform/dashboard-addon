@@ -91,7 +91,7 @@ public class WidgetConfigWindow extends AbstractWindow {
     }
 
     public void cancel() {
-        close("");
+        close(CLOSE_ACTION_ID);
     }
 
     public void save() {
@@ -140,6 +140,6 @@ public class WidgetConfigWindow extends AbstractWindow {
                 showNotification(getMessage("dashboard.notValidated"), NotificationType.ERROR);
             }
         }
-        close("");
+        close(CLOSE_ACTION_ID);
     }
 }
