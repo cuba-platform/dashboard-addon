@@ -6,6 +6,8 @@ import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.AbstractLayout;
@@ -273,20 +275,26 @@ public class DashboardTools {
     }
 
     public String getTreeItemCaption(Object component) {
+        Messages messages = AppBeans.get(Messages.NAME);
         if (component instanceof FramePanel) {
-            return "Widget";
+            String caption = ((FramePanel) component).getWidgetCaption();
+            if (caption != null) {
+                return messages.getMainMessage(caption);
+            } else {
+                return messages.getMainMessage("dashboard.widget");
+            }
         } else if (component instanceof GridCell) {
-            return "Cell";
+            return messages.getMainMessage("dashboard.cell");
         } else if (component instanceof DashboardVerticalLayout) {
-            return "Vertical";
+            return messages.getMainMessage("dashboard.vertical");
         } else if (component instanceof DashboardHorizontalLayout) {
-            return "Horizontal";
+            return messages.getMainMessage("dashboard.horizontal");
         } else if (component instanceof DDGridLayout) {
-            return "Grid";
+            return messages.getMainMessage("dashboard.grid");
         } else if (component instanceof GridRow) {
-            return "Row";
+            return messages.getMainMessage("dashboard.row");
         } else {
-            return "Undefined";
+            return messages.getMainMessage("dashboard.undefined");
         }
     }
 
