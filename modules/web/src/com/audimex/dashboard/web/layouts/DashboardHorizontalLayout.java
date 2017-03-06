@@ -23,13 +23,16 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardHorizontalLayout extends CssLayout implements HasMainLayout, HasWeight,
-        HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
+        HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption {
     protected DDHorizontalLayout horizontalLayout = null;
     protected int weight = 1;
     protected int colSpan = 1;
     protected int rowSpan = 1;
     protected Tree tree = null;
     protected Frame parentFrame = null;
+
+    protected String icon;
+    protected String caption;
 
     protected DashboardTools dashboardTools;
 
@@ -230,5 +233,24 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
     @Override
     public Transferable getTransferable(Map<String, Object> rawVariables) {
         return horizontalLayout.getTransferable(rawVariables);
+    }
+
+    @Override
+    public String getWidgetIcon() {
+        return icon;
+    }
+
+    public void setWidgetIcon(String icon) {
+        this.icon = icon;
+    }
+
+    @Override
+    public String getWidgetCaption() {
+        return caption;
+    }
+
+    @Override
+    public void setWidgetCaption(String caption) {
+        this.caption = caption;
     }
 }

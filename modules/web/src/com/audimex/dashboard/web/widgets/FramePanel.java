@@ -4,6 +4,8 @@
 
 package com.audimex.dashboard.web.widgets;
 
+import com.audimex.dashboard.web.WidgetRepository;
+import com.audimex.dashboard.web.layouts.HasDragCaption;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasMainLayout;
 import com.audimex.dashboard.web.layouts.HasWeight;
@@ -21,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout {
+public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout, HasDragCaption {
     protected VerticalLayout contentLayout = new VerticalLayout();
     protected Tree tree;
 
@@ -29,13 +31,16 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     protected int colSpan = 1;
     protected int rowSpan = 1;
 
-    protected String frameId;
+    protected String icon;
+    protected String caption;
+
+    protected WidgetRepository.Widget widget;
 
     protected DashboardTools dashboardTools;
 
-    public FramePanel(Tree tree, String frameId, Frame parentFrame, Consumer<Tree> treeHandler) {
+    public FramePanel(Tree tree, WidgetRepository.Widget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
-        this.frameId = frameId;
+        this.widget = widget;
 
         dashboardTools = AppBeans.get(DashboardTools.NAME);
 
@@ -68,7 +73,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
-        WindowInfo windowInfo = windowConfig.getWindowInfo(frameId);
+        WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
 
         Frame frame = windowManager.openFrame(parentFrame, null, windowInfo);
         frame.setParent(parentFrame);
@@ -85,7 +90,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     }
 
     public String getFrameId() {
-        return frameId;
+        return widget.getFrameId();
     }
 
     @Override
@@ -155,6 +160,25 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             dashboardTools.addEmptyLabels(parent, tree);
             dashboardTools.lockGridCells(parent, tree);
         }
+    }
+
+    @Override
+    public String getWidgetIcon() {
+        return icon;
+    }
+
+    public void setWidgetIcon(String icon) {
+        this.icon = icon;
+    }
+
+    @Override
+    public String getWidgetCaption() {
+        return caption;
+    }
+
+    @Override
+    public void setWidgetCaption(String caption) {
+        this.caption = caption;
     }
 
     @Override

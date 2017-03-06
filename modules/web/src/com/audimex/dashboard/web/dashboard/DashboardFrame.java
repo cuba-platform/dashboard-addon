@@ -8,9 +8,7 @@ import com.audimex.dashboard.web.DashboardSettings;
 import com.audimex.dashboard.web.WidgetRepository;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
-import com.audimex.dashboard.web.layouts.HasMainLayout;
+import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.model.DashboardModel;
 import com.audimex.dashboard.web.model.WidgetModel;
 import com.audimex.dashboard.web.tools.DashboardTools;
@@ -46,6 +44,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardFrame extends AbstractFrame {
+    protected static final String VERTICAL_LAYOUT_ICON = "icons/run.png";
+    protected static final String HORIZONTAL_LAYOUT_ICON = "icons/up.png";
+    protected static final String GRID_LAYOUT_ICON = "icons/upload.png";
+
     @Inject
     protected VBoxLayout containers;
 
@@ -199,7 +201,19 @@ public class DashboardFrame extends AbstractFrame {
         });
 
         rootDashboardPanel.setDragCaptionProvider(
-                component -> new DragCaption("Component", null)
+                component -> {
+                    if (component instanceof HasDragCaption) {
+                        return new DragCaption(
+                                getMessage(((HasDragCaption) component).getWidgetCaption()),
+                                WebComponentsHelper.getIcon(((HasDragCaption) component).getWidgetIcon())
+                        );
+                    } else {
+                        return new DragCaption(
+                                getMessage("dashboard.component"),
+                                null
+                        );
+                    }
+                }
         );
 
         rootDashboardPanel.setSizeFull();
@@ -346,22 +360,37 @@ public class DashboardFrame extends AbstractFrame {
     }
 
     protected void setupWidgetsPalette(DDCssLayout containersDraggableLayout) {
-        PaletteButton verticalLayoutButton = new PaletteButton(getMessage("dashboard.verticalLayout"), FontAwesome.ARROWS_V);
+        PaletteButton verticalLayoutButton = new PaletteButton(getMessage("dashboard.verticalLayout"),
+                WebComponentsHelper.getIcon(VERTICAL_LAYOUT_ICON));
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
+        WidgetRepository.Widget verticalWidget = new WidgetRepository.Widget();
+        verticalWidget.setIcon(VERTICAL_LAYOUT_ICON);
+        verticalWidget.setCaption("dashboard.verticalLayout");
+        verticalLayoutButton.setWidget(verticalWidget);
         verticalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
-        PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"), FontAwesome.ARROWS_H);
+        PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"),
+                WebComponentsHelper.getIcon(HORIZONTAL_LAYOUT_ICON));
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
+        WidgetRepository.Widget horizontalWidget = new WidgetRepository.Widget();
+        horizontalWidget.setIcon(HORIZONTAL_LAYOUT_ICON);
+        horizontalWidget.setCaption("dashboard.horizontalLayout");
+        horizontalLayoutButton.setWidget(horizontalWidget);
         horizontalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
-        PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"), FontAwesome.TH);
+        PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"),
+                WebComponentsHelper.getIcon(GRID_LAYOUT_ICON));
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
+        WidgetRepository.Widget gridWidget = new WidgetRepository.Widget();
+        gridWidget.setIcon(GRID_LAYOUT_ICON);
+        gridWidget.setCaption("dashboard.gridLayout");
+        gridButton.setWidget(gridWidget);
         gridButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
@@ -487,22 +516,30 @@ public class DashboardFrame extends AbstractFrame {
                     DashboardVerticalLayout layout = (DashboardVerticalLayout) child;
 
                     widgetModel.setType(WidgetType.VERTICAL_LAYOUT);
+                    widgetModel.setIcon(layout.getWidgetIcon());
+                    widgetModel.setCaption(layout.getWidgetCaption());
                     widgetModel.setWeight(layout.getWeight());
                 } else if (child instanceof DashboardHorizontalLayout) {
                     DashboardHorizontalLayout layout = (DashboardHorizontalLayout) child;
 
                     widgetModel.setType(WidgetType.HORIZONTAL_LAYOUT);
+                    widgetModel.setIcon(layout.getWidgetIcon());
+                    widgetModel.setCaption(layout.getWidgetCaption());
                     widgetModel.setWeight(layout.getWeight());
-                } else if (child instanceof GridLayout) {
-                    GridLayout layout = (GridLayout) child;
+                } else if (child instanceof DashboardGridLayout) {
+                    DashboardGridLayout layout = (DashboardGridLayout) child;
                     widgetModel.setType(WidgetType.GRID_LAYOUT);
                     widgetModel.setGridColumnCount(layout.getColumns());
                     widgetModel.setGridRowCount(layout.getRows());
+                    widgetModel.setIcon(layout.getWidgetIcon());
+                    widgetModel.setCaption(layout.getWidgetCaption());
                     widgetModel.setWeight(1);
                 } else if (child instanceof FramePanel) {
                     FramePanel framePanel = (FramePanel) child;
 
                     widgetModel.setType(WidgetType.FRAME_PANEL);
+                    widgetModel.setIcon(framePanel.getWidgetIcon());
+                    widgetModel.setCaption(framePanel.getWidgetCaption());
                     widgetModel.setFrameId(framePanel.getFrameId());
                     widgetModel.setWeight(framePanel.getWeight());
                 } else if (child instanceof GridRow) {
@@ -553,6 +590,8 @@ public class DashboardFrame extends AbstractFrame {
                             .createVerticalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     verticalLayout.setWeight(widgetModel.getWeight());
+                    verticalLayout.setWidgetCaption(widgetModel.getCaption());
+                    verticalLayout.setWidgetIcon(widgetModel.getIcon());
                     component = verticalLayout;
                     isNew = true;
                     break;
@@ -561,19 +600,29 @@ public class DashboardFrame extends AbstractFrame {
                             .createHorizontalDropLayout(tree, gridDropListener, getFrame(), treeHandler);
 
                     horizontalLayout.setWeight(widgetModel.getWeight());
+                    horizontalLayout.setWidgetCaption(widgetModel.getCaption());
+                    horizontalLayout.setWidgetIcon(widgetModel.getIcon());
                     component = horizontalLayout;
                     isNew = true;
                     break;
                 case FRAME_PANEL:
-                    FramePanel framePanel = new FramePanel(tree, widgetModel.getFrameId(), getFrame(), treeHandler);
+                    WidgetRepository.Widget widget = new WidgetRepository.Widget();
+                    widget.setCaption(widgetModel.getIcon());
+                    widget.setFrameId(widgetModel.getFrameId());
+                    FramePanel framePanel = new FramePanel(tree, widget, getFrame(), treeHandler);
+                    framePanel.setWidgetCaption(widgetModel.getCaption());
+                    framePanel.setWidgetIcon(widgetModel.getIcon());
+
                     component = framePanel;
                     isNew = true;
                     break;
                 case GRID_LAYOUT:
-                    GridLayout gridLayout = (GridLayout) dashboardTools
+                    DashboardGridLayout gridLayout = (DashboardGridLayout) dashboardTools
                             .createGridDropLayout(tree, gridDropListener, getFrame(), treeHandler);
                     gridLayout.setColumns(widgetModel.getGridColumnCount());
                     gridLayout.setRows(widgetModel.getGridRowCount());
+                    gridLayout.setWidgetCaption(widgetModel.getCaption());
+                    gridLayout.setWidgetIcon(widgetModel.getIcon());
 
                     component = gridLayout;
                     isNew = true;

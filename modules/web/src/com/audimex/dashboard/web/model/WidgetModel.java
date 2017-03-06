@@ -12,6 +12,8 @@ import java.util.List;
 
 public class WidgetModel implements Serializable {
     protected String frameId;
+    protected String caption;
+    protected String icon;
     protected int weight = 1;
     protected int colspan = 1;
     protected int rowspan = 1;
@@ -100,5 +102,21 @@ public class WidgetModel implements Serializable {
 
     public void setGridRowCount(int gridRowCount) {
         this.gridRowCount = gridRowCount;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

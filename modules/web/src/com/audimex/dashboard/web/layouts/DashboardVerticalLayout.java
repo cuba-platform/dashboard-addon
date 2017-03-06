@@ -23,10 +23,14 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
-        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource {
+        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption {
     protected int weight = 1;
     protected int colSpan = 1;
     protected int rowSpan = 1;
+
+    protected String caption;
+    protected String icon;
+
     protected Tree tree = null;
     protected DDVerticalLayout verticalLayout = null;
 
@@ -215,6 +219,25 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
     @Override
     public int getRowSpan() {
         return rowSpan;
+    }
+
+    @Override
+    public String getWidgetIcon() {
+        return icon;
+    }
+
+    public void setWidgetIcon(String icon) {
+        this.icon = icon;
+    }
+
+    @Override
+    public String getWidgetCaption() {
+        return caption;
+    }
+
+    @Override
+    public void setWidgetCaption(String caption) {
+        this.caption = caption;
     }
 
     @Override

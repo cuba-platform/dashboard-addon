@@ -2,10 +2,7 @@ package com.audimex.dashboard.web.tools;
 
 import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
-import com.audimex.dashboard.web.layouts.DashboardHorizontalLayout;
-import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
-import com.audimex.dashboard.web.layouts.HasMainLayout;
-import com.audimex.dashboard.web.layouts.HasWeight;
+import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
@@ -99,7 +96,7 @@ public class DashboardTools {
 
     public com.vaadin.ui.Component createGridDropLayout(Tree tree, GridDropListener gridDropListener,
                                                                Frame frame, Consumer<Tree> treeHandler) {
-        DDGridLayout component = new DDGridLayout();
+        DashboardGridLayout component = new DashboardGridLayout();
         component.setDragMode(getDefaultDragMode());
 
         DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
