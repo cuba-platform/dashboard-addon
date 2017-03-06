@@ -70,7 +70,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
         ddVerticalLayoutDropHandler.setTreeHandler(treeHandler);
         ddVerticalLayoutDropHandler.setTree(tree);
 
-        horizontalLayout.setDragMode(dashboardTools.getDefaultDragMode());
+        horizontalLayout.setDragMode(LayoutDragMode.CLONE);
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
         horizontalLayout.setMargin(true);

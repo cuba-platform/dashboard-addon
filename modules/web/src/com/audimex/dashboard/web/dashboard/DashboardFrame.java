@@ -98,7 +98,7 @@ public class DashboardFrame extends AbstractFrame {
         Layout treeLayoutContainer = (Layout) WebComponentsHelper.unwrap(treeLayout);
 
         containersDraggableLayout = new DDCssLayout();
-        containersDraggableLayout.setDragMode(dashboardTools.getDefaultDragMode());
+        containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
         containersDraggableLayout.setDragCaptionProvider(
                 component -> new DragCaption(component.getCaption(), component.getIcon())
         );
@@ -169,7 +169,7 @@ public class DashboardFrame extends AbstractFrame {
         tree.setItemCaption(rootDashboardPanel, getMessage("dashboard.rootContainer"));
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
-        rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
+        rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
         rootDashboardPanel.setDragGrabFilter(
                 (DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component)
         );
@@ -222,8 +222,8 @@ public class DashboardFrame extends AbstractFrame {
         allowEdit.setValue(true);
         allowEdit.addValueChangeListener(e -> {
             if (allowEdit.getValue()) {
-                containersDraggableLayout.setDragMode(dashboardTools.getDefaultDragMode());
-                rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
+                containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
+                rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
                 removeSpacings(rootDashboardPanel, true);
                 palette.setVisible(true);
                 containersDraggableLayout.removeStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);

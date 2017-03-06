@@ -97,14 +97,10 @@ public class DashboardTools {
         }
     }
 
-    public LayoutDragMode getDefaultDragMode() {
-        return LayoutDragMode.CLONE;
-    }
-
     public com.vaadin.ui.Component createGridDropLayout(Tree tree, GridDropListener gridDropListener,
                                                                Frame frame, Consumer<Tree> treeHandler) {
         DashboardGridLayout component = new DashboardGridLayout();
-        component.setDragMode(getDefaultDragMode());
+        component.setDragMode(LayoutDragMode.CLONE);
 
         DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
         ddGridLayoutDropHandler.setTree(tree);

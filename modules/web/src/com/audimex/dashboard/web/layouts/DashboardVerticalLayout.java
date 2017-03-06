@@ -69,7 +69,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         ddVerticalLayoutDropHandler.setFrame(frame);
         ddVerticalLayoutDropHandler.setTree(tree);
 
-        verticalLayout.setDragMode(dashboardTools.getDefaultDragMode());
+        verticalLayout.setDragMode(LayoutDragMode.CLONE);
         verticalLayout.setSizeFull();
         verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
