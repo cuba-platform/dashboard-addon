@@ -6,6 +6,8 @@ package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
+import com.audimex.dashboard.web.layouts.HasAllowDrop;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.GridCell;
@@ -37,10 +39,14 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected void handleComponentReordering(DragAndDropEvent event) {
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
                 .getTargetDetails();
-        DDGridLayout layout = (DDGridLayout) details.getTarget();
+        DashboardGridLayout layout = (DashboardGridLayout) details.getTarget();
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
                 .getTransferable();
         Component comp = transferable.getComponent();
+
+        if (!layout.isDropAllowed()) {
+            return;
+        }
 
         int row = details.getOverRow();
         int column = details.getOverColumn();
@@ -59,7 +65,11 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected void handleDropFromLayout(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event.getTargetDetails();
-        DDGridLayout layout = (DDGridLayout) details.getTarget();
+        DashboardGridLayout layout = (DashboardGridLayout) details.getTarget();
+
+        if (!layout.isDropAllowed()) {
+            return;
+        }
 
         int row = details.getOverRow();
         int column = details.getOverColumn();

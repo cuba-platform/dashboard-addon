@@ -6,6 +6,8 @@
     <actions>
         <action id="save" invoke="save" shortcut="CTRL-ENTER"/>
         <action id="cancel" invoke="cancel" shortcut="ESCAPE"/>
+        <!--<action id="save" invoke="save" shortcut="${cuba.gui.commitShortcut}"/>-->
+        <!--<action id="cancel" invoke="cancel" shortcut="${cuba.gui.closeShortcut}"/>-->
     </actions>
     <dialogMode forceDialog="true"
                 height="AUTO"

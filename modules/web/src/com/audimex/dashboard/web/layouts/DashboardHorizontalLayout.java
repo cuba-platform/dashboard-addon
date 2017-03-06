@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardHorizontalLayout extends CssLayout implements HasMainLayout, HasWeight,
-        HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption {
+        HasGridSpan, DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption, HasAllowDrop {
     protected DDHorizontalLayout horizontalLayout = null;
     protected int weight = 1;
     protected int colSpan = 1;
@@ -31,6 +31,7 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
     protected Tree tree = null;
     protected Frame parentFrame = null;
 
+    protected boolean dropAllowed = true;
     protected String icon;
     protected String caption;
 
@@ -78,6 +79,16 @@ public class DashboardHorizontalLayout extends CssLayout implements HasMainLayou
 
         super.addComponent(buttonsPanel);
         super.addComponent(horizontalLayout);
+    }
+
+    @Override
+    public boolean isDropAllowed() {
+        return dropAllowed;
+    }
+
+    @Override
+    public void setDropAllowed(boolean value) {
+        dropAllowed = value;
     }
 
     public Frame getParentFrame() {

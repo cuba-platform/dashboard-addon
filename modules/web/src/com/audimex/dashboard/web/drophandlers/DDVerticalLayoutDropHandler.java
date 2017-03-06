@@ -38,8 +38,12 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 .getTransferable();
         DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
                 .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
+        DashboardVerticalLayout layout = (DashboardVerticalLayout) details
                 .getTarget();
+
+        if (!layout.isDropAllowed()) {
+            return;
+        }
 
         Component comp = transferable.getComponent();
         int idx = details.getOverIndex();
@@ -57,6 +61,10 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
 
         if (targetLayout.getParent() instanceof DashboardVerticalLayout) {
             targetLayout = (DashboardVerticalLayout) targetLayout.getParent();
+        }
+
+        if (!((DashboardVerticalLayout) targetLayout).isDropAllowed()) {
+            return;
         }
 
         int idx = details.getOverIndex();

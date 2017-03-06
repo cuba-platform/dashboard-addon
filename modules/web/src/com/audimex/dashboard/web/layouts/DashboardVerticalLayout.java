@@ -23,13 +23,14 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
-        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption {
+        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption, HasAllowDrop {
     protected int weight = 1;
     protected int colSpan = 1;
     protected int rowSpan = 1;
 
     protected String caption;
     protected String icon;
+    protected boolean dropAllowed = true;
 
     protected Tree tree = null;
     protected DDVerticalLayout verticalLayout = null;
@@ -77,6 +78,16 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
 
         super.addComponent(buttonsPanel);
         super.addComponent(verticalLayout);
+    }
+
+    @Override
+    public boolean isDropAllowed() {
+        return dropAllowed;
+    }
+
+    @Override
+    public void setDropAllowed(boolean value) {
+        dropAllowed = value;
     }
 
     @Override

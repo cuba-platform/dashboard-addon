@@ -37,7 +37,11 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
                 .getTransferable();
         DDHorizontalLayout.HorizontalLayoutTargetDetails details =
                 (DDHorizontalLayout.HorizontalLayoutTargetDetails) event.getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details.getTarget();
+        DashboardHorizontalLayout layout = (DashboardHorizontalLayout) details.getTarget();
+
+        if (!layout.isDropAllowed()) {
+            return;
+        }
 
         Component comp = transferable.getComponent();
         int idx = details.getOverIndex();
@@ -55,6 +59,10 @@ public class DDHorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHa
 
         if (targetLayout.getParent() instanceof DashboardHorizontalLayout) {
             targetLayout = (DashboardHorizontalLayout) targetLayout.getParent();
+        }
+
+        if (!((DashboardHorizontalLayout) targetLayout).isDropAllowed()) {
+            return;
         }
 
         int idx = details.getOverIndex();

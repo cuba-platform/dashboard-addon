@@ -433,6 +433,10 @@ public class DashboardFrame extends AbstractFrame {
             }
         }
 
+        if (component instanceof HasAllowDrop) {
+            ((HasAllowDrop) component).setDropAllowed(value);
+        }
+
         if (component instanceof LayoutDragSource) {
             LayoutDragSource layoutDragSource = (LayoutDragSource) component;
             Component parent = layoutDragSource.getParent();
