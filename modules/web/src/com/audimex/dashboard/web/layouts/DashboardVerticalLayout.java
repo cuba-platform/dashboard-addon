@@ -43,7 +43,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_CONFIGURE_ICON));
-        configButton.addClickListener((Button.ClickListener) (event) -> {
+        configButton.addClickListener(event -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
@@ -54,7 +54,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_REMOVE_ICON));
-        removeButton.addClickListener((Button.ClickListener) event -> {
+        removeButton.addClickListener(event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });

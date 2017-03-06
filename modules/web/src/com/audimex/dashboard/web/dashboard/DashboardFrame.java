@@ -19,7 +19,6 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.data.util.HierarchicalContainer;
-import com.vaadin.event.LayoutEvents;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -32,7 +31,6 @@ import com.vaadin.ui.Window;
 import fi.jasoft.dragdroplayouts.DDCssLayout;
 import fi.jasoft.dragdroplayouts.DragCaption;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import fi.jasoft.dragdroplayouts.interfaces.DragGrabFilter;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
 import javax.inject.Inject;
@@ -155,7 +153,7 @@ public class DashboardFrame extends AbstractFrame {
                 }
             }
         });
-        tree.setItemStyleGenerator((Tree.ItemStyleGenerator) (source, itemId) -> {
+        tree.setItemStyleGenerator((source, itemId) -> {
             if (itemId instanceof GridCell && source.getChildren(itemId) == null && !((GridCell) itemId).isAvailable()) {
                 return DashboardTools.AMXD_NOT_AVAILABLE;
             }
@@ -171,10 +169,10 @@ public class DashboardFrame extends AbstractFrame {
 
         rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
         rootDashboardPanel.setDragGrabFilter(
-                (DragGrabFilter) component -> dashboardSettings.isComponentDraggable(component)
+                component -> dashboardSettings.isComponentDraggable(component)
         );
 
-        rootDashboardPanel.addLayoutClickListener((LayoutEvents.LayoutClickListener) e -> {
+        rootDashboardPanel.addLayoutClickListener(e -> {
             Component component = e.getClickedComponent();
             if (component != null) {
                 if (component.getParent() instanceof HasMainLayout) {

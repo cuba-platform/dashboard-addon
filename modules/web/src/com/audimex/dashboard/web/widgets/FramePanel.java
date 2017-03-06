@@ -46,7 +46,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_CONFIGURE_ICON));
-        configButton.addClickListener((Button.ClickListener) (event) -> {
+        configButton.addClickListener(event -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
