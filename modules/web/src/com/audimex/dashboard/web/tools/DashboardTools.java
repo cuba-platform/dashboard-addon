@@ -30,10 +30,14 @@ public class DashboardTools {
     public static final String AMXD_DASHBOARD_DISABLED = "amxd-dashboard-disabled";
     public static final String AMXD_CONTAINER_DISABLED = "amxd-container-disabled";
     public static final String AMXD_TREE_SELECTED = "amxd-tree-selected";
-    public static final String AMXD_BORDERING = "amxd-shadow-border";
+    public static final String AMXD_SHADOW_BORDER = "amxd-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
+    public static final String AMXD_OK_ICON = "icons/ok.png";
+    public static final String AMXD_CANCEL_ICON = "icons/cancel.png";
+    public static final String AMXD_CONFIGURE_ICON = "icons/gear.png";
+    public static final String AMXD_REMOVE_ICON = "icons/trash.png";
 
     public GridLayout addEmptyLabels(GridLayout gridLayout, Tree tree) {
         for (int i = 0; i < gridLayout.getRows(); i++) {
@@ -137,7 +141,7 @@ public class DashboardTools {
 
     protected com.vaadin.ui.Component configLayout(AbstractLayout component) {
         component.setSizeFull();
-        component.setStyleName(AMXD_BORDERING);
+        component.setStyleName(AMXD_SHADOW_BORDER);
 
         return component;
     }
@@ -145,7 +149,7 @@ public class DashboardTools {
     public GridCell createGridCell(int column, int row) {
         GridCell gridCell = new GridCell(column, row);
         gridCell.setSizeFull();
-        gridCell.setStyleName(AMXD_BORDERING);
+        gridCell.setStyleName(AMXD_SHADOW_BORDER);
 
         return gridCell;
     }

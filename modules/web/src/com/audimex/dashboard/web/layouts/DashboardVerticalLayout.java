@@ -10,9 +10,9 @@ import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.web.App;
+import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
@@ -41,7 +41,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         dashboardTools = AppBeans.get(DashboardTools.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
-        Button configButton = new Button(FontAwesome.GEARS);
+        Button configButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_CONFIGURE_ICON));
         configButton.addClickListener((Button.ClickListener) (event) -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
@@ -52,7 +52,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
             windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
-        Button removeButton = new Button(FontAwesome.TRASH);
+        Button removeButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_REMOVE_ICON));
         removeButton.addClickListener((Button.ClickListener) event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);

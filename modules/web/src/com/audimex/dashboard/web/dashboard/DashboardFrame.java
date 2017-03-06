@@ -20,7 +20,6 @@ import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.LayoutEvents;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -151,7 +150,7 @@ public class DashboardFrame extends AbstractFrame {
                     }
 
                     if (treeComponent != null) {
-                        treeComponent.addStyleName(dashboardTools.AMXD_TREE_SELECTED);
+                        treeComponent.addStyleName(DashboardTools.AMXD_TREE_SELECTED);
                     }
                 }
             }
@@ -168,7 +167,6 @@ public class DashboardFrame extends AbstractFrame {
 
         tree.addItem(rootDashboardPanel);
         tree.setItemCaption(rootDashboardPanel, getMessage("dashboard.rootContainer"));
-        tree.setItemIcon(rootDashboardPanel, FontAwesome.ASTERISK);
         tree.setChildrenAllowed(rootDashboardPanel, false);
 
         rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
@@ -213,7 +211,7 @@ public class DashboardFrame extends AbstractFrame {
         );
 
         rootDashboardPanel.setSizeFull();
-        rootDashboardPanel.setStyleName(dashboardTools.AMXD_BORDERING);
+        rootDashboardPanel.setStyleName(DashboardTools.AMXD_SHADOW_BORDER);
 
         setupWidgetsPalette(containersDraggableLayout);
 
@@ -228,15 +226,15 @@ public class DashboardFrame extends AbstractFrame {
                 rootDashboardPanel.setDragMode(dashboardTools.getDefaultDragMode());
                 removeSpacings(rootDashboardPanel, true);
                 palette.setVisible(true);
-                containersDraggableLayout.removeStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
-                rootDashboardPanel.removeStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
+                containersDraggableLayout.removeStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.removeStyleName(DashboardTools.AMXD_DASHBOARD_DISABLED);
             } else {
                 containersDraggableLayout.setDragMode(LayoutDragMode.NONE);
                 rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
                 removeSpacings(rootDashboardPanel, false);
                 palette.setVisible(false);
-                containersDraggableLayout.addStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
-                rootDashboardPanel.addStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
+                containersDraggableLayout.addStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);
+                rootDashboardPanel.addStyleName(DashboardTools.AMXD_DASHBOARD_DISABLED);
             }
 
             removeComponent.setEnabled(allowEdit.getValue());
@@ -266,8 +264,8 @@ public class DashboardFrame extends AbstractFrame {
             rootDashboardPanel.setDragMode(LayoutDragMode.NONE);
             removeSpacings(rootDashboardPanel, false);
             palette.setVisible(false);
-            containersDraggableLayout.addStyleName(dashboardTools.AMXD_CONTAINER_DISABLED);
-            rootDashboardPanel.addStyleName(dashboardTools.AMXD_DASHBOARD_DISABLED);
+            containersDraggableLayout.addStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);
+            rootDashboardPanel.addStyleName(DashboardTools.AMXD_DASHBOARD_DISABLED);
         }
     }
 
@@ -318,8 +316,10 @@ public class DashboardFrame extends AbstractFrame {
         subContent.addComponent(comboBoxPanel);
         subContent.addComponent(buttonsPanel);
 
-        Button cancelButton = new Button(getMessage("actions.Cancel"), FontAwesome.CLOSE);
-        Button okButton = new Button(getMessage("actions.Ok"), FontAwesome.CHECK);
+        Button cancelButton = new Button(getMessage("actions.Cancel"),
+                WebComponentsHelper.getIcon(DashboardTools.AMXD_OK_ICON));
+        Button okButton = new Button(getMessage("actions.Ok"),
+                WebComponentsHelper.getIcon(DashboardTools.AMXD_CANCEL_ICON));
         cancelButton.addClickListener(event -> {
             subWindow.close();
         });
@@ -365,7 +365,7 @@ public class DashboardFrame extends AbstractFrame {
         verticalWidget.setIcon(VERTICAL_LAYOUT_ICON);
         verticalWidget.setCaption("dashboard.verticalLayout");
         verticalLayoutButton.setWidget(verticalWidget);
-        verticalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
+        verticalLayoutButton.setStyleName(DashboardTools.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"),
                 WebComponentsHelper.getIcon(HORIZONTAL_LAYOUT_ICON));
@@ -376,7 +376,7 @@ public class DashboardFrame extends AbstractFrame {
         horizontalWidget.setIcon(HORIZONTAL_LAYOUT_ICON);
         horizontalWidget.setCaption("dashboard.horizontalLayout");
         horizontalLayoutButton.setWidget(horizontalWidget);
-        horizontalLayoutButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
+        horizontalLayoutButton.setStyleName(DashboardTools.AMXD_DASHBOARD_BUTTON);
 
         PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"),
                 WebComponentsHelper.getIcon(GRID_LAYOUT_ICON));
@@ -387,7 +387,7 @@ public class DashboardFrame extends AbstractFrame {
         gridWidget.setIcon(GRID_LAYOUT_ICON);
         gridWidget.setCaption("dashboard.gridLayout");
         gridButton.setWidget(gridWidget);
-        gridButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
+        gridButton.setStyleName(DashboardTools.AMXD_DASHBOARD_BUTTON);
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
@@ -402,7 +402,7 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
-            paletteButton.setStyleName(dashboardTools.AMXD_DASHBOARD_BUTTON);
+            paletteButton.setStyleName(DashboardTools.AMXD_DASHBOARD_BUTTON);
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }
@@ -421,9 +421,9 @@ public class DashboardFrame extends AbstractFrame {
         if (!(component instanceof HorizontalLayout
                 || component instanceof VerticalLayout)) {
             if (value) {
-                component.addStyleName(dashboardTools.AMXD_BORDERING);
+                component.addStyleName(DashboardTools.AMXD_SHADOW_BORDER);
             } else {
-                component.removeStyleName(dashboardTools.AMXD_BORDERING);
+                component.removeStyleName(DashboardTools.AMXD_SHADOW_BORDER);
             }
 
             if (component instanceof HasMainLayout) {
