@@ -211,11 +211,11 @@ configure(webToolkitModule) {
     }
     
     task buildWidgetSet(type: CubaWidgetSetBuilding) {
-        widgetSetClass = 'com.audimex.dashboard.web.toolkit.ui.AppWidgetSet'
+        widgetSetClass = 'com.audimex.dashboard.web.toolkit.ui.DashboardWidgetSet'
     }
     
     task debugWidgetSet(type: CubaWidgetSetDebug) {
-        widgetSetClass = 'com.audimex.dashboard.web.toolkit.ui.AppWidgetSet'
+        widgetSetClass = 'com.audimex.dashboard.web.toolkit.ui.DashboardWidgetSet'
     } 
 
     task webArchive(dependsOn: buildWidgetSet, type: Zip) {

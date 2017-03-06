@@ -57,7 +57,7 @@
         <property name="cuba.mainMessagePack"
                   value="+com.audimex.dashboard.gui com.audimex.dashboard.web"/>
         <property name="cuba.web.widgetSet"
-                  value="com.audimex.dashboard.web.toolkit.ui.AppWidgetSet"/>
+                  value="com.audimex.dashboard.web.toolkit.ui.DashboardWidgetSet"/>
     </module>
     <module dependsOn="web"
             name="web-toolkit">
