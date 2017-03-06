@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2016-2016 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.web.palette;
+package com.audimex.dashboard.web.dashboard;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
@@ -339,19 +339,19 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
-        verticalLayoutButton.setStyleName("amxd-palette-button");
+        verticalLayoutButton.setStyleName("amxd-dashboard-button");
 
         PaletteButton horizontalLayoutButton = new PaletteButton(getMessage("dashboard.horizontalLayout"), FontAwesome.ARROWS_H);
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
-        horizontalLayoutButton.setStyleName("amxd-palette-button");
+        horizontalLayoutButton.setStyleName("amxd-dashboard-button");
 
         PaletteButton gridButton = new PaletteButton(getMessage("dashboard.gridLayout"), FontAwesome.TH);
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
-        gridButton.setStyleName("amxd-palette-button");
+        gridButton.setStyleName("amxd-dashboard-button");
 
         containersDraggableLayout.addComponent(verticalLayoutButton);
         containersDraggableLayout.addComponent(horizontalLayoutButton);
@@ -366,7 +366,7 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);
             paletteButton.setWidth("100%");
             paletteButton.setHeight("50px");
-            paletteButton.setStyleName("amxd-palette-button");
+            paletteButton.setStyleName("amxd-dashboard-button");
             paletteButton.setWidget(widget);
             containersDraggableLayout.addComponent(paletteButton);
         }

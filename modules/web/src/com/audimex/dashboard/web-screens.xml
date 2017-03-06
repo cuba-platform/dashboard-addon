@@ -4,7 +4,7 @@
     <screen id="mainWindow"
             template="com/audimex/dashboard/web/mainwindow/ext-mainwindow.xml"/>
     <screen id="dashboard-frame"
-            template="com/audimex/dashboard/web/palette/dashboard-frame.xml"/>
+            template="com/audimex/dashboard/web/dashboard/dashboard-frame.xml"/>
     <screen id="widgetConfigWindow"
             template="com/audimex/dashboard/web/screens/widget-config-window.xml"/>
 </screen-config>

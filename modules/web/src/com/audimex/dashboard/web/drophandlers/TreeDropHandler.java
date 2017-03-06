@@ -5,7 +5,7 @@
 package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
-import com.audimex.dashboard.web.palette.PaletteButton;
+import com.audimex.dashboard.web.dashboard.PaletteButton;
 import com.audimex.dashboard.web.utils.LayoutUtils;
 import com.audimex.dashboard.web.utils.TreeUtils;
 import com.audimex.dashboard.web.widgets.FramePanel;
