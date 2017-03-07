@@ -5,10 +5,7 @@
 package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.web.WidgetRepository;
-import com.audimex.dashboard.web.layouts.HasDragCaption;
-import com.audimex.dashboard.web.layouts.HasGridSpan;
-import com.audimex.dashboard.web.layouts.HasMainLayout;
-import com.audimex.dashboard.web.layouts.HasWeight;
+import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
@@ -45,14 +42,14 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         dashboardTools = AppBeans.get(DashboardTools.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
-        Button configButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_CONFIGURE_ICON));
+        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
         configButton.addClickListener(event -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
             parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
         });
-        Button removeButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_REMOVE_ICON));
+        Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener((Button.ClickListener) event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
@@ -121,16 +118,18 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             gridCell.setColspan(colSpan);
         }
 
-        if (getParent() instanceof GridLayout) {
-            GridLayout parent = (GridLayout) getParent();
-            parent.removeComponent(this);
+        if (getParent() != null) {
+            if (getParent().getParent() instanceof DashboardGridLayout) {
+                DashboardGridLayout parent = (DashboardGridLayout) getParent().getParent();
+                parent.removeComponent(this);
 
-            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
-            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
-                    gridCell.getColumn() + gridCell.getColspan() - 1,
-                    gridCell.getRow() + gridCell.getRowspan() - 1);
-            dashboardTools.addEmptyLabels(parent, tree);
-            dashboardTools.lockGridCells(parent, tree);
+                dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
+                parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                        gridCell.getColumn() + gridCell.getColspan() - 1,
+                        gridCell.getRow() + gridCell.getRowspan() - 1);
+                dashboardTools.addEmptyLabels(parent, tree);
+                dashboardTools.lockGridCells(parent, tree);
+            }
         }
     }
 
@@ -148,17 +147,19 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             gridCell.setRowspan(rowSpan);
         }
 
-        if (getParent() instanceof GridLayout) {
-            GridLayout parent = (GridLayout) getParent();
+        if (getParent() != null) {
+            if (getParent().getParent() instanceof DashboardGridLayout) {
+                DashboardGridLayout parent = (DashboardGridLayout) getParent().getParent();
 
-            parent.removeComponent(this);
+                parent.removeComponent(this);
 
-            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
-            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
-                    gridCell.getColumn() + gridCell.getColspan() - 1,
-                    gridCell.getRow() + gridCell.getRowspan() - 1);
-            dashboardTools.addEmptyLabels(parent, tree);
-            dashboardTools.lockGridCells(parent, tree);
+                dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
+                parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                        gridCell.getColumn() + gridCell.getColspan() - 1,
+                        gridCell.getRow() + gridCell.getRowspan() - 1);
+                dashboardTools.addEmptyLabels(parent, tree);
+                dashboardTools.lockGridCells(parent, tree);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.DashboardVerticalLayout;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
@@ -38,12 +39,8 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 .getTransferable();
         DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
                 .getTargetDetails();
-        DashboardVerticalLayout layout = (DashboardVerticalLayout) details
+        DDVerticalLayout layout = (DDVerticalLayout) details
                 .getTarget();
-
-        if (!layout.isDropAllowed()) {
-            return;
-        }
 
         Component comp = transferable.getComponent();
         int idx = details.getOverIndex();
@@ -61,10 +58,6 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
 
         if (targetLayout.getParent() instanceof DashboardVerticalLayout) {
             targetLayout = (DashboardVerticalLayout) targetLayout.getParent();
-        }
-
-        if (!((DashboardVerticalLayout) targetLayout).isDropAllowed()) {
-            return;
         }
 
         int idx = details.getOverIndex();
@@ -122,7 +115,7 @@ public class DDVerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandle
                 GridCell gridCell = (GridCell) targetLayout;
                 dashboardTools.markGridCells(
                         tree,
-                        (GridLayout) gridCell.getParent(),
+                        (DashboardGridLayout) gridCell.getParent().getParent(),
                         gridCell.getRow(),
                         gridCell.getColumn(),
                         1,

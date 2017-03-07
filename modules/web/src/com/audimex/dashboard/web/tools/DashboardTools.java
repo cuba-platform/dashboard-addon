@@ -1,6 +1,5 @@
 package com.audimex.dashboard.web.tools;
 
-import com.audimex.dashboard.web.drophandlers.DDGridLayoutDropHandler;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
@@ -14,8 +13,6 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Tree;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.interfaces.DragGrabFilterSupport;
 import fi.jasoft.dragdroplayouts.interfaces.HasDragCaptionProvider;
 import org.springframework.stereotype.Component;
@@ -34,12 +31,8 @@ public class DashboardTools {
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
-    public static final String AMXD_OK_ICON = "icons/ok.png";
-    public static final String AMXD_CANCEL_ICON = "icons/cancel.png";
-    public static final String AMXD_CONFIGURE_ICON = "icons/gear.png";
-    public static final String AMXD_REMOVE_ICON = "icons/trash.png";
 
-    public GridLayout addEmptyLabels(GridLayout gridLayout, Tree tree) {
+    public DashboardGridLayout addEmptyLabels(DashboardGridLayout gridLayout, Tree tree) {
         for (int i = 0; i < gridLayout.getRows(); i++) {
             for (int j = 0; j < gridLayout.getColumns(); j++) {
                 GridRow gridRow = getGridRow(i, tree, gridLayout);
@@ -68,7 +61,7 @@ public class DashboardTools {
         return gridLayout;
     }
 
-    public void lockGridCells(GridLayout gridLayout, Tree tree) {
+    public void lockGridCells(DashboardGridLayout gridLayout, Tree tree) {
         for (int i = 0; i < gridLayout.getRows(); i++) {
             for (int j = 0; j < gridLayout.getColumns(); j++) {
                 GridRow gridRow = getGridRow(i, tree, gridLayout);
@@ -86,7 +79,7 @@ public class DashboardTools {
         }
     }
 
-    public void removeEmptyLabelsForSpan(GridLayout gridLayout, GridCell gridCell) {
+    public void removeEmptyLabelsForSpan(DashboardGridLayout gridLayout, GridCell gridCell) {
         for (int i = gridCell.getRow(); i < gridCell.getRow() + gridCell.getRowspan(); i++) {
             for (int j = gridCell.getColumn(); j < gridCell.getColumn() + gridCell.getColspan(); j++) {
                 com.vaadin.ui.Component gridChild = gridLayout.getComponent(j, i);
@@ -99,20 +92,8 @@ public class DashboardTools {
 
     public com.vaadin.ui.Component createGridDropLayout(Tree tree, GridDropListener gridDropListener,
                                                                Frame frame, Consumer<Tree> treeHandler) {
-        DashboardGridLayout component = new DashboardGridLayout();
-        component.setDragMode(LayoutDragMode.CLONE);
-
-        DDGridLayoutDropHandler ddGridLayoutDropHandler = new DDGridLayoutDropHandler();
-        ddGridLayoutDropHandler.setTree(tree);
-        ddGridLayoutDropHandler.setGridDropListener(gridDropListener);
-        ddGridLayoutDropHandler.setFrame(frame);
-        ddGridLayoutDropHandler.setTreeHandler(treeHandler);
-        component.setDropHandler(ddGridLayoutDropHandler);
-
+        DashboardGridLayout component = new DashboardGridLayout(tree, gridDropListener, frame, treeHandler);
         configLayout(component);
-        component.setSpacing(true);
-        component.setMargin(true);
-
         component.setColumns(2);
         component.setRows(2);
 
@@ -150,15 +131,17 @@ public class DashboardTools {
         return gridCell;
     }
 
-    public GridRow getGridRow(int rowIndex, Tree tree, GridLayout gridLayout) {
+    public GridRow getGridRow(int rowIndex, Tree tree, DashboardGridLayout gridLayout) {
         Collection<?> gridRows = tree.getChildren(gridLayout);
         if (rowIndex < gridLayout.getRows()) {
             int i=0;
-            for (Object row : gridRows) {
-                if (i == rowIndex) {
-                    return (GridRow) row;
+            if (gridRows != null) {
+                for (Object row : gridRows) {
+                    if (i == rowIndex) {
+                        return (GridRow) row;
+                    }
+                    i++;
                 }
-                i++;
             }
             return createNewGridRow(gridLayout, tree, rowIndex);
         } else {
@@ -166,7 +149,7 @@ public class DashboardTools {
         }
     }
 
-    public GridRow createNewGridRow(GridLayout component, Tree tree, int row) {
+    public GridRow createNewGridRow(DashboardGridLayout component, Tree tree, int row) {
         GridRow gridRow = new GridRow(component);
         tree.addItem(gridRow);
         tree.setItemCaption(gridRow, getTreeItemCaption(gridRow));
@@ -197,15 +180,17 @@ public class DashboardTools {
     }
 
     public GridCell getGridCell(Tree tree, Collection<?> rows, int columnIndex, int rowIndex) {
-        for (Object row : rows) {
-            Collection<?> cells = tree.getChildren(row);
-            if (cells == null) {
-                return null;
-            }
-            for (Object cell : cells) {
-                GridCell gridCell = (GridCell) cell;
-                if (gridCell.getColumn() == columnIndex && gridCell.getRow() == rowIndex) {
-                    return gridCell;
+        if (rows != null) {
+            for (Object row : rows) {
+                Collection<?> cells = tree.getChildren(row);
+                if (cells == null) {
+                    return null;
+                }
+                for (Object cell : cells) {
+                    GridCell gridCell = (GridCell) cell;
+                    if (gridCell.getColumn() == columnIndex && gridCell.getRow() == rowIndex) {
+                        return gridCell;
+                    }
                 }
             }
         }
@@ -245,9 +230,9 @@ public class DashboardTools {
         tree.setItemCaption(component, getTreeItemCaption(component));
         HierarchicalContainer container = (HierarchicalContainer) tree.getContainerDataSource();
 
-        if (component instanceof GridLayout) {
-            for (int i=0; i<((GridLayout) component).getRows(); i++) {
-                createNewGridRow((GridLayout) component, tree, i);
+        if (component instanceof DashboardGridLayout) {
+            for (int i=0; i<((DashboardGridLayout) component).getRows(); i++) {
+                createNewGridRow((DashboardGridLayout) component, tree, i);
             }
             tree.expandItem(component);
         } else {
@@ -289,7 +274,7 @@ public class DashboardTools {
             return messages.getMainMessage("dashboard.vertical");
         } else if (component instanceof DashboardHorizontalLayout) {
             return messages.getMainMessage("dashboard.horizontal");
-        } else if (component instanceof DDGridLayout) {
+        } else if (component instanceof DashboardGridLayout) {
             return messages.getMainMessage("dashboard.grid");
         } else if (component instanceof GridRow) {
             return messages.getMainMessage("dashboard.row");
@@ -383,7 +368,7 @@ public class DashboardTools {
     protected void drawComponents(Tree tree, Object layout, Collection chlidren) {
         for (Object component : chlidren) {
             if (component instanceof GridCell) {
-                GridLayout grid = ((GridRow) layout).getGridLayout();
+                DashboardGridLayout grid = ((GridRow) layout).getGridLayout();
                 GridCell gridCell = (GridCell) component;
 
                 removeEmptyLabelsForSpan(grid, gridCell);
@@ -468,7 +453,7 @@ public class DashboardTools {
         }
     }
 
-    public void markGridCells(Tree tree, GridLayout gridLayout,
+    public void markGridCells(Tree tree, DashboardGridLayout gridLayout,
                                      int row, int column, int rowspan, int colspan) {
         Collection<?> rows = tree.getChildren(gridLayout);
         for (Object gridRow : rows) {

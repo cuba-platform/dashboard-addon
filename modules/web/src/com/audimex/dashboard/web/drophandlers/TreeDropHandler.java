@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.drophandlers;
 
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.FramePanel;
@@ -92,7 +93,7 @@ public class TreeDropHandler implements DropHandler {
                 GridCell gridCell = (GridCell) targetItemId;
                 dashboardTools.markGridCells(
                         tree,
-                        (GridLayout) gridCell.getParent(),
+                        (DashboardGridLayout) gridCell.getParent().getParent(),
                         gridCell.getRow(),
                         gridCell.getColumn(),
                         1,

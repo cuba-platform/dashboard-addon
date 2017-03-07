@@ -4,7 +4,7 @@
 
 package com.audimex.dashboard.web.widgets;
 
-import com.vaadin.ui.GridLayout;
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ import java.util.List;
 
 public class GridRow implements Serializable {
     private List<GridCell> gridCells = new ArrayList<>();
-    private GridLayout gridLayout;
+    private DashboardGridLayout gridLayout;
 
-    public GridRow(GridLayout gridLayout) {
+    public GridRow(DashboardGridLayout gridLayout) {
         this.gridLayout = gridLayout;
     }
 
-    public GridLayout getGridLayout() {
+    public DashboardGridLayout getGridLayout() {
         return gridLayout;
     }
 
-    public void setGridLayout(GridLayout gridLayout) {
+    public void setGridLayout(DashboardGridLayout gridLayout) {
         this.gridLayout = gridLayout;
     }
 

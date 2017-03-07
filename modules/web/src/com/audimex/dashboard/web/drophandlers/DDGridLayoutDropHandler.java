@@ -7,7 +7,6 @@ package com.audimex.dashboard.web.drophandlers;
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
-import com.audimex.dashboard.web.layouts.HasAllowDrop;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.DashboardWidgetsFactory;
 import com.audimex.dashboard.web.widgets.GridCell;
@@ -44,10 +43,6 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 .getTransferable();
         Component comp = transferable.getComponent();
 
-        if (!layout.isDropAllowed()) {
-            return;
-        }
-
         int row = details.getOverRow();
         int column = details.getOverColumn();
 
@@ -65,11 +60,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected void handleDropFromLayout(DragAndDropEvent event) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event.getTargetDetails();
-        DashboardGridLayout layout = (DashboardGridLayout) details.getTarget();
-
-        if (!layout.isDropAllowed()) {
-            return;
-        }
+        DDGridLayout layout = (DDGridLayout) details.getTarget();
 
         int row = details.getOverRow();
         int column = details.getOverColumn();
@@ -95,7 +86,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                     GridLayout gridLayout = (GridLayout) details.getTarget();
                     target = dashboardTools.getGridCell(
                             tree,
-                            tree.getChildren(gridLayout),
+                            tree.getChildren(gridLayout.getParent()),
                             column,
                             row);
                 } else {
@@ -104,7 +95,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
                 dashboardTools.addComponent(tree, target, component, 0);
             }
         } else {
-            GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout), column, row);
+            GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout.getParent()), column, row);
             if (gridCell != null) {
                 dashboardTools.moveComponent(tree, gridCell, component, 0);
             }

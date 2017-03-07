@@ -15,8 +15,13 @@ import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.CheckBox;
+import com.haulmont.cuba.gui.config.WindowConfig;
+import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.server.Sizeable;
@@ -34,10 +39,7 @@ import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -45,9 +47,9 @@ import java.util.function.Consumer;
  * Can be used to build a user interface in the runtime.
  */
 public class DashboardFrame extends AbstractFrame {
-    protected static final String VERTICAL_LAYOUT_ICON = "icons/run.png";
-    protected static final String HORIZONTAL_LAYOUT_ICON = "icons/up.png";
-    protected static final String GRID_LAYOUT_ICON = "icons/upload.png";
+    protected static final String VERTICAL_LAYOUT_ICON = "icons/vertical-container.png";
+    protected static final String HORIZONTAL_LAYOUT_ICON = "icons/horizontal-container.png";
+    protected static final String GRID_LAYOUT_ICON = "icons/grid-container.png";
 
     @Inject
     protected VBoxLayout containers;
@@ -141,7 +143,7 @@ public class DashboardFrame extends AbstractFrame {
                             if (gridCellChild != null) {
                                 treeComponent = (Component) gridCellChild.iterator().next();
                             } else {
-                                treeComponent = ((GridCell) treeObject).getParent();
+                                treeComponent = ((GridCell) treeObject).getParent().getParent();
                             }
                         } else {
                             treeComponent = (Component) treeObject;
@@ -243,7 +245,20 @@ public class DashboardFrame extends AbstractFrame {
         });
 
         mode = (DashboardMode) params.get("mode");
+
+        convertToTree();
         enableViewMode();
+    }
+
+    public void configureComponent() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("widget", treeComponent);
+        params.put("tree", tree);
+
+        WindowManager windowManager = App.getInstance().getWindowManager();
+        WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+        WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
+        windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
     }
 
     protected FramePanel getFramePanel(Component component) {
@@ -281,15 +296,12 @@ public class DashboardFrame extends AbstractFrame {
 
     /**
      * Set the component structure hierarchical model.
-     * After setting, the dashboard will be refreshed.
      */
     public void setDashboardModel(DashboardModel dashboardModel) {
         this.dashboardModel = dashboardModel;
-        convertToTree();
-        enableViewMode();
     }
 
-    protected void onGridDrop(GridLayout gridLayout, Object targetLayout, int idx) {
+    protected void onGridDrop(DashboardGridLayout gridLayout, Object targetLayout, int idx) {
         Window subWindow = new Window(getMessage("dashboard.gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
@@ -326,9 +338,9 @@ public class DashboardFrame extends AbstractFrame {
         subContent.addComponent(buttonsPanel);
 
         Button cancelButton = new Button(getMessage("actions.Cancel"),
-                WebComponentsHelper.getIcon(DashboardTools.AMXD_OK_ICON));
+                WebComponentsHelper.getIcon("icons/ok.png"));
         Button okButton = new Button(getMessage("actions.Ok"),
-                WebComponentsHelper.getIcon(DashboardTools.AMXD_CANCEL_ICON));
+                WebComponentsHelper.getIcon("icons/cancel.png"));
         cancelButton.addClickListener(event -> {
             subWindow.close();
         });
@@ -370,6 +382,7 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidgetType(WidgetType.VERTICAL_LAYOUT);
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
+
         WidgetRepository.Widget verticalWidget = new WidgetRepository.Widget();
         verticalWidget.setIcon(VERTICAL_LAYOUT_ICON);
         verticalWidget.setCaption("dashboard.verticalLayout");
@@ -442,10 +455,6 @@ public class DashboardFrame extends AbstractFrame {
             }
         }
 
-        if (component instanceof HasAllowDrop) {
-            ((HasAllowDrop) component).setDropAllowed(value);
-        }
-
         if (component instanceof LayoutDragSource) {
             LayoutDragSource layoutDragSource = (LayoutDragSource) component;
             Component parent = layoutDragSource.getParent();
@@ -487,6 +496,9 @@ public class DashboardFrame extends AbstractFrame {
         treeHandler.accept(tree);
         if (!removed) {
             showNotification(messages.getMessage(getClass(), "dashboard.cantRemove"), NotificationType.HUMANIZED);
+        } else {
+            tree.setValue(rootDashboardPanel);
+            tree.focus();
         }
     }
 
@@ -578,11 +590,13 @@ public class DashboardFrame extends AbstractFrame {
     protected void convertToTree() {
         removeAllComponents();
 
-        modelToContainer(
-                dashboardModel.getWidgets(),
-                rootDashboardPanel,
-                gridDropListener
-        );
+        if (dashboardModel != null) {
+            modelToContainer(
+                    dashboardModel.getWidgets(),
+                    rootDashboardPanel,
+                    gridDropListener
+            );
+        }
 
         dashboardTools.redrawLayout(tree, rootDashboardPanel);
     }
@@ -637,11 +651,11 @@ public class DashboardFrame extends AbstractFrame {
                     isNew = true;
                     break;
                 case GRID_ROW:
-                    GridRow gridRow = dashboardTools.getGridRow(idx, tree, (GridLayout) parent);
+                    GridRow gridRow = dashboardTools.getGridRow(idx, tree, (DashboardGridLayout) parent);
                     component = gridRow;
                     break;
                 case GRID_CELL:
-                    GridLayout parentGrid = ((GridRow) parent).getGridLayout();
+                    GridLayout parentGrid = ((GridRow) parent).getGridLayout().getGridLayout();
                     GridCell gridCell = dashboardTools.getGridCell(
                             tree,
                             tree.getChildren(parentGrid),

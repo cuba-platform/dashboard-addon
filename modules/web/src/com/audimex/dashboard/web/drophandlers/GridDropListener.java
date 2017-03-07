@@ -4,8 +4,8 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
-import com.vaadin.ui.GridLayout;
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 
 public interface GridDropListener {
-    void gridDropped(GridLayout gridLayout, Object targetLayout, int idx);
+    void gridDropped(DashboardGridLayout gridLayout, Object targetLayout, int idx);
 }

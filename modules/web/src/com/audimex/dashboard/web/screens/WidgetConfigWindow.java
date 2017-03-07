@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.web.screens;
 
+import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.tools.DashboardTools;
@@ -134,7 +135,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
                 GridCell gridCellComponent = dashboardTools.getWidgetCell(tree, widget);
                 dashboardTools.markGridCells(tree,
-                        (GridLayout) widget.getParent(),
+                        (DashboardGridLayout) widget.getParent().getParent(),
                         gridCellComponent.getRow(),
                         gridCellComponent.getColumn(),
                         rowSpan,
@@ -143,6 +144,7 @@ public class WidgetConfigWindow extends AbstractWindow {
                 showNotification(getMessage("dashboard.notValidated"), NotificationType.ERROR);
             }
         }
+        tree.focus();
         close(CLOSE_ACTION_ID);
     }
 }

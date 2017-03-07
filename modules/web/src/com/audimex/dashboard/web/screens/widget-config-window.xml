@@ -3,17 +3,18 @@
         caption="msg://dashboard.widgetConfigWindowCaption"
         class="com.audimex.dashboard.web.screens.WidgetConfigWindow"
         messagesPack="com.audimex.dashboard.web.screens">
+
     <actions>
         <action id="save" invoke="save" shortcut="CTRL-ENTER"/>
         <action id="cancel" invoke="cancel" shortcut="ESCAPE"/>
-        <!--<action id="save" invoke="save" shortcut="${cuba.gui.commitShortcut}"/>-->
-        <!--<action id="cancel" invoke="cancel" shortcut="${cuba.gui.closeShortcut}"/>-->
     </actions>
+
     <dialogMode forceDialog="true"
                 height="AUTO"
                 modal="true"
                 width="AUTO"/>
-    <layout margin="true">
+
+    <layout>
         <hbox id="sliderLayout"
               width="300px"
               spacing="true"/>

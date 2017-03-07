@@ -13,6 +13,7 @@
         text-align: left;
         font-size: 24px;
         box-shadow: none;
+        margin-bottom: 5px;
     }
 
     .amxd-dashboard-button:after {
@@ -94,6 +95,11 @@
         border: none;
         box-shadow: none;
         background: none;
+    }
+
+    .amxd-layout-content .v-gridlayout-spacing-on {
+        padding-left: 5px;
+        padding-top: 5px;
     }
 
     .v-tree-node-caption.v-drag-element {

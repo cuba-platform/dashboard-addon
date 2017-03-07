@@ -5,6 +5,7 @@ import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.config.WindowConfig;
@@ -23,14 +24,15 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DashboardVerticalLayout extends CssLayout implements HasMainLayout, HasWeight, HasGridSpan,
-        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption, HasAllowDrop {
+        DragGrabFilterSupport, HasDragCaptionProvider, LayoutDragSource, HasDragCaption {
     protected int weight = 1;
     protected int colSpan = 1;
     protected int rowSpan = 1;
 
     protected String caption;
     protected String icon;
-    protected boolean dropAllowed = true;
+
+    protected Messages messages = AppBeans.get(Messages.NAME);
 
     protected Tree tree = null;
     protected DDVerticalLayout verticalLayout = null;
@@ -42,7 +44,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
         dashboardTools = AppBeans.get(DashboardTools.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
-        Button configButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_CONFIGURE_ICON));
+        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
         configButton.addClickListener(event -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
@@ -53,14 +55,16 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
             windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
-        Button removeButton = new Button(WebComponentsHelper.getIcon(DashboardTools.AMXD_REMOVE_ICON));
+        Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener(event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });
+        configButton.setDescription(messages.getMainMessage("dashboard.configButton"));
+        removeButton.setDescription(messages.getMainMessage("dashboard.removeButton"));
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName(dashboardTools.AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addStyleName(DashboardTools.AMXD_LAYOUT_CONTROLS);
 
         verticalLayout = new DDVerticalLayout();
         DDVerticalLayoutDropHandler ddVerticalLayoutDropHandler = new DDVerticalLayoutDropHandler();
@@ -78,16 +82,6 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
 
         super.addComponent(buttonsPanel);
         super.addComponent(verticalLayout);
-    }
-
-    @Override
-    public boolean isDropAllowed() {
-        return dropAllowed;
-    }
-
-    @Override
-    public void setDropAllowed(boolean value) {
-        dropAllowed = value;
     }
 
     @Override
@@ -143,16 +137,18 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             gridCell.setColspan(colSpan);
         }
 
-        if (getParent() instanceof GridLayout) {
-            GridLayout parent = (GridLayout) getParent();
-            parent.removeComponent(this);
+        if (getParent() != null) {
+            if (getParent().getParent() instanceof DashboardGridLayout) {
+                DashboardGridLayout parent = (DashboardGridLayout) getParent().getParent();
+                parent.removeComponent(this);
 
-            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
-            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
-                    gridCell.getColumn() + gridCell.getColspan() - 1,
-                    gridCell.getRow() + gridCell.getRowspan() - 1);
-            dashboardTools.addEmptyLabels(parent, tree);
-            dashboardTools.lockGridCells(parent, tree);
+                dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
+                parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                        gridCell.getColumn() + gridCell.getColspan() - 1,
+                        gridCell.getRow() + gridCell.getRowspan() - 1);
+                dashboardTools.addEmptyLabels(parent, tree);
+                dashboardTools.lockGridCells(parent, tree);
+            }
         }
     }
 
@@ -170,20 +166,22 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             gridCell.setRowspan(rowSpan);
         }
 
-        if (getParent() instanceof GridLayout) {
-            GridLayout parent = (GridLayout) getParent();
+        if (getParent() != null) {
+            if (getParent().getParent() instanceof DashboardGridLayout) {
+                DashboardGridLayout parent = (DashboardGridLayout) getParent().getParent();
 
-            int availableColspan = parent.getColumns() - gridCell.getColumn();
-            int availableRowspan = parent.getRows() - gridCell.getRowspan();
+                int availableColspan = parent.getColumns() - gridCell.getColumn();
+                int availableRowspan = parent.getRows() - gridCell.getRowspan();
 
-            parent.removeComponent(this);
+                parent.removeComponent(this);
 
-            dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
-            parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
-                    gridCell.getColumn() + gridCell.getColspan() - 1,
-                    gridCell.getRow() + gridCell.getRowspan() - 1);
-            dashboardTools.addEmptyLabels(parent, tree);
-            dashboardTools.lockGridCells(parent, tree);
+                dashboardTools.removeEmptyLabelsForSpan(parent, gridCell);
+                parent.addComponent(this, gridCell.getColumn(), gridCell.getRow(),
+                        gridCell.getColumn() + gridCell.getColspan() - 1,
+                        gridCell.getRow() + gridCell.getRowspan() - 1);
+                dashboardTools.addEmptyLabels(parent, tree);
+                dashboardTools.lockGridCells(parent, tree);
+            }
         }
     }
 
