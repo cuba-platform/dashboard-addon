@@ -658,7 +658,7 @@ public class DashboardFrame extends AbstractFrame {
                     GridLayout parentGrid = ((GridRow) parent).getGridLayout().getGridLayout();
                     GridCell gridCell = dashboardTools.getGridCell(
                             tree,
-                            tree.getChildren(parentGrid),
+                            tree.getChildren(parentGrid.getParent()),
                             widgetModel.getColumn(),
                             widgetModel.getRow()
                     );

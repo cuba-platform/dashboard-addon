@@ -8,6 +8,9 @@ import com.audimex.dashboard.web.DashboardSettings;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.web.gui.components.WebPopupButton;
 import com.vaadin.ui.*;
+import org.apache.commons.lang.ClassUtils;
+
+import java.util.List;
 
 @org.springframework.stereotype.Component(DashboardSettings.NAME)
 public class DashboardSettingsImpl implements DashboardSettings {
@@ -34,6 +37,9 @@ public class DashboardSettingsImpl implements DashboardSettings {
         if (component instanceof GridCell) {
             return false;
         }
-        return true;
+        List<Class> allSuperclasses = ClassUtils.getAllSuperclasses(component.getClass());
+        boolean restricted = allSuperclasses.stream()
+                .anyMatch(aClass -> aClass.getName().contains("com.vaadin.tapio.googlemaps.GoogleMap"));
+        return !restricted;
     }
 }

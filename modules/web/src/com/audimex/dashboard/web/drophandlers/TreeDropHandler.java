@@ -128,6 +128,11 @@ public class TreeDropHandler implements DropHandler {
                 com.vaadin.ui.Tree.TreeTargetDetails targetDetails =
                         (com.vaadin.ui.Tree.TreeTargetDetails) dragEvent.getTargetDetails();
                 VerticalDropLocation location = targetDetails.getDropLocation();
+                Object draggedComponent = dragEvent.getTransferable().getData("itemId");
+                if (draggedComponent instanceof GridCell
+                        || draggedComponent instanceof GridRow) {
+                    return false;
+                }
                 if (targetDetails.getItemIdOver() == null) {
                     return false;
                 }

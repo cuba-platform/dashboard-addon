@@ -52,6 +52,8 @@
                   value="+com/audimex/dashboard/web-screens.xml"/>
         <property name="cuba.menuConfig"
                   value="+com/audimex/dashboard/web-menu.xml"/>
+        <property name="cuba.themeConfig"
+                  value="+com/audimex/dashboard/halo-theme.properties"/>
         <property name="cuba.permissionConfig"
                   value="+com/audimex/dashboard/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"

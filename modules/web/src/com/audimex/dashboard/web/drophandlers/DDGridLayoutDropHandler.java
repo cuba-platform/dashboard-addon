@@ -38,7 +38,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
     protected void handleComponentReordering(DragAndDropEvent event) {
         DDGridLayout.GridLayoutTargetDetails details = (DDGridLayout.GridLayoutTargetDetails) event
                 .getTargetDetails();
-        DashboardGridLayout layout = (DashboardGridLayout) details.getTarget();
+        DDGridLayout layout = (DDGridLayout) details.getTarget();
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
                 .getTransferable();
         Component comp = transferable.getComponent();
@@ -48,7 +48,7 @@ public class DDGridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
         super.handleComponentReordering(event);
 
-        GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout), column, row);
+        GridCell gridCell = dashboardTools.getGridCell(tree, tree.getChildren(layout.getParent()), column, row);
         if (gridCell != null) {
             dashboardTools.moveComponent(tree, gridCell, comp, 0);
         }
