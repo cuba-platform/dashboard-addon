@@ -10,7 +10,9 @@ import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
 
@@ -26,10 +28,10 @@ public class WidgetConfigWindow extends AbstractWindow {
     protected HBoxLayout sliderLayout;
 
     @Inject
-    protected com.haulmont.cuba.gui.components.Button okButton;
+    protected Button okButton;
 
     @Inject
-    protected com.haulmont.cuba.gui.components.Button cancelButton;
+    protected Button cancelButton;
 
     @WindowParam(name = "widget")
     protected Component widget;
@@ -40,6 +42,12 @@ public class WidgetConfigWindow extends AbstractWindow {
     @Inject
     protected DashboardTools dashboardTools;
 
+    @Inject
+    private Label leftLabel;
+
+    @Inject
+    private Label rightLabel;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -47,14 +55,21 @@ public class WidgetConfigWindow extends AbstractWindow {
         Layout layout = (Layout) WebComponentsHelper.unwrap(sliderLayout);
 
         if (widget.getParent() instanceof AbstractOrderedLayout) {
+            int weight = ((HasWeight) widget).getWeight();
             weightSlider = new Slider();
             weightSlider.setImmediate(true);
             weightSlider.setWidth("300px");
-            weightSlider.setCaption(getMessage("dashboard.weightInLayout"));
             weightSlider.setMin(1);
             weightSlider.setMax(10);
             weightSlider.setResolution(0);
-            weightSlider.setValue((double) ((HasWeight) widget).getWeight());
+            weightSlider.setValue((double) weight);
+            weightSlider.addValueChangeListener(event ->
+                    leftLabel.setValue(String.format(
+                            getMessage("dashboard.weightInLayout"),
+                            weightSlider.getValue().intValue())
+                    )
+            );
+            leftLabel.setValue(String.format(getMessage("dashboard.weightInLayout"), weight));
             layout.addComponent(weightSlider);
             weightSlider.focus();
         }
@@ -62,7 +77,6 @@ public class WidgetConfigWindow extends AbstractWindow {
         if (widget.getParent() instanceof GridLayout) {
             colSpanSlider = new Slider();
             colSpanSlider.setImmediate(true);
-            colSpanSlider.setCaption(getMessage("dashboard.columnSpan"));
             colSpanSlider.setWidth("100%");
             colSpanSlider.setMin(1);
 
@@ -71,6 +85,13 @@ public class WidgetConfigWindow extends AbstractWindow {
                     dashboardTools.getWidgetCell(tree, widget))
             );
 
+            colSpanSlider.addValueChangeListener(event ->
+                    leftLabel.setValue(String.format(
+                            getMessage("dashboard.columnSpan"),
+                            colSpanSlider.getValue().intValue())
+                    )
+            );
+            leftLabel.setValue(String.format(getMessage("dashboard.columnSpan"), ((HasGridSpan) widget).getColSpan()));
             colSpanSlider.setResolution(0);
             colSpanSlider.setValue((double) ((HasGridSpan) widget).getColSpan());
             layout.addComponent(colSpanSlider);
@@ -78,7 +99,6 @@ public class WidgetConfigWindow extends AbstractWindow {
 
             rowSpanSlider = new Slider();
             rowSpanSlider.setImmediate(true);
-            rowSpanSlider.setCaption(getMessage("dashboard.rowSpan"));
             rowSpanSlider.setWidth("100%");
             rowSpanSlider.setMin(1);
             if (widget.getParent() instanceof GridLayout) {
@@ -87,6 +107,13 @@ public class WidgetConfigWindow extends AbstractWindow {
                         dashboardTools.getWidgetCell(tree, widget))
                 );
             }
+            rowSpanSlider.addValueChangeListener(event ->
+                    rightLabel.setValue(String.format(
+                            getMessage("dashboard.rowSpan"),
+                            rowSpanSlider.getValue().intValue())
+                    )
+            );
+            rightLabel.setValue(String.format(getMessage("dashboard.rowSpan"), ((HasGridSpan) widget).getRowSpan()));
             rowSpanSlider.setResolution(0);
             rowSpanSlider.setValue((double) ((HasGridSpan) widget).getRowSpan());
 
