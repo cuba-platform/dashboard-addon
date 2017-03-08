@@ -39,16 +39,13 @@
                       spacing="true">
                     <label htmlEnabled="true"
                            value="msg://dashboard.componentTree"/>
-                    <hbox spacing="true"
-                          width="100%">
+                    <hbox spacing="true">
                         <button id="removeComponent"
                                 caption="Remove"
                                 enable="false"
-                                invoke="removeComponent"
-                                width="100%"/>
+                                invoke="removeComponent"/>
                         <button caption="Clear all"
-                                invoke="clearAll"
-                                width="100%"/>
+                                invoke="clearAll"/>
                     </hbox>
                     <vbox id="treeLayout"/>
                 </vbox>
