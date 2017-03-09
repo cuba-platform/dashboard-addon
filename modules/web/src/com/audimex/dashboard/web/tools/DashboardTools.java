@@ -258,6 +258,8 @@ public class DashboardTools {
         }
 
         moveToIndex(container, component, container.getChildren(parentId), position);
+        tree.setValue(component);
+        tree.focus();
     }
 
     public String getTreeItemCaption(Object component) {
