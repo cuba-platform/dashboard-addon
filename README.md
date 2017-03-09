@@ -1,54 +1,51 @@
-# Audimex-Dashboards POC
+# Audimex-Dashboards
 
 ## Abstract
+Dashboard designer allows you to build a dashboard with your frames and predefined layouts such as vertical, horizontal and grid in WYSIWYG mode.
 
-Конструктор Dashboards поддерживает 3 типа контейнеров (VBox/HBox/Grid) и один тип виджетов (Widget), 
-для которого пользователь может задать тип содержимого в диалоге настроек: Table/Chart/Report с тестовыми данными.
+## Key concepts
+Designer contains a widget palette, widget tree with hierarchical structure and canvas where you can build and see your dashboard. Also, it's possible to build dashboard by dropping widgets into a tree.
 
-Дополнительные настройки виджета:
+Dashboard contains some public methods such as:
+ - `setDashboardModel` sets a dashboard model to frame.
+ - `getDashboardModel` returns a dashboard model of frame.
 
-1. Надпись
-2. Иконка
-3. Вес (в VBox/HBox)
-4. Colspan / Rowspan (Grid)
+## Structure
+The structure of this project contains some main components:
+ - `DashboardFrame` contains main controls and canvas.
+ - `DashboardModel` contains component hierarchical structure. May be converted into JSON string.
+ - `WidgetRepository` can load a widget descriptors from XML (widget caption, icon, frameId).
 
-## Prerequisites
+## How to add to a project
+1. Open the project in Studio
+2. Go to ProjectProperties > Edit
+3. Add new custom component
+4. Enter `com.audimex.dashboard` to the artifact group field
+5. Enter `dashboard-global` to the artifact name field
+6. Enter `0.1-SNAPSHOT` to the version field
+7. Click `Ok`
 
-1. Импортировать отчёт из каталога reports
+## How to integrate to a screen
+1. Open an XML of your screen
+2. Add new frame to layout `<frame id="myFrame" screen="dashboard-frame"/>` with a screen attribute and set it to `dashboard-frame`
+3. Inject the dashboard frame into your screen controller.
+4. Now you can use `setDashboardModel` and `getDashboardModel` to save and load a data model of the dashboard.
 
-## Demo script
+## How to register a widget
+At first, create an XML file in the web module and specify your frames
+```
+<widgets xmlns="http://schemas.haulmont.com/audimex/dashboards/widget-descriptor.xsd">
+    <widget id="first" caption="firstFrame" frameId="first-frame" icon="icons/ok.png"/>
+    <widget id="second" caption="secondFrame" frameId="second-frame" icon="icons/ok.png"/>
+</widgets>
+```
+Then specify your XML path in the `amxd.dashboard.widgetsConfig` config:
+```
+amxd.dashboard.widgetsConfig = widgets.xml
+```
+Now you can see your widgets in the dashboard palette.
 
-1. Открыть экран Dashboards из меню
-2. Показать палитру компонентов
-3. Бросить на холст 2 горизонтальных контейнера
-4. Добавить в верхний контейнер 3 виджета
-5. Для каждого из виджетов настроить Надпись и выбрать тип содержимого в диалоге настроек (открывается по кнопке в шапке виджета)
-6. Объяснить какие типы содержимого поддерживаются (любые экраны-фреймы платформы)
-6. Добавить в нижний контейнер два виджета
-7. Для первого виджета в нижнем контейнере задать вес 3, показать как это влияет
-8. Выключить режим редактирования, показать как выглядит без палитры
-9. Включить режим редактирования
-10. Очистить холст
-11. Добавить Grid контейнер 3x3
-12. Добавить в ячейку 0,1 виджет и залать colspan = 2, rowspan = 2 
-13. Задать для виджета тип содержимого, иконку, надпись
-14. Закрыть экран и открыть снова
-15. Показать что настройки сохраняются и загружаются из базы
-
-## Заключение
-
-В дальнейшем пользователи смогут создавать множество Dashboards и можно будет поставлять предустановленные в составе систем. 
-В рамках POC проверены возможности интеграции Drag-Drop виджетов и экранов платформы, 
-а также продемонстрирована интеграция с Charts и Reports. 
-
-Разные типы контента могут быть перенесены в палитру компонентов, 
-в рамках POC это один компонент с разными предустановленными данными: таблица, график, HTML отчёт. 
-
-## Known issues
-
-1. В таблицах нельзя скролить хватая полосу прокрутки мышью
-2. Для контейнеров нельзя настраивать веса и colspan rowspan
-3. Нет горячих клавиш для удаления контейнеров и виджетов
-4. Нет кнопки удаления виджета в шапке
-5. Нет подсветки компонента, выделенного в дереве  
-6. Нет валидации параметров colspan / rowspan в настройках Widget
+## Extensibility: how to customize behavior
+Also, you can override the behavior of the `DashboardSettings` and `WidgetRepository`.
+In the `DashboardSettingsImpl` you can define any components to restrict their dragging.
+In the `WidgetRepositoryImpl` you can redefine a widget loading to load it from any source
