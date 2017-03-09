@@ -4,17 +4,17 @@
 Dashboard designer allows you to build a dashboard with your frames and predefined layouts such as vertical, horizontal and grid in WYSIWYG mode.
 
 ## Key concepts
-Designer contains a widget palette, widget tree with hierarchical structure and canvas where you can build and see your dashboard. Also, it's possible to build dashboard by dropping widgets into a tree.
+Designer contains a widget palette, widget tree with hierarchical structure and canvas where you can build and see your dashboard. Also, it's possible to build dashboard using Drag-n-Drop from Palette to Canvas / Tree.
 
-Dashboard contains some public methods such as:
+Dashboard public methods:
  - `setDashboardModel` sets a dashboard model to frame.
  - `getDashboardModel` returns a dashboard model of frame.
 
 ## Structure
-The structure of this project contains some main components:
+Main components of this application component:
  - `DashboardFrame` contains main controls and canvas.
- - `DashboardModel` contains component hierarchical structure. May be converted into JSON string.
- - `WidgetRepository` can load a widget descriptors from XML (widget caption, icon, frameId).
+ - `DashboardModel` contains component hierarchical structure. Can be serializaed to any format (JSON/XML).
+ - `WidgetRepository` loads widgets configuration from XML config files (widget caption, icon, frameId) that are set to `<...>` config property.
 
 ## How to add to a project
 1. Open the project in Studio
@@ -39,7 +39,9 @@ At first, create an XML file in the web module and specify your frames
     <widget id="second" caption="secondFrame" frameId="second-frame" icon="icons/ok.png"/>
 </widgets>
 ```
-Then specify your XML path in the `amxd.dashboard.widgetsConfig` config:
+XML config of the widget repository is defined in widget-descriptor.xsd
+
+Then specify your XML path (or several space-separated paths) in the `amxd.dashboard.widgetsConfig` config:
 ```
 amxd.dashboard.widgetsConfig = widgets.xml
 ```
