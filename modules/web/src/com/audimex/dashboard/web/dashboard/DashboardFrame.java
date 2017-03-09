@@ -23,6 +23,7 @@ import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
@@ -305,7 +306,7 @@ public class DashboardFrame extends AbstractFrame {
         Window subWindow = new Window(getMessage("dashboard.gridSettings"));
         subWindow.setModal(true);
         subWindow.setResizable(false);
-        subWindow.setWidth(300, Sizeable.Unit.PIXELS);
+        subWindow.setWidth(480, Sizeable.Unit.PIXELS);
         VerticalLayout subContent = new VerticalLayout();
         subContent.setSpacing(true);
         subWindow.setContent(subContent);
@@ -319,17 +320,31 @@ public class DashboardFrame extends AbstractFrame {
         Slider rows = new Slider();
 
         cols.setMin(1);
-        cols.setMax(10);
+        cols.setMax(16);
 
         rows.setMin(1);
-        rows.setMax(10);
+        rows.setMax(16);
 
         cols.setValue((double) 2);
         rows.setValue((double) 2);
         cols.setWidth(100, Sizeable.Unit.PERCENTAGE);
         rows.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        cols.setCaption(getMessage("dashboard.gridColumnCount"));
-        rows.setCaption(getMessage("dashboard.gridRowCount"));
+        cols.setCaption(String.format(getMessage("dashboard.gridColumnCount"), 1));
+        rows.setCaption(String.format(getMessage("dashboard.gridRowCount"), 1));
+        cols.setCaptionAsHtml(true);
+        rows.setCaptionAsHtml(true);
+        cols.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                cols.setCaption(String.format(getMessage("dashboard.gridColumnCount"), cols.getValue().intValue()));
+            }
+        });
+        rows.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                rows.setCaption(String.format(getMessage("dashboard.gridRowCount"), rows.getValue().intValue()));
+            }
+        });
         cols.focus();
 
         comboBoxPanel.addComponent(cols);

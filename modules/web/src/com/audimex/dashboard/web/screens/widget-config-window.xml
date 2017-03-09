@@ -15,12 +15,12 @@
                 width="AUTO"/>
 
     <layout>
-        <hbox width="300px" spacing="true">
-            <label id="leftLabel" width="100%"/>
-            <label id="rightLabel" width="100%"/>
+        <hbox width="480px" spacing="true">
+            <label id="leftLabel" width="100%" htmlEnabled="true"/>
+            <label id="rightLabel" width="100%" htmlEnabled="true"/>
         </hbox>
         <hbox id="sliderLayout"
-              width="300px"
+              width="480px"
               spacing="true"
               align="MIDDLE_CENTER"/>
         <hbox id="buttonsLayout"

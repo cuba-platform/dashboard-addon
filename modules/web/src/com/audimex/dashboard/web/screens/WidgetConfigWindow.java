@@ -58,7 +58,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             int weight = ((HasWeight) widget).getWeight();
             weightSlider = new Slider();
             weightSlider.setImmediate(true);
-            weightSlider.setWidth("300px");
+            weightSlider.setWidth("480px");
             weightSlider.setMin(1);
             weightSlider.setMax(10);
             weightSlider.setResolution(0);
@@ -79,19 +79,29 @@ public class WidgetConfigWindow extends AbstractWindow {
             colSpanSlider.setImmediate(true);
             colSpanSlider.setWidth("100%");
             colSpanSlider.setMin(1);
-
-            colSpanSlider.setMax(dashboardTools.availableColumns(
+            int maxColSpan = dashboardTools.availableColumns(
                     (GridLayout) widget.getParent(),
-                    dashboardTools.getWidgetCell(tree, widget))
+                    dashboardTools.getWidgetCell(tree, widget)
             );
+            int maxRowSpan = dashboardTools.availableRows(
+                    (GridLayout) widget.getParent(),
+                    dashboardTools.getWidgetCell(tree, widget)
+            );
+
+            colSpanSlider.setMax(maxColSpan);
 
             colSpanSlider.addValueChangeListener(event ->
                     leftLabel.setValue(String.format(
                             getMessage("dashboard.columnSpan"),
-                            colSpanSlider.getValue().intValue())
+                            colSpanSlider.getValue().intValue(),
+                            maxColSpan)
                     )
             );
-            leftLabel.setValue(String.format(getMessage("dashboard.columnSpan"), ((HasGridSpan) widget).getColSpan()));
+            leftLabel.setValue(String.format(
+                    getMessage("dashboard.columnSpan"),
+                    ((HasGridSpan) widget).getColSpan(),
+                    maxColSpan
+            ));
             colSpanSlider.setResolution(0);
             colSpanSlider.setValue((double) ((HasGridSpan) widget).getColSpan());
             layout.addComponent(colSpanSlider);
@@ -102,18 +112,19 @@ public class WidgetConfigWindow extends AbstractWindow {
             rowSpanSlider.setWidth("100%");
             rowSpanSlider.setMin(1);
             if (widget.getParent() instanceof GridLayout) {
-                rowSpanSlider.setMax(dashboardTools.availableRows(
-                        (GridLayout) widget.getParent(),
-                        dashboardTools.getWidgetCell(tree, widget))
-                );
+                rowSpanSlider.setMax(maxRowSpan);
             }
             rowSpanSlider.addValueChangeListener(event ->
                     rightLabel.setValue(String.format(
                             getMessage("dashboard.rowSpan"),
-                            rowSpanSlider.getValue().intValue())
-                    )
+                            rowSpanSlider.getValue().intValue(),
+                            maxRowSpan))
             );
-            rightLabel.setValue(String.format(getMessage("dashboard.rowSpan"), ((HasGridSpan) widget).getRowSpan()));
+            rightLabel.setValue(String.format(getMessage(
+                    "dashboard.rowSpan"),
+                    ((HasGridSpan) widget).getRowSpan(),
+                    maxRowSpan
+            ));
             rowSpanSlider.setResolution(0);
             rowSpanSlider.setValue((double) ((HasGridSpan) widget).getRowSpan());
 
