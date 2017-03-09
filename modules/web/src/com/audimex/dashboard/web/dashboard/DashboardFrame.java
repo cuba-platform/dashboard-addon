@@ -520,13 +520,15 @@ public class DashboardFrame extends AbstractFrame {
     }
 
     public void removeComponent() {
-        boolean removed = dashboardTools.removeComponent(tree, tree.getValue());
-        treeHandler.accept(tree);
-        if (!removed) {
-            showNotification(messages.getMessage(getClass(), "dashboard.cantRemove"), NotificationType.HUMANIZED);
-        } else {
-            tree.setValue(rootDashboardPanel);
-            tree.focus();
+        if (treeComponent != null) {
+            boolean removed = dashboardTools.removeComponent(tree, treeComponent);
+            treeHandler.accept(tree);
+            if (!removed) {
+                showNotification(messages.getMessage(getClass(), "dashboard.cantRemove"), NotificationType.HUMANIZED);
+            } else {
+                tree.setValue(rootDashboardPanel);
+                tree.focus();
+            }
         }
     }
 
