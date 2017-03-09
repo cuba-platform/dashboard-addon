@@ -14,7 +14,7 @@ Dashboard public methods:
 Main components of this application component:
  - `DashboardFrame` contains main controls and canvas.
  - `DashboardModel` contains component hierarchical structure. Can be serializaed to any format (JSON/XML).
- - `WidgetRepository` loads widgets configuration from XML config files (widget caption, icon, frameId) that are set to `<...>` config property.
+ - `WidgetRepository` loads widgets configuration from XML config files (widget caption, icon, frameId) that are set to `<widget .../>` config property.
 
 ## How to add to a project
 1. Open the project in Studio
