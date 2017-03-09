@@ -28,6 +28,7 @@ public class DashboardTools {
     public static final String AMXD_CONTAINER_DISABLED = "amxd-container-disabled";
     public static final String AMXD_TREE_SELECTED = "amxd-tree-selected";
     public static final String AMXD_SHADOW_BORDER = "amxd-shadow-border";
+    public static final String AMXD_GRID_CELL_SHADOW_BORDER = "amxd-grid-cell-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
@@ -126,7 +127,7 @@ public class DashboardTools {
     public GridCell createGridCell(int column, int row) {
         GridCell gridCell = new GridCell(column, row);
         gridCell.setSizeFull();
-        gridCell.setStyleName(AMXD_SHADOW_BORDER);
+        gridCell.setStyleName(AMXD_GRID_CELL_SHADOW_BORDER);
 
         return gridCell;
     }

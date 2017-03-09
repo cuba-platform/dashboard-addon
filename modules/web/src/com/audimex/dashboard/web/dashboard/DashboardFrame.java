@@ -441,11 +441,20 @@ public class DashboardFrame extends AbstractFrame {
 
     protected void removeSpacings(AbstractLayout component, boolean value) {
         if (!(component instanceof HorizontalLayout
-                || component instanceof VerticalLayout)) {
+                || component instanceof VerticalLayout
+                || component instanceof GridLayout)) {
             if (value) {
                 component.addStyleName(DashboardTools.AMXD_SHADOW_BORDER);
             } else {
                 component.removeStyleName(DashboardTools.AMXD_SHADOW_BORDER);
+            }
+
+            if (component instanceof GridCell) {
+                if (value) {
+                    component.addStyleName(DashboardTools.AMXD_GRID_CELL_SHADOW_BORDER);
+                } else {
+                    component.removeStyleName(DashboardTools.AMXD_GRID_CELL_SHADOW_BORDER);
+                }
             }
 
             if (component instanceof HasMainLayout) {
