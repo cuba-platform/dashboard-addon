@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.audimex.dashboard.web.dashboard.DashboardBrowse"
+        focusComponent="dashboardsTable"
+        lookupComponent="dashboardsTable"
+        messagesPack="com.audimex.dashboard.web.dashboard">
+    <dsContext>
+        <groupDatasource id="dashboardsDs"
+                         class="com.audimex.dashboard.entity.Dashboard"
+                         view="dashboard-view">
+            <query>
+                <![CDATA[select e from amxd$Dashboard e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dashboardsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dashboardsTable"
+                datasource="dashboardsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dashboardsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="title"/>
+                <column id="user"/>
+            </columns>
+            <rows datasource="dashboardsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dashboardsTable.create"/>
+                <button id="editBtn"
+                        action="dashboardsTable.edit"/>
+                <button id="removeBtn"
+                        action="dashboardsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

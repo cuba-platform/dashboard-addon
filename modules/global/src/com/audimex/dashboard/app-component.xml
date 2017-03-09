@@ -21,6 +21,10 @@
                   value="+com/audimex/dashboard/spring.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+com.audimex.dashboard.core"/>
+        <artifact classifier="db"
+                  configuration="dbscripts"
+                  ext="zip"
+                  name="dashboard-core"/>
     </module>
     <module blocks="web,desktop"
             dependsOn="global"

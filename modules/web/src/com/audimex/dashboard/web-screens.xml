@@ -5,4 +5,8 @@
             template="com/audimex/dashboard/web/dashboard/dashboard-frame.xml"/>
     <screen id="widgetConfigWindow"
             template="com/audimex/dashboard/web/screens/widget-config-window.xml"/>
+    <screen id="amxd$Dashboard.browse"
+            template="com/audimex/dashboard/web/dashboard/dashboard-browse.xml"/>
+    <screen id="amxd$Dashboard.edit"
+            template="com/audimex/dashboard/web/dashboard/dashboard-edit.xml"/>
 </screen-config>

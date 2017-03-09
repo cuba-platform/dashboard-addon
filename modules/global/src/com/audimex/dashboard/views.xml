@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-
+    <view class="com.audimex.dashboard.entity.Dashboard"
+          extends="_local"
+          name="dashboard-view">
+        <property name="user"
+                  view="_minimal"/>
+    </view>
 </views>

@@ -302,6 +302,10 @@ public class DashboardFrame extends AbstractFrame {
         this.dashboardModel = dashboardModel;
     }
 
+    public void refresh() {
+        convertToTree();
+    }
+
     protected void onGridDrop(DashboardGridLayout gridLayout, Object targetLayout, int idx) {
         Window subWindow = new Window(getMessage("dashboard.gridSettings"));
         subWindow.setModal(true);
