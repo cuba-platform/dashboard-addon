@@ -28,7 +28,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         if (getItem().getModel() != null) {
             dashboardModel = gson.fromJson(getItem().getModel(), DashboardModel.class);
             dashboardDesigner.setDashboardModel(dashboardModel);
-            dashboardDesigner.refresh();
         }
     }
 

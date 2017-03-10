@@ -14,12 +14,9 @@
                 width="800"/>
     <layout expand="mainLayout"
             spacing="true">
-        <hbox id="controlLayout"
-              spacing="true">
-            <checkBox id="allowEdit"
-                      align="MIDDLE_LEFT"
-                      caption="Designer mode"/>
-        </hbox>
+        <checkBox id="allowEdit"
+                  align="MIDDLE_LEFT"
+                  caption="Designer mode"/>
         <hbox id="mainLayout"
               expand="dropLayout"
               spacing="true"

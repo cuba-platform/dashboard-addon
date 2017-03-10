@@ -245,8 +245,6 @@ public class DashboardFrame extends AbstractFrame {
             removeComponent.setEnabled(allowEdit.getValue());
         });
 
-        mode = (DashboardMode) params.get("mode");
-
         convertToTree();
         enableViewMode();
     }
@@ -284,7 +282,36 @@ public class DashboardFrame extends AbstractFrame {
             palette.setVisible(false);
             containersDraggableLayout.addStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);
             rootDashboardPanel.addStyleName(DashboardTools.AMXD_DASHBOARD_DISABLED);
+        } else {
+            allowEdit.setVisible(true);
+            containersDraggableLayout.setDragMode(LayoutDragMode.CLONE);
+            rootDashboardPanel.setDragMode(LayoutDragMode.CLONE);
+            removeSpacings(rootDashboardPanel, true);
+            palette.setVisible(true);
+            containersDraggableLayout.removeStyleName(DashboardTools.AMXD_CONTAINER_DISABLED);
+            rootDashboardPanel.removeStyleName(DashboardTools.AMXD_DASHBOARD_DISABLED);
         }
+    }
+
+    /**
+     * Set type of the dashboard view.
+     *
+     * In VIEW mode it can display only non-editable canvas.
+     * DESIGNER mode is default mode with widget palette and component structure tree.
+     */
+    public void setDashboardMode(DashboardMode dashboardMode) {
+        mode = dashboardMode;
+
+        if (containersDraggableLayout != null) {
+            enableViewMode();
+        }
+    }
+
+    /**
+     * Returns the dashboard display mode.
+     */
+    public DashboardMode getDashboardMode() {
+        return mode;
     }
 
     /**
@@ -300,10 +327,10 @@ public class DashboardFrame extends AbstractFrame {
      */
     public void setDashboardModel(DashboardModel dashboardModel) {
         this.dashboardModel = dashboardModel;
-    }
 
-    public void refresh() {
-        convertToTree();
+        if (tree != null) {
+            convertToTree();
+        }
     }
 
     protected void onGridDrop(DashboardGridLayout gridLayout, Object targetLayout, int idx) {
