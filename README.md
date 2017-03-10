@@ -9,6 +9,8 @@ Designer contains a widget palette, widget tree with hierarchical structure and 
 Dashboard public methods:
  - `setDashboardModel` sets a dashboard model to frame.
  - `getDashboardModel` returns a dashboard model of frame.
+ - `setDashboardMode` sets a type of the dashboard view. In VIEW mode it can display only non-editable canvas and DESIGNER mode is default mode with widget palette and component structure tree.
+ - `getDashboardMode` returns a dashboard display mode type.
 
 ## Structure
 Main components of this application component:
@@ -35,13 +37,15 @@ Main components of this application component:
 At first, create an XML file in the web module and specify your frames
 ```
 <widgets xmlns="http://schemas.haulmont.com/audimex/dashboards/widget-descriptor.xsd">
-    <widget id="first" caption="firstFrame" frameId="first-frame" icon="icons/ok.png"/>
-    <widget id="second" caption="secondFrame" frameId="second-frame" icon="icons/ok.png"/>
+    <widget id="first" caption="firstFrame" frameId="first-frame" icon="icons/boat.png"/>
+    <widget id="second" caption="secondFrame" frameId="second-frame" icon="font-icon:CAR"/>
 </widgets>
 ```
 XML config of the widget repository is defined in widget-descriptor.xsd
+If you want to use your own `.png` icons, you can put it inside of theme extension like `themes/halo/icons/boat.png` and then specify it in `icon` attribute like `icon="icons/boat.png"`
+Also, using of FontAwesome icons is possible too. Just specify it in icon attribute with `font-icon` prefix and icon ID like `icon="font-icon:CAR"`
 
-Then specify your XML path (or several space-separated paths) in the `amxd.dashboard.widgetsConfig` config:
+Then specify the relative path (or several space-separated paths) of your XML file in the `amxd.dashboard.widgetsConfig` config:
 ```
 amxd.dashboard.widgetsConfig = widgets.xml
 ```
