@@ -41,11 +41,6 @@
                   configuration="webcontent"
                   ext="zip"
                   name="dashboard-web"/>
-        <artifact classifier="web"
-                  configuration="webcontent"
-                  ext="zip"
-                  name="dashboard-web-toolkit"
-                  skipIfExists="web-toolkit"/>
         <artifact configuration="themes"
                   name="dashboard-web-themes"/>
         <property name="cuba.springContextConfig"
@@ -62,12 +57,6 @@
                   value="+com/audimex/dashboard/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+com.audimex.dashboard.gui com.audimex.dashboard.web"/>
-        <property name="cuba.web.widgetSet"
-                  value="com.audimex.dashboard.web.toolkit.ui.DashboardWidgetSet"/>
-    </module>
-    <module dependsOn="web"
-            name="web-toolkit">
-        <artifact name="dashboard-web-toolkit"/>
     </module>
     <module name="web-themes">
         <artifact name="dashboard-web-themes"/>
