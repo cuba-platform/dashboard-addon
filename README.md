@@ -17,6 +17,7 @@ Main components of this application component:
  - `DashboardFrame` contains main controls and canvas.
  - `DashboardModel` contains component hierarchical structure. Can be serializaed to any format (JSON/XML).
  - `WidgetRepository` loads widgets configuration from XML config files (widget caption, icon, frameId) that are set to `<widget .../>` config property.
+ - `Dashboard` entity has `user`, `title` and `model` properties. `model` contains JSON structure as a String. Also, this entity is bounded to `DashboardEdit` and `DashboardBrowse` screens and can be used in your project.
 
 ## How to add to a project
 1. Open the project in Studio
@@ -26,6 +27,8 @@ Main components of this application component:
 5. Enter `dashboard-global` to the artifact name field
 6. Enter `0.1-SNAPSHOT` to the version field
 7. Click `Ok`
+
+This component supports PostgreSQL and HSQLDB databases.
 
 ## How to integrate to a screen
 1. Open an XML of your screen
