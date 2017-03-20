@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard;
 
+import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.WidgetRepository;
 import com.vaadin.server.Resource;
@@ -12,7 +13,7 @@ import com.vaadin.ui.Button;
 public class PaletteButton extends Button {
 
     private WidgetType widgetType;
-    private WidgetRepository.Widget widget;
+    private DashboardWidget widget;
 
     public PaletteButton(String caption, Resource icon) {
         super(caption, icon);
@@ -26,11 +27,11 @@ public class PaletteButton extends Button {
         this.widgetType = widgetType;
     }
 
-    public WidgetRepository.Widget getWidget() {
+    public DashboardWidget getWidget() {
         return widget;
     }
 
-    public void setWidget(WidgetRepository.Widget widget) {
+    public void setWidget(DashboardWidget widget) {
         this.widget = widget;
     }
 }

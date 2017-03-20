@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.widgets;
 
+import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.web.WidgetRepository;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
@@ -31,11 +32,11 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     protected String icon;
     protected String caption;
 
-    protected WidgetRepository.Widget widget;
+    protected DashboardWidget widget;
 
     protected DashboardTools dashboardTools;
 
-    public FramePanel(Tree tree, WidgetRepository.Widget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
+    public FramePanel(Tree tree, DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.widget = widget;
 

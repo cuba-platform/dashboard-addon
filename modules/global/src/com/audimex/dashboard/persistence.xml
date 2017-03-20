@@ -4,5 +4,6 @@
     <persistence-unit name="audimex-dashboards"
                       transaction-type="RESOURCE_LOCAL">
         <class>com.audimex.dashboard.entity.Dashboard</class>
+        <class>com.audimex.dashboard.entity.DashboardWidget</class>
     </persistence-unit>
 </persistence>

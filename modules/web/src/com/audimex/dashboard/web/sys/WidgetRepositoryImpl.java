@@ -4,9 +4,12 @@
 
 package com.audimex.dashboard.web.sys;
 
+import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.web.WidgetConfig;
 import com.audimex.dashboard.web.WidgetRepository;
 import com.haulmont.bali.util.Dom4j;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Resources;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,17 +33,25 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     private final Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
 
     protected volatile boolean initialized = false;
-    protected List<Widget> widgetMap;
+    protected List<DashboardWidget> predefinedWidgetMap = new ArrayList<>();
+    protected List<DashboardWidget> loadedWidgetsMap = new ArrayList<>();
 
     @Inject
     protected WidgetConfig widgetConfig;
 
     @Inject
+    protected DataManager dataManager;
+
+    @Inject
     protected Resources resources;
 
     @Override
-    public List<Widget> getWidgets() {
+    public List<DashboardWidget> getWidgets() {
         checkInitialized();
+
+        List<DashboardWidget> widgetMap = new ArrayList<>();
+        widgetMap.addAll(predefinedWidgetMap);
+        widgetMap.addAll(loadedWidgetsMap);
         return widgetMap;
     }
 
@@ -54,31 +65,33 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                 }
             }
         }
+
+        LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
+                .setQuery(LoadContext.createQuery("select dw from amxd$DashboardWidget dw"));
+        loadedWidgetsMap.clear();
+        loadedWidgetsMap = dataManager.loadList(ctx);
     }
 
     protected void init() {
         String paths = widgetConfig.getWidgetConfigPaths();
         if (StringUtils.isNotBlank(paths)) {
             StrTokenizer stringTokenizer = new StrTokenizer(paths);
-            List<Widget> widgets = new ArrayList<>();
 
             for (String fileName : stringTokenizer.getTokenArray()) {
-                List<Widget> widgetsFromFile = readFile(fileName);
-                widgets.addAll(widgetsFromFile);
+                List<DashboardWidget> widgetsFromFile = readFile(fileName);
+                predefinedWidgetMap.addAll(widgetsFromFile);
             }
-
-            widgetMap = Collections.unmodifiableList(widgets);
         } else {
-            widgetMap = Collections.emptyList();
+            predefinedWidgetMap = Collections.emptyList();
         }
     }
 
-    protected Widget createWidget(Element viewElem) {
-        Widget widget = new Widget();
+    protected DashboardWidget createWidget(Element viewElem) {
+        DashboardWidget widget = new DashboardWidget();
 
         String viewId = viewElem.attributeValue("id");
         if (StringUtils.isNotEmpty(viewId)) {
-            widget.setId(viewId);
+            widget.setWidgetId(viewId);
         }
 
         String viewName = viewElem.attributeValue("caption");
@@ -104,7 +117,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         return widget;
     }
 
-    protected List<Widget> readFile(String fileName) {
+    protected List<DashboardWidget> readFile(String fileName) {
         log.debug("Deploying widgets config: " + fileName);
 
         InputStream stream = null;
@@ -123,10 +136,10 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             }
             Element rootElem = doc.getRootElement();
 
-            List<Widget> widgets = new ArrayList<>();
+            List<DashboardWidget> widgets = new ArrayList<>();
 
             for (Element viewElem : Dom4j.elements(rootElem, "widget")) {
-                Widget widget = createWidget(viewElem);
+                DashboardWidget widget = createWidget(viewElem);
                 widgets.add(widget);
             }
 

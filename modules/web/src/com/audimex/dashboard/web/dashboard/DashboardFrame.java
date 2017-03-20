@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.web.dashboard;
 
+import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.DashboardSettings;
 import com.audimex.dashboard.web.WidgetRepository;
@@ -429,7 +430,7 @@ public class DashboardFrame extends AbstractFrame {
         verticalLayoutButton.setWidth("100%");
         verticalLayoutButton.setHeight("50px");
 
-        WidgetRepository.Widget verticalWidget = new WidgetRepository.Widget();
+        DashboardWidget verticalWidget = new DashboardWidget();
         verticalWidget.setIcon(VERTICAL_LAYOUT_ICON);
         verticalWidget.setCaption("dashboard.verticalLayout");
         verticalLayoutButton.setWidget(verticalWidget);
@@ -440,7 +441,7 @@ public class DashboardFrame extends AbstractFrame {
         horizontalLayoutButton.setWidgetType(WidgetType.HORIZONTAL_LAYOUT);
         horizontalLayoutButton.setWidth("100%");
         horizontalLayoutButton.setHeight("50px");
-        WidgetRepository.Widget horizontalWidget = new WidgetRepository.Widget();
+        DashboardWidget horizontalWidget = new DashboardWidget();
         horizontalWidget.setIcon(HORIZONTAL_LAYOUT_ICON);
         horizontalWidget.setCaption("dashboard.horizontalLayout");
         horizontalLayoutButton.setWidget(horizontalWidget);
@@ -451,7 +452,7 @@ public class DashboardFrame extends AbstractFrame {
         gridButton.setWidgetType(WidgetType.GRID_LAYOUT);
         gridButton.setWidth("100%");
         gridButton.setHeight("50px");
-        WidgetRepository.Widget gridWidget = new WidgetRepository.Widget();
+        DashboardWidget gridWidget = new DashboardWidget();
         gridWidget.setIcon(GRID_LAYOUT_ICON);
         gridWidget.setCaption("dashboard.gridLayout");
         gridButton.setWidget(gridWidget);
@@ -461,7 +462,7 @@ public class DashboardFrame extends AbstractFrame {
         containersDraggableLayout.addComponent(horizontalLayoutButton);
         containersDraggableLayout.addComponent(gridButton);
 
-        for (WidgetRepository.Widget widget : widgetRepository.getWidgets()) {
+        for (DashboardWidget widget : widgetRepository.getWidgets()) {
             PaletteButton paletteButton = new PaletteButton(
                     messages.getMainMessage(widget.getCaption()),
                     WebComponentsHelper.getIcon(widget.getIcon())
@@ -686,7 +687,7 @@ public class DashboardFrame extends AbstractFrame {
                     isNew = true;
                     break;
                 case FRAME_PANEL:
-                    WidgetRepository.Widget widget = new WidgetRepository.Widget();
+                    DashboardWidget widget = new DashboardWidget();
                     widget.setCaption(widgetModel.getIcon());
                     widget.setFrameId(widgetModel.getFrameId());
                     FramePanel framePanel = new FramePanel(tree, widget, getFrame(), treeHandler);
