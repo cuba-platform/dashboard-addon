@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.audimex.dashboard.web.dashboardwidget.DashboardWidgetBrowse"
+        focusComponent="dashboardWidgetsTable"
+        lookupComponent="dashboardWidgetsTable"
+        messagesPack="com.audimex.dashboard.web.dashboardwidget">
+    <dsContext>
+        <groupDatasource id="dashboardWidgetsDs"
+                         class="com.audimex.dashboard.entity.DashboardWidget"
+                         view="_local">
+            <query>
+                <![CDATA[select e from amxd$DashboardWidget e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dashboardWidgetsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dashboardWidgetsTable"
+                datasource="dashboardWidgetsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dashboardWidgetsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="widgetId"/>
+                <column id="caption"/>
+                <column id="icon"/>
+                <column id="description"/>
+                <column id="frameId"/>
+            </columns>
+            <rows datasource="dashboardWidgetsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dashboardWidgetsTable.create"/>
+                <button id="editBtn"
+                        action="dashboardWidgetsTable.edit"/>
+                <button id="removeBtn"
+                        action="dashboardWidgetsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

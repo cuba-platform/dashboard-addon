@@ -9,4 +9,8 @@
             template="com/audimex/dashboard/web/dashboard/dashboard-browse.xml"/>
     <screen id="amxd$Dashboard.edit"
             template="com/audimex/dashboard/web/dashboard/dashboard-edit.xml"/>
+    <screen id="amxd$DashboardWidget.browse"
+            template="com/audimex/dashboard/web/dashboardwidget/dashboard-widget-browse.xml"/>
+    <screen id="amxd$DashboardWidget.edit"
+            template="com/audimex/dashboard/web/dashboardwidget/dashboard-widget-edit.xml"/>
 </screen-config>
