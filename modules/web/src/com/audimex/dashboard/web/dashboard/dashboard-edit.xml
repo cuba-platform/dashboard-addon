@@ -10,8 +10,9 @@
                     class="com.audimex.dashboard.entity.Dashboard"
                     view="dashboard-view"/>
     </dsContext>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="800"
+                width="1200"
+                resizable="true"/>
     <layout expand="dashboardDesigner"
             spacing="true">
         <fieldGroup id="fieldGroupLeft"
