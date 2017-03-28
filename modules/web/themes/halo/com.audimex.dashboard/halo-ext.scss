@@ -12,13 +12,17 @@
 
     .amxd-dashboard-button {
         background: none;
-        border: 2px dashed #b5b5b5;
+        border: 2px dashed #b5b5b5 !important;
         color: #4e4e4e;
         border-radius: 4px;
         text-align: left;
-        font-size: 24px;
+        font-size: 24px !important;
         box-shadow: none;
         margin-bottom: 5px;
+    }
+
+    .amxd-dashboard-button .v-button-caption {
+        font-weight: 300;
     }
 
     .amxd-settings-window-label {
