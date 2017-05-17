@@ -203,8 +203,10 @@ public class DashboardFrame extends AbstractFrame {
         rootDashboardPanel.setDragCaptionProvider(
                 component -> {
                     if (component instanceof HasDragCaption) {
+                        String caption = ((HasDragCaption) component).getWidgetCaption() != null ?
+                                ((HasDragCaption) component).getWidgetCaption() : "";
                         return new DragCaption(
-                                getMessage(((HasDragCaption) component).getWidgetCaption()),
+                                getMessage(caption),
                                 WebComponentsHelper.getIcon(((HasDragCaption) component).getWidgetIcon())
                         );
                     } else {
@@ -463,9 +465,11 @@ public class DashboardFrame extends AbstractFrame {
         containersDraggableLayout.addComponent(gridButton);
 
         for (DashboardWidget widget : widgetRepository.getWidgets()) {
+            String caption = widget.getCaption() != null ? widget.getCaption() : "";
+            String icon = widget.getIcon() != null ? widget.getIcon() : "";
             PaletteButton paletteButton = new PaletteButton(
-                    messages.getMainMessage(widget.getCaption()),
-                    WebComponentsHelper.getIcon(widget.getIcon())
+                    messages.getMainMessage(caption),
+                    WebComponentsHelper.getIcon(icon)
             );
 
             paletteButton.setWidgetType(WidgetType.FRAME_PANEL);

@@ -7,16 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "AMXD_DASHBOARD_WIDGET")
 @Entity(name = "amxd$DashboardWidget")
 public class DashboardWidget extends StandardEntity {
     private static final long serialVersionUID = 8608098106185215266L;
 
-    @Column(name = "WIDGET_ID")
+    @NotNull
+    @Column(name = "WIDGET_ID", nullable = false)
     protected String widgetId;
 
-    @Column(name = "CAPTION")
+    @NotNull
+    @Column(name = "CAPTION", nullable = false)
     protected String caption;
 
     @Column(name = "ICON")
@@ -25,7 +28,8 @@ public class DashboardWidget extends StandardEntity {
     @Column(name = "DESCRIPTION")
     protected String description;
 
-    @Column(name = "FRAME_ID")
+    @NotNull
+    @Column(name = "FRAME_ID", nullable = false)
     protected String frameId;
 
     public void setWidgetId(String widgetId) {

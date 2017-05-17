@@ -27,11 +27,11 @@ create table AMXD_DASHBOARD_WIDGET (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    WIDGET_ID varchar(255),
-    CAPTION varchar(255),
+    WIDGET_ID varchar(255) not null,
+    CAPTION varchar(255) not null,
     ICON varchar(255),
     DESCRIPTION varchar(255),
-    FRAME_ID varchar(255),
+    FRAME_ID varchar(255) not null,
     --
     primary key (ID)
 )^
