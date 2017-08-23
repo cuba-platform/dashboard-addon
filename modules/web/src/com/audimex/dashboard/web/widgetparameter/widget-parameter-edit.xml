@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.audimex.dashboard.web.widgetparameter.WidgetParameterEdit"
+        datasource="widgetParameterDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.audimex.dashboard.web.widgetparameter">
+    <dsContext>
+        <datasource id="widgetParameterDs"
+                    class="com.audimex.dashboard.entity.WidgetParameter"
+                    view="widgetParameter-view"/>
+    </dsContext>
+    <dialogMode height="170"
+                width="400"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="widgetParameterDs">
+            <column width="250px">
+                <field property="name" required="true"/>
+                <field property="parameterType" required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

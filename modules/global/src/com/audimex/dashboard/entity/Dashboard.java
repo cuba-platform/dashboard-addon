@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.security.entity.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "AMXD_DASHBOARD")
 @Entity(name = "amxd$Dashboard")
@@ -23,6 +24,29 @@ public class Dashboard extends StandardEntity {
     @Lob
     @Column(name = "MODEL")
     protected String model;
+
+    @OneToMany(mappedBy = "dashboard")
+    protected List<DashboardWidgetLink> widgetLinks;
+
+    @Column(name = "ENTITY_TYPE")
+    protected String entityType;
+
+    public void setWidgetLinks(List<DashboardWidgetLink> widgetLinks) {
+        this.widgetLinks = widgetLinks;
+    }
+
+    public List<DashboardWidgetLink> getWidgetLinks() {
+        return widgetLinks;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
 
     public void setUser(User user) {
         this.user = user;
