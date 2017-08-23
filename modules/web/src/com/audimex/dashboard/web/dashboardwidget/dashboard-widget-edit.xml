@@ -8,23 +8,46 @@
     <dsContext>
         <datasource id="dashboardWidgetDs"
                     class="com.audimex.dashboard.entity.DashboardWidget"
-                    view="_local"/>
+                    view="dashboardWidget-view">
+            <collectionDatasource id="widgetParameters" property="parameters"/>
+        </datasource>
     </dsContext>
     <dialogMode height="600"
-                width="800"/>
+                width="400"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardWidgetDs">
             <column width="250px">
-                <field id="widgetId"/>
-                <field id="caption"/>
-                <field id="icon"/>
-                <field id="description"/>
+                <field id="widgetId" property="widgetId"/>
+                <field id="caption" property="caption"/>
+                <field id="icon" property="icon"/>
+                <field id="description" property="description"/>
+                <field id="widgetViewType" property="widgetViewType"
+                       required="true"/>
                 <field id="frameId" custom="true"/>
+                <field id="entityType" property="entityType"/>
+                <field id="report" property="report"/>
             </column>
         </fieldGroup>
+        <table id="parametersTable" width="100%" height="250px">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="parameterType"/>
+            </columns>
+            <rows datasource="widgetParameters"/>
+            <buttonsPanel>
+                <button id="btnCreate" action="parametersTable.create"/>
+                <button id="btnEdit" action="parametersTable.edit"/>
+                <button id="btnRemove" action="parametersTable.remove"/>
+            </buttonsPanel>
+        </table>
         <frame id="windowActions"
-               screen="editWindowActions"/>
+               screen="extendedEditWindowActions"/>
     </layout>
 </window>
