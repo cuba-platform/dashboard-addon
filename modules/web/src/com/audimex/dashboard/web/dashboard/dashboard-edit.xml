@@ -8,21 +8,24 @@
     <dsContext>
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.entity.Dashboard"
-                    view="dashboard-view"/>
+                    view="dashboard-view">
+                <collectionDatasource id="linksDs" property="widgetLinks">
+                    <collectionDatasource id="parametersDs" property="dashboardParameters"/>
+                </collectionDatasource>
+        </datasource>
     </dsContext>
     <dialogMode height="800"
                 width="1200"
                 resizable="true"/>
-    <layout expand="dashboardDesigner"
+    <layout expand="dashboardDesignerVBox"
             spacing="true">
         <fieldGroup id="fieldGroupLeft"
                     datasource="dashboardDs">
             <column width="250px">
-                <field id="title"/>
+                <field id="title" property="title"/>
             </column>
         </fieldGroup>
-        <frame id="dashboardDesigner"
-               screen="dashboard-frame"/>
+        <vbox id="dashboardDesignerVBox"/>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

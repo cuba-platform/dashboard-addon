@@ -1,11 +1,17 @@
 package com.audimex.dashboard.web.tools;
 
+import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.DashboardWidgetLink;
+import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
+import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -18,7 +24,10 @@ import fi.jasoft.dragdroplayouts.interfaces.HasDragCaptionProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Component(DashboardTools.NAME)
 public class DashboardTools {
@@ -91,7 +100,7 @@ public class DashboardTools {
         }
     }
 
-    public com.vaadin.ui.Component createGridDropLayout(Tree tree, GridDropListener gridDropListener,
+    public com.vaadin.ui.Component createGridDropLayout(Tree tree,  GridDropListener gridDropListener,
                                                                Frame frame, Consumer<Tree> treeHandler) {
         DashboardGridLayout component = new DashboardGridLayout(tree, gridDropListener, frame, treeHandler);
         configLayout(component);
@@ -330,6 +339,22 @@ public class DashboardTools {
                 tree.setChildrenAllowed(parent, false);
             }
             com.vaadin.ui.Component component = (com.vaadin.ui.Component) itemId;
+
+            if (itemId instanceof FramePanel) {
+                FramePanel framePanel = (FramePanel) itemId;
+                Consumer<DashboardEvent> dashboardEventConsumer = framePanel.getDashboardEventExecutor();
+                framePanel.getWidget().getDashboardLinks().forEach(link -> {
+                        link.getDashboardParameters().forEach(parameter -> {
+                            dashboardEventConsumer.accept(
+                                    new DashboardEvent<>(parameter, DashboardEventType.REMOVE)
+                            );
+                        });
+                        dashboardEventConsumer.accept(
+                                new DashboardEvent<>(link, DashboardEventType.REMOVE)
+                        );
+                    });
+            }
+
             if (component.getParent() != null) {
                 AbstractLayout parentComponent = (AbstractLayout) component.getParent();
                 parentComponent.removeComponent(component);
@@ -475,5 +500,27 @@ public class DashboardTools {
         }
 
         tree.markAsDirty();
+    }
+
+    public List<DashboardWidgetLink> getWidgetLinksFromStrings(List<String> ids) {
+        DataManager dataManager = AppBeans.get(DataManager.class);
+        LoadContext<DashboardWidgetLink> ctx = LoadContext.create(DashboardWidgetLink.class)
+                .setQuery(LoadContext.createQuery("select dwl from amxd$DashboardWidgetLink dwl where dwl.id in :ids")
+                        .setParameter("ids", ids))
+                .setView("dashboardWidgetLink-view");
+        return dataManager.loadList(ctx);
+    }
+
+    public List<String> getStringsFromWidgetLinks(List<DashboardWidgetLink> links) {
+        return links.stream().map(l -> l.getId().toString())
+                .collect(Collectors.toList());
+    }
+
+    public DashboardWidget getWidget(String id) {
+        DataManager dataManager = AppBeans.get(DataManager.class);
+        LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
+                .setId(UUID.fromString(id))
+                .setView("dashboardWidget-view");
+        return dataManager.load(ctx);
     }
 }

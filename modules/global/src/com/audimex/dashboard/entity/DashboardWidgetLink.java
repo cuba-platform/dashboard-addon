@@ -3,13 +3,13 @@
  */
 package com.audimex.dashboard.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "AMXD_DASHBOARD_WIDGET_LINK")
 @Entity(name = "amxd$DashboardWidgetLink")
@@ -26,6 +26,26 @@ public class DashboardWidgetLink extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DASHBOARD_WIDGET_ID")
     protected DashboardWidget dashboardWidget;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "dashboardWidgetLink")
+    protected List<WidgetParameter> dashboardParameters;
+
+    public void setDashboardParameters(List<WidgetParameter> dashboardParameters) {
+        this.dashboardParameters = dashboardParameters;
+    }
+
+    public void addDashboardParameter(WidgetParameter widgetParameter) {
+        if (dashboardParameters == null) {
+            dashboardParameters = new ArrayList<>();
+        }
+        dashboardParameters.add(widgetParameter);
+    }
+
+    public List<WidgetParameter> getDashboardParameters() {
+        return dashboardParameters;
+    }
+
 
     public void setDashboardWidget(DashboardWidget dashboardWidget) {
         this.dashboardWidget = dashboardWidget;

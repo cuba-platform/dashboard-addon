@@ -18,8 +18,20 @@
           extends="_local"
           name="dashboardWidget-view">
         <property name="dashboardLinks"
-                  view="_minimal"/>
+                  view="_local">
+            <property name="dashboardParameters" view="_local"/>
+        </property>
         <property name="parameters"
                   view="widgetParameter-view"/>
+    </view>
+    <view class="com.audimex.dashboard.entity.DashboardWidgetLink"
+          extends="_local"
+          name="dashboardWidgetLink-view">
+        <property name="dashboard"
+                  view="_minimal"/>
+        <property name="dashboardWidget"
+                  view="_minimal"/>
+        <property name="dashboardParameters"
+                  view="_local"/>
     </view>
 </views>

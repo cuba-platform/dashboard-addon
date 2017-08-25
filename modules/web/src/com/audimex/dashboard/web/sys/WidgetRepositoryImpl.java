@@ -67,7 +67,8 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         }
 
         LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
-                .setQuery(LoadContext.createQuery("select dw from amxd$DashboardWidget dw"));
+                .setQuery(LoadContext.createQuery("select dw from amxd$DashboardWidget dw"))
+                .setView("dashboardWidget-view");
         loadedWidgetsMap.clear();
         loadedWidgetsMap = dataManager.loadList(ctx);
     }

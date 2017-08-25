@@ -13,6 +13,8 @@
     <dialogMode height="600"
                 width="800"/>
     <layout expand="mainLayout"
+            width="100%"
+            height="100%"
             spacing="true">
         <checkBox id="allowEdit"
                   align="MIDDLE_LEFT"

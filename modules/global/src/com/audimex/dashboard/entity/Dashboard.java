@@ -4,9 +4,12 @@
 package com.audimex.dashboard.entity;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.security.entity.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "AMXD_DASHBOARD")
@@ -25,6 +28,7 @@ public class Dashboard extends StandardEntity {
     @Column(name = "MODEL")
     protected String model;
 
+    @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboard")
     protected List<DashboardWidgetLink> widgetLinks;
 
@@ -33,6 +37,20 @@ public class Dashboard extends StandardEntity {
 
     public void setWidgetLinks(List<DashboardWidgetLink> widgetLinks) {
         this.widgetLinks = widgetLinks;
+    }
+
+    public void addWidgetLink(DashboardWidgetLink widgetLink) {
+        if (widgetLinks == null) {
+            widgetLinks = new ArrayList<>();
+        }
+        widgetLinks.add(widgetLink);
+    }
+
+    public void removeWidgetLink(DashboardWidgetLink widgetLink) {
+        if (widgetLinks == null) {
+            widgetLinks = new ArrayList<>();
+        }
+        widgetLinks.remove(widgetLink);
     }
 
     public List<DashboardWidgetLink> getWidgetLinks() {
