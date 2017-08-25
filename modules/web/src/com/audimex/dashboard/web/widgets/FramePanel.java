@@ -4,8 +4,9 @@
 
 package com.audimex.dashboard.web.widgets;
 
+import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.DashboardWidget;
-import com.audimex.dashboard.web.WidgetRepository;
+import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -29,16 +30,22 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     protected int colSpan = 1;
     protected int rowSpan = 1;
 
-    protected String icon;
-    protected String caption;
+    protected Dashboard dashboard;
+
+    protected Consumer<DashboardEvent> dashboardEventExecutor;
 
     protected DashboardWidget widget;
 
+    protected DashboardWidget templateWidget;
+
     protected DashboardTools dashboardTools;
 
-    public FramePanel(Tree tree, DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
+    public FramePanel(Tree tree, Dashboard dashboard, Consumer<DashboardEvent> dashboardEventExecutor,
+                      DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
+        this.dashboard = dashboard;
         this.widget = widget;
+        this.dashboardEventExecutor = dashboardEventExecutor;
 
         dashboardTools = AppBeans.get(DashboardTools.NAME);
 
@@ -85,6 +92,18 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             c.setSizeFull();
             contentLayout.addComponent(c);
         }
+    }
+
+    public Dashboard getDashboard() {
+        return dashboard;
+    }
+
+    public DashboardWidget getWidget() {
+        return widget;
+    }
+
+    public Consumer<DashboardEvent> getDashboardEventExecutor() {
+        return dashboardEventExecutor;
     }
 
     public String getFrameId() {
@@ -166,21 +185,21 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     @Override
     public String getWidgetIcon() {
-        return icon;
+        return widget.getIcon();
     }
 
     public void setWidgetIcon(String icon) {
-        this.icon = icon;
+
     }
 
     @Override
     public String getWidgetCaption() {
-        return caption;
+        return widget.getCaption();
     }
 
     @Override
     public void setWidgetCaption(String caption) {
-        this.caption = caption;
+
     }
 
     @Override
@@ -191,5 +210,13 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
     @Override
     public void setMargin(boolean margin) {
         contentLayout.setMargin(margin);
+    }
+
+    public DashboardWidget getTemplateWidget() {
+        return templateWidget;
+    }
+
+    public void setTemplateWidget(DashboardWidget templateWidget) {
+        this.templateWidget = templateWidget;
     }
 }

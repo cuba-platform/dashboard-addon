@@ -3,17 +3,18 @@
  */
 package com.audimex.dashboard.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.validation.constraints.NotNull;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.util.List;
-import javax.persistence.OneToMany;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @NamePattern("%s|caption")
 @Table(name = "AMXD_DASHBOARD_WIDGET")
@@ -48,6 +49,7 @@ public class DashboardWidget extends StandardEntity {
     @Column(name = "REPORT")
     protected String report;
 
+    @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboardWidget")
     protected List<DashboardWidgetLink> dashboardLinks;
 
@@ -65,6 +67,13 @@ public class DashboardWidget extends StandardEntity {
 
     public List<DashboardWidgetLink> getDashboardLinks() {
         return dashboardLinks;
+    }
+
+    public void addDashboardLink(DashboardWidgetLink dashboardLink) {
+        if (dashboardLinks == null) {
+            dashboardLinks = new ArrayList<>();
+        }
+        dashboardLinks.add(dashboardLink);
     }
 
     public void setDashboardLinks(List<DashboardWidgetLink> dashboardLinks) {

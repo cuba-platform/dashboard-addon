@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.drophandlers;
 
+import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
@@ -30,6 +31,7 @@ import java.util.function.Consumer;
 
 public class TreeDropHandler implements DropHandler {
     protected Tree tree;
+    protected Dashboard dashboard;
     protected GridDropListener gridDropListener;
     protected Frame frame;
     protected Consumer<Tree> treeHandler;
@@ -111,6 +113,15 @@ public class TreeDropHandler implements DropHandler {
     public void setFrame(Frame frame) {
         this.frame = frame;
     }
+
+    public Dashboard getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(Dashboard dashboard) {
+        this.dashboard = dashboard;
+    }
+
 
     public void setTreeHandler(Consumer<Tree> treeHandler) {
         this.treeHandler = treeHandler;

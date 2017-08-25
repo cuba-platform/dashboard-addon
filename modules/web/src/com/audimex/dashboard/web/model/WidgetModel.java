@@ -14,6 +14,7 @@ public class WidgetModel implements Serializable {
     protected String frameId;
     protected String caption;
     protected String icon;
+    protected String templateWidgetId;
     protected int weight = 1;
     protected int colspan = 1;
     protected int rowspan = 1;
@@ -23,6 +24,7 @@ public class WidgetModel implements Serializable {
     protected int gridRowCount = 1;
     protected List<WidgetModel> children = new ArrayList<>();
     protected WidgetType type;
+    protected List<String> widgetLinks = new ArrayList<>();
 
     public String getFrameId() {
         return frameId;
@@ -80,6 +82,14 @@ public class WidgetModel implements Serializable {
         this.children = children;
     }
 
+    public List<String> getWidgetLinks() {
+        return widgetLinks;
+    }
+
+    public void setWidgetLinks(List<String> widgetLinks) {
+        this.widgetLinks = widgetLinks;
+    }
+
     public WidgetType getType() {
         return type;
     }
@@ -118,5 +128,13 @@ public class WidgetModel implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getTemplateWidgetId() {
+        return templateWidgetId;
+    }
+
+    public void setTemplateWidgetId(String templateWidgetId) {
+        this.templateWidgetId = templateWidgetId;
     }
 }

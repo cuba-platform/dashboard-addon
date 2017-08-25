@@ -72,6 +72,7 @@ create table AMXD_WIDGET_PARAMETER (
     NAME varchar(255),
     PARAMETER_TYPE integer,
     DASHBOARD_WIDGET_ID uuid,
+    DASHBOARD_WIDGET_LINK_ID uuid,
     --
     primary key (ID)
 )^

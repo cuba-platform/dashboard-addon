@@ -3,13 +3,9 @@
  */
 package com.audimex.dashboard.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
 
 @Table(name = "AMXD_WIDGET_PARAMETER")
 @Entity(name = "amxd$WidgetParameter")
@@ -25,6 +21,19 @@ public class WidgetParameter extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DASHBOARD_WIDGET_ID")
     protected DashboardWidget dashboardWidget;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DASHBOARD_WIDGET_LINK_ID")
+    protected DashboardWidgetLink dashboardWidgetLink;
+
+    public void setDashboardWidgetLink(DashboardWidgetLink dashboardWidgetLink) {
+        this.dashboardWidgetLink = dashboardWidgetLink;
+    }
+
+    public DashboardWidgetLink getDashboardWidgetLink() {
+        return dashboardWidgetLink;
+    }
+
 
     public void setDashboardWidget(DashboardWidget dashboardWidget) {
         this.dashboardWidget = dashboardWidget;
