@@ -28,5 +28,6 @@
             <button id="okButton" caption="mainMsg://actions.Ok" icon="icons/ok.png" action="save"/>
             <button id="cancelButton" caption="mainMsg://actions.Cancel" icon="icons/cancel.png" action="cancel"/>
         </hbox>
+        <hbox id="parametersBox" width="100%" height="100%" spacing="true"/>
     </layout>
 </window>

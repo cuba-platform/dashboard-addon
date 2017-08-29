@@ -1,0 +1,6 @@
+alter table AMXD_WIDGET_PARAMETER add column REFERENCE_TO_ENTITY_ENTITY_ID uuid ;
+alter table AMXD_WIDGET_PARAMETER add column REFERENCE_TO_ENTITY_META_CLASS_NAME varchar(255) ;
+alter table AMXD_WIDGET_PARAMETER add column REFERENCE_TO_ENTITY_VIEW_NAME varchar(255) ;
+alter table AMXD_WIDGET_PARAMETER drop column ENTITY_VALUE_ENTITY_ID cascade ;
+alter table AMXD_WIDGET_PARAMETER drop column ENTITY_VALUE_META_CLASS_NAME cascade ;
+alter table AMXD_WIDGET_PARAMETER drop column ENTITY_VALUE_VIEW_NAME cascade ;

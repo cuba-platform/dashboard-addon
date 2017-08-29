@@ -14,15 +14,34 @@
         <property name="dashboardWidget"
                   view="_minimal"/>
     </view>
+    <view class="com.audimex.dashboard.entity.WidgetParameter"
+          extends="_local"
+          name="master-widgetParameter-view">
+        <property name="dashboardWidget"
+                  view="_minimal"/>
+        <property name="listParameters"
+                  view="slave-widgetParameter-view"/>
+        <property name="referenceToEntity"
+                  view="_local"/>
+    </view>
+    <view class="com.audimex.dashboard.entity.WidgetParameter"
+          extends="_local"
+          name="slave-widgetParameter-view">
+        <property name="dashboardWidget"
+                  view="_minimal"/>
+        <property name="referenceToEntity"
+                  view="_local"/>
+    </view>
     <view class="com.audimex.dashboard.entity.DashboardWidget"
           extends="_local"
           name="dashboardWidget-view">
         <property name="dashboardLinks"
                   view="_local">
-            <property name="dashboardParameters" view="_local"/>
+            <property name="dashboardParameters"
+                      view="_local"/>
         </property>
         <property name="parameters"
-                  view="widgetParameter-view"/>
+                  view="master-widgetParameter-view"/>
     </view>
     <view class="com.audimex.dashboard.entity.DashboardWidgetLink"
           extends="_local"

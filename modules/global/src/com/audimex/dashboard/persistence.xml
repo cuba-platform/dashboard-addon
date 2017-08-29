@@ -7,5 +7,6 @@
         <class>com.audimex.dashboard.entity.DashboardWidget</class>
         <class>com.audimex.dashboard.entity.DashboardWidgetLink</class>
         <class>com.audimex.dashboard.entity.WidgetParameter</class>
+        <class>com.audimex.dashboard.entity.ReferenceToEntity</class>
     </persistence-unit>
 </persistence>

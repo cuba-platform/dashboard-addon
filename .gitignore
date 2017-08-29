@@ -7,3 +7,5 @@ build/*
 modules/*/build/*
 out
 test-run
+.ideaDataSources
+dataSources

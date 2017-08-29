@@ -8,17 +8,25 @@
     <dsContext>
         <datasource id="widgetParameterDs"
                     class="com.audimex.dashboard.entity.WidgetParameter"
-                    view="widgetParameter-view"/>
+                    view="master-widgetParameter-view"/>
     </dsContext>
-    <dialogMode height="170"
-                width="400"/>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="widgetParameterDs">
             <column width="250px">
-                <field property="name" required="true"/>
-                <field property="parameterType" required="true"/>
+                <field property="name"
+                       required="true"/>
+                <field property="parameterType"
+                       required="true"/>
+                <field id="referenceToEntity.metaClassName"
+                       property="referenceToEntity.metaClassName"
+                       custom="true"/>
+                <field id="referenceToEntity.viewName"
+                       property="referenceToEntity.viewName"
+                       custom="true"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

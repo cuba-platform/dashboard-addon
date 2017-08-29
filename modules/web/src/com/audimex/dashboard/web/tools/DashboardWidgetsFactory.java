@@ -14,11 +14,15 @@ import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.Tree;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.function.Consumer;
 
 @Component(DashboardWidgetsFactory.NAME)
 public class DashboardWidgetsFactory {
     public static final String NAME = "amxd_DashboardWidgetsFactory";
+
+    @Inject
+    protected ParameterTools parameterTools;
 
     public com.vaadin.ui.Component createWidgetOnDrop(PaletteButton dragComponent, Tree tree, GridDropListener gridDropListener,
                                                       Frame frame, Consumer<Tree> treeHandler, Object layout) {
@@ -41,8 +45,8 @@ public class DashboardWidgetsFactory {
 
             if (dragComponent.getDashboard() != null && dashboardEventConsumer != null) {
                 Dashboard dashboard = dragComponent.getDashboard();
-                link = createDashboardLink(dashboard, dashboardEventConsumer, templateWidget);
-                dashboard.addWidgetLink(link);
+                link = parameterTools.createDashboardLink(dashboard, templateWidget, dashboardEventConsumer);
+
             }
 
             switch (templateWidget.getWidgetViewType()) {
@@ -74,34 +78,5 @@ public class DashboardWidgetsFactory {
         }
 
         return component;
-    }
-
-    protected DashboardWidgetLink createDashboardLink(Dashboard dashboard, Consumer<DashboardEvent> dashboardEventConsumer,
-                                                      DashboardWidget widget) {
-
-        Metadata metadata = AppBeans.get(Metadata.NAME);
-        DashboardWidgetLink dashboardWidgetLink = metadata.create(DashboardWidgetLink.class);
-
-        widget.getParameters().forEach(p -> {
-            WidgetParameter param = metadata.create(WidgetParameter.class);
-            param.setName(p.getName());
-            param.setParameterType(p.getParameterType());
-            param.setDashboardWidget(widget);
-            param.setDashboardWidgetLink(dashboardWidgetLink);
-            dashboardWidgetLink.addDashboardParameter(param);
-        });
-
-        dashboardWidgetLink.setDashboardWidget(widget);
-        dashboardWidgetLink.setDashboard(dashboard);
-        dashboardEventConsumer.accept(
-                new DashboardEvent<>(dashboardWidgetLink, DashboardEventType.CREATE)
-        );
-        dashboardWidgetLink.getDashboardParameters().forEach(param ->
-                dashboardEventConsumer.accept(
-                        new DashboardEvent<>(param, DashboardEventType.CREATE)
-                )
-        );
-
-        return dashboardWidgetLink;
     }
 }

@@ -69,10 +69,22 @@ create table AMXD_WIDGET_PARAMETER (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    REFERENCE_TO_ENTITY_ENTITY_ID uuid,
+    REFERENCE_TO_ENTITY_META_CLASS_NAME varchar(255),
+    REFERENCE_TO_ENTITY_VIEW_NAME varchar(255),
+    --
     NAME varchar(255),
     PARAMETER_TYPE integer,
     DASHBOARD_WIDGET_ID uuid,
     DASHBOARD_WIDGET_LINK_ID uuid,
+    INTEGER_VALUE integer,
+    STRING_VALUE varchar(255),
+    DECIMAL_VALUE decimal(19, 2),
+    DATE_VALUE date,
+    BOOL_VALUE boolean,
+    LONG_VALUE bigint,
+    DOUBLE_VALUE double precision,
+    MASTER_PARAMETER_ID uuid,
     --
     primary key (ID)
 )^
