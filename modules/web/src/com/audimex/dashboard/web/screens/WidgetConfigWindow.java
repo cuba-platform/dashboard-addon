@@ -3,18 +3,29 @@
  */
 package com.audimex.dashboard.web.screens;
 
+import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
+import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Tree;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -23,6 +34,9 @@ public class WidgetConfigWindow extends AbstractWindow {
     protected Slider weightSlider = null;
     protected Slider colSpanSlider = null;
     protected Slider rowSpanSlider = null;
+
+    @Inject
+    protected HBoxLayout parametersBox;
 
     @Inject
     protected HBoxLayout sliderLayout;
@@ -47,6 +61,9 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     @Inject
     private Label rightLabel;
+
+    @Inject
+    protected ComponentsFactory componentsFactory;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -130,7 +147,89 @@ public class WidgetConfigWindow extends AbstractWindow {
 
             layout.addComponent(rowSpanSlider);
         }
+
+        if (widget instanceof FramePanel) {
+            parametersInit(((FramePanel) widget).getWidget());
+        }
     }
+
+    protected void parametersInit(DashboardWidget dashboardWidget) {
+        dashboardWidget.getDashboardLinks().forEach(link ->
+                link.getDashboardParameters().forEach(param -> {
+                    com.haulmont.cuba.gui.components.Component component = createComponent(param);
+                    parametersBox.add(component);
+                })
+        );
+    }
+
+    protected com.haulmont.cuba.gui.components.Component createComponent(WidgetParameter parameter) {
+        com.haulmont.cuba.gui.components.Component component;
+        switch (parameter.getParameterType()) {
+            case INTEGER:
+                TextField textFieldInteger =
+                        componentsFactory.createComponent(TextField.class);
+                textFieldInteger.setWidth("100%");
+                //textFieldInteger.setValue(entity.getDefaultIntegerValue());
+                textFieldInteger.setEditable(false);
+                component = textFieldInteger;
+                break;
+            case LIST_ENTITY:
+                LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+                //lookupField.setOptionsDatasource(riskModelParamOptionDs);
+                lookupField.setWidth("100%");
+                //lookupField.setValue(entity.getDefaultListItemValue());
+                lookupField.setEditable(false);
+                component = lookupField;
+
+/*                DataManager dataManager = AppBeans.get(DataManager.class);
+                Metadata metadata = AppBeans.get(Metadata.class);
+                MetaClass metaClass = metadata.getSession().getClassNN("sec$User");
+
+                MetadataTools tools = AppBeans.get(MetadataTools.class);
+
+                LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
+                        .setQuery(LoadContext.createQuery("select dw from amxd$DashboardWidget dw"))
+                        .setView("dashboardWidget-view");
+
+                LoadContext ctx2 = LoadContext.create(metaClass.getJavaClass());
+
+                dataManager.load(ctx2);
+                //metadata.getSession().getClassNN("sec$User");*/
+                break;
+            case DECIMAL:
+                TextField textFieldDecimal =
+                        componentsFactory.createComponent(TextField.class);
+                textFieldDecimal.setWidth("100%");
+                //textFieldDecimal.setValue(entity.getDefaultDecimalValue());
+                textFieldDecimal.setEditable(false);
+                component = textFieldDecimal;
+                break;
+            case DATE:
+                DateField dateField =
+                        componentsFactory.createComponent(DateField.class);
+                dateField.setWidth("100%");
+                dateField.setDateFormat("dd.MM.yyyy");
+                //dateField.setValue(entity.getDefaultDateValue());
+                dateField.setEditable(false);
+                component = dateField;
+                break;
+            case ENTITY:
+                //component = new com.haulmont.cuba.gui.components.Table.PlainTextCell(parameter.getInstanceName());
+                TextField textField =
+                        componentsFactory.createComponent(TextField.class);
+                component = textField;
+/*
+                component = new com.haulmont.cuba.gui.components.Table.PlainTextCell(entity.getDefaultAuditObjectValue() != null ?
+                        entity.getDefaultAuditObjectValue().getInstanceName() : "");
+*/
+                break;
+            default:
+                component = componentsFactory.createComponent(TextField.class);
+        }
+
+        return component;
+    }
+
 
     public void cancel() {
         close(CLOSE_ACTION_ID);
