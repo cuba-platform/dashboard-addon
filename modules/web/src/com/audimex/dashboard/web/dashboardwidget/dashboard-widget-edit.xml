@@ -9,16 +9,8 @@
         <datasource id="dashboardWidgetDs"
                     class="com.audimex.dashboard.entity.DashboardWidget"
                     view="dashboardWidget-view">
+            <collectionDatasource id="widgetParametersDs" property="parameters"/>
         </datasource>
-        <collectionDatasource id="widgetParameters"
-                    class="com.audimex.dashboard.entity.WidgetParameter"
-                    view="master-widgetParameter-view">
-            <query>
-                <![CDATA[select e from amxd$WidgetParameter e
-                        where e.dashboardWidget.id = :ds$dashboardWidgetDs.id
-                            and e.dashboardWidgetLink is null]]>
-            </query>
-        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="400"/>
@@ -50,7 +42,7 @@
                 <column id="referenceToEntity.metaClassName"/>
                 <column id="referenceToEntity.viewName"/>
             </columns>
-            <rows datasource="widgetParameters"/>
+            <rows datasource="widgetParametersDs"/>
             <buttonsPanel>
                 <button id="btnCreate" action="parametersTable.create"/>
                 <button id="btnEdit" action="parametersTable.edit"/>

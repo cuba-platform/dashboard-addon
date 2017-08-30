@@ -5,15 +5,15 @@ package com.audimex.dashboard.web.screens;
 
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetParameter;
+import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
+import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
-import com.haulmont.chile.core.model.MetaClass;
-import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
+import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.Button;
@@ -28,7 +28,9 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Tree;
 
 import javax.inject.Inject;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class WidgetConfigWindow extends AbstractWindow {
     protected Slider weightSlider = null;
@@ -36,7 +38,7 @@ public class WidgetConfigWindow extends AbstractWindow {
     protected Slider rowSpanSlider = null;
 
     @Inject
-    protected HBoxLayout parametersBox;
+    protected VBoxLayout parametersBox;
 
     @Inject
     protected HBoxLayout sliderLayout;
@@ -53,6 +55,9 @@ public class WidgetConfigWindow extends AbstractWindow {
     @WindowParam(name = "tree")
     protected Tree tree;
 
+    @WindowParam(name = "dashboardEventExecutor")
+    protected Consumer<DashboardEvent> dashboardEventExecutor;
+
     @Inject
     protected DashboardTools dashboardTools;
 
@@ -64,6 +69,10 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     @Inject
     protected ComponentsFactory componentsFactory;
+
+    protected static final List<Boolean> booleanList = ImmutableList.of(true, false);
+
+    protected Map<WidgetParameter, Object> valuesMap = new HashMap<>();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -157,85 +166,142 @@ public class WidgetConfigWindow extends AbstractWindow {
         dashboardWidget.getDashboardLinks().forEach(link ->
                 link.getDashboardParameters().forEach(param -> {
                     com.haulmont.cuba.gui.components.Component component = createComponent(param);
-                    parametersBox.add(component);
+                    if (component != null) {
+                        parametersBox.add(component);
+                    }
                 })
         );
     }
 
     protected com.haulmont.cuba.gui.components.Component createComponent(WidgetParameter parameter) {
         com.haulmont.cuba.gui.components.Component component;
+        HBoxLayout parameterArea = componentsFactory.createComponent(HBoxLayout.class);
+        parameterArea.setWidth("100%");
+        parameterArea.setSpacing(true);
+
         switch (parameter.getParameterType()) {
-            case INTEGER:
-                TextField textFieldInteger =
-                        componentsFactory.createComponent(TextField.class);
-                textFieldInteger.setWidth("100%");
-                //textFieldInteger.setValue(entity.getDefaultIntegerValue());
-                textFieldInteger.setEditable(false);
-                component = textFieldInteger;
+            case ENTITY:
+                TextField undefinedField1 = componentsFactory.createComponent(TextField.class);
+                undefinedField1.setWidth("100%");
+                undefinedField1.setValue(parameter.getStringValue());
+                component = undefinedField1;
                 break;
             case LIST_ENTITY:
-                LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-                //lookupField.setOptionsDatasource(riskModelParamOptionDs);
-                lookupField.setWidth("100%");
-                //lookupField.setValue(entity.getDefaultListItemValue());
-                lookupField.setEditable(false);
-                component = lookupField;
-
-/*                DataManager dataManager = AppBeans.get(DataManager.class);
-                Metadata metadata = AppBeans.get(Metadata.class);
-                MetaClass metaClass = metadata.getSession().getClassNN("sec$User");
-
-                MetadataTools tools = AppBeans.get(MetadataTools.class);
-
-                LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
-                        .setQuery(LoadContext.createQuery("select dw from amxd$DashboardWidget dw"))
-                        .setView("dashboardWidget-view");
-
-                LoadContext ctx2 = LoadContext.create(metaClass.getJavaClass());
-
-                dataManager.load(ctx2);
-                //metadata.getSession().getClassNN("sec$User");*/
-                break;
-            case DECIMAL:
-                TextField textFieldDecimal =
-                        componentsFactory.createComponent(TextField.class);
-                textFieldDecimal.setWidth("100%");
-                //textFieldDecimal.setValue(entity.getDefaultDecimalValue());
-                textFieldDecimal.setEditable(false);
-                component = textFieldDecimal;
+                TextField undefinedField2 = componentsFactory.createComponent(TextField.class);
+                undefinedField2.setWidth("100%");
+                undefinedField2.setValue(parameter.getStringValue());
+                component = undefinedField2;
                 break;
             case DATE:
-                DateField dateField =
-                        componentsFactory.createComponent(DateField.class);
+                DateField dateField = componentsFactory.createComponent(DateField.class);
                 dateField.setWidth("100%");
                 dateField.setDateFormat("dd.MM.yyyy");
-                //dateField.setValue(entity.getDefaultDateValue());
-                dateField.setEditable(false);
+                dateField.setValue(parameter.getDateValue());
+                parameterArea.add(dateField);
+                dateField.addValueChangeListener(event -> {
+                    Date date = (Date) event.getValue();
+                    addValue(parameter, date);
+                });
                 component = dateField;
                 break;
-            case ENTITY:
-                //component = new com.haulmont.cuba.gui.components.Table.PlainTextCell(parameter.getInstanceName());
-                TextField textField =
-                        componentsFactory.createComponent(TextField.class);
-                component = textField;
-/*
-                component = new com.haulmont.cuba.gui.components.Table.PlainTextCell(entity.getDefaultAuditObjectValue() != null ?
-                        entity.getDefaultAuditObjectValue().getInstanceName() : "");
-*/
+            case INTEGER:
+                TextField integerField = componentsFactory.createComponent(TextField.class);
+                integerField.setWidth("100%");
+                integerField.setValue(parameter.getIntegerValue());
+                integerField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
+                    Integer intValue = Integer.parseInt((String) event.getValue());
+                    addValue(parameter, intValue);
+                });
+                component = integerField;
+                break;
+            case STRING:
+                TextField stringField = componentsFactory.createComponent(TextField.class);
+                stringField.setWidth("100%");
+                stringField.setValue(parameter.getStringValue());
+                stringField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
+                    String strValue = (String) event.getValue();
+                    addValue(parameter, strValue);
+                });
+                component = stringField;
+                break;
+            case DECIMAL:
+                TextField decimalField = componentsFactory.createComponent(TextField.class);
+                decimalField.setWidth("100%");
+                decimalField.setValue(parameter.getDecimalValue());
+                decimalField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
+                    BigDecimal decValue = BigDecimal.valueOf(Long.parseLong((String) event.getValue()));
+                    addValue(parameter, decValue);
+                });
+                component = decimalField;
+                break;
+            case BOOLEAN:
+                LookupField booleanField = componentsFactory.createComponent(LookupField.class);
+                booleanField.setWidth("100%");
+                booleanField.setOptionsList(booleanList);
+                booleanField.setValue(parameter.getBoolValue());
+                booleanField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
+                    Boolean booleanDate = (Boolean) event.getValue();
+                    addValue(parameter, booleanDate);
+                });
+                component = booleanField;
+                break;
+            case LONG:
+                TextField longField = componentsFactory.createComponent(TextField.class);
+                longField.setWidth("100%");
+                longField.setValue(parameter.getLongValue());
+                longField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
+                    Long longValue = Long.parseLong((String) event.getValue());
+                    addValue(parameter, longValue);
+                });
+                component = longField;
                 break;
             default:
-                component = componentsFactory.createComponent(TextField.class);
+                TextField undefinedField = componentsFactory.createComponent(TextField.class);
+                undefinedField.setWidth("100%");
+                undefinedField.setValue(parameter.getStringValue());
+                undefinedField.addValueChangeListener(event -> {
+                    String stringValue = (String) event.getValue();
+                    addValue(parameter, stringValue);
+                });
+                component = undefinedField;
         }
 
-        return component;
+        Label parameterNameField = componentsFactory.createComponent(Label.class);
+        parameterNameField.setWidth("100%");
+        parameterNameField.setValue(parameter.getName());
+
+        parameterArea.add(parameterNameField);
+        parameterArea.add(component);
+
+        return parameterArea;
     }
 
+    protected void addValue(WidgetParameter parameter, Object value) {
+        if (valuesMap.containsKey(parameter)) {
+            valuesMap.replace(parameter, value);
+        } else {
+            valuesMap.put(parameter, value);
+        }
+    }
 
     public void cancel() {
         close(CLOSE_ACTION_ID);
     }
 
     public void save() {
+        if (valuesMap.size() > 0 && dashboardEventExecutor != null) {
+            valuesMap.forEach((param, newValue) -> {
+                param.setValue(newValue);
+                dashboardEventExecutor.accept(
+                        new DashboardEvent<>(param, DashboardEventType.UPDATE)
+                );
+            });
+        }
         if (widget.getParent() instanceof AbstractOrderedLayout) {
             ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());
         }

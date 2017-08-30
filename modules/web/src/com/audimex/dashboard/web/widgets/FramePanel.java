@@ -55,6 +55,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
             params.put("tree", tree);
+            params.put("dashboardEventExecutor", dashboardEventExecutor);
             parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
