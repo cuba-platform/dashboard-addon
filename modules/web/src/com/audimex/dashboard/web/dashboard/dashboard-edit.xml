@@ -9,9 +9,6 @@
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.entity.Dashboard"
                     view="dashboard-view">
-                <collectionDatasource id="linksDs" property="widgetLinks">
-                    <collectionDatasource id="parametersDs" property="dashboardParameters"/>
-                </collectionDatasource>
         </datasource>
     </dsContext>
     <dialogMode height="800"

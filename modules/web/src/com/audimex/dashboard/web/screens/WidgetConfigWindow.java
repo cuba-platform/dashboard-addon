@@ -4,6 +4,7 @@
 package com.audimex.dashboard.web.screens;
 
 import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
 import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
@@ -11,15 +12,20 @@ import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
 import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.google.common.collect.ImmutableList;
+import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
@@ -69,6 +75,12 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     @Inject
     protected ComponentsFactory componentsFactory;
+
+    @Inject
+    protected Metadata metadata;
+
+    @Inject
+    protected ParameterTools parameterTools;
 
     protected static final List<Boolean> booleanList = ImmutableList.of(true, false);
 
@@ -164,12 +176,14 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected void parametersInit(DashboardWidget dashboardWidget) {
         dashboardWidget.getDashboardLinks().forEach(link ->
-                link.getDashboardParameters().forEach(param -> {
-                    com.haulmont.cuba.gui.components.Component component = createComponent(param);
-                    if (component != null) {
-                        parametersBox.add(component);
-                    }
-                })
+                link.getDashboardParameters().stream()
+                        .sorted(Comparator.comparing(WidgetParameter::getName))
+                        .forEach(param -> {
+                            com.haulmont.cuba.gui.components.Component component = createComponent(param);
+                            if (component != null) {
+                                parametersBox.add(component);
+                            }
+                        })
         );
     }
 
@@ -181,10 +195,28 @@ public class WidgetConfigWindow extends AbstractWindow {
 
         switch (parameter.getParameterType()) {
             case ENTITY:
-                TextField undefinedField1 = componentsFactory.createComponent(TextField.class);
-                undefinedField1.setWidth("100%");
-                undefinedField1.setValue(parameter.getStringValue());
-                component = undefinedField1;
+                LookupField entityField = componentsFactory.createComponent(LookupField.class);
+                entityField.setWidth("100%");
+
+                ReferenceToEntity reference = parameter.getReferenceToEntity();
+
+                MetaClass metaClass = metadata.getSession()
+                        .getClassNN(reference.getMetaClassName());
+                CollectionDatasource ds = new DsBuilder(getDsContext())
+                        .setJavaClass(metaClass.getJavaClass())
+                        .setAllowCommit(false)
+                        .setViewName(reference.getViewName())
+                        .setId(parameter.getName() + "Ds")
+                        .buildCollectionDatasource();
+
+                ds.refresh();
+
+                entityField.setOptionsDatasource(ds);
+                entityField.setValue(parameterTools.getWidgetLinkParameterValue(parameter));
+                entityField.addValueChangeListener(event -> {
+                    addValue(parameter, event.getValue());
+                });
+                component = entityField;
                 break;
             case LIST_ENTITY:
                 TextField undefinedField2 = componentsFactory.createComponent(TextField.class);
@@ -197,7 +229,6 @@ public class WidgetConfigWindow extends AbstractWindow {
                 dateField.setWidth("100%");
                 dateField.setDateFormat("dd.MM.yyyy");
                 dateField.setValue(parameter.getDateValue());
-                parameterArea.add(dateField);
                 dateField.addValueChangeListener(event -> {
                     Date date = (Date) event.getValue();
                     addValue(parameter, date);
@@ -272,7 +303,7 @@ public class WidgetConfigWindow extends AbstractWindow {
         }
 
         Label parameterNameField = componentsFactory.createComponent(Label.class);
-        parameterNameField.setWidth("100%");
+        parameterNameField.setWidth("100px");
         parameterNameField.setValue(parameter.getName());
 
         parameterArea.add(parameterNameField);

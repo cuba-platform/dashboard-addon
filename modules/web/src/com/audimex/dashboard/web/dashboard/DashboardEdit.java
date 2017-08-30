@@ -12,6 +12,9 @@ import com.audimex.dashboard.web.model.DashboardModel;
 import com.google.gson.Gson;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.CommitContext;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -36,15 +39,11 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     private UserSession userSession;
 
-    @Inject
-    protected CollectionDatasource<DashboardWidgetLink, UUID> linksDs;
-
-    @Inject
-    protected CollectionDatasource<WidgetParameter, UUID> parametersDs;
-
     protected DashboardFrame dashboardDesigner;
 
     protected Consumer<DashboardEvent> dashboardEventExecutor = this::eventExecution;
+
+    protected CommitContext commitContext = new CommitContext();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -66,12 +65,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
             dashboardModel = gson.fromJson(getItem().getModel(), DashboardModel.class);
             dashboardDesigner.setDashboardModel(dashboardModel);
         }
-
-        linksDs.getItems().forEach(link ->
-                link.getDashboardParameters().forEach(parameter ->
-                        parametersDs.addItem(parameter)
-                )
-        );
     }
 
     @Override
@@ -83,28 +76,27 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         return super.preCommit();
     }
 
+    @Override
+    protected boolean postCommit(boolean committed, boolean close) {
+        DataManager dataManager = AppBeans.get(DataManager.class);
+        dataManager.commit(commitContext);
+
+        return super.postCommit(committed, close);
+    }
+
     protected void eventExecution(DashboardEvent event) {
         Entity entity = (Entity) event.getEntity();
         DashboardEventType type = event.getType();
 
-        if (entity instanceof DashboardWidgetLink) {
-            executeEventAction(type, linksDs, entity);
-        } else if (entity instanceof WidgetParameter) {
-            executeEventAction(type, parametersDs, entity);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void executeEventAction(DashboardEventType type, CollectionDatasource datasource, Entity entity) {
         switch (type) {
             case CREATE:
-                datasource.addItem(entity);
+                commitContext.addInstanceToCommit(entity);
                 break;
             case UPDATE:
-                datasource.updateItem(entity);
+                commitContext.addInstanceToCommit(entity);
                 break;
             case REMOVE:
-                datasource.removeItem(entity);
+                commitContext.addInstanceToRemove(entity);
                 break;
             default:
         }

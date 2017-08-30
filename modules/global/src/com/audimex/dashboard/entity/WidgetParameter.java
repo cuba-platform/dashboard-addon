@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Table(name = "AMXD_WIDGET_PARAMETER")
 @Entity(name = "amxd$WidgetParameter")
@@ -74,7 +75,7 @@ public class WidgetParameter extends StandardEntity {
     protected WidgetParameter masterParameter;
 
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "masterParameter", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "masterParameter")
     protected List<WidgetParameter> listParameters;
 
     public void setReferenceToEntity(ReferenceToEntity referenceToEntity) {
@@ -242,16 +243,26 @@ public class WidgetParameter extends StandardEntity {
             Object referenceId = getReferenceId(value);
             referenceToEntity.setObjectEntityId(referenceId);
             referenceToEntity.setMetaClassName(((BaseGenericIdEntity) value).getMetaClass().getName());
-            referenceToEntity.setViewName(viewName);
+            if (viewName != null) {
+                referenceToEntity.setViewName(viewName);
+            }
         } else if (value instanceof List) {
-            ((List) value).forEach(par -> {
-                Metadata metadata = AppBeans.get(Metadata.NAME);
-                WidgetParameter wp = metadata.create(WidgetParameter.class);
-                wp.setMasterParameter(this);
-                wp.setParameterType(WidgetParameterType.ENTITY);
-                wp.setValue(par, viewName);
-                this.addListParameter(wp);
-            });
+            Optional optional = ((List) value).stream().findAny();
+            if (optional.isPresent()) {
+                ((List) value).forEach(par -> {
+                    Metadata metadata = AppBeans.get(Metadata.NAME);
+                    WidgetParameter wp = metadata.create(WidgetParameter.class);
+                    wp.setMasterParameter(this);
+                    wp.setParameterType(WidgetParameterType.ENTITY);
+                    referenceToEntity.setMetaClassName(((BaseGenericIdEntity) optional.get())
+                            .getMetaClass().getName());
+                    if (viewName != null) {
+                        referenceToEntity.setViewName(viewName);
+                    }
+                    wp.setValue(par, viewName);
+                    addListParameter(wp);
+                });
+            }
         } else {
             throw new IllegalArgumentException("Unsupported value type " + value.getClass());
         }
