@@ -46,9 +46,13 @@ public class ParameterTools {
             dashboardEventConsumer.accept(
                     new DashboardEvent<>(dashboardWidgetLink, DashboardEventType.CREATE)
             );
-        }
 
-        dashboard.addWidgetLink(dashboardWidgetLink);
+            dashboardWidgetLink.getDashboardParameters().forEach(parameter ->
+                    dashboardEventConsumer.accept(
+                            new DashboardEvent<>(parameter, DashboardEventType.CREATE)
+                    )
+            );
+        }
 
         return dashboardWidgetLink;
     }
@@ -58,11 +62,15 @@ public class ParameterTools {
         param.setName(parameter.getName());
         param.setParameterType(parameter.getParameterType());
         param.setDashboardWidgetLink(link);
+        param.getReferenceToEntity().setMetaClassName(parameter.getReferenceToEntity().getMetaClassName());
+        param.getReferenceToEntity().setViewName(parameter.getReferenceToEntity().getViewName());
         return param;
     }
 
     @SuppressWarnings("unchecked")
     public Object getWidgetLinkParameterValue(WidgetParameter widgetParameter) {
+        if (widgetParameter.getReferenceToEntity().getEntityId() == null) return null;
+
         if (widgetParameter.getParameterType().equals(WidgetParameterType.ENTITY)) {
             ReferenceToEntity referenceToEntity = (ReferenceToEntity) widgetParameter.getValue();
             Metadata metadata = AppBeans.get(Metadata.class);

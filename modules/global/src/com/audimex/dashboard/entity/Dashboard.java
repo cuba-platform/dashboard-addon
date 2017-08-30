@@ -11,6 +11,7 @@ import com.haulmont.cuba.security.entity.User;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.haulmont.chile.core.annotations.Composition;
 
 @Table(name = "AMXD_DASHBOARD")
 @Entity(name = "amxd$Dashboard")
@@ -28,6 +29,7 @@ public class Dashboard extends StandardEntity {
     @Column(name = "MODEL")
     protected String model;
 
+    @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboard")
     protected List<DashboardWidgetLink> widgetLinks;

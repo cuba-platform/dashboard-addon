@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import com.haulmont.chile.core.annotations.Composition;
 
 @NamePattern("%s|caption")
 @Table(name = "AMXD_DASHBOARD_WIDGET")
@@ -53,6 +54,8 @@ public class DashboardWidget extends StandardEntity {
     @OneToMany(mappedBy = "dashboardWidget")
     protected List<DashboardWidgetLink> dashboardLinks;
 
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboardWidget")
     protected List<WidgetParameter> parameters;
 

@@ -15,6 +15,8 @@
                   view="_minimal"/>
         <property name="listParameters"
                   view="_minimal"/>
+        <property name="referenceToEntity"
+                  view="_local"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
@@ -40,7 +42,9 @@
         <property name="dashboardLinks"
                   view="_local">
             <property name="dashboardParameters"
-                      view="_local"/>
+                      view="_local">
+                <property name="referenceToEntity" view="_local"/>
+            </property>
         </property>
         <property name="parameters"
                   view="master-widgetParameter-view"/>

@@ -7,6 +7,7 @@ package com.audimex.dashboard.web.widgets;
 import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
+import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -60,6 +61,20 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         });
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener((Button.ClickListener) event -> {
+            widget.getDashboardLinks().forEach(link -> {
+                if (dashboardEventExecutor != null) {
+                    dashboardEventExecutor.accept(
+                            new DashboardEvent<>(link, DashboardEventType.CREATE)
+                    );
+
+                    link.getDashboardParameters().forEach(parameter ->
+                            dashboardEventExecutor.accept(
+                                    new DashboardEvent<>(parameter, DashboardEventType.CREATE)
+                            )
+                    );
+                }
+            });
+
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });

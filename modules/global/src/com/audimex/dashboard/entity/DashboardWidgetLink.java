@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.haulmont.chile.core.annotations.Composition;
 
 @Table(name = "AMXD_DASHBOARD_WIDGET_LINK")
 @Entity(name = "amxd$DashboardWidgetLink")
@@ -27,8 +28,9 @@ public class DashboardWidgetLink extends StandardEntity {
     @JoinColumn(name = "DASHBOARD_WIDGET_ID")
     protected DashboardWidget dashboardWidget;
 
+    @Composition
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "dashboardWidgetLink", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dashboardWidgetLink")
     protected List<WidgetParameter> dashboardParameters;
 
     public void setDashboardParameters(List<WidgetParameter> dashboardParameters) {
