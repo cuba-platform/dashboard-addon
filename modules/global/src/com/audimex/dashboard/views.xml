@@ -6,12 +6,14 @@
         <property name="user"
                   view="_minimal"/>
         <property name="widgetLinks"
-                  view="_minimal"/>
+                  view="dashboardWidgetLink-view"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
           name="widgetParameter-view">
-        <property name="dashboardWidget"
+        <property name="dashboardWidgetLink"
+                  view="_minimal"/>
+        <property name="listParameters"
                   view="_minimal"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
@@ -51,6 +53,6 @@
         <property name="dashboardWidget"
                   view="_minimal"/>
         <property name="dashboardParameters"
-                  view="_local"/>
+                  view="widgetParameter-view"/>
     </view>
 </views>

@@ -28,7 +28,7 @@ public class DashboardWidgetLink extends StandardEntity {
     protected DashboardWidget dashboardWidget;
 
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "dashboardWidgetLink")
+    @OneToMany(mappedBy = "dashboardWidgetLink", cascade = CascadeType.ALL)
     protected List<WidgetParameter> dashboardParameters;
 
     public void setDashboardParameters(List<WidgetParameter> dashboardParameters) {

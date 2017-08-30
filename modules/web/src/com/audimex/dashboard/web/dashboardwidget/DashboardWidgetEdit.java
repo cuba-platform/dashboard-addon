@@ -4,6 +4,7 @@
 package com.audimex.dashboard.web.dashboardwidget;
 
 import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -16,6 +17,7 @@ import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -25,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
@@ -51,15 +54,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             "frameId",
             "entityType",
             "report"
-    );
-
-    protected static final List<String> excludeScreens = ImmutableList.of(
-            ".edit",
-            "filterSelect",
-            ".changePassword",
-            "filterEditor",
-            "loginWindow",
-            "mainWindow"
     );
 
     protected static final List<String> commonFieldNames = ImmutableList.of("frameId");
@@ -179,11 +173,30 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected boolean isApplicableScreen(WindowInfo windowInfo) {
-        for (String screenPart : excludeScreens) {
-            if (windowInfo.getId().contains(screenPart)) {
-                return false;
-            }
+        if (windowInfo.getId().contains(".edit")) {
+            return false;
         }
+
+        if (windowInfo.getId().contains("filterSelect")) {
+            return false;
+        }
+
+        if (windowInfo.getId().contains(".changePassword")) {
+            return false;
+        }
+
+        if (windowInfo.getId().contains("filterEditor")) {
+            return false;
+        }
+
+        if (windowInfo.getId().contains("loginWindow")) {
+            return false;
+        }
+
+        if (windowInfo.getId().contains("mainWindow")) {
+            return false;
+        }
+
         return true;
     }
 }

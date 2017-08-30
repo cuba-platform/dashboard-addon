@@ -14,20 +14,33 @@
                 modal="true"
                 width="AUTO"/>
 
-    <layout>
+    <layout spacing="true">
         <hbox width="480px" spacing="true">
-            <label id="leftLabel" width="100%" htmlEnabled="true"/>
-            <label id="rightLabel" width="100%" htmlEnabled="true"/>
+            <label id="leftLabel"
+                   width="100%"
+                   htmlEnabled="true"/>
+            <label id="rightLabel"
+                   width="100%"
+                   htmlEnabled="true"/>
         </hbox>
         <hbox id="sliderLayout"
               width="480px"
               spacing="true"
               align="MIDDLE_CENTER"/>
+        <vbox id="parametersBox"
+              width="100%"
+              height="100%"
+              spacing="true"/>
         <hbox id="buttonsLayout"
               spacing="true">
-            <button id="okButton" caption="mainMsg://actions.Ok" icon="icons/ok.png" action="save"/>
-            <button id="cancelButton" caption="mainMsg://actions.Cancel" icon="icons/cancel.png" action="cancel"/>
+            <button id="okButton"
+                    caption="mainMsg://actions.Ok"
+                    icon="icons/ok.png"
+                    action="save"/>
+            <button id="cancelButton"
+                    caption="mainMsg://actions.Cancel"
+                    icon="icons/cancel.png"
+                    action="cancel"/>
         </hbox>
-        <hbox id="parametersBox" width="100%" height="100%" spacing="true"/>
     </layout>
 </window>

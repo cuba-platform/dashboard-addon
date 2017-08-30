@@ -15,6 +15,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.security.global.UserSession;
 
 import javax.inject.Inject;
@@ -65,6 +66,12 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
             dashboardModel = gson.fromJson(getItem().getModel(), DashboardModel.class);
             dashboardDesigner.setDashboardModel(dashboardModel);
         }
+
+        linksDs.getItems().forEach(link ->
+                link.getDashboardParameters().forEach(parameter ->
+                        parametersDs.addItem(parameter)
+                )
+        );
     }
 
     @Override

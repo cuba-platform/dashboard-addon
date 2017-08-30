@@ -35,7 +35,7 @@ public class ParameterTools {
         DashboardWidgetLink dashboardWidgetLink = metadata.create(DashboardWidgetLink.class);
 
         widget.getParameters().forEach(parameter -> {
-            WidgetParameter param = createWidgetLinkParameter(dashboardWidgetLink, parameter, widget);
+            WidgetParameter param = createWidgetLinkParameter(dashboardWidgetLink, parameter);
             dashboardWidgetLink.addDashboardParameter(param);
         });
 
@@ -48,25 +48,15 @@ public class ParameterTools {
             );
         }
 
-        if (dashboardEventConsumer != null) {
-            dashboardWidgetLink.getDashboardParameters().forEach(param ->
-                    dashboardEventConsumer.accept(
-                            new DashboardEvent<>(param, DashboardEventType.CREATE)
-                    )
-            );
-        }
-
         dashboard.addWidgetLink(dashboardWidgetLink);
 
         return dashboardWidgetLink;
     }
 
-    public WidgetParameter createWidgetLinkParameter(DashboardWidgetLink link, WidgetParameter parameter,
-                                                     DashboardWidget widget) {
+    public WidgetParameter createWidgetLinkParameter(DashboardWidgetLink link, WidgetParameter parameter) {
         WidgetParameter param = metadata.create(WidgetParameter.class);
         param.setName(parameter.getName());
         param.setParameterType(parameter.getParameterType());
-        param.setDashboardWidget(widget);
         param.setDashboardWidgetLink(link);
         return param;
     }
