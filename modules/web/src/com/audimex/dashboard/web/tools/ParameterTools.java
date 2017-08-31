@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author bochkarev
@@ -77,26 +78,33 @@ public class ParameterTools {
             );
             return dataManager.load(ctx);
         } else if (widgetParameter.getParameterType().equals(WidgetParameterType.LIST_ENTITY)) {
+            ReferenceToEntity referenceToEntity = widgetParameter.getReferenceToEntity();
             List<WidgetParameter> parameters = (List<WidgetParameter>) widgetParameter.getValue();
-/*            Metadata metadata = AppBeans.get(Metadata.class);
+            if (referenceToEntity == null || parameters == null) return null;
 
-            Class entityClass = metadata.getSession().getClassNN(referenceToEntity.getMetaClassName()).getJavaClass();
+            List<UUID> ids = parameters.stream()
+                    .map(parameter -> parameter.getReferenceToEntity().getEntityId())
+                    .collect(Collectors.toList());
+
+            Metadata metadata = AppBeans.get(Metadata.class);
+            Class entityClass = metadata.getSession()
+                    .getClassNN(referenceToEntity.getMetaClassName()).getJavaClass();
+
             LoadContext.Query query = new LoadContext.Query(
-                    String.format("select e from %s e where e.id in :ids", referenceToEntity.getMetaClassName())
-            ).setParameter("ids", widgetParameter.getValue());
+                    String.format("select e from %s e where e.id in :ids",
+                            referenceToEntity.getMetaClassName())
+            ).setParameter("ids", ids);
 
             LoadContext ctx = LoadContext.create(entityClass)
                     .setQuery(query)
                     .setView(referenceToEntity.getViewName()
             );
 
-            return dataManager.loadList(ctx);*/
-            return null;
+            return dataManager.loadList(ctx);
         } else {
             return widgetParameter.getValue();
         }
     }
-
 
     public List<WidgetLinkModel> createWidgetLinkModel(FramePanel framePanel) {
         List<WidgetLinkModel> widgetLinksModel = new ArrayList<>();

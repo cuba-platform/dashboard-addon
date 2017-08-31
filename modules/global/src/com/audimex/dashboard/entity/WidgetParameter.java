@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.EmbeddedParameters;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@NamePattern("%s|name")
 @Table(name = "AMXD_WIDGET_PARAMETER")
 @Entity(name = "amxd$WidgetParameter")
 public class WidgetParameter extends StandardEntity {
