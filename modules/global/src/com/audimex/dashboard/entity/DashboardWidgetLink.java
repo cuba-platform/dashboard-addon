@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.entity;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -10,7 +11,6 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.haulmont.chile.core.annotations.Composition;
 
 @Table(name = "AMXD_DASHBOARD_WIDGET_LINK")
 @Entity(name = "amxd$DashboardWidgetLink")
@@ -45,7 +45,7 @@ public class DashboardWidgetLink extends StandardEntity {
     }
 
     public List<WidgetParameter> getDashboardParameters() {
-        return dashboardParameters;
+        return dashboardParameters == null ? new ArrayList<>() : dashboardParameters;
     }
 
 

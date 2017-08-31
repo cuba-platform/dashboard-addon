@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame"
+        messagesPack="com.audimex.dashboard.web.widgets.frames">
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout spacing="true">
+        <vbox id="undefinedParametersVbox"
+              spacing="true">
+            <label id="widgetName" htmlEnabled="true"/>
+            <label value="msg://label.parametersShouldBeFiled"/>
+        </vbox>
+    </layout>
+</window>

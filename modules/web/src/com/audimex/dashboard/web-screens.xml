@@ -15,4 +15,6 @@
             template="com/audimex/dashboard/web/dashboardwidget/dashboard-widget-edit.xml"/>
     <screen id="amxd$WidgetParameter.edit"
             template="com/audimex/dashboard/web/widgetparameter/widget-parameter-edit.xml"/>
+    <screen id="amxd$UndefinedParameters.frame"
+            template="com/audimex/dashboard/web/widgets/frames/undefined-parameters-frame.xml"/>
 </screen-config>

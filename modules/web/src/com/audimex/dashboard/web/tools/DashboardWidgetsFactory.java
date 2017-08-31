@@ -52,7 +52,8 @@ public class DashboardWidgetsFactory {
             switch (templateWidget.getWidgetViewType()) {
                 case COMMON:
                     DashboardWidget widget = new DashboardWidget();
-                    widget.setCaption(templateWidget.getIcon());
+                    widget.setCaption(templateWidget.getCaption());
+                    widget.setIcon(templateWidget.getIcon());
                     widget.setFrameId(templateWidget.getFrameId());
                     if (link != null) {
                         widget.addDashboardLink(link);

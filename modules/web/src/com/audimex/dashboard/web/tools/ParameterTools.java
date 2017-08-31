@@ -14,6 +14,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -69,10 +70,10 @@ public class ParameterTools {
 
     @SuppressWarnings("unchecked")
     public Object getWidgetLinkParameterValue(WidgetParameter widgetParameter) {
-        if (widgetParameter.getReferenceToEntity().getEntityId() == null) return null;
-
         if (widgetParameter.getParameterType().equals(WidgetParameterType.ENTITY)) {
             ReferenceToEntity referenceToEntity = (ReferenceToEntity) widgetParameter.getValue();
+            if (referenceToEntity == null || referenceToEntity.getEntityId() == null) return null;
+
             Metadata metadata = AppBeans.get(Metadata.class);
             LoadContext ctx = LoadContext.create(
                                 metadata.getSession().getClassNN(
@@ -85,8 +86,8 @@ public class ParameterTools {
             );
             return dataManager.load(ctx);
         } else if (widgetParameter.getParameterType().equals(WidgetParameterType.LIST_ENTITY)) {
-            ReferenceToEntity referenceToEntity = (ReferenceToEntity) widgetParameter.getValue();
-            Metadata metadata = AppBeans.get(Metadata.class);
+            List<WidgetParameter> parameters = (List<WidgetParameter>) widgetParameter.getValue();
+/*            Metadata metadata = AppBeans.get(Metadata.class);
 
             Class entityClass = metadata.getSession().getClassNN(referenceToEntity.getMetaClassName()).getJavaClass();
             LoadContext.Query query = new LoadContext.Query(
@@ -98,7 +99,8 @@ public class ParameterTools {
                     .setView(referenceToEntity.getViewName()
             );
 
-            return dataManager.loadList(ctx);
+            return dataManager.loadList(ctx);*/
+            return null;
         } else {
             return widgetParameter.getValue();
         }
