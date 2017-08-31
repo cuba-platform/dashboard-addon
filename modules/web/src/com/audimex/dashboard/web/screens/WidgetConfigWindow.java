@@ -220,9 +220,9 @@ public class WidgetConfigWindow extends AbstractWindow {
 
                 entityField.setOptionsDatasource(ds);
                 entityField.setValue(parameterTools.getWidgetLinkParameterValue(parameter));
-                entityField.addValueChangeListener(event -> {
-                    addValue(parameter, event.getValue());
-                });
+                entityField.addValueChangeListener(event ->
+                        addValue(parameter, event.getValue())
+                );
                 component = entityField;
                 break;
             case LIST_ENTITY:
@@ -233,6 +233,9 @@ public class WidgetConfigWindow extends AbstractWindow {
                         ParamsMap.of(LookupFrame.WIDGET_PARAMETER, parameter)
                 );
                 frame.setParent(this);
+                lookupFrame.setValueChangeListener(event ->
+                        addValue(parameter, lookupFrame.getWidgetParameterValues())
+                );
                 component = lookupFrame;
                 break;
             case DATE:
