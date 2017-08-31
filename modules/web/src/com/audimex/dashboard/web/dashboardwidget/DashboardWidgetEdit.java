@@ -4,7 +4,6 @@
 package com.audimex.dashboard.web.dashboardwidget;
 
 import com.audimex.dashboard.entity.DashboardWidget;
-import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -17,7 +16,6 @@ import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
-import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -27,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);

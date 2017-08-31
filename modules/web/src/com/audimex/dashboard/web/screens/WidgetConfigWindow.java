@@ -6,8 +6,6 @@ package com.audimex.dashboard.web.screens;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
-import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
-import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
@@ -43,7 +41,6 @@ import com.vaadin.ui.Tree;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class WidgetConfigWindow extends AbstractWindow {
     protected Slider weightSlider = null;
@@ -68,9 +65,6 @@ public class WidgetConfigWindow extends AbstractWindow {
     @WindowParam(name = "tree")
     protected Tree tree;
 
-    @WindowParam(name = "dashboardEventExecutor")
-    protected Consumer<DashboardEvent> dashboardEventExecutor;
-
     @Inject
     protected DashboardTools dashboardTools;
 
@@ -88,7 +82,6 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     @Inject
     protected ParameterTools parameterTools;
-
 
     protected static final List<Boolean> booleanList = ImmutableList.of(true, false);
 
@@ -343,13 +336,8 @@ public class WidgetConfigWindow extends AbstractWindow {
     }
 
     public void save() {
-        if (valuesMap.size() > 0 && dashboardEventExecutor != null) {
-            valuesMap.forEach((param, newValue) -> {
-                param.setValue(newValue);
-                dashboardEventExecutor.accept(
-                        new DashboardEvent<>(param, DashboardEventType.UPDATE)
-                );
-            });
+        if (valuesMap.size() > 0) {
+            valuesMap.forEach(WidgetParameter::setValue);
         }
         if (widget.getParent() instanceof AbstractOrderedLayout) {
             ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());

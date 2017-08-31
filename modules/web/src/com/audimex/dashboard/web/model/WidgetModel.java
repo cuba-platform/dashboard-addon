@@ -9,12 +9,13 @@ import com.audimex.dashboard.entity.WidgetType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WidgetModel implements Serializable {
     protected String frameId;
     protected String caption;
     protected String icon;
-    protected String templateWidgetId;
+    protected UUID templateWidgetId;
     protected int weight = 1;
     protected int colspan = 1;
     protected int rowspan = 1;
@@ -24,7 +25,7 @@ public class WidgetModel implements Serializable {
     protected int gridRowCount = 1;
     protected List<WidgetModel> children = new ArrayList<>();
     protected WidgetType type;
-    protected List<String> widgetLinks = new ArrayList<>();
+    protected List<WidgetLinkModel> widgetLinks = new ArrayList<>();
 
     public String getFrameId() {
         return frameId;
@@ -82,11 +83,11 @@ public class WidgetModel implements Serializable {
         this.children = children;
     }
 
-    public List<String> getWidgetLinks() {
+    public List<WidgetLinkModel> getWidgetLinks() {
         return widgetLinks;
     }
 
-    public void setWidgetLinks(List<String> widgetLinks) {
+    public void setWidgetLinks(List<WidgetLinkModel> widgetLinks) {
         this.widgetLinks = widgetLinks;
     }
 
@@ -130,11 +131,11 @@ public class WidgetModel implements Serializable {
         this.icon = icon;
     }
 
-    public String getTemplateWidgetId() {
+    public UUID getTemplateWidgetId() {
         return templateWidgetId;
     }
 
-    public void setTemplateWidgetId(String templateWidgetId) {
+    public void setTemplateWidgetId(UUID templateWidgetId) {
         this.templateWidgetId = templateWidgetId;
     }
 }

@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.entity;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -15,7 +16,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import com.haulmont.chile.core.annotations.Composition;
 
 @NamePattern("%s|caption")
 @Table(name = "AMXD_DASHBOARD_WIDGET")

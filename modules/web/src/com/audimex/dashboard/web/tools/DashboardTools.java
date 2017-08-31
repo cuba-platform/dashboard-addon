@@ -2,8 +2,6 @@ package com.audimex.dashboard.web.tools;
 
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.DashboardWidgetLink;
-import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
-import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
@@ -340,21 +338,6 @@ public class DashboardTools {
             }
             com.vaadin.ui.Component component = (com.vaadin.ui.Component) itemId;
 
-            if (itemId instanceof FramePanel) {
-                FramePanel framePanel = (FramePanel) itemId;
-                Consumer<DashboardEvent> dashboardEventConsumer = framePanel.getDashboardEventExecutor();
-                framePanel.getWidget().getDashboardLinks().forEach(link -> {
-                        link.getDashboardParameters().forEach(parameter -> {
-                            dashboardEventConsumer.accept(
-                                    new DashboardEvent<>(parameter, DashboardEventType.REMOVE)
-                            );
-                        });
-                        dashboardEventConsumer.accept(
-                                new DashboardEvent<>(link, DashboardEventType.REMOVE)
-                        );
-                    });
-            }
-
             if (component.getParent() != null) {
                 AbstractLayout parentComponent = (AbstractLayout) component.getParent();
                 parentComponent.removeComponent(component);
@@ -516,10 +499,10 @@ public class DashboardTools {
                 .collect(Collectors.toList());
     }
 
-    public DashboardWidget getWidget(String id) {
+    public DashboardWidget getWidget(UUID id) {
         DataManager dataManager = AppBeans.get(DataManager.class);
         LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
-                .setId(UUID.fromString(id))
+                .setId(id)
                 .setView("dashboardWidget-view");
         return dataManager.load(ctx);
     }

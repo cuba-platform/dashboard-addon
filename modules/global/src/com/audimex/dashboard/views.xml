@@ -5,8 +5,7 @@
           name="dashboard-view">
         <property name="user"
                   view="_minimal"/>
-        <property name="widgetLinks"
-                  view="dashboardWidgetLink-view"/>
+        <property name="widgetLinks" view="_local"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
