@@ -3,13 +3,12 @@
  */
 package com.audimex.dashboard.entity;
 
-import javax.persistence.Embeddable;
 import com.haulmont.chile.core.annotations.MetaClass;
-import java.util.UUID;
-import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.EmbeddableEntity;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.View;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.util.UUID;
 
 @MetaClass(name = "amxd$ReferenceToEntity")
 @Embeddable

@@ -8,8 +8,6 @@ import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.DashboardWidgetLink;
 import com.audimex.dashboard.entity.WidgetParameter;
-import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
-import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
@@ -39,8 +37,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected Dashboard dashboard;
 
-    protected Consumer<DashboardEvent> dashboardEventExecutor;
-
     protected DashboardWidget widget;
 
     protected DashboardWidget templateWidget;
@@ -51,12 +47,10 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected Frame parentFrame;
 
-    public FramePanel(Tree tree, Dashboard dashboard, Consumer<DashboardEvent> dashboardEventExecutor,
-                      DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
+    public FramePanel(Tree tree, Dashboard dashboard, DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.dashboard = dashboard;
         this.widget = widget;
-        this.dashboardEventExecutor = dashboardEventExecutor;
         this.parentFrame = parentFrame;
 
         dashboardTools = AppBeans.get(DashboardTools.NAME);
@@ -67,20 +61,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         configButton.addClickListener(event -> showConfigWindow());
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener((Button.ClickListener) event -> {
-            widget.getDashboardLinks().forEach(link -> {
-                if (dashboardEventExecutor != null) {
-                    dashboardEventExecutor.accept(
-                            new DashboardEvent<>(link, DashboardEventType.CREATE)
-                    );
-
-                    link.getDashboardParameters().forEach(parameter ->
-                            dashboardEventExecutor.accept(
-                                    new DashboardEvent<>(parameter, DashboardEventType.CREATE)
-                            )
-                    );
-                }
-            });
-
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });
@@ -147,7 +127,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         Map<String, Object> params = new HashMap<>();
         params.put("widget", this);
         params.put("tree", tree);
-        params.put("dashboardEventExecutor", dashboardEventExecutor);
         com.haulmont.cuba.gui.components.Window window =
                 parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
 
@@ -173,10 +152,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     public DashboardWidget getWidget() {
         return widget;
-    }
-
-    public Consumer<DashboardEvent> getDashboardEventExecutor() {
-        return dashboardEventExecutor;
     }
 
     public String getFrameId() {

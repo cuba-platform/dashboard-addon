@@ -1,15 +1,15 @@
 package com.audimex.dashboard.web.tools;
 
-import com.audimex.dashboard.entity.*;
+import com.audimex.dashboard.entity.Dashboard;
+import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.DashboardWidgetLink;
+import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.dashboard.PaletteButton;
-import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
-import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasDragCaption;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.Tree;
 import org.springframework.stereotype.Component;
@@ -40,12 +40,11 @@ public class DashboardWidgetsFactory {
             component = gridLayout;
         } else if (dragComponent.getWidgetType() == WidgetType.FRAME_PANEL) {
             DashboardWidget templateWidget = dragComponent.getWidget();
-            Consumer<DashboardEvent> dashboardEventConsumer = dragComponent.getDashboardEventExecutor();
             DashboardWidgetLink link = null;
 
-            if (dragComponent.getDashboard() != null && dashboardEventConsumer != null) {
+            if (dragComponent.getDashboard() != null) {
                 Dashboard dashboard = dragComponent.getDashboard();
-                link = parameterTools.createDashboardLink(dashboard, templateWidget, dashboardEventConsumer);
+                link = parameterTools.createDashboardLink(dashboard, templateWidget);
 
             }
 
@@ -59,8 +58,7 @@ public class DashboardWidgetsFactory {
                         widget.addDashboardLink(link);
                     }
 
-                    component = new FramePanel(tree, dragComponent.getDashboard(), dashboardEventConsumer, widget,
-                            frame, treeHandler);
+                    component = new FramePanel(tree, dragComponent.getDashboard(), widget, frame, treeHandler);
 
                     ((FramePanel) component).setWidgetCaption(templateWidget.getCaption());
                     ((FramePanel) component).setWidgetIcon(templateWidget.getIcon());

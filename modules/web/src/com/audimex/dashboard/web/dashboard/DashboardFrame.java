@@ -5,16 +5,18 @@ package com.audimex.dashboard.web.dashboard;
 
 import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.DashboardWidgetLink;
 import com.audimex.dashboard.entity.WidgetType;
 import com.audimex.dashboard.web.DashboardSettings;
 import com.audimex.dashboard.web.WidgetRepository;
-import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.drophandlers.TreeDropHandler;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.model.DashboardModel;
+import com.audimex.dashboard.web.model.WidgetLinkModel;
 import com.audimex.dashboard.web.model.WidgetModel;
 import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
@@ -81,6 +83,9 @@ public class DashboardFrame extends AbstractFrame {
     protected DashboardTools dashboardTools;
 
     @Inject
+    protected ParameterTools parameterTools;
+
+    @Inject
     protected com.haulmont.cuba.gui.components.Button removeComponent;
 
     protected Tree tree;
@@ -96,9 +101,6 @@ public class DashboardFrame extends AbstractFrame {
 
     @WindowParam(name = DashboardEdit.DASHBOARD_PARAMETER)
     protected Dashboard dashboard;
-
-    @WindowParam(name = DashboardEdit.DASHBOARD_EVENT_ACTION)
-    protected Consumer<DashboardEvent> dashboardEventExecutor;
 
     public enum DashboardMode {
         DESIGNER,
@@ -492,7 +494,6 @@ public class DashboardFrame extends AbstractFrame {
             paletteButton.setHeight("50px");
             paletteButton.setStyleName(DashboardTools.AMXD_DASHBOARD_BUTTON);
             paletteButton.setWidget(widget);
-            paletteButton.setDashboardEventExecutor(dashboardEventExecutor);
             paletteButton.setDashboard(dashboard);
             containersDraggableLayout.addComponent(paletteButton);
         }
@@ -639,14 +640,12 @@ public class DashboardFrame extends AbstractFrame {
 
                     widgetModel.setType(WidgetType.FRAME_PANEL);
                     widgetModel.setWeight(framePanel.getWeight());
-                    widgetModel.setTemplateWidgetId(
-                            framePanel.getTemplateWidget().getId().toString()
-                    );
-                    widgetModel.setWidgetLinks(
-                            dashboardTools.getStringsFromWidgetLinks(
-                                    framePanel.getWidget().getDashboardLinks()
-                            )
-                    );
+                    widgetModel.setTemplateWidgetId(framePanel.getTemplateWidget().getId());
+
+                    List<WidgetLinkModel> widgetLinksModel =
+                            parameterTools.createWidgetLinkModel(framePanel);
+                    widgetModel.setWidgetLinks(widgetLinksModel);
+
                     widgetModel.setIcon(framePanel.getWidgetIcon());
                     widgetModel.setCaption(framePanel.getWidgetCaption());
                     widgetModel.setFrameId(framePanel.getFrameId());
@@ -722,13 +721,11 @@ public class DashboardFrame extends AbstractFrame {
                     widget.setCaption(widgetModel.getCaption());
                     widget.setIcon(widgetModel.getIcon());
                     widget.setFrameId(widgetModel.getFrameId());
-                    widget.setDashboardLinks(
-                            dashboardTools.getWidgetLinksFromStrings(
-                                    widgetModel.getWidgetLinks()
-                            )
-                    );
 
-                    FramePanel framePanel = new FramePanel(tree, dashboard, dashboardEventExecutor, widget, getFrame(),
+                    List<DashboardWidgetLink> links = parameterTools.loadWidgetLinks(widgetModel);
+                    widget.setDashboardLinks(links);
+
+                    FramePanel framePanel = new FramePanel(tree, dashboard, widget, getFrame(),
                             treeHandler);
 
                     framePanel.setWidgetCaption(widgetModel.getCaption());
