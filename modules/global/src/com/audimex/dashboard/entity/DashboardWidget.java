@@ -69,7 +69,7 @@ public class DashboardWidget extends StandardEntity {
 
 
     public List<DashboardWidgetLink> getDashboardLinks() {
-        return dashboardLinks;
+        return dashboardLinks == null ? new ArrayList<>() : dashboardLinks;
     }
 
     public void addDashboardLink(DashboardWidgetLink dashboardLink) {

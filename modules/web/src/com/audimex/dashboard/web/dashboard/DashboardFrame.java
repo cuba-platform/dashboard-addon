@@ -719,7 +719,8 @@ public class DashboardFrame extends AbstractFrame {
                     break;
                 case FRAME_PANEL:
                     DashboardWidget widget = new DashboardWidget();
-                    widget.setCaption(widgetModel.getIcon());
+                    widget.setCaption(widgetModel.getCaption());
+                    widget.setIcon(widgetModel.getIcon());
                     widget.setFrameId(widgetModel.getFrameId());
                     widget.setDashboardLinks(
                             dashboardTools.getWidgetLinksFromStrings(

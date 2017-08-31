@@ -379,6 +379,6 @@ public class WidgetConfigWindow extends AbstractWindow {
             }
         }
         tree.focus();
-        close(CLOSE_ACTION_ID);
+        close(COMMIT_ACTION_ID);
     }
 }

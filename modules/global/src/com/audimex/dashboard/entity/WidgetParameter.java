@@ -288,7 +288,7 @@ public class WidgetParameter extends StandardEntity {
             return boolValue;
         } else if (longValue != null) {
             return longValue;
-        } else if (referenceToEntity != null) {
+        } else if (referenceToEntity.getEntityId() != null) {
             return referenceToEntity;
         } else if (listParameters != null) {
             return listParameters;

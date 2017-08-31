@@ -6,10 +6,14 @@ package com.audimex.dashboard.web.widgets;
 
 import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.DashboardWidgetLink;
+import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.web.dashboard.events.DashboardEvent;
 import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
+import com.audimex.dashboard.web.tools.ParameterTools;
+import com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
@@ -19,7 +23,9 @@ import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -41,24 +47,24 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected DashboardTools dashboardTools;
 
+    protected ParameterTools parameterTools;
+
+    protected Frame parentFrame;
+
     public FramePanel(Tree tree, Dashboard dashboard, Consumer<DashboardEvent> dashboardEventExecutor,
                       DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.dashboard = dashboard;
         this.widget = widget;
         this.dashboardEventExecutor = dashboardEventExecutor;
+        this.parentFrame = parentFrame;
 
         dashboardTools = AppBeans.get(DashboardTools.NAME);
+        parameterTools = AppBeans.get(ParameterTools.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
-        configButton.addClickListener(event -> {
-            Map<String, Object> params = new HashMap<>();
-            params.put("widget", this);
-            params.put("tree", tree);
-            params.put("dashboardEventExecutor", dashboardEventExecutor);
-            parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
-        });
+        configButton.addClickListener(event -> showConfigWindow());
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener((Button.ClickListener) event -> {
             widget.getDashboardLinks().forEach(link -> {
@@ -92,13 +98,64 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         setSizeFull();
         addStyleName(DashboardTools.AMXD_SHADOW_BORDER);
 
+        initContent();
+    }
+
+    public void initContent() {
         WindowManager windowManager = App.getInstance().getWindowManager();
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
 
-        Frame frame = windowManager.openFrame(parentFrame, null, windowInfo);
+        List<String> undefinedParameters = new ArrayList<>();
+        Map<String, Object> params = getParameters();
+
+        for (Map.Entry<String, Object> par : params.entrySet()) {
+            if (par.getValue() == null) {
+                undefinedParameters.add(par.getKey());
+            }
+        }
+
+        Frame frame;
+
+        if (undefinedParameters.size() == 0) {
+            frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
+            frame.setParent(parentFrame);
+            setContent(frame.unwrapComposition(Layout.class));
+        } else {
+            windowInfo = windowConfig.getWindowInfo("amxd$UndefinedParameters.frame");
+            params.put(UndefinedParametersFrame.PARAMETER_UNDEFINED_VALUES_LIST, undefinedParameters);
+            params.put(UndefinedParametersFrame.PARAMETER_WIDGET, widget);
+            frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
+        }
+
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));
+    }
+
+    protected Map<String, Object> getParameters() {
+        Map<String, Object> params = new HashMap<>();
+        for (DashboardWidgetLink link : widget.getDashboardLinks()) {
+            for (WidgetParameter parameter : link.getDashboardParameters()) {
+                Object value = parameterTools.getWidgetLinkParameterValue(parameter);
+                params.put(parameter.getName(), value);
+            }
+        }
+        return params;
+    }
+
+    protected void showConfigWindow() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("widget", this);
+        params.put("tree", tree);
+        params.put("dashboardEventExecutor", dashboardEventExecutor);
+        com.haulmont.cuba.gui.components.Window window =
+                parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
+
+        window.addCloseListener(actionId -> {
+            if (com.haulmont.cuba.gui.components.Window.COMMIT_ACTION_ID.equals(actionId)) {
+                initContent();
+            }
+        });
     }
 
     public void setContent(Component c) {
