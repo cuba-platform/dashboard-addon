@@ -11,22 +11,29 @@ import com.audimex.dashboard.web.dashboard.events.DashboardEventType;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
+import com.audimex.dashboard.web.screens.frames.LookupFrame;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.google.common.collect.ImmutableList;
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.config.WindowConfig;
+import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Component;
@@ -82,13 +89,20 @@ public class WidgetConfigWindow extends AbstractWindow {
     @Inject
     protected ParameterTools parameterTools;
 
+
     protected static final List<Boolean> booleanList = ImmutableList.of(true, false);
 
     protected Map<WidgetParameter, Object> valuesMap = new HashMap<>();
 
+    protected WindowManager windowManager = App.getInstance().getWindowManager();
+    protected WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
+    protected WindowInfo lookupWindowInfo;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+
+        lookupWindowInfo = windowConfig.getWindowInfo(LookupFrame.SCREEN_ID);
 
         Layout layout = (Layout) WebComponentsHelper.unwrap(sliderLayout);
 
@@ -219,10 +233,14 @@ public class WidgetConfigWindow extends AbstractWindow {
                 component = entityField;
                 break;
             case LIST_ENTITY:
-                TextField undefinedField2 = componentsFactory.createComponent(TextField.class);
-                undefinedField2.setWidth("100%");
-                undefinedField2.setValue(parameter.getStringValue());
-                component = undefinedField2;
+                LookupFrame lookupFrame = (LookupFrame) windowManager.openFrame(
+                        this.getFrame(),
+                        null,
+                        lookupWindowInfo,
+                        ParamsMap.of(LookupFrame.WIDGET_PARAMETER, parameter)
+                );
+                frame.setParent(this);
+                component = lookupFrame;
                 break;
             case DATE:
                 DateField dateField = componentsFactory.createComponent(DateField.class);

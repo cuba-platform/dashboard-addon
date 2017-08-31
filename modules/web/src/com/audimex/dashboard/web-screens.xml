@@ -17,4 +17,6 @@
             template="com/audimex/dashboard/web/widgetparameter/widget-parameter-edit.xml"/>
     <screen id="amxd$UndefinedParameters.frame"
             template="com/audimex/dashboard/web/widgets/frames/undefined-parameters-frame.xml"/>
+    <screen id="amxd$Lookup.frame"
+            template="com/audimex/dashboard/web/screens/frames/lookup-frame.xml"/>
 </screen-config>

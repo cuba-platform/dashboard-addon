@@ -7,8 +7,10 @@
     <layout spacing="true">
         <vbox id="undefinedParametersVbox"
               spacing="true">
-            <label id="widgetName" htmlEnabled="true"/>
-            <label value="msg://label.parametersShouldBeFiled"/>
+            <label id="widgetName"
+                   htmlEnabled="true"/>
+            <label value="msg://label.parametersShouldBeFiled"
+                   htmlEnabled="true"/>
         </vbox>
     </layout>
 </window>
