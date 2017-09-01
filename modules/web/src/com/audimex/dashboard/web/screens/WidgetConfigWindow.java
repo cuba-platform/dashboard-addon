@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.screens;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
+import com.audimex.dashboard.entity.WidgetViewType;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
@@ -31,6 +32,7 @@ import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.security.entity.FilterEntity;
 import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.*;
@@ -177,7 +179,13 @@ public class WidgetConfigWindow extends AbstractWindow {
         }
 
         if (widget instanceof FramePanel) {
-            parametersInit(((FramePanel) widget).getWidget());
+            DashboardWidget dashboardWidget = ((FramePanel) widget).getWidget();
+
+            if (WidgetViewType.LIST.equals(dashboardWidget.getWidgetViewType())) {
+
+            }
+
+            parametersInit(dashboardWidget);
         }
     }
 
