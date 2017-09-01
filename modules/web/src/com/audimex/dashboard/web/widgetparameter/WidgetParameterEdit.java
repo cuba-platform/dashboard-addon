@@ -45,10 +45,10 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        FieldGroup.FieldConfig metaСonfig = fieldGroup.getField("referenceToEntity.metaClassName");
+        FieldGroup.FieldConfig metaConfig = fieldGroup.getField("referenceToEntity.metaClassName");
         metaLookupField = componentsFactory.createComponent(LookupField.class);
-        metaLookupField.setDatasource(widgetParameterDs, metaСonfig.getProperty());
-        metaСonfig.setComponent(metaLookupField);
+        metaLookupField.setDatasource(widgetParameterDs, metaConfig.getProperty());
+        metaConfig.setComponent(metaLookupField);
 
         FieldGroup.FieldConfig viewConfig = fieldGroup.getField("referenceToEntity.viewName");
         viewLookupField = componentsFactory.createComponent(LookupField.class);

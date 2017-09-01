@@ -48,27 +48,21 @@ public class DashboardWidgetsFactory {
 
             }
 
-            switch (templateWidget.getWidgetViewType()) {
-                case COMMON:
-                    DashboardWidget widget = new DashboardWidget();
-                    widget.setCaption(templateWidget.getCaption());
-                    widget.setIcon(templateWidget.getIcon());
-                    widget.setFrameId(templateWidget.getFrameId());
-                    if (link != null) {
-                        widget.addDashboardLink(link);
-                    }
-
-                    component = new FramePanel(tree, dragComponent.getDashboard(), widget, frame, treeHandler);
-
-                    ((FramePanel) component).setWidgetCaption(templateWidget.getCaption());
-                    ((FramePanel) component).setWidgetIcon(templateWidget.getIcon());
-                    ((FramePanel) component).setTemplateWidget(templateWidget);
-                    break;
-                case LIST:
-                    break;
-                case CHART:
-                    break;
+            DashboardWidget widget = new DashboardWidget();
+            widget.setCaption(templateWidget.getCaption());
+            widget.setIcon(templateWidget.getIcon());
+            widget.setFrameId(templateWidget.getFrameId());
+            widget.setWidgetViewType(templateWidget.getWidgetViewType());
+            widget.setEntityType(templateWidget.getEntityType());
+            if (link != null) {
+                widget.addDashboardLink(link);
             }
+
+            component = new FramePanel(tree, dragComponent.getDashboard(), widget, frame, treeHandler);
+
+            ((FramePanel) component).setWidgetCaption(templateWidget.getCaption());
+            ((FramePanel) component).setWidgetIcon(templateWidget.getIcon());
+            ((FramePanel) component).setTemplateWidget(templateWidget);
         }
 
         if (component instanceof HasDragCaption) {
