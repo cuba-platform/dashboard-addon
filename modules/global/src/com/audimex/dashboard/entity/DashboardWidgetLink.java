@@ -33,6 +33,7 @@ public class DashboardWidgetLink extends StandardEntity {
     @OneToMany(mappedBy = "dashboardWidgetLink")
     protected List<WidgetParameter> dashboardParameters;
 
+
     public void setDashboardParameters(List<WidgetParameter> dashboardParameters) {
         this.dashboardParameters = dashboardParameters;
     }

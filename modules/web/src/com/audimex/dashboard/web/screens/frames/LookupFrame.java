@@ -63,7 +63,7 @@ public class LookupFrame extends AbstractFrame {
             @SuppressWarnings("unchecked")
             List<Entity> o = (List<Entity>) parameterTools
                     .getWidgetLinkParameterValue(widgetParameter);
-            o.forEach(selectedDs::includeItem);
+            o.forEach(selectedDs::addItem);
         }
 
         CollectionDatasource allItemsDs = new DsBuilder(getDsContext())
@@ -73,14 +73,15 @@ public class LookupFrame extends AbstractFrame {
                 .setAllowCommit(false)
                 .buildCollectionDatasource();
 
-        allItemsDs.refresh();
-
         TokenList tokenList = componentsFactory.createComponent(TokenList.class);
         tokenList.setWidth("100%");
         tokenList.setDatasource(selectedDs);
         tokenList.setOptionsDatasource(allItemsDs);
 
         add(tokenList);
+
+        allItemsDs.refresh();
+        selectedDs.refresh();
     }
 
     @SuppressWarnings("unchecked")
