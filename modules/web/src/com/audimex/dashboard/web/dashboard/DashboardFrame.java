@@ -641,6 +641,8 @@ public class DashboardFrame extends AbstractFrame {
                     widgetModel.setType(WidgetType.FRAME_PANEL);
                     widgetModel.setWeight(framePanel.getWeight());
                     widgetModel.setTemplateWidgetId(framePanel.getTemplateWidget().getId());
+                    widgetModel.setViewType(framePanel.getTemplateWidget().getWidgetViewType());
+                    widgetModel.setEntityType(framePanel.getTemplateWidget().getEntityType());
 
                     List<WidgetLinkModel> widgetLinksModel =
                             parameterTools.createWidgetLinkModel(framePanel);
@@ -721,6 +723,8 @@ public class DashboardFrame extends AbstractFrame {
                     widget.setCaption(widgetModel.getCaption());
                     widget.setIcon(widgetModel.getIcon());
                     widget.setFrameId(widgetModel.getFrameId());
+                    widget.setWidgetViewType(widgetModel.getViewType());
+                    widget.setEntityType(widgetModel.getEntityType());
 
                     List<DashboardWidgetLink> links = parameterTools.loadWidgetLinks(widgetModel);
                     widget.setDashboardLinks(links);

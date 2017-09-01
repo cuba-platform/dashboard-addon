@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web.model;
 
 import com.audimex.dashboard.entity.WidgetType;
+import com.audimex.dashboard.entity.WidgetViewType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class WidgetModel implements Serializable {
     protected String caption;
     protected String icon;
     protected UUID templateWidgetId;
+    protected String entityType;
     protected int weight = 1;
     protected int colspan = 1;
     protected int rowspan = 1;
@@ -26,6 +28,24 @@ public class WidgetModel implements Serializable {
     protected List<WidgetModel> children = new ArrayList<>();
     protected WidgetType type;
     protected List<WidgetLinkModel> widgetLinks = new ArrayList<>();
+    protected WidgetViewType viewType;
+
+
+    public WidgetViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(WidgetViewType viewType) {
+        this.viewType = viewType;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
+    }
 
     public String getFrameId() {
         return frameId;

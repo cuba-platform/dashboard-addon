@@ -26,7 +26,9 @@
                 <field id="widgetViewType" property="widgetViewType"
                        required="true"/>
                 <field id="frameId" custom="true"/>
-                <field id="entityType" property="entityType"/>
+                <field id="entityTypeField"
+                       property="entityType"
+                       custom="true"/>
                 <field id="report" property="report"/>
             </column>
         </fieldGroup>

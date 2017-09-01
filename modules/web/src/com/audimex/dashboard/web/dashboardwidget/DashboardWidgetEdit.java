@@ -7,6 +7,7 @@ import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.ScreensHelper;
 import com.haulmont.cuba.gui.components.AbstractEditor;
@@ -16,6 +17,7 @@ import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -23,11 +25,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
+
+    @Inject
+    protected Datasource<DashboardWidget> dashboardWidgetDs;
 
     @Inject
     private ComponentsFactory componentsFactory;
@@ -46,6 +52,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     @Inject
     protected Button btnCreate;
+
+    @Inject
+    protected Metadata metadata;
 
     protected static final List<String> allFieldNames = ImmutableList.of(
             "frameId",
@@ -75,6 +84,18 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         initFrameIdField();
         initWidgetViewTypeValueChangeListener();
         initCreateButtonActions();
+
+        FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("entityTypeField");
+        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        lookupField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
+        entityTypeFieldConfig.setComponent(lookupField);
+
+        Map<String, Object> metaClasses = new LinkedHashMap<>();
+        metadata.getTools().getAllPersistentMetaClasses()
+                .forEach(metaClass ->
+                        metaClasses.put(metaClass.getName(), metaClass.getName())
+                );
+        lookupField.setOptionsMap(metaClasses);
     }
 
     protected void initFrameIdField() {
