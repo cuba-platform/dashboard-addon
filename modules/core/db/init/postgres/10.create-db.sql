@@ -35,7 +35,7 @@ create table AMXD_DASHBOARD_WIDGET (
     FRAME_ID varchar(255) not null,
     WIDGET_VIEW_TYPE integer,
     ENTITY_TYPE varchar(255),
-    REPORT varchar(255),
+    REPORT_ID uuid,
     --
     primary key (ID)
 )^

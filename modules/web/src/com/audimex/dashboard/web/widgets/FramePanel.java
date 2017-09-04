@@ -32,6 +32,9 @@ import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.haulmont.cuba.web.gui.components.WebFilter;
 import com.haulmont.cuba.web.gui.components.WebTable;
+import com.haulmont.reports.gui.ReportGuiManager;
+import com.haulmont.reports.gui.report.run.ShowChartController;
+import com.haulmont.yarg.reporting.ReportOutputDocument;
 import com.vaadin.ui.*;
 import org.apache.commons.lang.BooleanUtils;
 import org.dom4j.Element;
@@ -63,6 +66,8 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected Frame parentFrame;
 
+    protected ReportGuiManager reportGuiManager;
+
     public FramePanel(Tree tree, Dashboard dashboard, DashboardWidget widget, Frame parentFrame, Consumer<Tree> treeHandler) {
         this.tree = tree;
         this.dashboard = dashboard;
@@ -72,6 +77,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         dashboardTools = AppBeans.get(DashboardTools.NAME);
         parameterTools = AppBeans.get(ParameterTools.NAME);
         metadata = AppBeans.get(Metadata.NAME);
+        reportGuiManager = AppBeans.get(ReportGuiManager.class);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
@@ -162,40 +168,25 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         Frame frame;
 
         if (undefinedParameters.size() == 0) {
-            frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
-            frame.setId("widgetFrame");
             if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
-                /*frame.getComponents().forEach(component -> {
-                    if (component instanceof WebFilter) {
-                        WebFilter filter = (WebFilter) component;
-                        Optional<DashboardWidgetLink> optional = widget.getDashboardLinks().stream().findFirst();
-                        DashboardWidgetLink link = optional.orElse(null);
-                        if (link != null && link.getFilter() != null) {
-                            FilterEntity filterEntity = metadata.create(FilterEntity.class);
-                            filterEntity.setComponentId(filter.getId());
-                            filterEntity.setName(filter.getCaption());
-
-                            filterEntity.setXml(link.getFilter());
-                            filter.setFilterEntity(filterEntity);
-                        }
-                    }
-                    if (component instanceof WebTable) {
-                        *//*WebTable table = (WebTable) component;
-                        CollectionDatasource datasource = table.getDatasource();
-                        if(datasource.getMetaClass().getName().equals(widget.getEntityType())) {
-                            Optional<DashboardWidgetLink> optional = widget.getDashboardLinks().stream().findFirst();
-                            DashboardWidgetLink link = optional.orElse(null);
-                            if (link != null && link.getFilter() != null) {
-                                Element element = Dom4j.readDocument(link.getFilter()).getRootElement();
-                                QueryFilter filter = new QueryFilter(element);
-                                datasource.setQueryFilter(filter);
-                            }
-                        }*//*
-                    }
-                });*/
+                frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
+                frame.setId("widgetListFrame");
                 frame.getDsContext().refresh();
             } else if (WidgetViewType.CHART.equals(widget.getWidgetViewType())) {
+                ReportOutputDocument document = reportGuiManager.getReportResult(widget.getReport(), params, null);
 
+                HashMap<String, Object> screenParams = new HashMap<>();
+                screenParams.put(ShowChartController.CHART_JSON_PARAMETER, new String(document.getContent()));
+                screenParams.put(ShowChartController.REPORT_PARAMETER, document.getReport());
+                screenParams.put(ShowChartController.TEMPLATE_CODE_PARAMETER, null);
+
+                windowInfo = windowConfig.getWindowInfo("amxd$ShowChartController.frame");
+                frame = windowManager.openFrame(parentFrame, null, windowInfo, screenParams);
+                frame.setId("widgetCommonFrame");
+            } else {
+                frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
+                frame.setId("widgetCommonFrame");
+                frame.getDsContext().refresh();
             }
         } else {
             windowInfo = windowConfig.getWindowInfo("amxd$UndefinedParameters.frame");
@@ -203,7 +194,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             params.put(UndefinedParametersFrame.PARAMETER_WIDGET, widget);
             frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
         }
-
 
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));

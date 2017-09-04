@@ -16,6 +16,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import com.haulmont.reports.entity.Report;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @NamePattern("%s|caption")
 @Table(name = "AMXD_DASHBOARD_WIDGET")
@@ -47,8 +51,9 @@ public class DashboardWidget extends StandardEntity {
     @Column(name = "ENTITY_TYPE")
     protected String entityType;
 
-    @Column(name = "REPORT")
-    protected String report;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REPORT_ID")
+    protected Report report;
 
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboardWidget")
@@ -58,6 +63,15 @@ public class DashboardWidget extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboardWidget")
     protected List<WidgetParameter> parameters;
+
+    public Report getReport() {
+        return report;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
 
     public void setParameters(List<WidgetParameter> parameters) {
         this.parameters = parameters;
@@ -98,14 +112,6 @@ public class DashboardWidget extends StandardEntity {
 
     public String getEntityType() {
         return entityType;
-    }
-
-    public void setReport(String report) {
-        this.report = report;
-    }
-
-    public String getReport() {
-        return report;
     }
 
 

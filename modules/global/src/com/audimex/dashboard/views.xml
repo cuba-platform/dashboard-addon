@@ -38,6 +38,7 @@
     <view class="com.audimex.dashboard.entity.DashboardWidget"
           extends="_local"
           name="dashboardWidget-view">
+        <property name="report" view="report.view"/>
         <property name="dashboardLinks"
                   view="_local">
             <property name="dashboardParameters"
