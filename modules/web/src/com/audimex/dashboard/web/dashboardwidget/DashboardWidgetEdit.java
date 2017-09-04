@@ -17,7 +17,9 @@ import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -84,18 +86,28 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         initFrameIdField();
         initWidgetViewTypeValueChangeListener();
         initCreateButtonActions();
+        initEntityTypeField();
+        initReportField();
+    }
 
-        FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("entityTypeField");
+    private void initReportField() {
+        if (fieldGroup.getFieldNN("report").getComponent() != null) return;
+
+        FieldGroup.FieldConfig reportFieldConfig = fieldGroup.getField("report");
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-        lookupField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
-        entityTypeFieldConfig.setComponent(lookupField);
+        lookupField.setDatasource(dashboardWidgetDs, reportFieldConfig.getProperty());
+        reportFieldConfig.setComponent(lookupField);
 
-        Map<String, Object> metaClasses = new LinkedHashMap<>();
-        metadata.getTools().getAllPersistentMetaClasses()
-                .forEach(metaClass ->
-                        metaClasses.put(metaClass.getName(), metaClass.getName())
-                );
-        lookupField.setOptionsMap(metaClasses);
+        CollectionDatasource ds = new DsBuilder(getDsContext())
+                .setJavaClass(com.haulmont.reports.entity.Report.class)
+                .setAllowCommit(false)
+                .setViewName("report.view")
+                .setId("reportDs")
+                .buildCollectionDatasource();
+
+        ds.refresh();
+
+        lookupField.setOptionsDatasource(ds);
     }
 
     protected void initFrameIdField() {
@@ -130,6 +142,22 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             lookupField.setDatasource(datasource, propertyId);
             return lookupField;
         });
+    }
+
+    protected void initEntityTypeField() {
+        if (fieldGroup.getFieldNN("entityTypeField").getComponent() != null) return;
+
+        FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("entityTypeField");
+        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        lookupField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
+        entityTypeFieldConfig.setComponent(lookupField);
+
+        Map<String, Object> metaClasses = new LinkedHashMap<>();
+        metadata.getTools().getAllPersistentMetaClasses()
+                .forEach(metaClass ->
+                        metaClasses.put(metaClass.getName(), metaClass.getName())
+                );
+        lookupField.setOptionsMap(metaClasses);
     }
 
     protected void initWidgetViewTypeValueChangeListener() {

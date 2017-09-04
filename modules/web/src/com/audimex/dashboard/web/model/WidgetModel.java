@@ -17,6 +17,7 @@ public class WidgetModel implements Serializable {
     protected String caption;
     protected String icon;
     protected UUID templateWidgetId;
+    protected UUID reportId;
     protected String entityType;
     protected int weight = 1;
     protected int colspan = 1;
@@ -157,5 +158,13 @@ public class WidgetModel implements Serializable {
 
     public void setTemplateWidgetId(UUID templateWidgetId) {
         this.templateWidgetId = templateWidgetId;
+    }
+
+    public UUID getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(UUID reportId) {
+        this.reportId = reportId;
     }
 }

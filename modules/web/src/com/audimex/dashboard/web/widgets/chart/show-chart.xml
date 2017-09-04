@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://showChart.caption"
+        class="com.audimex.dashboard.web.widgets.chart.ShowChartController"
+        messagesPack="com.haulmont.reports.gui.report.run">
+
+    <dsContext>
+        <collectionDatasource id="reportsDs" class="com.haulmont.reports.entity.Report">
+            <query>select r from report$Report r, in (r.templates) t where t.reportOutputType = 70</query>
+        </collectionDatasource>
+    </dsContext>
+
+    <layout expand="chartBox">
+        <groupBox id="chartBox" width="100%"/>
+    </layout>
+</window>

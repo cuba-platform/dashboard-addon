@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.Frame;
+import com.haulmont.reports.entity.Report;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -485,25 +486,21 @@ public class DashboardTools {
         tree.markAsDirty();
     }
 
-    public List<DashboardWidgetLink> getWidgetLinksFromStrings(List<String> ids) {
-        DataManager dataManager = AppBeans.get(DataManager.class);
-        LoadContext<DashboardWidgetLink> ctx = LoadContext.create(DashboardWidgetLink.class)
-                .setQuery(LoadContext.createQuery("select dwl from amxd$DashboardWidgetLink dwl where dwl.id in :ids")
-                        .setParameter("ids", ids))
-                .setView("dashboardWidgetLink-view");
-        return dataManager.loadList(ctx);
-    }
-
-    public List<String> getStringsFromWidgetLinks(List<DashboardWidgetLink> links) {
-        return links.stream().map(l -> l.getId().toString())
-                .collect(Collectors.toList());
-    }
-
     public DashboardWidget getWidget(UUID id) {
         DataManager dataManager = AppBeans.get(DataManager.class);
         LoadContext<DashboardWidget> ctx = LoadContext.create(DashboardWidget.class)
                 .setId(id)
                 .setView("dashboardWidget-view");
+        return dataManager.load(ctx);
+    }
+
+    public Report getReport(UUID id) {
+        if (id == null) return null;
+
+        DataManager dataManager = AppBeans.get(DataManager.class);
+        LoadContext<Report> ctx = LoadContext.create(Report.class)
+                .setId(id)
+                .setView("report.view");
         return dataManager.load(ctx);
     }
 }

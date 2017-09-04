@@ -54,6 +54,7 @@ public class DashboardWidgetsFactory {
             widget.setFrameId(templateWidget.getFrameId());
             widget.setWidgetViewType(templateWidget.getWidgetViewType());
             widget.setEntityType(templateWidget.getEntityType());
+            widget.setReport(templateWidget.getReport());
             if (link != null) {
                 widget.addDashboardLink(link);
             }
