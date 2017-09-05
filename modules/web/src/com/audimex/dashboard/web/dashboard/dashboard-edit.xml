@@ -21,6 +21,9 @@
             <column width="250px">
                 <field id="title" property="title"/>
             </column>
+            <column>
+                <field id="entityType" property="entityType" custom="true"/>
+            </column>
         </fieldGroup>
         <vbox id="dashboardDesignerVBox"/>
         <frame id="windowActions"
