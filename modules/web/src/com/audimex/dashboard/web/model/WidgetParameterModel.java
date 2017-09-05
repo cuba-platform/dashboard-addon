@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class WidgetParameterModel implements Serializable {
     protected Double doubleValue;
     protected UUID masterParameter;
     protected List<WidgetParameterModel> listParameters;
+    protected List<WidgetParameterModel> additionalParameters;
 
     public String getName() {
         return name;
@@ -143,5 +145,21 @@ public class WidgetParameterModel implements Serializable {
 
     public void setListParameters(List<WidgetParameterModel> listParameters) {
         this.listParameters = listParameters;
+    }
+
+    public List<WidgetParameterModel> getAdditionalParameters() {
+        return additionalParameters;
+    }
+
+    public void setAdditionalParameters(List<WidgetParameterModel> additionalParameters) {
+        this.additionalParameters = additionalParameters;
+    }
+
+    public void addAdditionalParameter(WidgetParameterModel additionalParameter) {
+        if (additionalParameters == null) {
+            additionalParameters = new ArrayList<>();
+        }
+
+        additionalParameters.add(additionalParameter);
     }
 }

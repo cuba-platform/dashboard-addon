@@ -80,7 +80,7 @@ public class ParameterTools {
         } else if (widgetParameter.getParameterType().equals(WidgetParameterType.LIST_ENTITY)) {
             ReferenceToEntity referenceToEntity = widgetParameter.getReferenceToEntity();
             List<WidgetParameter> parameters = (List<WidgetParameter>) widgetParameter.getValue();
-            if (referenceToEntity == null || parameters == null) return null;
+            if (referenceToEntity == null || parameters == null || parameters.size() == 0) return null;
 
             List<UUID> ids = parameters.stream()
                     .map(parameter -> parameter.getReferenceToEntity().getEntityId())
@@ -145,8 +145,34 @@ public class ParameterTools {
         wpm.setBoolValue(parameter.getBoolValue());
         wpm.setLongValue(parameter.getLongValue());
         wpm.setDoubleValue(parameter.getDoubleValue());
+
         if (parameter.getMasterParameter() != null) {
             wpm.setMasterParameter(parameter.getMasterParameter().getId());
+        }
+
+        if (parameter.getAdditionalParameters() != null) {
+            parameter.getAdditionalParameters().forEach(ap -> {
+                WidgetParameterModel additional = new WidgetParameterModel();
+                additional.setName(ap.getName());
+                additional.setParameterType(ap.getParameterType().getId());
+                additional.setIntegerValue(ap.getIntegerValue());
+                additional.setStringValue(ap.getStringValue());
+                additional.setDecimalValue(ap.getDecimalValue());
+                additional.setDateValue(ap.getDateValue());
+                additional.setBoolValue(ap.getBoolValue());
+                additional.setLongValue(ap.getLongValue());
+                additional.setDoubleValue(ap.getDoubleValue());
+                if (additional.getMasterParameter() != null) {
+                    additional.setMasterParameter(ap.getMasterParameter().getId());
+                }
+
+                ReferenceToEntity reference = ap.getReferenceToEntity();
+
+                additional.setEntityId(reference.getEntityId());
+                additional.setMetaClassName(reference.getMetaClassName());
+                additional.setViewName(reference.getViewName());
+                wpm.addAdditionalParameter(additional);
+            });
         }
 
         ReferenceToEntity reference = parameter.getReferenceToEntity();
@@ -227,6 +253,36 @@ public class ParameterTools {
         wp.getReferenceToEntity().setEntityId(parameter.getEntityId());
         wp.getReferenceToEntity().setMetaClassName(parameter.getMetaClassName());
         wp.getReferenceToEntity().setViewName(parameter.getViewName());
+
+        if (parameter.getAdditionalParameters() != null) {
+            parameter.getAdditionalParameters().forEach(ap -> {
+                WidgetParameter additional = new WidgetParameter();
+                additional.setName(ap.getName());
+                additional.setParameterType(WidgetParameterType.fromId(ap.getParameterType()));
+                additional.setIntegerValue(ap.getIntegerValue());
+                additional.setStringValue(ap.getStringValue());
+                additional.setDecimalValue(ap.getDecimalValue());
+                additional.setDateValue(ap.getDateValue());
+                additional.setBoolValue(ap.getBoolValue());
+                additional.setLongValue(ap.getLongValue());
+                additional.setDoubleValue(ap.getDoubleValue());
+                if (ap.getMasterParameter() != null) {
+                    additional.setMasterParameter(
+                            (WidgetParameter) getEntity(
+                                    WidgetParameter.class,
+                                    ap.getMasterParameter(),
+                                    "master-widgetParameter-view"
+                            )
+                    );
+                }
+
+                additional.setReferenceToEntity(new ReferenceToEntity());
+                additional.getReferenceToEntity().setEntityId(ap.getEntityId());
+                additional.getReferenceToEntity().setMetaClassName(ap.getMetaClassName());
+                additional.getReferenceToEntity().setViewName(ap.getViewName());
+                wp.addAdditionalParameter(additional);
+            });
+        }
 
         return wp;
     }

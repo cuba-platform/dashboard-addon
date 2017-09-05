@@ -3,7 +3,7 @@
     <include file="com/audimex/dashboard/screens.xml"/>
     <screen id="dashboard-frame"
             template="com/audimex/dashboard/web/dashboard/dashboard-frame.xml"/>
-    <screen id="widgetConfigWindow"
+    <screen id="amxd$widgetConfigWindow"
             template="com/audimex/dashboard/web/screens/widget-config-window.xml"/>
     <screen id="amxd$Dashboard.browse"
             template="com/audimex/dashboard/web/dashboard/dashboard-browse.xml"/>

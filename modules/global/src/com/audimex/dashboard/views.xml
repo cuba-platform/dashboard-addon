@@ -5,7 +5,8 @@
           name="dashboard-view">
         <property name="user"
                   view="_minimal"/>
-        <property name="widgetLinks" view="_local"/>
+        <property name="widgetLinks"
+                  view="_local"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
@@ -16,6 +17,8 @@
                   view="_minimal"/>
         <property name="referenceToEntity"
                   view="_local"/>
+        <property name="additionalParameters"
+                  view="_minimal"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
@@ -26,6 +29,8 @@
                   view="slave-widgetParameter-view"/>
         <property name="referenceToEntity"
                   view="_local"/>
+        <property name="additionalParameters"
+                  view="_minimal"/>
     </view>
     <view class="com.audimex.dashboard.entity.WidgetParameter"
           extends="_local"
@@ -34,16 +39,20 @@
                   view="_minimal"/>
         <property name="referenceToEntity"
                   view="_local"/>
+        <property name="additionalParameters"
+                  view="_minimal"/>
     </view>
     <view class="com.audimex.dashboard.entity.DashboardWidget"
           extends="_local"
           name="dashboardWidget-view">
-        <property name="report" view="report.view"/>
+        <property name="report"
+                  view="report.view"/>
         <property name="dashboardLinks"
                   view="_local">
             <property name="dashboardParameters"
                       view="_local">
-                <property name="referenceToEntity" view="_local"/>
+                <property name="referenceToEntity"
+                          view="_local"/>
             </property>
         </property>
         <property name="parameters"

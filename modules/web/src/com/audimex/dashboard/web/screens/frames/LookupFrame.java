@@ -59,7 +59,7 @@ public class LookupFrame extends AbstractFrame {
                 .setRefreshMode(CollectionDatasource.RefreshMode.NEVER)
                 .buildCollectionDatasource();
 
-        if (widgetParameter.getListParameters() != null) {
+        if (widgetParameter.getListParameters() != null && widgetParameter.getListParameters().size() != 0) {
             @SuppressWarnings("unchecked")
             List<Entity> o = (List<Entity>) parameterTools
                     .getWidgetLinkParameterValue(widgetParameter);
