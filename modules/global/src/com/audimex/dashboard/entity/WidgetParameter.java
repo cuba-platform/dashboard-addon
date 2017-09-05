@@ -257,6 +257,7 @@ public class WidgetParameter extends StandardEntity {
             boolValue = null;
             dateValue = null;
             referenceToEntity.setEntityId(null);
+            listParameters = null;
         } else if (value instanceof Date) {
             setDateValue((Date) value);
         } else if (value instanceof Integer) {
@@ -281,7 +282,9 @@ public class WidgetParameter extends StandardEntity {
         } else if (value instanceof List) {
             Optional optional = ((List) value).stream().findAny();
             if (optional.isPresent()) {
-                getListParameters().clear();
+                if (getListParameters() != null) {
+                    getListParameters().clear();
+                }
                 ((List) value).forEach(par -> {
                     Metadata metadata = AppBeans.get(Metadata.NAME);
                     WidgetParameter wp = metadata.create(WidgetParameter.class);
@@ -293,6 +296,8 @@ public class WidgetParameter extends StandardEntity {
                     wp.getReferenceToEntity().setViewName(getReferenceToEntity().getViewName());
                     addListParameter(wp);
                 });
+            } else {
+                setListParameters(null);
             }
         } else {
             throw new IllegalArgumentException("Unsupported value type " + value.getClass());
