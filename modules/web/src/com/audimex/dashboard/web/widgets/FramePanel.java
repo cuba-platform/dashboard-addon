@@ -10,34 +10,25 @@ import com.audimex.dashboard.web.screens.filters.FakeQueryFilterSupport;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame;
-import com.haulmont.bali.util.Dom4j;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.filter.QueryFilter;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Filter;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.components.filter.ConditionsTree;
-import com.haulmont.cuba.gui.components.filter.FilterDelegate;
 import com.haulmont.cuba.gui.components.filter.FilterParser;
 import com.haulmont.cuba.gui.components.filter.Param;
 import com.haulmont.cuba.gui.components.filter.edit.FilterEditor;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
-import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.security.entity.FilterEntity;
-import com.haulmont.cuba.security.entity.SearchFolder;
 import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
-import com.haulmont.cuba.web.gui.components.WebFilter;
-import com.haulmont.cuba.web.gui.components.WebTable;
 import com.haulmont.reports.gui.ReportGuiManager;
 import com.haulmont.reports.gui.report.run.ShowChartController;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import com.vaadin.ui.*;
-import org.apache.commons.lang.BooleanUtils;
-import org.dom4j.Element;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -215,7 +206,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         params.put("widget", this);
         params.put("tree", tree);
         com.haulmont.cuba.gui.components.Window window =
-                parentFrame.openWindow("widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
+                parentFrame.openWindow("amxd$widgetConfigWindow", WindowManager.OpenType.DIALOG, params);
 
         window.addCloseListener(actionId -> {
             if (COMMIT_ACTION_ID.equals(actionId)) {

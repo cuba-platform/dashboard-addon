@@ -36,6 +36,7 @@ create table AMXD_DASHBOARD_WIDGET (
     WIDGET_VIEW_TYPE integer,
     ENTITY_TYPE varchar(255),
     REPORT_ID uuid,
+    IS_TEMPLATE boolean,
     --
     primary key (ID)
 )^

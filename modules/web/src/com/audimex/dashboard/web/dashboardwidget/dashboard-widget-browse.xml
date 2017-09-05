@@ -10,7 +10,7 @@
                          class="com.audimex.dashboard.entity.DashboardWidget"
                          view="_local">
             <query>
-                <![CDATA[select e from amxd$DashboardWidget e]]>
+                <![CDATA[select e from amxd$DashboardWidget e where e.isTemplate = true]]>
             </query>
         </groupDatasource>
     </dsContext>

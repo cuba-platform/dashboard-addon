@@ -75,6 +75,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         super.initNewItem(item);
 
         item.setWidgetViewType(WidgetViewType.COMMON);
+        item.setIsTemplate(true);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class DashboardGridLayout extends CssLayout implements HasDragCaption, Ha
 
             WindowManager windowManager = App.getInstance().getWindowManager();
             WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
-            WindowInfo windowInfo = windowConfig.getWindowInfo("widgetConfigWindow");
+            WindowInfo windowInfo = windowConfig.getWindowInfo("amxd$widgetConfigWindow");
             windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));

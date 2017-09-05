@@ -13,6 +13,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.ReferenceToEntitySupport;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -79,6 +80,37 @@ public class WidgetParameter extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "masterParameter")
     protected List<WidgetParameter> listParameters;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "masterParameter")
+    protected List<WidgetParameter> additionalParameters;
+
+    public void setAdditionalParameters(List<WidgetParameter> additionalParameters) {
+        this.additionalParameters = additionalParameters;
+    }
+
+    public void addAdditionalParameter(WidgetParameter additionalParameter) {
+        if (additionalParameters == null) {
+            additionalParameters = new ArrayList<>();
+        }
+        additionalParameters.add(additionalParameter);
+    }
+
+    public List<WidgetParameter> getAdditionalParameters() {
+        return additionalParameters;
+    }
+
+    public WidgetParameter getAdditionalParameter(@Nonnull String name) {
+        WidgetParameter parameter = null;
+        if (additionalParameters != null) {
+            Optional<WidgetParameter> optional = additionalParameters.stream()
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst();
+
+            parameter = optional.orElse(null);
+        }
+        return parameter;
+    }
 
     public void setReferenceToEntity(ReferenceToEntity referenceToEntity) {
         this.referenceToEntity = referenceToEntity;
@@ -290,9 +322,9 @@ public class WidgetParameter extends StandardEntity {
             return boolValue;
         } else if (longValue != null) {
             return longValue;
-        } else if (referenceToEntity.getEntityId() != null) {
+        } else if (WidgetParameterType.ENTITY.getId().equals(parameterType)) {
             return referenceToEntity;
-        } else if (listParameters != null) {
+        } else if (WidgetParameterType.LIST_ENTITY.getId().equals(parameterType)) {
             return listParameters;
         }
 
