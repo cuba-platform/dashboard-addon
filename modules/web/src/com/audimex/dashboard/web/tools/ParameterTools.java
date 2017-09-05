@@ -17,9 +17,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -285,5 +283,26 @@ public class ParameterTools {
         }
 
         return wp;
+    }
+
+    public Map<String, Object> getParameterValues(DashboardWidget widget) {
+        Map<String, Object> params = new HashMap<>();
+        for (DashboardWidgetLink link : widget.getDashboardLinks()) {
+            for (WidgetParameter parameter : link.getDashboardParameters()) {
+                Object value = getWidgetLinkParameterValue(parameter);
+                params.put(parameter.getName(), value);
+            }
+        }
+        return params;
+    }
+
+    public List<String> getUndefinedParameters(Map<String, Object> params) {
+        List<String> undefinedParameters = new ArrayList<>();
+        for (Map.Entry<String, Object> par : params.entrySet()) {
+            if (par.getValue() == null) {
+                undefinedParameters.add(par.getKey());
+            }
+        }
+        return undefinedParameters;
     }
 }

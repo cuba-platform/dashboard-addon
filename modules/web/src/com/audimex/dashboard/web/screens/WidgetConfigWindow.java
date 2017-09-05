@@ -95,6 +95,8 @@ public class WidgetConfigWindow extends AbstractWindow {
     public void init(Map<String, Object> params) {
         super.init(params);
 
+        preInit();
+
         lookupWindowInfo = windowConfig.getWindowInfo(LookupFrame.SCREEN_ID);
 
         Layout layout = (Layout) WebComponentsHelper.unwrap(sliderLayout);
@@ -182,6 +184,10 @@ public class WidgetConfigWindow extends AbstractWindow {
         }
     }
 
+    protected void preInit() {
+
+    }
+
     protected void parametersInit(DashboardWidget dashboardWidget) {
         dashboardWidget.getDashboardLinks().forEach(link ->
                 link.getDashboardParameters().stream()
@@ -205,6 +211,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case ENTITY:
                 LookupField entityField = componentsFactory.createComponent(LookupField.class);
                 entityField.setWidth("100%");
+                entityField.setInputPrompt(getMessage("message.value"));
 
                 ReferenceToEntity reference = parameter.getReferenceToEntity();
 
@@ -235,7 +242,7 @@ public class WidgetConfigWindow extends AbstractWindow {
                 );
                 frame.setParent(this);
                 lookupFrame.setValueChangeListener(event ->
-                        addValue(parameter, lookupFrame.getWidgetParameterValues())
+                        addValue(parameter, lookupFrame.getValue())
                 );
                 component = lookupFrame;
                 break;
@@ -253,6 +260,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case INTEGER:
                 TextField integerField = componentsFactory.createComponent(TextField.class);
                 integerField.setWidth("100%");
+                integerField.setInputPrompt(getMessage("message.value"));
                 integerField.setValue(parameter.getIntegerValue());
                 integerField.addValueChangeListener(event -> {
                     if (event.getValue() == null) return;
@@ -264,6 +272,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case STRING:
                 TextField stringField = componentsFactory.createComponent(TextField.class);
                 stringField.setWidth("100%");
+                stringField.setInputPrompt(getMessage("message.value"));
                 stringField.setValue(parameter.getStringValue());
                 stringField.addValueChangeListener(event -> {
                     if (event.getValue() == null) return;
@@ -275,6 +284,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case DECIMAL:
                 TextField decimalField = componentsFactory.createComponent(TextField.class);
                 decimalField.setWidth("100%");
+                decimalField.setInputPrompt(getMessage("message.value"));
                 decimalField.setValue(parameter.getDecimalValue());
                 decimalField.addValueChangeListener(event -> {
                     if (event.getValue() == null) return;
@@ -286,6 +296,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case BOOLEAN:
                 LookupField booleanField = componentsFactory.createComponent(LookupField.class);
                 booleanField.setWidth("100%");
+                booleanField.setInputPrompt(getMessage("message.value"));
                 booleanField.setOptionsList(booleanList);
                 booleanField.setValue(parameter.getBoolValue());
                 booleanField.addValueChangeListener(event -> {
@@ -298,6 +309,7 @@ public class WidgetConfigWindow extends AbstractWindow {
             case LONG:
                 TextField longField = componentsFactory.createComponent(TextField.class);
                 longField.setWidth("100%");
+                longField.setInputPrompt(getMessage("message.value"));
                 longField.setValue(parameter.getLongValue());
                 longField.addValueChangeListener(event -> {
                     if (event.getValue() == null) return;
@@ -309,8 +321,10 @@ public class WidgetConfigWindow extends AbstractWindow {
             default:
                 TextField undefinedField = componentsFactory.createComponent(TextField.class);
                 undefinedField.setWidth("100%");
+                undefinedField.setInputPrompt(getMessage("message.value"));
                 undefinedField.setValue(parameter.getStringValue());
                 undefinedField.addValueChangeListener(event -> {
+                    if (event.getValue() == null) return;
                     String stringValue = (String) event.getValue();
                     addValue(parameter, stringValue);
                 });
@@ -318,7 +332,8 @@ public class WidgetConfigWindow extends AbstractWindow {
         }
 
         Label parameterNameField = componentsFactory.createComponent(Label.class);
-        parameterNameField.setWidth("100px");
+        parameterNameField.setWidth("120px");
+        parameterNameField.setAlignment(Alignment.MIDDLE_CENTER);
         parameterNameField.setValue(parameter.getName());
 
         parameterArea.add(parameterNameField);
@@ -340,9 +355,8 @@ public class WidgetConfigWindow extends AbstractWindow {
     }
 
     public void save() {
-        if (valuesMap.size() > 0) {
-            valuesMap.forEach(WidgetParameter::setValue);
-        }
+        widgetParametersSaveFunction();
+
         if (widget.getParent() instanceof AbstractOrderedLayout) {
             ((HasWeight) widget).setWeight(weightSlider.getValue().intValue());
         }
@@ -390,5 +404,11 @@ public class WidgetConfigWindow extends AbstractWindow {
         }
         tree.focus();
         close(COMMIT_ACTION_ID);
+    }
+
+    protected void widgetParametersSaveFunction() {
+        if (valuesMap.size() > 0) {
+            valuesMap.forEach(WidgetParameter::setValue);
+        }
     }
 }

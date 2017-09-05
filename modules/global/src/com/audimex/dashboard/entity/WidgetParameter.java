@@ -5,6 +5,7 @@ package com.audimex.dashboard.entity;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.EmbeddedParameters;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -17,10 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @NamePattern("%s|name")
 @Table(name = "AMXD_WIDGET_PARAMETER")
@@ -283,17 +281,16 @@ public class WidgetParameter extends StandardEntity {
         } else if (value instanceof List) {
             Optional optional = ((List) value).stream().findAny();
             if (optional.isPresent()) {
+                getListParameters().clear();
                 ((List) value).forEach(par -> {
                     Metadata metadata = AppBeans.get(Metadata.NAME);
                     WidgetParameter wp = metadata.create(WidgetParameter.class);
                     wp.setMasterParameter(this);
                     wp.setParameterType(WidgetParameterType.ENTITY);
-                    referenceToEntity.setMetaClassName(((BaseGenericIdEntity) optional.get())
-                            .getMetaClass().getName());
-                    if (viewName != null) {
-                        referenceToEntity.setViewName(viewName);
-                    }
-                    wp.setValue(par, viewName);
+                    wp.setReferenceToEntity(new ReferenceToEntity());
+                    wp.getReferenceToEntity().setEntityId(((BaseUuidEntity) par).getId());
+                    wp.getReferenceToEntity().setMetaClassName(getReferenceToEntity().getMetaClassName());
+                    wp.getReferenceToEntity().setViewName(getReferenceToEntity().getViewName());
                     addListParameter(wp);
                 });
             }

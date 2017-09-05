@@ -4,7 +4,10 @@
 
 package com.audimex.dashboard.web.widgets;
 
-import com.audimex.dashboard.entity.*;
+import com.audimex.dashboard.entity.Dashboard;
+import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.DashboardWidgetLink;
+import com.audimex.dashboard.entity.WidgetViewType;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.screens.filters.FakeQueryFilterSupport;
 import com.audimex.dashboard.web.tools.DashboardTools;
@@ -30,7 +33,10 @@ import com.haulmont.reports.gui.report.run.ShowChartController;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import com.vaadin.ui.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.haulmont.cuba.gui.components.Window.COMMIT_ACTION_ID;
@@ -147,14 +153,8 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
 
-        List<String> undefinedParameters = new ArrayList<>();
-        Map<String, Object> params = getParameters();
-
-        for (Map.Entry<String, Object> par : params.entrySet()) {
-            if (par.getValue() == null) {
-                undefinedParameters.add(par.getKey());
-            }
-        }
+        Map<String, Object> params = parameterTools.getParameterValues(widget);
+        List<String> undefinedParameters = parameterTools.getUndefinedParameters(params);
 
         Frame frame;
 
@@ -188,17 +188,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));
-    }
-
-    protected Map<String, Object> getParameters() {
-        Map<String, Object> params = new HashMap<>();
-        for (DashboardWidgetLink link : widget.getDashboardLinks()) {
-            for (WidgetParameter parameter : link.getDashboardParameters()) {
-                Object value = parameterTools.getWidgetLinkParameterValue(parameter);
-                params.put(parameter.getName(), value);
-            }
-        }
-        return params;
     }
 
     protected void showConfigWindow() {

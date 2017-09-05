@@ -11,9 +11,11 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.TokenList;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
+import com.haulmont.cuba.gui.data.ValueListener;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ import java.util.Map;
  * @author bochkarev
  * @version $Id$
  */
-public class LookupFrame extends AbstractFrame {
+public class LookupFrame extends AbstractFrame implements Component.HasValue {
     public static final String WIDGET_PARAMETER = "WIDGET_PARAMETER";
     public static final String SCREEN_ID = "amxd$Lookup.frame";
 
@@ -89,10 +91,51 @@ public class LookupFrame extends AbstractFrame {
         selectedDs.addCollectionChangeListener(collectionChangeListener);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Object> getWidgetParameterValues() {
+    @Override @SuppressWarnings("unchecked")
+    public List<Object>  getValue() {
         List<Object> objectList = new ArrayList<>();
         objectList.addAll(selectedDs.getItems());
         return objectList;
+    }
+
+    @Override @SuppressWarnings("unchecked")
+    public void setValue(Object value) {
+        if (value == null) {
+            selectedDs.clear();
+        } else if (value instanceof List) {
+            ((List) value).forEach(v ->
+                    selectedDs.includeItem((Entity) v)
+            );
+        }
+    }
+
+    @Override
+    public void addListener(ValueListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(ValueListener listener) {
+
+    }
+
+    @Override
+    public void addValueChangeListener(ValueChangeListener listener) {
+
+    }
+
+    @Override
+    public void removeValueChangeListener(ValueChangeListener listener) {
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+
     }
 }

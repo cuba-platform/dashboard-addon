@@ -9,7 +9,7 @@
               spacing="true">
             <label id="widgetName"
                    htmlEnabled="true"/>
-            <label value="msg://label.parametersShouldBeFiled"
+            <label value="msg://label.parametersShouldBeFilled"
                    htmlEnabled="true"/>
         </vbox>
     </layout>
