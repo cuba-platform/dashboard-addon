@@ -10,6 +10,7 @@ import com.audimex.dashboard.web.model.WidgetModel;
 import com.audimex.dashboard.web.model.WidgetParameterModel;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;

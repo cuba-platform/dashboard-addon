@@ -61,6 +61,9 @@ public class DashboardWidget extends StandardEntity {
     @Column(name = "IS_TEMPLATE")
     protected Boolean isTemplate;
 
+    @Transient
+    protected com.haulmont.cuba.core.entity.Entity entity;
+
     public void setIsTemplate(Boolean isTemplate) {
         this.isTemplate = isTemplate;
     }
@@ -161,5 +164,12 @@ public class DashboardWidget extends StandardEntity {
         return frameId;
     }
 
+    public com.haulmont.cuba.core.entity.Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(com.haulmont.cuba.core.entity.Entity entity) {
+        this.entity = entity;
+    }
 
 }
