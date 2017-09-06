@@ -8,18 +8,23 @@ import com.audimex.dashboard.web.model.DashboardModel;
 import com.google.gson.Gson;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.WindowParam;
+import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.components.FieldGroup;
+import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
+import com.haulmont.cuba.core.entity.Entity;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
     public static final String DASHBOARD_PARAMETER = "DASHBOARD_PARAMETER";
+    public static final String DASHBOARD_ENTITY = "DASHBOARD_ENTITY";
 
     protected DashboardModel dashboardModel = null;
     protected Gson gson = new Gson();
@@ -41,6 +46,9 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @Inject
     private ComponentsFactory componentsFactory;
+
+    @WindowParam(name = DASHBOARD_ENTITY)
+    protected Entity entity;
 
     protected DashboardFrame dashboardDesigner;
 

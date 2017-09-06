@@ -20,6 +20,7 @@ import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.FramePanel;
 import com.audimex.dashboard.web.widgets.GridCell;
 import com.audimex.dashboard.web.widgets.GridRow;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
@@ -49,6 +50,8 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.audimex.dashboard.web.dashboard.DashboardEdit.DASHBOARD_ENTITY;
+
 /**
  * The dashboard frame contains the palette, canvas and tree of components.
  * Can be used to build a user interface in the runtime.
@@ -57,6 +60,9 @@ public class DashboardFrame extends AbstractFrame {
     protected static final String VERTICAL_LAYOUT_ICON = "icons/vertical-container.png";
     protected static final String HORIZONTAL_LAYOUT_ICON = "icons/horizontal-container.png";
     protected static final String GRID_LAYOUT_ICON = "icons/grid-container.png";
+
+    @WindowParam(name = DASHBOARD_ENTITY)
+    protected Entity entity;
 
     @Inject
     protected VBoxLayout containers;
@@ -733,6 +739,7 @@ public class DashboardFrame extends AbstractFrame {
                                     widgetModel.getReportId()
                             )
                     );
+                    widget.setEntity(entity);
 
                     List<DashboardWidgetLink> links = parameterTools.loadWidgetLinks(widgetModel);
                     widget.setDashboardLinks(links);
