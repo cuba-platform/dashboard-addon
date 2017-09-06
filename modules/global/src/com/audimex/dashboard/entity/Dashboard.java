@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.haulmont.chile.core.annotations.Composition;
 
+@NamePattern("%s|title")
 @Table(name = "AMXD_DASHBOARD")
 @Entity(name = "amxd$Dashboard")
 public class Dashboard extends StandardEntity {
