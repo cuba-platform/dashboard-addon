@@ -4,16 +4,14 @@
 package com.audimex.dashboard.web.dashboardwidget;
 
 import com.audimex.dashboard.entity.DashboardWidget;
+import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.ScreensHelper;
-import com.haulmont.cuba.gui.components.AbstractEditor;
-import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.FieldGroup;
-import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
@@ -21,21 +19,24 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.reports.entity.Report;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.audimex.dashboard.entity.WidgetViewType.CHART;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
 
     @Inject
     protected Datasource<DashboardWidget> dashboardWidgetDs;
+
+    @Inject
+    protected CollectionDatasource<WidgetParameter, UUID> widgetParametersDs;
 
     @Inject
     private ComponentsFactory componentsFactory;
@@ -58,17 +59,13 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     @Inject
     protected Metadata metadata;
 
-    protected static final List<String> allFieldNames = ImmutableList.of(
-            "frameId",
-            "entityType",
-            "report"
-    );
+    protected List<Field> allFieldNames;
 
-    protected static final List<String> commonFieldNames = ImmutableList.of("frameId");
+    protected List<Field> commonFieldNames;
 
-    protected static final List<String> listFieldNames = ImmutableList.of("entityType");
+    protected List<Field> listFieldNames;
 
-    protected static final List<String> chartFieldNames = ImmutableList.of("report");
+    protected List<Field> chartFieldNames;
 
     @Override
     protected void initNewItem(DashboardWidget item) {
@@ -79,28 +76,76 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     @Override
-    protected void postInit() {
-        super.postInit();
-
-        showComponents(getItem().getWidgetViewType());
-
-        initFrameIdField();
-        initWidgetViewTypeValueChangeListener();
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        initFieldList();
         initCreateButtonActions();
-        initEntityTypeField();
-        initReportField();
     }
 
-    private void initReportField() {
-        if (fieldGroup.getFieldNN("report").getComponent() != null) return;
+    @Override
+    protected void postInit() {
+        super.postInit();
+        showComponents(getItem().getWidgetViewType());
+        initWidgetViewTypeValueChangeListener();
+    }
 
+    protected void initFieldList() {
+        LookupField lookupFrameIdField = initFrameIdField();
+        LookupField lookupReportField = initReportField();
+        initEntityTypeField();
+
+        allFieldNames = ImmutableList.of(
+                lookupFrameIdField,
+                lookupReportField
+        );
+
+        commonFieldNames = ImmutableList.of(lookupFrameIdField);
+        listFieldNames = ImmutableList.of(lookupFrameIdField);
+        chartFieldNames = ImmutableList.of(lookupReportField);
+    }
+
+    protected LookupField initFrameIdField() {
+        FieldGroup.FieldConfig frameIdFieldConfig = fieldGroup.getField("frameId");
+        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        lookupField.setDatasource(dashboardWidgetDs, frameIdFieldConfig.getProperty());
+        frameIdFieldConfig.setComponent(lookupField);
+
+        Map<String, String> availableFrames = new HashMap<>();
+
+        try {
+            for (WindowInfo windowInfo : windowConfig.getWindows()) {
+                if (isApplicableScreen(windowInfo)) {
+                    String screenCaption = screensHelper.getScreenCaption(windowInfo);
+                    String screenName;
+                    if (StringUtils.isNotBlank(screenCaption)) {
+                        screenName = screenCaption +
+                                " (" +
+                                windowInfo.getId() +
+                                ")";
+                    } else {
+                        screenName = windowInfo.getId();
+                    }
+                    availableFrames.put(screenName,
+                            windowInfo.getId());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        lookupField.setOptionsMap(availableFrames);
+        return lookupField;
+    }
+
+
+    protected LookupField initReportField() {
         FieldGroup.FieldConfig reportFieldConfig = fieldGroup.getField("report");
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setDatasource(dashboardWidgetDs, reportFieldConfig.getProperty());
         reportFieldConfig.setComponent(lookupField);
 
         CollectionDatasource ds = new DsBuilder(getDsContext())
-                .setJavaClass(com.haulmont.reports.entity.Report.class)
+                .setJavaClass(Report.class)
                 .setAllowCommit(false)
                 .setViewName("report.view")
                 .setId("reportDs")
@@ -109,45 +154,10 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         ds.refresh();
 
         lookupField.setOptionsDatasource(ds);
+        return lookupField;
     }
 
-    protected void initFrameIdField() {
-        if (fieldGroup.getFieldNN("frameId").getComponent() != null) return;
-
-        fieldGroup.addCustomField("frameId", (datasource, propertyId) -> {
-            LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-            Map<String, String> availableFrames = new HashMap<>();
-
-            try {
-                for (WindowInfo windowInfo : windowConfig.getWindows()) {
-                    if (isApplicableScreen(windowInfo)) {
-                        String screenCaption = screensHelper.getScreenCaption(windowInfo);
-                        String screenName;
-                        if (StringUtils.isNotBlank(screenCaption)) {
-                            screenName = screenCaption +
-                                    " (" +
-                                    windowInfo.getId() +
-                                    ")";
-                        } else {
-                            screenName = windowInfo.getId();
-                        }
-                        availableFrames.put(screenName,
-                                windowInfo.getId());
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            lookupField.setOptionsMap(availableFrames);
-            lookupField.setDatasource(datasource, propertyId);
-            return lookupField;
-        });
-    }
-
-    protected void initEntityTypeField() {
-        if (fieldGroup.getFieldNN("entityTypeField").getComponent() != null) return;
-
+    protected LookupField initEntityTypeField() {
         FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("entityTypeField");
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
@@ -159,14 +169,13 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
                         metaClasses.put(metaClass.getName(), metaClass.getName())
                 );
         lookupField.setOptionsMap(metaClasses);
+        return lookupField;
     }
 
     protected void initWidgetViewTypeValueChangeListener() {
         widgetViewTypeField.addValueChangeListener(event -> {
-            if (event.getValue() == null) {
-                return;
-            }
-
+            Collection<WidgetParameter> parameters = new ArrayList<>(widgetParametersDs.getItems());
+            parameters.forEach(widgetParametersDs::removeItem);
             showComponents((WidgetViewType) event.getValue());
         });
     }
@@ -198,15 +207,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         }
     }
 
-    protected void showComponents(List<String> componentNames) {
-        allFieldNames.forEach(name -> {
-            FieldGroup.FieldConfig field = fieldGroup.getField(name);
-
-            if (field == null) {
-                return;
-            }
-
-            if (componentNames.contains(name)) {
+    protected void showComponents(List<Field> componentNames) {
+        allFieldNames.forEach(field -> {
+            if (componentNames.contains(field)) {
                 showComponent(field, true);
             } else {
                 showComponent(field, false);
@@ -214,7 +217,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         });
     }
 
-    protected void showComponent(FieldGroup.FieldConfig field, boolean isShowing) {
+    protected void showComponent(Field field, boolean isShowing) {
         field.setVisible(isShowing);
         field.setRequired(isShowing);
     }
@@ -245,5 +248,13 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         }
 
         return true;
+    }
+
+    @Override
+    protected boolean preCommit() {
+        if (CHART.equals(getItem().getWidgetViewType())) {
+            getItem().setFrameId("amxd$Empty.frame");
+        }
+        return super.preCommit();
     }
 }
