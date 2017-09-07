@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.web.widgetparameter;
 
+import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
 import com.haulmont.chile.core.model.MetaClass;
@@ -27,7 +28,7 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
     @Inject
     private ComponentsFactory componentsFactory;
     @Inject
-    protected Datasource<WidgetParameter> widgetParameterDs;
+    protected Datasource<ReferenceToEntity> referenceToEntityDs;
     @Inject
     protected Metadata metadata;
 
@@ -45,14 +46,14 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        FieldGroup.FieldConfig metaConfig = fieldGroup.getField("referenceToEntity.metaClassName");
+        FieldGroup.FieldConfig metaConfig = fieldGroup.getField("metaClassName");
         metaLookupField = componentsFactory.createComponent(LookupField.class);
-        metaLookupField.setDatasource(widgetParameterDs, metaConfig.getProperty());
+        metaLookupField.setDatasource(referenceToEntityDs, metaConfig.getProperty());
         metaConfig.setComponent(metaLookupField);
 
-        FieldGroup.FieldConfig viewConfig = fieldGroup.getField("referenceToEntity.viewName");
+        FieldGroup.FieldConfig viewConfig = fieldGroup.getField("viewName");
         viewLookupField = componentsFactory.createComponent(LookupField.class);
-        viewLookupField.setDatasource(widgetParameterDs, viewConfig.getProperty());
+        viewLookupField.setDatasource(referenceToEntityDs, viewConfig.getProperty());
         viewConfig.setComponent(viewLookupField);
 
         Map<String, Object> metaClasses = new LinkedHashMap<>();
@@ -63,7 +64,8 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
         metaLookupField.setOptionsMap(metaClasses);
 
         metaLookupField.addValueChangeListener(e -> {
-            MetaClass metaClass = metadata.getClass((String) e.getValue());
+            String value = (String) e.getValue();
+            MetaClass metaClass = metadata.getClass(value);
             if (metaClass != null) {
                 Map<String, Object> views = new LinkedHashMap<>();
                 views.put(View.MINIMAL, View.MINIMAL);

@@ -23,13 +23,13 @@
                 <field id="caption" property="caption"/>
                 <field id="icon" property="icon"/>
                 <field id="description" property="description"/>
+                <field id="entityTypeField"
+                       property="entityType"
+                       custom="true"/>
                 <field id="widgetViewType" property="widgetViewType"
                        required="true"/>
                 <field id="frameId"
                        property="frameId"
-                       custom="true"/>
-                <field id="entityTypeField"
-                       property="entityType"
                        custom="true"/>
                 <field id="report"
                        property="report"
