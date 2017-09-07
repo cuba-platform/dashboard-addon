@@ -19,10 +19,14 @@
         <fieldGroup id="fieldGroupLeft"
                     datasource="dashboardDs">
             <column width="250px">
-                <field id="title" property="title"/>
+                <field id="title"
+                       property="title"
+                       required="true"/>
             </column>
             <column>
-                <field id="entityType" property="entityType" custom="true"/>
+                <field id="entityType"
+                       property="entityType"
+                       custom="true"/>
             </column>
         </fieldGroup>
         <vbox id="dashboardDesignerVBox"/>

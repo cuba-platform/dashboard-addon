@@ -13,4 +13,6 @@ public interface WidgetRepository {
     String NAME = "amxd_WidgetRepository";
 
     List<DashboardWidget> getWidgets();
+
+    List<DashboardWidget> getWidgets(String entityType);
 }

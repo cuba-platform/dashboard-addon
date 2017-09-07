@@ -75,6 +75,15 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected void postInit() {
         super.postInit();
 
+        initDashboardFrame();
+
+        metaLookupField.addValueChangeListener(event -> {
+            getItem().setModel(null);
+            initDashboardFrame();
+        });
+    }
+
+    protected void initDashboardFrame() {
         dashboardDesigner = (DashboardFrame) openFrame(dashboardDesignerVBox, "dashboard-frame",
                 ParamsMap.of(DASHBOARD_PARAMETER, getItem())
         );
