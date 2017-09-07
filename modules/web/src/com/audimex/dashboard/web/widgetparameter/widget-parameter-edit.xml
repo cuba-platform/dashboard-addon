@@ -8,7 +8,9 @@
     <dsContext>
         <datasource id="widgetParameterDs"
                     class="com.audimex.dashboard.entity.WidgetParameter"
-                    view="master-widgetParameter-view"/>
+                    view="master-widgetParameter-view">
+            <datasource id="referenceToEntityDs" property="referenceToEntity"/>
+        </datasource>
     </dsContext>
     <dialogMode height="AUTO"
                 width="AUTO"/>
@@ -21,11 +23,11 @@
                        required="true"/>
                 <field property="parameterType"
                        required="true"/>
-                <field id="referenceToEntity.metaClassName"
-                       property="referenceToEntity.metaClassName"
+                <field id="metaClassName"
+                       datasource="referenceToEntityDs"
                        custom="true"/>
-                <field id="referenceToEntity.viewName"
-                       property="referenceToEntity.viewName"
+                <field id="viewName"
+                       datasource="referenceToEntityDs"
                        custom="true"/>
             </column>
         </fieldGroup>

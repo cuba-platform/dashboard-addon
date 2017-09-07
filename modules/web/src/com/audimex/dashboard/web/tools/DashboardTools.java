@@ -1,7 +1,6 @@
 package com.audimex.dashboard.web.tools;
 
 import com.audimex.dashboard.entity.DashboardWidget;
-import com.audimex.dashboard.entity.DashboardWidgetLink;
 import com.audimex.dashboard.web.drophandlers.GridDropListener;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.widgets.FramePanel;
@@ -23,10 +22,8 @@ import fi.jasoft.dragdroplayouts.interfaces.HasDragCaptionProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Component(DashboardTools.NAME)
 public class DashboardTools {
@@ -143,7 +140,7 @@ public class DashboardTools {
     public GridRow getGridRow(int rowIndex, Tree tree, DashboardGridLayout gridLayout) {
         Collection<?> gridRows = tree.getChildren(gridLayout);
         if (rowIndex < gridLayout.getRows()) {
-            int i=0;
+            int i = 0;
             if (gridRows != null) {
                 for (Object row : gridRows) {
                     if (i == rowIndex) {
@@ -240,7 +237,7 @@ public class DashboardTools {
         HierarchicalContainer container = (HierarchicalContainer) tree.getContainerDataSource();
 
         if (component instanceof DashboardGridLayout) {
-            for (int i=0; i<((DashboardGridLayout) component).getRows(); i++) {
+            for (int i = 0; i < ((DashboardGridLayout) component).getRows(); i++) {
                 createNewGridRow((DashboardGridLayout) component, tree, i);
             }
             tree.expandItem(component);
@@ -408,8 +405,8 @@ public class DashboardTools {
                                 cellComponent,
                                 gridCell.getColumn(),
                                 gridCell.getRow(),
-                                gridCell.getColumn()+gridCell.getColspan()-1,
-                                gridCell.getRow()+gridCell.getRowspan()-1
+                                gridCell.getColumn() + gridCell.getColspan() - 1,
+                                gridCell.getRow() + gridCell.getRowspan() - 1
                         );
                     }
                 } else {
@@ -473,9 +470,9 @@ public class DashboardTools {
             for (Object gridCell : cells) {
                 GridCell currentCell = (GridCell) gridCell;
                 if (currentCell.getRow() >= row
-                        && currentCell.getRow() < row+rowspan
+                        && currentCell.getRow() < row + rowspan
                         && currentCell.getColumn() >= column
-                        && currentCell.getColumn() < column+colspan) {
+                        && currentCell.getColumn() < column + colspan) {
                     currentCell.setAvailable(false);
                 } else {
                     currentCell.setAvailable(true);

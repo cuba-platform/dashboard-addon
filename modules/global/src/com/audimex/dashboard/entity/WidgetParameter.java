@@ -18,7 +18,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @NamePattern("%s|name")
 @Table(name = "AMXD_WIDGET_PARAMETER")
