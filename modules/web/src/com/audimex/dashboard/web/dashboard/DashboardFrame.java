@@ -487,7 +487,9 @@ public class DashboardFrame extends AbstractFrame {
         containersDraggableLayout.addComponent(horizontalLayoutButton);
         containersDraggableLayout.addComponent(gridButton);
 
-        for (DashboardWidget widget : widgetRepository.getWidgets()) {
+        List<DashboardWidget> widgets = widgetRepository.getWidgets(dashboard.getEntityType());
+
+        for (DashboardWidget widget : widgets) {
             String caption = widget.getCaption() != null ? widget.getCaption() : "";
             String icon = widget.getIcon() != null ? widget.getIcon() : "";
             PaletteButton paletteButton = new PaletteButton(

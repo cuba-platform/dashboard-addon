@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component(WidgetRepository.NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
@@ -52,6 +53,24 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         List<DashboardWidget> widgetMap = new ArrayList<>();
         widgetMap.addAll(predefinedWidgetMap);
         widgetMap.addAll(loadedWidgetsMap);
+        return widgetMap;
+    }
+
+    @Override
+    public List<DashboardWidget> getWidgets(String entityType) {
+        checkInitialized();
+
+        List<DashboardWidget> widgetMap = new ArrayList<>();
+        widgetMap.addAll(
+                predefinedWidgetMap.stream()
+                        .filter(widget -> widget.getEntityType() == null || widget.getEntityType().equals(entityType))
+                        .collect(Collectors.toList())
+        );
+        widgetMap.addAll(
+                loadedWidgetsMap.stream()
+                        .filter(widget -> widget.getEntityType() == null || widget.getEntityType().equals(entityType))
+                        .collect(Collectors.toList())
+                );
         return widgetMap;
     }
 
