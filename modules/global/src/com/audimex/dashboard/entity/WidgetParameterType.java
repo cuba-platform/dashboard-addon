@@ -17,7 +17,8 @@ public enum WidgetParameterType implements EnumClass<Integer> {
     STRING(50),
     DECIMAL(60),
     BOOLEAN(70),
-    LONG(80);
+    LONG(80),
+    UNDEFINED(90);
 
     private Integer id;
 
