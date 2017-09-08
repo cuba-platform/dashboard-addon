@@ -70,6 +70,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected List<Field> chartFieldNames;
 
+    protected LookupField reportLookupField;
+
     @Override
     protected void initNewItem(DashboardWidget item) {
         super.initNewItem(item);
@@ -90,21 +92,27 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         super.postInit();
         showComponents(getItem().getWidgetViewType());
         initWidgetViewTypeValueChangeListener();
+
+        reportLookupField.addValueChangeListener(e -> {
+            clearParameterDs();
+            Report report = (Report) e.getValue();
+            createReportParameters(report);
+        });
     }
 
     protected void initFieldList() {
         LookupField lookupFrameIdField = initFrameIdField();
-        LookupField lookupReportField = initReportField();
+        reportLookupField = initReportField();
         initEntityTypeField();
 
         allFieldNames = ImmutableList.of(
                 lookupFrameIdField,
-                lookupReportField
+                reportLookupField
         );
 
         commonFieldNames = ImmutableList.of(lookupFrameIdField);
         listFieldNames = ImmutableList.of(lookupFrameIdField);
-        chartFieldNames = ImmutableList.of(lookupReportField);
+        chartFieldNames = ImmutableList.of(reportLookupField);
     }
 
     protected LookupField initFrameIdField() {
@@ -143,9 +151,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected LookupField initReportField() {
         FieldGroup.FieldConfig reportFieldConfig = fieldGroup.getField("report");
-        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-        lookupField.setDatasource(dashboardWidgetDs, reportFieldConfig.getProperty());
-        reportFieldConfig.setComponent(lookupField);
+        LookupField reportLookupField = componentsFactory.createComponent(LookupField.class);
+        reportLookupField.setDatasource(dashboardWidgetDs, reportFieldConfig.getProperty());
+        reportFieldConfig.setComponent(reportLookupField);
 
         CollectionDatasource ds = new DsBuilder(getDsContext())
                 .setJavaClass(Report.class)
@@ -156,15 +164,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
         ds.refresh();
 
-        lookupField.setOptionsDatasource(ds);
+        reportLookupField.setOptionsDatasource(ds);
 
-        lookupField.addValueChangeListener(e -> {
-            clearParameterDs();
-            Report report = (Report) e.getValue();
-            createReportParameters(report);
-        });
-
-        return lookupField;
+        return reportLookupField;
     }
 
     protected void createReportParameters(Report report) {
