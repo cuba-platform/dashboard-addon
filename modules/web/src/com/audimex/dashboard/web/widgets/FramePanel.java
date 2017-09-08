@@ -9,25 +9,28 @@ import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.DashboardWidgetLink;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.audimex.dashboard.web.layouts.*;
-import com.audimex.dashboard.web.screens.filters.FakeQueryFilterSupport;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Filter;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.components.filter.ConditionsTree;
+import com.haulmont.cuba.gui.components.filter.FakeFilterSupport;
 import com.haulmont.cuba.gui.components.filter.FilterParser;
 import com.haulmont.cuba.gui.components.filter.Param;
 import com.haulmont.cuba.gui.components.filter.edit.FilterEditor;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.entity.FilterEntity;
 import com.haulmont.cuba.web.App;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
+import com.haulmont.cuba.web.gui.components.WebFilter;
 import com.haulmont.reports.gui.ReportGuiManager;
 import com.haulmont.reports.gui.report.run.ShowChartController;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
@@ -59,6 +62,8 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     protected ParameterTools parameterTools;
 
+    protected ComponentsFactory componentsFactory;
+
     protected Metadata metadata;
 
     protected Frame parentFrame;
@@ -75,6 +80,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         parameterTools = AppBeans.get(ParameterTools.NAME);
         metadata = AppBeans.get(Metadata.NAME);
         reportGuiManager = AppBeans.get(ReportGuiManager.class);
+        componentsFactory = AppBeans.get(ComponentsFactory.NAME);
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
@@ -111,7 +117,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         filterConfigButton.addClickListener((Button.ClickListener) event -> {
             String entityName = widget.getEntityType();
             MetaClass entityNameFromMetaClass = metadata.getSession().getClassNN(entityName);
-            FakeQueryFilterSupport fakeFilterSupport = new FakeQueryFilterSupport(parentFrame, entityNameFromMetaClass);
+            FakeFilterSupport fakeFilterSupport = new FakeFilterSupport(parentFrame, entityNameFromMetaClass);
 
             WindowManager windowManager = App.getInstance().getWindowManager();
             WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
@@ -124,7 +130,6 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             Map<String, Object> params = new HashMap<>();
             String filterXml = link.getFilter();
             final Filter fakeFilter = fakeFilterSupport.createFakeFilter();
-            //fakeFilter.setShowCollections(true);
             final FilterEntity filterEntity = fakeFilterSupport.createFakeFilterEntity(filterXml);
             final ConditionsTree conditionsTree = fakeFilterSupport.createFakeConditionsTree(fakeFilter, filterEntity);
 
@@ -162,6 +167,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetListFrame");
+                replaceFilter(frame);
                 frame.getDsContext().refresh();
             } else if (WidgetViewType.CHART.equals(widget.getWidgetViewType())) {
                 ReportOutputDocument document = reportGuiManager.getReportResult(widget.getReport(), params, null);
@@ -188,6 +194,39 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         frame.setParent(parentFrame);
         setContent(frame.unwrapComposition(Layout.class));
+    }
+
+    protected Filter replaceFilter(Frame frame) {
+        Filter filter = null;
+
+        for (com.haulmont.cuba.gui.components.Component component : frame.getComponents()) {
+            if (component instanceof WebFilter) {
+                filter = (WebFilter) component;
+                Optional<DashboardWidgetLink> optional = widget.getDashboardLinks().stream().findFirst();
+                DashboardWidgetLink link = optional.orElse(null);
+                if (link != null && link.getFilter() != null) {
+                    UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+
+                    String componentId = String.format("%s.%s", frame.getId(), filter.getId());
+                    String xml = link.getFilter().replaceAll("filterWithoutId", componentId);
+
+                    filter.getDatasource().setQuery("select queryEntity from " +
+                            filter.getDatasource().getMetaClass().getName() +
+                            " queryEntity"
+                    );
+
+                    FilterEntity filterEntity = metadata.create(FilterEntity.class);
+                    filterEntity.setComponentId(componentId);
+                    filterEntity.setXml(xml);
+                    filterEntity.setUser(userSessionSource.getUserSession().getCurrentOrSubstitutedUser());
+                    filter.setFilterEntity(filterEntity);
+
+                    filter.apply(true);
+                }
+            }
+        }
+
+        return filter;
     }
 
     protected void showConfigWindow() {

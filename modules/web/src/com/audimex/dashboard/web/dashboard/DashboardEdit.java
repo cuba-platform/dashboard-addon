@@ -57,6 +57,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        this.setId("dashboard_edit");
 
         FieldGroup.FieldConfig metaConfig = fieldGroupLeft.getField("entityType");
         metaLookupField = componentsFactory.createComponent(LookupField.class);
@@ -87,6 +88,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         dashboardDesigner = (DashboardFrame) openFrame(dashboardDesignerVBox, "dashboard-frame",
                 ParamsMap.of(DASHBOARD_PARAMETER, getItem())
         );
+        dashboardDesigner.setId("dashboardDesigner");
 
         if (getItem().getModel() != null) {
             dashboardModel = gson.fromJson(getItem().getModel(), DashboardModel.class);
