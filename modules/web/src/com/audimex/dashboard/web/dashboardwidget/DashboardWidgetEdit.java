@@ -5,11 +5,13 @@ package com.audimex.dashboard.web.dashboardwidget;
 
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetParameter;
+import com.audimex.dashboard.entity.WidgetParameterType;
 import com.audimex.dashboard.entity.WidgetViewType;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreensHelper;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
@@ -19,6 +21,7 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.reports.entity.ParameterType;
 import com.haulmont.reports.entity.Report;
 import org.apache.commons.lang.StringUtils;
 
@@ -147,14 +150,67 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         CollectionDatasource ds = new DsBuilder(getDsContext())
                 .setJavaClass(Report.class)
                 .setAllowCommit(false)
-                .setViewName("report.view")
+                .setViewName("report.edit")
                 .setId("reportDs")
                 .buildCollectionDatasource();
 
         ds.refresh();
 
         lookupField.setOptionsDatasource(ds);
+
+        lookupField.addValueChangeListener(e -> {
+            clearParameterDs();
+            Report report = (Report) e.getValue();
+            createReportParameters(report);
+        });
+
         return lookupField;
+    }
+
+    protected void createReportParameters(Report report) {
+        if (report != null && report.getInputParameters() != null) {
+            report.getInputParameters().forEach(param -> {
+                String name = param.getAlias();
+                String metaClass = param.getEntityMetaClass();
+                WidgetParameterType type = WidgetParameterType.UNDEFINED;
+                ParameterType parameterType = param.getType();
+                switch (parameterType) {
+                    case DATE: case TIME: case DATETIME:
+                        type = WidgetParameterType.DATE;
+                        break;
+                    case TEXT:
+                        type = WidgetParameterType.STRING;
+                        break;
+                    case BOOLEAN:
+                        type = WidgetParameterType.BOOLEAN;
+                        break;
+                    case NUMERIC:
+                        type = WidgetParameterType.DECIMAL;
+                        break;
+                       /*case ENUMERATION:
+                            break;*/
+                    case ENTITY:
+                        type = WidgetParameterType.ENTITY;
+                        break;
+                    case ENTITY_LIST:
+                        type = WidgetParameterType.LIST_ENTITY;
+                        break;
+                    default:
+                }
+                WidgetParameter wp = createWidgetParameter(name, metaClass, type);
+                widgetParametersDs.addItem(wp);
+            });
+        }
+    }
+
+    protected WidgetParameter createWidgetParameter(String name, String metaClass, WidgetParameterType parameterType) {
+        WidgetParameter wp = metadata.create(WidgetParameter.class);
+        wp.setName(name);
+        wp.setParameterType(parameterType);
+        wp.setDashboardWidget(dashboardWidgetDs.getItem());
+        wp.getReferenceToEntity().setMetaClassName(metaClass);
+        wp.getReferenceToEntity().setViewName(View.LOCAL);
+        return wp;
     }
 
     protected LookupField initEntityTypeField() {
@@ -174,10 +230,19 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected void initWidgetViewTypeValueChangeListener() {
         widgetViewTypeField.addValueChangeListener(event -> {
-            Collection<WidgetParameter> parameters = new ArrayList<>(widgetParametersDs.getItems());
-            parameters.forEach(widgetParametersDs::removeItem);
+            if (WidgetViewType.CHART.equals(dashboardWidgetDs.getItem().getWidgetViewType()) &&
+                    dashboardWidgetDs.getItem().getReport() != null) {
+                createReportParameters(dashboardWidgetDs.getItem().getReport());
+            } else {
+                clearParameterDs();
+            }
             showComponents((WidgetViewType) event.getValue());
         });
+    }
+
+    protected void clearParameterDs() {
+        Collection<WidgetParameter> parameters = new ArrayList<>(widgetParametersDs.getItems());
+        parameters.forEach(widgetParametersDs::removeItem);
     }
 
     protected void initCreateButtonActions() {
