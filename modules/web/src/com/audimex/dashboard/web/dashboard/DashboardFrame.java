@@ -204,7 +204,9 @@ public class DashboardFrame extends AbstractFrame {
             if (component != null) {
                 if (component.getParent() instanceof HasMainLayout) {
                     tree.setValue(component.getParent());
-                } if (component instanceof GridLayout) {
+                }
+
+                if (component instanceof GridLayout) {
                     tree.setValue(component);
                 } else if (e.getChildComponent() instanceof FramePanel) {
                     tree.setValue(e.getChildComponent());
@@ -487,7 +489,7 @@ public class DashboardFrame extends AbstractFrame {
         containersDraggableLayout.addComponent(horizontalLayoutButton);
         containersDraggableLayout.addComponent(gridButton);
 
-        List<DashboardWidget> widgets = widgetRepository.getWidgets(dashboard.getEntityType());
+        List<DashboardWidget> widgets = widgetRepository.getWidgets();
 
         for (DashboardWidget widget : widgets) {
             String caption = widget.getCaption() != null ? widget.getCaption() : "";

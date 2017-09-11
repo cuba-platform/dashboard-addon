@@ -56,24 +56,6 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         return widgetMap;
     }
 
-    @Override
-    public List<DashboardWidget> getWidgets(String entityType) {
-        checkInitialized();
-
-        List<DashboardWidget> widgetMap = new ArrayList<>();
-        widgetMap.addAll(
-                predefinedWidgetMap.stream()
-                        .filter(widget -> widget.getEntityType() == null || widget.getEntityType().equals(entityType))
-                        .collect(Collectors.toList())
-        );
-        widgetMap.addAll(
-                loadedWidgetsMap.stream()
-                        .filter(widget -> widget.getEntityType() == null || widget.getEntityType().equals(entityType))
-                        .collect(Collectors.toList())
-                );
-        return widgetMap;
-    }
-
     protected void checkInitialized() {
         if (!initialized) {
             synchronized (this) {

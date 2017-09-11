@@ -116,6 +116,11 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         Button filterConfigButton = new Button(WebComponentsHelper.getIcon("font-icon:FILTER"));
         filterConfigButton.addClickListener((Button.ClickListener) event -> {
             String entityName = widget.getEntityType();
+
+            if (entityName == null || entityName.isEmpty()) {
+                return;
+            }
+
             MetaClass entityNameFromMetaClass = metadata.getSession().getClassNN(entityName);
             FakeFilterSupport fakeFilterSupport = new FakeFilterSupport(parentFrame, entityNameFromMetaClass);
 
