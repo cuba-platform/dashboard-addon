@@ -4,13 +4,20 @@
 Dashboard designer allows you to build a dashboard with your frames and predefined layouts such as vertical, horizontal and grid in WYSIWYG mode.
 
 ## Key concepts
-Designer contains a widget palette, widget tree with hierarchical structure and canvas where you can build and see your dashboard. Also, it's possible to build dashboard using Drag-n-Drop from Palette to Canvas / Tree.
+Designer contains a widget palette, widget tree with hierarchical structure and canvas where you can build and see your dashboard. Also, it's possible to build dashboard using Drag-n-Drop from Palette to Canvas / Tree. The widget can be depended from an entity type value. The designer show a two types of widget. The first type of widget is a widget which doesn't include an entity type. The second type of widget is a widget which equal of a selected entity type of dashboard. If on the dashboard the entity type is not set, then an only widgets with not setted an entity type will be available for choising. Otherwise the widgets for equal type and without type will be avaible.
 
 Dashboard public methods:
  - `setDashboardModel` sets a dashboard model to frame.
  - `getDashboardModel` returns a dashboard model of frame.
  - `setDashboardMode` sets a type of the dashboard view. In VIEW mode it can display only non-editable canvas and DESIGNER mode is default mode with widget palette and component structure tree.
  - `getDashboardMode` returns a dashboard display mode type.
+     
+Dashboard parameters:
+
+@WindowParam(name = "DASHBOARD_ENTITY")
+protected Entity entity;
+
+This parameter describe the entity which will using for an algorithm calculation.
 
 ## Structure
 Main components of this application component:
@@ -18,6 +25,8 @@ Main components of this application component:
  - `DashboardModel` contains component hierarchical structure. Can be serializaed to any format (JSON/XML).
  - `WidgetRepository` loads widgets configuration from XML config files (widget caption, icon, frameId) that are set to `<widget .../>` config property.
  - `Dashboard` entity has `user`, `title` and `model` properties. `model` contains JSON structure as a String. Also, this entity is bounded to `DashboardEdit` and `DashboardBrowse` screens and can be used in your project.
+ - `WidgetLinkModel` contains data for relationships between dashboard widget and widget parameters.
+ - `WidgetParameterModel` contains widget parameters values.
 
 ## How to add to a project
 1. Open the project in Studio
