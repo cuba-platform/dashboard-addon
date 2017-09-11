@@ -83,7 +83,7 @@ public class WidgetConfigWindow extends AbstractWindow {
     @Inject
     protected ParameterTools parameterTools;
 
-    protected static final List<Boolean> booleanList = ImmutableList.of(true, false);
+    protected static final List<Boolean> BOOLEAN_LIST = ImmutableList.of(true, false);
 
     protected Map<WidgetParameter, Object> valuesMap = new HashMap<>();
 
@@ -297,7 +297,7 @@ public class WidgetConfigWindow extends AbstractWindow {
                 LookupField booleanField = componentsFactory.createComponent(LookupField.class);
                 booleanField.setWidth("100%");
                 booleanField.setInputPrompt(getMessage("message.value"));
-                booleanField.setOptionsList(booleanList);
+                booleanField.setOptionsList(BOOLEAN_LIST);
                 booleanField.setValue(parameter.getBoolValue());
                 booleanField.addValueChangeListener(event -> {
                     if (event.getValue() == null) return;
@@ -334,7 +334,7 @@ public class WidgetConfigWindow extends AbstractWindow {
         Label parameterNameField = componentsFactory.createComponent(Label.class);
         parameterNameField.setWidth("120px");
         parameterNameField.setAlignment(Alignment.MIDDLE_CENTER);
-        parameterNameField.setValue(parameter.getName());
+        parameterNameField.setValue(String.format("%s (%s)", parameter.getName(), parameter.getAlias()));
 
         parameterArea.add(parameterNameField);
         parameterArea.add(component);

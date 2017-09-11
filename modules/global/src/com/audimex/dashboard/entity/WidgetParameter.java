@@ -89,6 +89,18 @@ public class WidgetParameter extends StandardEntity {
     @OneToMany(mappedBy = "masterParameter")
     protected List<WidgetParameter> additionalParameters;
 
+    @Column(name = "INPUT_TYPE")
+    protected Integer inputType;
+
+    public void setInputType(ParameterInputType inputType) {
+        this.inputType = inputType == null ? null : inputType.getId();
+    }
+
+    public ParameterInputType getInputType() {
+        return inputType == null ? null : ParameterInputType.fromId(inputType);
+    }
+
+
     public void setAlias(String alias) {
         this.alias = alias;
     }
