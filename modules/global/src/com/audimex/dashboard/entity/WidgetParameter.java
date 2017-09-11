@@ -32,6 +32,9 @@ public class WidgetParameter extends StandardEntity {
     @Column(name = "NAME")
     protected String name;
 
+    @Column(name = "ALIAS")
+    protected String alias;
+
     @Column(name = "PARAMETER_TYPE")
     protected Integer parameterType;
 
@@ -85,6 +88,15 @@ public class WidgetParameter extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "masterParameter")
     protected List<WidgetParameter> additionalParameters;
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
 
     public void setAdditionalParameters(List<WidgetParameter> additionalParameters) {
         this.additionalParameters = additionalParameters;

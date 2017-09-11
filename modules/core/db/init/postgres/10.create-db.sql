@@ -75,6 +75,7 @@ create table AMXD_WIDGET_PARAMETER (
     REFERENCE_TO_ENTITY_VIEW_NAME varchar(255),
     --
     NAME varchar(255),
+    ALIAS varchar(255),
     PARAMETER_TYPE integer,
     DASHBOARD_WIDGET_ID uuid,
     DASHBOARD_WIDGET_LINK_ID uuid,

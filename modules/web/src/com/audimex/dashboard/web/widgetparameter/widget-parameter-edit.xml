@@ -21,6 +21,8 @@
             <column width="250px">
                 <field property="name"
                        required="true"/>
+                <field property="alias"
+                       required="true"/>
                 <field property="parameterType"
                        required="true"/>
                 <field id="metaClassName"

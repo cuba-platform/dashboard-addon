@@ -44,6 +44,7 @@
             </actions>
             <columns>
                 <column id="name"/>
+                <column id="alias"/>
                 <column id="parameterType"/>
                 <column id="referenceToEntity.metaClassName"/>
                 <column id="referenceToEntity.viewName"/>

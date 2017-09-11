@@ -290,7 +290,7 @@ public class ParameterTools {
         for (DashboardWidgetLink link : widget.getDashboardLinks()) {
             for (WidgetParameter parameter : link.getDashboardParameters()) {
                 Object value = getWidgetLinkParameterValue(parameter);
-                params.put(parameter.getName(), value);
+                params.put(parameter.getAlias(), value);
             }
         }
         return params;
