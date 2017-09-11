@@ -72,6 +72,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected LookupField reportLookupField;
 
+    protected LookupField lookupEntityTypeField;
+
     @Override
     protected void initNewItem(DashboardWidget item) {
         super.initNewItem(item);
@@ -103,7 +105,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     protected void initFieldList() {
         LookupField lookupFrameIdField = initFrameIdField();
         reportLookupField = initReportField();
-        initEntityTypeField();
+        lookupEntityTypeField = initEntityTypeField();
 
         allFieldNames = ImmutableList.of(
                 lookupFrameIdField,
@@ -238,6 +240,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             } else {
                 clearParameterDs();
             }
+
             showComponents((WidgetViewType) event.getValue());
         });
     }
@@ -260,12 +263,14 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void showComponents(WidgetViewType type) {
+        lookupEntityTypeField.setRequired(false);
         switch (type) {
             case COMMON:
                 showComponents(commonFieldNames);
                 break;
             case LIST:
                 showComponents(listFieldNames);
+                lookupEntityTypeField.setRequired(true);
                 break;
             case CHART:
                 showComponents(chartFieldNames);
@@ -286,7 +291,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected void showComponent(Field field, boolean isShowing) {
         field.setVisible(isShowing);
-        field.setRequired(isShowing);
     }
 
     protected boolean isApplicableScreen(WindowInfo windowInfo) {
