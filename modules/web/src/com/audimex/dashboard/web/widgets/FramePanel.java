@@ -4,14 +4,12 @@
 
 package com.audimex.dashboard.web.widgets;
 
-import com.audimex.dashboard.entity.Dashboard;
-import com.audimex.dashboard.entity.DashboardWidget;
-import com.audimex.dashboard.entity.DashboardWidgetLink;
-import com.audimex.dashboard.entity.WidgetViewType;
+import com.audimex.dashboard.entity.*;
 import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame;
+import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -36,7 +34,6 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import com.haulmont.reports.gui.report.run.ShowChartController;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import com.vaadin.ui.*;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.List;
@@ -166,7 +163,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
 
-        List<Triple<String, String, Object>> values = parameterTools.getParameterValues(widget);
+        List<Pair<WidgetParameter, Object>> values = parameterTools.getParameterValues(widget);
         List<String> undefinedParameters = parameterTools.getUndefinedParameters(values);
 
         Frame frame;
@@ -175,9 +172,19 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             Map<String, Object> params = values.stream()
                     .collect(
                             Collectors.toMap(
-                                Triple::getMiddle,
-                                Triple::getRight
-                    ));
+                                    pair -> {
+                                        WidgetParameter parameter = pair.getFirst();
+                                        String name = parameter.getAlias();
+
+                                        if (ParameterInputType.OUTER.equals(parameter.getInputType())) {
+                                            name = parameter.getMappedAlias();
+                                        }
+
+                                        return name;
+                                    },
+                                    Pair::getSecond
+                            )
+                    );
             if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetListFrame");

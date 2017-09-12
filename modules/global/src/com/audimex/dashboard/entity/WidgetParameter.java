@@ -32,6 +32,9 @@ public class WidgetParameter extends StandardEntity {
     @Column(name = "ALIAS")
     protected String alias;
 
+    @Column(name = "MAPPED_ALIAS")
+    protected String mappedAlias;
+
     @Column(name = "PARAMETER_TYPE")
     protected Integer parameterType;
 
@@ -88,6 +91,15 @@ public class WidgetParameter extends StandardEntity {
 
     @Column(name = "INPUT_TYPE")
     protected Integer inputType;
+
+    public void setMappedAlias(String mappedAlias) {
+        this.mappedAlias = mappedAlias;
+    }
+
+    public String getMappedAlias() {
+        return mappedAlias;
+    }
+
 
     public void setInputType(ParameterInputType inputType) {
         this.inputType = inputType == null ? null : inputType.getId();

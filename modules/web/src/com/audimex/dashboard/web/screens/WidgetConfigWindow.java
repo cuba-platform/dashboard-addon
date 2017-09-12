@@ -9,6 +9,7 @@ import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.web.layouts.DashboardGridLayout;
 import com.audimex.dashboard.web.layouts.HasGridSpan;
 import com.audimex.dashboard.web.layouts.HasWeight;
+import com.audimex.dashboard.web.screens.events.ChangeParameterEvent;
 import com.audimex.dashboard.web.screens.frames.LookupFrame;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
@@ -46,6 +47,9 @@ public class WidgetConfigWindow extends AbstractWindow {
     protected Slider weightSlider = null;
     protected Slider colSpanSlider = null;
     protected Slider rowSpanSlider = null;
+
+    public static final String VALUE = "VALUE";
+    public static final String MAPPED_ALIAS = "MAPPED_ALIAS";
 
     @Inject
     protected VBoxLayout parametersBox;
@@ -85,7 +89,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected static final List<Boolean> BOOLEAN_LIST = ImmutableList.of(true, false);
 
-    protected Map<WidgetParameter, Object> valuesMap = new HashMap<>();
+    protected Map<WidgetParameter, ChangeParameterEvent> changeParameterEvents = new HashMap<>();
 
     protected WindowManager windowManager = App.getInstance().getWindowManager();
     protected WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
@@ -209,68 +213,28 @@ public class WidgetConfigWindow extends AbstractWindow {
 
         switch (parameter.getParameterType()) {
             case ENTITY:
-                LookupField entityField = createEntityField(parameter);
-                entityField.addValueChangeListener(event -> {
-                    addValue(parameter, event.getValue());
-                });
-                component = entityField;
+                component = createEntityField(parameter);
                 break;
             case LIST_ENTITY:
-                LookupFrame lookupFrame = createListEntityField(parameter);
-                lookupFrame.setValueChangeListener(event ->
-                        addValue(parameter, lookupFrame.getValue())
-                );
-                component = lookupFrame;
+                component = createListEntityField(parameter);
                 break;
             case DATE:
-                DateField dateField = createDateField(parameter);
-                dateField.addValueChangeListener(event -> {
-                    Date date = (Date) event.getValue();
-                    addValue(parameter, date);
-                });
-                component = dateField;
+                component = createDateField(parameter);
                 break;
             case INTEGER:
-                TextField integerField = createIntegerField(parameter);
-                integerField.addValueChangeListener(event -> {
-                    Integer intValue = event.getValue() != null ? Integer.parseInt((String) event.getValue()) : null;
-                    addValue(parameter, intValue);
-                });
-                component = integerField;
+                component = createIntegerField(parameter);
                 break;
             case STRING:
-                TextField stringField = createStringField(parameter);
-                stringField.addValueChangeListener(event -> {
-                    String strValue = (String) event.getValue();
-                    addValue(parameter, strValue);
-                });
-                component = stringField;
+                component = createStringField(parameter);
                 break;
             case DECIMAL:
-                TextField decimalField = createDecimalField(parameter);
-                decimalField.addValueChangeListener(event -> {
-                    BigDecimal decValue = event.getValue() != null ? BigDecimal.valueOf(
-                            Long.parseLong((String) event.getValue())
-                    ) : null;
-                    addValue(parameter, decValue);
-                });
-                component = decimalField;
+                component = createDecimalField(parameter);
                 break;
             case BOOLEAN:
-                LookupField booleanField = createBooleanField(parameter);
-                booleanField.addValueChangeListener(event -> {
-                    Boolean booleanDate = (Boolean) event.getValue();
-                    addValue(parameter, booleanDate);
-                });
-                component = booleanField;
+                component = createBooleanField(parameter);
                 break;
             case LONG:
-                TextField longField = createLongField(parameter);
-                longField.addValueChangeListener(event -> {
-                    Long longValue = event.getValue() != null ? Long.parseLong((String) event.getValue()) : null;
-                    addValue(parameter, longValue);
-                });
-                component = longField;
+                component = createLongField(parameter);
                 break;
             default:
                 component = null;
@@ -283,20 +247,26 @@ public class WidgetConfigWindow extends AbstractWindow {
                 String.format("%s (%s)", parameter.getName(), parameter.getAlias())
         );
 
+        TextField mappedAliasField = createMappedAliasField(parameter);
+
         parameterArea.add(parameterNameField);
+        parameterArea.add(mappedAliasField);
         parameterArea.add(component);
 
         return parameterArea;
     }
 
-    protected void addValue(WidgetParameter parameter, Object value) {
-        if (valuesMap.containsKey(parameter)) {
-            valuesMap.replace(parameter, value);
+    protected void addChangeEvent(WidgetParameter parameter, String eventType, Object value) {
+        if (changeParameterEvents.containsKey(parameter)) {
+            ChangeParameterEvent event = changeParameterEvents.get(parameter);
+            event.addChangeValue(eventType, value);
+            changeParameterEvents.replace(parameter, event);
         } else {
-            valuesMap.put(parameter, value);
+            ChangeParameterEvent event = new ChangeParameterEvent();
+            event.addChangeValue(eventType, value);
+            changeParameterEvents.put(parameter, event);
         }
     }
-
     public void cancel() {
         close(CLOSE_ACTION_ID);
     }
@@ -354,8 +324,20 @@ public class WidgetConfigWindow extends AbstractWindow {
     }
 
     protected void widgetParametersSaveFunction() {
-        if (valuesMap.size() > 0) {
-            valuesMap.forEach(WidgetParameter::setValue);
+        if (changeParameterEvents.size() > 0) {
+            changeParameterEvents.forEach((parameter, event) -> {
+                event.getChangeValues().forEach((key, object) -> {
+                    switch (key) {
+                        case VALUE:
+                            parameter.setValue(object);
+                            break;
+                        case MAPPED_ALIAS:
+                            parameter.setMappedAlias((String) object);
+                            break;
+                        default:
+                    }
+                });
+            });
         }
     }
 
@@ -379,6 +361,9 @@ public class WidgetConfigWindow extends AbstractWindow {
 
         entityField.setOptionsDatasource(ds);
         entityField.setValue(parameterTools.getWidgetLinkParameterValue(parameter));
+        entityField.addValueChangeListener(event -> {
+            addChangeEvent(parameter, VALUE, event.getValue());
+        });
         return entityField;
     }
 
@@ -390,6 +375,9 @@ public class WidgetConfigWindow extends AbstractWindow {
                 ParamsMap.of(LookupFrame.WIDGET_PARAMETER, parameter)
         );
         frame.setParent(this);
+        lookupFrame.setValueChangeListener(event ->
+                addChangeEvent(parameter, VALUE, lookupFrame.getValue())
+        );
         return lookupFrame;
     }
 
@@ -398,6 +386,10 @@ public class WidgetConfigWindow extends AbstractWindow {
         dateField.setWidth("100%");
         dateField.setDateFormat("dd.MM.yyyy");
         dateField.setValue(parameter.getDateValue());
+        dateField.addValueChangeListener(event -> {
+            Date date = (Date) event.getValue();
+            addChangeEvent(parameter, VALUE, date);
+        });
         return dateField;
     }
 
@@ -406,6 +398,10 @@ public class WidgetConfigWindow extends AbstractWindow {
         integerField.setWidth("100%");
         integerField.setInputPrompt(getMessage("message.value"));
         integerField.setValue(parameter.getIntegerValue());
+        integerField.addValueChangeListener(event -> {
+            Integer intValue = event.getValue() != null ? Integer.parseInt((String) event.getValue()) : null;
+            addChangeEvent(parameter, VALUE, intValue);
+        });
         return integerField;
     }
 
@@ -414,6 +410,10 @@ public class WidgetConfigWindow extends AbstractWindow {
         stringField.setWidth("100%");
         stringField.setInputPrompt(getMessage("message.value"));
         stringField.setValue(parameter.getStringValue());
+        stringField.addValueChangeListener(event -> {
+            String strValue = (String) event.getValue();
+            addChangeEvent(parameter, VALUE, strValue);
+        });
         return stringField;
     }
 
@@ -422,6 +422,12 @@ public class WidgetConfigWindow extends AbstractWindow {
         decimalField.setWidth("100%");
         decimalField.setInputPrompt(getMessage("message.value"));
         decimalField.setValue(parameter.getDecimalValue());
+        decimalField.addValueChangeListener(event -> {
+            BigDecimal decValue = event.getValue() != null ? BigDecimal.valueOf(
+                    Long.parseLong((String) event.getValue())
+            ) : null;
+            addChangeEvent(parameter, VALUE, decValue);
+        });
         return decimalField;
     }
 
@@ -431,6 +437,10 @@ public class WidgetConfigWindow extends AbstractWindow {
         booleanField.setInputPrompt(getMessage("message.value"));
         booleanField.setOptionsList(BOOLEAN_LIST);
         booleanField.setValue(parameter.getBoolValue());
+        booleanField.addValueChangeListener(event -> {
+            Boolean booleanDate = (Boolean) event.getValue();
+            addChangeEvent(parameter, VALUE, booleanDate);
+        });
         return booleanField;
     }
 
@@ -439,6 +449,23 @@ public class WidgetConfigWindow extends AbstractWindow {
         longField.setWidth("100%");
         longField.setInputPrompt(getMessage("message.value"));
         longField.setValue(parameter.getLongValue());
+        longField.addValueChangeListener(event -> {
+            Long longValue = event.getValue() != null ? Long.parseLong((String) event.getValue()) : null;
+            addChangeEvent(parameter, VALUE, longValue);
+        });
         return longField;
+    }
+
+
+    protected TextField createMappedAliasField(WidgetParameter parameter) {
+        TextField mappedAliasField = componentsFactory.createComponent(TextField.class);
+        mappedAliasField.setWidth("100%");
+        mappedAliasField.setInputPrompt(getMessage("message.mappedValue"));
+        mappedAliasField.setValue(parameter.getMappedAlias());
+        mappedAliasField.addValueChangeListener(event -> {
+            String strValue = (String) event.getValue();
+            addChangeEvent(parameter, MAPPED_ALIAS, strValue);
+        });
+        return mappedAliasField;
     }
 }

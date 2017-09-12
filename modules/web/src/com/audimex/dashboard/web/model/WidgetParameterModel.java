@@ -21,6 +21,7 @@ public class WidgetParameterModel implements Serializable {
 
     protected String name;
     protected String alias;
+    protected String mappedAlias;
     protected Integer inputType;
     protected Integer parameterType;
     protected Integer integerValue;
@@ -181,4 +182,11 @@ public class WidgetParameterModel implements Serializable {
         this.inputType = inputType;
     }
 
+    public String getMappedAlias() {
+        return mappedAlias;
+    }
+
+    public void setMappedAlias(String mappedAlias) {
+        this.mappedAlias = mappedAlias;
+    }
 }
