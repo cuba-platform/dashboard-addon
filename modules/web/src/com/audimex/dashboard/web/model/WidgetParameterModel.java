@@ -20,6 +20,8 @@ public class WidgetParameterModel implements Serializable {
     private static final long serialVersionUID = 5192647316326329176L;
 
     protected String name;
+    protected String alias;
+    protected Integer inputType;
     protected Integer parameterType;
     protected Integer integerValue;
     protected String stringValue;
@@ -162,4 +164,21 @@ public class WidgetParameterModel implements Serializable {
 
         additionalParameters.add(additionalParameter);
     }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public Integer getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(Integer inputType) {
+        this.inputType = inputType;
+    }
+
 }

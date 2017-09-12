@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 
 public enum ParameterInputType implements EnumClass<Integer> {
 
-    INNER(10),
+    OUTER(10),
     ALGORITHM(20),
     INPUT(30);
 

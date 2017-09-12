@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.web.widgetparameter;
 
+import com.audimex.dashboard.entity.ParameterInputType;
 import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
@@ -45,6 +46,7 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
         super.initNewItem(item);
 
         item.setParameterType(WidgetParameterType.STRING);
+        item.setInputType(ParameterInputType.INPUT);
     }
 
     @Override

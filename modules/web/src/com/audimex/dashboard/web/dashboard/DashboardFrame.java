@@ -51,6 +51,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static com.audimex.dashboard.web.dashboard.DashboardEdit.DASHBOARD_ENTITY;
+import static com.audimex.dashboard.web.dashboard.DashboardEdit.DASHBOARD_OUTER_PARAMS;
 
 /**
  * The dashboard frame contains the palette, canvas and tree of components.
@@ -63,6 +64,9 @@ public class DashboardFrame extends AbstractFrame {
 
     @WindowParam(name = DASHBOARD_ENTITY)
     protected Entity entity;
+
+    @WindowParam(name = DASHBOARD_OUTER_PARAMS)
+    protected Map<String, Object> outerParameters;
 
     @Inject
     protected VBoxLayout containers;
@@ -141,45 +145,8 @@ public class DashboardFrame extends AbstractFrame {
         treeDropHandler.setTreeHandler(treeHandler);
 
         tree.setDropHandler(treeDropHandler);
-        tree.addValueChangeListener(e -> {
-            if (allowEdit.getValue()) {
-                if (treeComponent != null) {
-                    treeComponent.removeStyleName(dashboardTools.AMXD_TREE_SELECTED);
-                }
+        addTreeValueChangeListener();
 
-                if (tree.getValue() == null) {
-                    removeComponent.setEnabled(false);
-                } else if (tree.getValue() != rootDashboardPanel) {
-                    if (tree.getParent(tree.getValue()) != null) {
-                        removeComponent.setEnabled(true);
-                    } else {
-                        removeComponent.setEnabled(false);
-                    }
-
-                    Object treeObject = tree.getValue();
-                    if (treeObject instanceof Component) {
-                        if (treeObject instanceof GridCell) {
-                            removeComponent.setEnabled(false);
-                            Collection<?> gridCellChild = tree.getChildren(treeObject);
-                            if (gridCellChild != null) {
-                                treeComponent = (Component) gridCellChild.iterator().next();
-                            } else {
-                                treeComponent = ((GridCell) treeObject).getParent().getParent();
-                            }
-                        } else {
-                            treeComponent = (Component) treeObject;
-                        }
-                    } else if (treeObject instanceof GridRow) {
-                        removeComponent.setEnabled(false);
-                        treeComponent = ((GridRow) treeObject).getGridLayout();
-                    }
-
-                    if (treeComponent != null) {
-                        treeComponent.addStyleName(DashboardTools.AMXD_TREE_SELECTED);
-                    }
-                }
-            }
-        });
         tree.setItemStyleGenerator((source, itemId) -> {
             if (itemId instanceof GridCell && source.getChildren(itemId) == null && !((GridCell) itemId).isAvailable()) {
                 return DashboardTools.AMXD_NOT_AVAILABLE;
@@ -199,27 +166,7 @@ public class DashboardFrame extends AbstractFrame {
                 component -> dashboardSettings.isComponentDraggable(component)
         );
 
-        rootDashboardPanel.addLayoutClickListener(e -> {
-            Component component = e.getClickedComponent();
-            if (component != null) {
-                if (component.getParent() instanceof HasMainLayout) {
-                    tree.setValue(component.getParent());
-                }
-
-                if (component instanceof GridLayout) {
-                    tree.setValue(component);
-                } else if (e.getChildComponent() instanceof FramePanel) {
-                    tree.setValue(e.getChildComponent());
-                } else {
-                    Component framePanel = getFramePanel(component);
-                    if (framePanel != null) {
-                        tree.setValue(framePanel);
-                    } else {
-                        tree.setValue(component);
-                    }
-                }
-            }
-        });
+        addRootDashboardPanelLayoutClickListener();
 
         rootDashboardPanel.setDragCaptionProvider(
                 component -> {
@@ -271,6 +218,72 @@ public class DashboardFrame extends AbstractFrame {
 
         convertToTree();
         enableViewMode();
+    }
+
+    protected void addTreeValueChangeListener() {
+        tree.addValueChangeListener(e -> {
+            if (allowEdit.getValue()) {
+                if (treeComponent != null) {
+                    treeComponent.removeStyleName(dashboardTools.AMXD_TREE_SELECTED);
+                }
+
+                if (tree.getValue() == null) {
+                    removeComponent.setEnabled(false);
+                } else if (tree.getValue() != rootDashboardPanel) {
+                    if (tree.getParent(tree.getValue()) != null) {
+                        removeComponent.setEnabled(true);
+                    } else {
+                        removeComponent.setEnabled(false);
+                    }
+
+                    Object treeObject = tree.getValue();
+                    if (treeObject instanceof Component) {
+                        if (treeObject instanceof GridCell) {
+                            removeComponent.setEnabled(false);
+                            Collection<?> gridCellChild = tree.getChildren(treeObject);
+                            if (gridCellChild != null) {
+                                treeComponent = (Component) gridCellChild.iterator().next();
+                            } else {
+                                treeComponent = ((GridCell) treeObject).getParent().getParent();
+                            }
+                        } else {
+                            treeComponent = (Component) treeObject;
+                        }
+                    } else if (treeObject instanceof GridRow) {
+                        removeComponent.setEnabled(false);
+                        treeComponent = ((GridRow) treeObject).getGridLayout();
+                    }
+
+                    if (treeComponent != null) {
+                        treeComponent.addStyleName(DashboardTools.AMXD_TREE_SELECTED);
+                    }
+                }
+            }
+        });
+    }
+
+    protected void addRootDashboardPanelLayoutClickListener() {
+        rootDashboardPanel.addLayoutClickListener(e -> {
+            Component component = e.getClickedComponent();
+            if (component != null) {
+                if (component.getParent() instanceof HasMainLayout) {
+                    tree.setValue(component.getParent());
+                }
+
+                if (component instanceof GridLayout) {
+                    tree.setValue(component);
+                } else if (e.getChildComponent() instanceof FramePanel) {
+                    tree.setValue(e.getChildComponent());
+                } else {
+                    Component framePanel = getFramePanel(component);
+                    if (framePanel != null) {
+                        tree.setValue(framePanel);
+                    } else {
+                        tree.setValue(component);
+                    }
+                }
+            }
+        });
     }
 
     public void configureComponent() {
@@ -744,6 +757,7 @@ public class DashboardFrame extends AbstractFrame {
                             )
                     );
                     widget.setEntity(entity);
+                    widget.setOuterParameters(outerParameters);
 
                     List<DashboardWidgetLink> links = parameterTools.loadWidgetLinks(widgetModel);
                     widget.setDashboardLinks(links);

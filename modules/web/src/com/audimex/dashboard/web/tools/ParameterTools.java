@@ -14,6 +14,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -51,6 +52,8 @@ public class ParameterTools {
     public WidgetParameter createWidgetLinkParameter(DashboardWidgetLink link, WidgetParameter parameter) {
         WidgetParameter param = metadata.create(WidgetParameter.class);
         param.setName(parameter.getName());
+        param.setAlias(parameter.getAlias());
+        param.setInputType(parameter.getInputType());
         param.setParameterType(parameter.getParameterType());
         param.setDashboardWidgetLink(link);
         param.getReferenceToEntity().setMetaClassName(parameter.getReferenceToEntity().getMetaClassName());
@@ -135,6 +138,8 @@ public class ParameterTools {
     protected WidgetParameterModel createWidgetParameterModel(WidgetParameter parameter) {
         WidgetParameterModel wpm = new WidgetParameterModel();
         wpm.setName(parameter.getName());
+        wpm.setAlias(parameter.getAlias());
+        wpm.setInputType(parameter.getInputType() != null ? parameter.getInputType().getId() : null);
         wpm.setParameterType(parameter.getParameterType().getId());
         wpm.setIntegerValue(parameter.getIntegerValue());
         wpm.setStringValue(parameter.getStringValue());
@@ -152,6 +157,8 @@ public class ParameterTools {
             parameter.getAdditionalParameters().forEach(ap -> {
                 WidgetParameterModel additional = new WidgetParameterModel();
                 additional.setName(ap.getName());
+                additional.setAlias(ap.getAlias());
+                additional.setInputType(ap.getInputType() != null ? ap.getInputType().getId() : null);
                 additional.setParameterType(ap.getParameterType().getId());
                 additional.setIntegerValue(ap.getIntegerValue());
                 additional.setStringValue(ap.getStringValue());
@@ -229,6 +236,8 @@ public class ParameterTools {
     protected WidgetParameter createWidgetParameter(WidgetParameterModel parameter) {
         WidgetParameter wp = new WidgetParameter();
         wp.setName(parameter.getName());
+        wp.setAlias(parameter.getAlias());
+        wp.setInputType(ParameterInputType.fromId(parameter.getInputType()));
         wp.setParameterType(WidgetParameterType.fromId(parameter.getParameterType()));
         wp.setIntegerValue(parameter.getIntegerValue());
         wp.setStringValue(parameter.getStringValue());
@@ -256,6 +265,8 @@ public class ParameterTools {
             parameter.getAdditionalParameters().forEach(ap -> {
                 WidgetParameter additional = new WidgetParameter();
                 additional.setName(ap.getName());
+                additional.setAlias(ap.getAlias());
+                additional.setInputType(ParameterInputType.fromId(ap.getInputType()));
                 additional.setParameterType(WidgetParameterType.fromId(ap.getParameterType()));
                 additional.setIntegerValue(ap.getIntegerValue());
                 additional.setStringValue(ap.getStringValue());
@@ -285,24 +296,41 @@ public class ParameterTools {
         return wp;
     }
 
-    public Map<String, Object> getParameterValues(DashboardWidget widget) {
-        Map<String, Object> params = new HashMap<>();
+    public List<Triple<String, String, Object>> getParameterValues(DashboardWidget widget) {
+        List<Triple<String, String, Object>>  params = new ArrayList<>();
         for (DashboardWidgetLink link : widget.getDashboardLinks()) {
             for (WidgetParameter parameter : link.getDashboardParameters()) {
-                Object value = getWidgetLinkParameterValue(parameter);
-                params.put(parameter.getAlias(), value);
+                if (ParameterInputType.OUTER.equals(parameter.getInputType())) {
+                    Object value = widget.getOuterParameters() != null ?
+                            widget.getOuterParameters().get(parameter.getAlias()) : null;
+                    params.add(
+                        Triple.of(
+                                parameter.getName(),
+                                parameter.getAlias(),
+                                value)
+                    );
+                } else {
+                    Object value = getWidgetLinkParameterValue(parameter);
+                    params.add(
+                        Triple.of(
+                            parameter.getName(),
+                            parameter.getAlias(),
+                            value)
+                    );
+                }
             }
         }
+
         return params;
     }
 
-    public List<String> getUndefinedParameters(Map<String, Object> params) {
+    public List<String> getUndefinedParameters(List<Triple<String, String, Object>> params) {
         List<String> undefinedParameters = new ArrayList<>();
-        for (Map.Entry<String, Object> par : params.entrySet()) {
-            if (par.getValue() == null) {
-                undefinedParameters.add(par.getKey());
+        params.forEach(triple -> {
+            if (triple.getRight() == null) {
+                undefinedParameters.add(triple.getLeft());
             }
-        }
+        });
         return undefinedParameters;
     }
 }

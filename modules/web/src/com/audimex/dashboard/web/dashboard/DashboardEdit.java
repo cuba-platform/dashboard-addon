@@ -25,6 +25,7 @@ import java.util.Map;
 public class DashboardEdit extends AbstractEditor<Dashboard> {
     public static final String DASHBOARD_PARAMETER = "DASHBOARD_PARAMETER";
     public static final String DASHBOARD_ENTITY = "DASHBOARD_ENTITY";
+    public static final String DASHBOARD_OUTER_PARAMS = "DASHBOARD_OUTER_PARAMS";
 
     protected DashboardModel dashboardModel = null;
     protected Gson gson = new Gson();
@@ -49,6 +50,9 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @WindowParam(name = DASHBOARD_ENTITY)
     protected Entity entity;
+
+    @WindowParam(name = DASHBOARD_OUTER_PARAMS)
+    protected Map<String, Object> outerParameters;
 
     protected DashboardFrame dashboardDesigner;
 
@@ -86,7 +90,10 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected void initDashboardFrame() {
         dashboardDesigner = (DashboardFrame) openFrame(dashboardDesignerVBox, "dashboard-frame",
-                ParamsMap.of(DASHBOARD_PARAMETER, getItem())
+                ParamsMap.of(
+                        DASHBOARD_PARAMETER, getItem(),
+                        DASHBOARD_OUTER_PARAMS, outerParameters
+                )
         );
         dashboardDesigner.setId("dashboardDesigner");
 

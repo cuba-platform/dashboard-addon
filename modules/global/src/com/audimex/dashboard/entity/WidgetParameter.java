@@ -18,10 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @NamePattern("%s|name")
 @Table(name = "AMXD_WIDGET_PARAMETER")
@@ -358,5 +355,11 @@ public class WidgetParameter extends StandardEntity {
         }
 
         return null;
+    }
+
+    public void setRefEntityId(UUID id) {
+        if (referenceToEntity != null) {
+            referenceToEntity.setEntityId(id);
+        }
     }
 }

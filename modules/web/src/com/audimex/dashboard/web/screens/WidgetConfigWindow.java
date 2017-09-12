@@ -209,48 +209,21 @@ public class WidgetConfigWindow extends AbstractWindow {
 
         switch (parameter.getParameterType()) {
             case ENTITY:
-                LookupField entityField = componentsFactory.createComponent(LookupField.class);
-                entityField.setWidth("100%");
-                entityField.setInputPrompt(getMessage("message.value"));
-
-                ReferenceToEntity reference = parameter.getReferenceToEntity();
-
-                MetaClass metaClass = metadata.getSession()
-                        .getClassNN(reference.getMetaClassName());
-                CollectionDatasource ds = new DsBuilder(getDsContext())
-                        .setJavaClass(metaClass.getJavaClass())
-                        .setAllowCommit(false)
-                        .setViewName(reference.getViewName())
-                        .setId(parameter.getName() + "Ds")
-                        .buildCollectionDatasource();
-
-                ds.refresh();
-
-                entityField.setOptionsDatasource(ds);
-                entityField.setValue(parameterTools.getWidgetLinkParameterValue(parameter));
-                entityField.addValueChangeListener(event ->
-                        addValue(parameter, event.getValue())
-                );
+                LookupField entityField = createEntityField(parameter);
+                entityField.addValueChangeListener(event -> {
+                    addValue(parameter, event.getValue());
+                });
                 component = entityField;
                 break;
             case LIST_ENTITY:
-                LookupFrame lookupFrame = (LookupFrame) windowManager.openFrame(
-                        this.getFrame(),
-                        null,
-                        lookupWindowInfo,
-                        ParamsMap.of(LookupFrame.WIDGET_PARAMETER, parameter)
-                );
-                frame.setParent(this);
+                LookupFrame lookupFrame = createListEntityField(parameter);
                 lookupFrame.setValueChangeListener(event ->
                         addValue(parameter, lookupFrame.getValue())
                 );
                 component = lookupFrame;
                 break;
             case DATE:
-                DateField dateField = componentsFactory.createComponent(DateField.class);
-                dateField.setWidth("100%");
-                dateField.setDateFormat("dd.MM.yyyy");
-                dateField.setValue(parameter.getDateValue());
+                DateField dateField = createDateField(parameter);
                 dateField.addValueChangeListener(event -> {
                     Date date = (Date) event.getValue();
                     addValue(parameter, date);
@@ -258,83 +231,57 @@ public class WidgetConfigWindow extends AbstractWindow {
                 component = dateField;
                 break;
             case INTEGER:
-                TextField integerField = componentsFactory.createComponent(TextField.class);
-                integerField.setWidth("100%");
-                integerField.setInputPrompt(getMessage("message.value"));
-                integerField.setValue(parameter.getIntegerValue());
+                TextField integerField = createIntegerField(parameter);
                 integerField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
-                    Integer intValue = Integer.parseInt((String) event.getValue());
+                    Integer intValue = event.getValue() != null ? Integer.parseInt((String) event.getValue()) : null;
                     addValue(parameter, intValue);
                 });
                 component = integerField;
                 break;
             case STRING:
-                TextField stringField = componentsFactory.createComponent(TextField.class);
-                stringField.setWidth("100%");
-                stringField.setInputPrompt(getMessage("message.value"));
-                stringField.setValue(parameter.getStringValue());
+                TextField stringField = createStringField(parameter);
                 stringField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
                     String strValue = (String) event.getValue();
                     addValue(parameter, strValue);
                 });
                 component = stringField;
                 break;
             case DECIMAL:
-                TextField decimalField = componentsFactory.createComponent(TextField.class);
-                decimalField.setWidth("100%");
-                decimalField.setInputPrompt(getMessage("message.value"));
-                decimalField.setValue(parameter.getDecimalValue());
+                TextField decimalField = createDecimalField(parameter);
                 decimalField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
-                    BigDecimal decValue = BigDecimal.valueOf(Long.parseLong((String) event.getValue()));
+                    BigDecimal decValue = event.getValue() != null ? BigDecimal.valueOf(
+                            Long.parseLong((String) event.getValue())
+                    ) : null;
                     addValue(parameter, decValue);
                 });
                 component = decimalField;
                 break;
             case BOOLEAN:
-                LookupField booleanField = componentsFactory.createComponent(LookupField.class);
-                booleanField.setWidth("100%");
-                booleanField.setInputPrompt(getMessage("message.value"));
-                booleanField.setOptionsList(BOOLEAN_LIST);
-                booleanField.setValue(parameter.getBoolValue());
+                LookupField booleanField = createBooleanField(parameter);
                 booleanField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
                     Boolean booleanDate = (Boolean) event.getValue();
                     addValue(parameter, booleanDate);
                 });
                 component = booleanField;
                 break;
             case LONG:
-                TextField longField = componentsFactory.createComponent(TextField.class);
-                longField.setWidth("100%");
-                longField.setInputPrompt(getMessage("message.value"));
-                longField.setValue(parameter.getLongValue());
+                TextField longField = createLongField(parameter);
                 longField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
-                    Long longValue = Long.parseLong((String) event.getValue());
+                    Long longValue = event.getValue() != null ? Long.parseLong((String) event.getValue()) : null;
                     addValue(parameter, longValue);
                 });
                 component = longField;
                 break;
             default:
-                TextField undefinedField = componentsFactory.createComponent(TextField.class);
-                undefinedField.setWidth("100%");
-                undefinedField.setInputPrompt(getMessage("message.value"));
-                undefinedField.setValue(parameter.getStringValue());
-                undefinedField.addValueChangeListener(event -> {
-                    if (event.getValue() == null) return;
-                    String stringValue = (String) event.getValue();
-                    addValue(parameter, stringValue);
-                });
-                component = undefinedField;
+                component = null;
         }
 
         Label parameterNameField = componentsFactory.createComponent(Label.class);
         parameterNameField.setWidth("120px");
         parameterNameField.setAlignment(Alignment.MIDDLE_CENTER);
-        parameterNameField.setValue(String.format("%s (%s)", parameter.getName(), parameter.getAlias()));
+        parameterNameField.setValue(
+                String.format("%s (%s)", parameter.getName(), parameter.getAlias())
+        );
 
         parameterArea.add(parameterNameField);
         parameterArea.add(component);
@@ -410,5 +357,88 @@ public class WidgetConfigWindow extends AbstractWindow {
         if (valuesMap.size() > 0) {
             valuesMap.forEach(WidgetParameter::setValue);
         }
+    }
+
+    protected LookupField createEntityField(WidgetParameter parameter) {
+        LookupField entityField = componentsFactory.createComponent(LookupField.class);
+        entityField.setWidth("100%");
+        entityField.setInputPrompt(getMessage("message.value"));
+
+        ReferenceToEntity reference = parameter.getReferenceToEntity();
+
+        MetaClass metaClass = metadata.getSession()
+                .getClassNN(reference.getMetaClassName());
+        CollectionDatasource ds = new DsBuilder(getDsContext())
+                .setJavaClass(metaClass.getJavaClass())
+                .setAllowCommit(false)
+                .setViewName(reference.getViewName())
+                .setId(parameter.getName() + "Ds")
+                .buildCollectionDatasource();
+
+        ds.refresh();
+
+        entityField.setOptionsDatasource(ds);
+        entityField.setValue(parameterTools.getWidgetLinkParameterValue(parameter));
+        return entityField;
+    }
+
+    protected LookupFrame createListEntityField(WidgetParameter parameter) {
+        LookupFrame lookupFrame = (LookupFrame) windowManager.openFrame(
+                this.getFrame(),
+                null,
+                lookupWindowInfo,
+                ParamsMap.of(LookupFrame.WIDGET_PARAMETER, parameter)
+        );
+        frame.setParent(this);
+        return lookupFrame;
+    }
+
+    protected DateField createDateField(WidgetParameter parameter) {
+        DateField dateField = componentsFactory.createComponent(DateField.class);
+        dateField.setWidth("100%");
+        dateField.setDateFormat("dd.MM.yyyy");
+        dateField.setValue(parameter.getDateValue());
+        return dateField;
+    }
+
+    protected TextField createIntegerField(WidgetParameter parameter) {
+        TextField integerField = componentsFactory.createComponent(TextField.class);
+        integerField.setWidth("100%");
+        integerField.setInputPrompt(getMessage("message.value"));
+        integerField.setValue(parameter.getIntegerValue());
+        return integerField;
+    }
+
+    protected TextField createStringField(WidgetParameter parameter) {
+        TextField stringField = componentsFactory.createComponent(TextField.class);
+        stringField.setWidth("100%");
+        stringField.setInputPrompt(getMessage("message.value"));
+        stringField.setValue(parameter.getStringValue());
+        return stringField;
+    }
+
+    protected TextField createDecimalField(WidgetParameter parameter) {
+        TextField decimalField = componentsFactory.createComponent(TextField.class);
+        decimalField.setWidth("100%");
+        decimalField.setInputPrompt(getMessage("message.value"));
+        decimalField.setValue(parameter.getDecimalValue());
+        return decimalField;
+    }
+
+    protected LookupField createBooleanField(WidgetParameter parameter) {
+        LookupField booleanField = componentsFactory.createComponent(LookupField.class);
+        booleanField.setWidth("100%");
+        booleanField.setInputPrompt(getMessage("message.value"));
+        booleanField.setOptionsList(BOOLEAN_LIST);
+        booleanField.setValue(parameter.getBoolValue());
+        return booleanField;
+    }
+
+    protected TextField createLongField(WidgetParameter parameter) {
+        TextField longField = componentsFactory.createComponent(TextField.class);
+        longField.setWidth("100%");
+        longField.setInputPrompt(getMessage("message.value"));
+        longField.setValue(parameter.getLongValue());
+        return longField;
     }
 }

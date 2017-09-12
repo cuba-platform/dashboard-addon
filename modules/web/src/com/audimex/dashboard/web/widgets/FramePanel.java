@@ -12,6 +12,7 @@ import com.audimex.dashboard.web.layouts.*;
 import com.audimex.dashboard.web.tools.DashboardTools;
 import com.audimex.dashboard.web.tools.ParameterTools;
 import com.audimex.dashboard.web.widgets.frames.UndefinedParametersFrame;
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
@@ -35,12 +36,14 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import com.haulmont.reports.gui.report.run.ShowChartController;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import com.vaadin.ui.*;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.haulmont.cuba.gui.components.Window.COMMIT_ACTION_ID;
 
@@ -163,12 +166,18 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
         WindowInfo windowInfo = windowConfig.getWindowInfo(widget.getFrameId());
 
-        Map<String, Object> params = parameterTools.getParameterValues(widget);
-        List<String> undefinedParameters = parameterTools.getUndefinedParameters(params);
+        List<Triple<String, String, Object>> values = parameterTools.getParameterValues(widget);
+        List<String> undefinedParameters = parameterTools.getUndefinedParameters(values);
 
         Frame frame;
 
         if (undefinedParameters.size() == 0) {
+            Map<String, Object> params = values.stream()
+                    .collect(
+                            Collectors.toMap(
+                                Triple::getMiddle,
+                                Triple::getRight
+                    ));
             if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetListFrame");
@@ -192,9 +201,10 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             }
         } else {
             windowInfo = windowConfig.getWindowInfo("amxd$UndefinedParameters.frame");
-            params.put(UndefinedParametersFrame.PARAMETER_UNDEFINED_VALUES_LIST, undefinedParameters);
-            params.put(UndefinedParametersFrame.PARAMETER_WIDGET, widget);
-            frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
+            frame = windowManager.openFrame(parentFrame, null, windowInfo, ParamsMap.of(
+                    UndefinedParametersFrame.PARAMETER_UNDEFINED_VALUES_LIST, undefinedParameters,
+                    UndefinedParametersFrame.PARAMETER_WIDGET, widget
+            ));
         }
 
         frame.setParent(parentFrame);
