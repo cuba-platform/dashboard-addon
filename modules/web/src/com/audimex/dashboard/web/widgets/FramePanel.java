@@ -177,7 +177,9 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
                                         String name = parameter.getAlias();
 
                                         if (ParameterInputType.OUTER.equals(parameter.getInputType())) {
-                                            name = parameter.getMappedAlias();
+                                            name = parameter.getMappedAlias() != null ||
+                                                    !parameter.getMappedAlias().isEmpty() ?
+                                                        parameter.getMappedAlias() : parameter.getName();
                                         }
 
                                         return name;
