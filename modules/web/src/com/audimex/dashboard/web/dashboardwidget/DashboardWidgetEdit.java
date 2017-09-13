@@ -72,6 +72,10 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected LookupField reportLookupField;
 
+    protected LookupField lookupEntityTypeField;
+
+    protected LookupField lookupFrameIdField;
+
     @Override
     protected void initNewItem(DashboardWidget item) {
         super.initNewItem(item);
@@ -101,9 +105,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void initFieldList() {
-        LookupField lookupFrameIdField = initFrameIdField();
+        lookupFrameIdField = initFrameIdField();
         reportLookupField = initReportField();
-        initEntityTypeField();
+        lookupEntityTypeField = initEntityTypeField();
 
         allFieldNames = ImmutableList.of(
                 lookupFrameIdField,
@@ -120,7 +124,11 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setDatasource(dashboardWidgetDs, frameIdFieldConfig.getProperty());
         frameIdFieldConfig.setComponent(lookupField);
+        setDefaultApplicableScreens(lookupField);
+        return lookupField;
+    }
 
+    protected void setDefaultApplicableScreens(LookupField lookupEntityTypeField) {
         Map<String, String> availableFrames = new HashMap<>();
 
         try {
@@ -144,8 +152,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             e.printStackTrace();
         }
 
-        lookupField.setOptionsMap(availableFrames);
-        return lookupField;
+        lookupEntityTypeField.setOptionsMap(availableFrames);
     }
 
 
@@ -173,6 +180,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         if (report != null && report.getInputParameters() != null) {
             report.getInputParameters().forEach(param -> {
                 String name = param.getAlias();
+                String alias = param.getAlias();
                 String metaClass = param.getEntityMetaClass();
                 WidgetParameterType type = WidgetParameterType.UNDEFINED;
                 ParameterType parameterType = param.getType();
@@ -199,15 +207,17 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
                         break;
                     default:
                 }
-                WidgetParameter wp = createWidgetParameter(name, metaClass, type);
+                WidgetParameter wp = createWidgetParameter(name, alias, metaClass, type);
                 widgetParametersDs.addItem(wp);
             });
         }
     }
 
-    protected WidgetParameter createWidgetParameter(String name, String metaClass, WidgetParameterType parameterType) {
+    protected WidgetParameter createWidgetParameter(String name, String alias, String metaClass,
+                                                    WidgetParameterType parameterType) {
         WidgetParameter wp = metadata.create(WidgetParameter.class);
         wp.setName(name);
+        wp.setAlias(alias);
         wp.setParameterType(parameterType);
         wp.setDashboardWidget(dashboardWidgetDs.getItem());
         wp.getReferenceToEntity().setMetaClassName(metaClass);
@@ -227,6 +237,18 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
                         metaClasses.put(metaClass.getName(), metaClass.getName())
                 );
         lookupField.setOptionsMap(metaClasses);
+
+        lookupField.addValueChangeListener(event -> {
+            String metaClass = (String) event.getValue();
+            if (metaClass != null) {
+                Class mClass = metadata.getSession().getClassNN(metaClass).getJavaClass();
+                Map<String, Object> applicableScreens = screensHelper.getAvailableScreens(mClass);
+                lookupFrameIdField.setOptionsMap(applicableScreens);
+            } else {
+                setDefaultApplicableScreens(lookupFrameIdField);
+            }
+        });
+
         return lookupField;
     }
 
@@ -238,6 +260,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             } else {
                 clearParameterDs();
             }
+
             showComponents((WidgetViewType) event.getValue());
         });
     }
@@ -260,12 +283,14 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void showComponents(WidgetViewType type) {
+        lookupEntityTypeField.setRequired(false);
         switch (type) {
             case COMMON:
                 showComponents(commonFieldNames);
                 break;
             case LIST:
                 showComponents(listFieldNames);
+                lookupEntityTypeField.setRequired(true);
                 break;
             case CHART:
                 showComponents(chartFieldNames);
@@ -286,7 +311,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected void showComponent(Field field, boolean isShowing) {
         field.setVisible(isShowing);
-        field.setRequired(isShowing);
     }
 
     protected boolean isApplicableScreen(WindowInfo windowInfo) {
