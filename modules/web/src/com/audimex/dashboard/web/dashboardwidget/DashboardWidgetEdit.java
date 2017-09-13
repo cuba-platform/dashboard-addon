@@ -175,6 +175,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         if (report != null && report.getInputParameters() != null) {
             report.getInputParameters().forEach(param -> {
                 String name = param.getAlias();
+                String alias = param.getAlias();
                 String metaClass = param.getEntityMetaClass();
                 WidgetParameterType type = WidgetParameterType.UNDEFINED;
                 ParameterType parameterType = param.getType();
@@ -201,15 +202,17 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
                         break;
                     default:
                 }
-                WidgetParameter wp = createWidgetParameter(name, metaClass, type);
+                WidgetParameter wp = createWidgetParameter(name, alias, metaClass, type);
                 widgetParametersDs.addItem(wp);
             });
         }
     }
 
-    protected WidgetParameter createWidgetParameter(String name, String metaClass, WidgetParameterType parameterType) {
+    protected WidgetParameter createWidgetParameter(String name, String alias, String metaClass,
+                                                    WidgetParameterType parameterType) {
         WidgetParameter wp = metadata.create(WidgetParameter.class);
         wp.setName(name);
+        wp.setAlias(alias);
         wp.setParameterType(parameterType);
         wp.setDashboardWidget(dashboardWidgetDs.getItem());
         wp.getReferenceToEntity().setMetaClassName(metaClass);
