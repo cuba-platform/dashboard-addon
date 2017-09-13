@@ -13,7 +13,7 @@
         </datasource>
     </dsContext>
     <dialogMode height="600"
-                width="400"/>
+                width="600"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"

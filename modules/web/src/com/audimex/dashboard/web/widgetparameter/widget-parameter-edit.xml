@@ -18,7 +18,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="widgetParameterDs">
-            <column width="250px">
+            <column width="450px">
                 <field property="name"
                        required="true"/>
                 <field property="alias"

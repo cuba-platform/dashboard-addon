@@ -172,18 +172,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             Map<String, Object> params = values.stream()
                     .collect(
                             Collectors.toMap(
-                                    pair -> {
-                                        WidgetParameter parameter = pair.getFirst();
-                                        String name = parameter.getAlias();
-
-                                        if (ParameterInputType.OUTER.equals(parameter.getInputType())) {
-                                            name = parameter.getMappedAlias() != null ||
-                                                    !parameter.getMappedAlias().isEmpty() ?
-                                                        parameter.getMappedAlias() : parameter.getName();
-                                        }
-
-                                        return name;
-                                    },
+                                    pair -> pair.getFirst().getAlias(),
                                     Pair::getSecond
                             )
                     );

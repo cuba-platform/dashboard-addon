@@ -383,7 +383,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected DateField createDateField(WidgetParameter parameter) {
         DateField dateField = componentsFactory.createComponent(DateField.class);
-        dateField.setWidth("100%");
+        dateField.setWidth(getFieldWidth());
         dateField.setDateFormat("dd.MM.yyyy");
         dateField.setValue(parameter.getDateValue());
         dateField.addValueChangeListener(event -> {
@@ -395,7 +395,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected TextField createIntegerField(WidgetParameter parameter) {
         TextField integerField = componentsFactory.createComponent(TextField.class);
-        integerField.setWidth("100%");
+        integerField.setWidth(getFieldWidth());
         integerField.setInputPrompt(getMessage("message.value"));
         integerField.setValue(parameter.getIntegerValue());
         integerField.addValueChangeListener(event -> {
@@ -407,7 +407,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected TextField createStringField(WidgetParameter parameter) {
         TextField stringField = componentsFactory.createComponent(TextField.class);
-        stringField.setWidth("100%");
+        stringField.setWidth(getFieldWidth());
         stringField.setInputPrompt(getMessage("message.value"));
         stringField.setValue(parameter.getStringValue());
         stringField.addValueChangeListener(event -> {
@@ -419,7 +419,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected TextField createDecimalField(WidgetParameter parameter) {
         TextField decimalField = componentsFactory.createComponent(TextField.class);
-        decimalField.setWidth("100%");
+        decimalField.setWidth(getFieldWidth());
         decimalField.setInputPrompt(getMessage("message.value"));
         decimalField.setValue(parameter.getDecimalValue());
         decimalField.addValueChangeListener(event -> {
@@ -433,7 +433,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected LookupField createBooleanField(WidgetParameter parameter) {
         LookupField booleanField = componentsFactory.createComponent(LookupField.class);
-        booleanField.setWidth("100%");
+        booleanField.setWidth(getFieldWidth());
         booleanField.setInputPrompt(getMessage("message.value"));
         booleanField.setOptionsList(BOOLEAN_LIST);
         booleanField.setValue(parameter.getBoolValue());
@@ -446,7 +446,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected TextField createLongField(WidgetParameter parameter) {
         TextField longField = componentsFactory.createComponent(TextField.class);
-        longField.setWidth("100%");
+        longField.setWidth(getFieldWidth());
         longField.setInputPrompt(getMessage("message.value"));
         longField.setValue(parameter.getLongValue());
         longField.addValueChangeListener(event -> {
@@ -459,7 +459,7 @@ public class WidgetConfigWindow extends AbstractWindow {
 
     protected TextField createMappedAliasField(WidgetParameter parameter) {
         TextField mappedAliasField = componentsFactory.createComponent(TextField.class);
-        mappedAliasField.setWidth("100%");
+        mappedAliasField.setWidth(getFieldWidth());
         mappedAliasField.setInputPrompt(getMessage("message.mappedValue"));
         mappedAliasField.setValue(parameter.getMappedAlias());
         mappedAliasField.addValueChangeListener(event -> {
@@ -467,5 +467,9 @@ public class WidgetConfigWindow extends AbstractWindow {
             addChangeEvent(parameter, MAPPED_ALIAS, strValue);
         });
         return mappedAliasField;
+    }
+
+    protected String getFieldWidth() {
+        return "200px";
     }
 }
