@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.web.widgetparameter;
 
+import com.audimex.dashboard.entity.ParameterInputType;
 import com.audimex.dashboard.entity.ReferenceToEntity;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
@@ -12,6 +13,7 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FieldGroup;
 import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
@@ -31,6 +33,10 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
     protected Datasource<ReferenceToEntity> referenceToEntityDs;
     @Inject
     protected Metadata metadata;
+    @Named("fieldGroup.name")
+    protected TextField nameField;
+    @Named("fieldGroup.alias")
+    protected TextField aliasField;
 
     protected LookupField metaLookupField;
     protected LookupField viewLookupField;
@@ -40,6 +46,7 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
         super.initNewItem(item);
 
         item.setParameterType(WidgetParameterType.STRING);
+        item.setInputType(ParameterInputType.INPUT);
     }
 
     @Override
@@ -84,6 +91,21 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
             } else {
                 showRequiredField(metaLookupField, false);
                 showRequiredField(viewLookupField, false);
+            }
+        });
+    }
+
+    @Override
+    protected void postInit() {
+        super.postInit();
+
+        nameField.addValueChangeListener(e -> {
+            String name = (String) e.getValue();
+            if (name != null) {
+                aliasField.setValue(
+                        name.toLowerCase()
+                                .replace(" ", "_")
+                );
             }
         });
     }

@@ -13,12 +13,12 @@
         </datasource>
     </dsContext>
     <dialogMode height="600"
-                width="400"/>
+                width="600"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardWidgetDs">
-            <column width="250px">
+            <column width="450px">
                 <field id="widgetId" property="widgetId"/>
                 <field id="caption" property="caption"/>
                 <field id="icon" property="icon"/>
@@ -44,6 +44,7 @@
             </actions>
             <columns>
                 <column id="name"/>
+                <column id="alias"/>
                 <column id="parameterType"/>
                 <column id="referenceToEntity.metaClassName"/>
                 <column id="referenceToEntity.viewName"/>
@@ -56,6 +57,6 @@
             </buttonsPanel>
         </table>
         <frame id="windowActions"
-               screen="extendedEditWindowActions"/>
+               screen="editWindowActions"/>
     </layout>
 </window>

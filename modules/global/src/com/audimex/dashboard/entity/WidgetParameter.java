@@ -18,10 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @NamePattern("%s|name")
 @Table(name = "AMXD_WIDGET_PARAMETER")
@@ -31,6 +28,12 @@ public class WidgetParameter extends StandardEntity {
 
     @Column(name = "NAME")
     protected String name;
+
+    @Column(name = "ALIAS")
+    protected String alias;
+
+    @Column(name = "MAPPED_ALIAS")
+    protected String mappedAlias;
 
     @Column(name = "PARAMETER_TYPE")
     protected Integer parameterType;
@@ -85,6 +88,36 @@ public class WidgetParameter extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "masterParameter")
     protected List<WidgetParameter> additionalParameters;
+
+    @Column(name = "INPUT_TYPE")
+    protected Integer inputType;
+
+    public void setMappedAlias(String mappedAlias) {
+        this.mappedAlias = mappedAlias;
+    }
+
+    public String getMappedAlias() {
+        return mappedAlias;
+    }
+
+
+    public void setInputType(ParameterInputType inputType) {
+        this.inputType = inputType == null ? null : inputType.getId();
+    }
+
+    public ParameterInputType getInputType() {
+        return inputType == null ? null : ParameterInputType.fromId(inputType);
+    }
+
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
 
     public void setAdditionalParameters(List<WidgetParameter> additionalParameters) {
         this.additionalParameters = additionalParameters;
@@ -334,5 +367,11 @@ public class WidgetParameter extends StandardEntity {
         }
 
         return null;
+    }
+
+    public void setRefEntityId(UUID id) {
+        if (referenceToEntity != null) {
+            referenceToEntity.setEntityId(id);
+        }
     }
 }

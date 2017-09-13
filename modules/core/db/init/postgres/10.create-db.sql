@@ -33,10 +33,6 @@ create table AMXD_DASHBOARD_WIDGET (
     ICON varchar(255),
     DESCRIPTION varchar(255),
     FRAME_ID varchar(255) not null,
-    WIDGET_VIEW_TYPE integer,
-    ENTITY_TYPE varchar(255),
-    REPORT_ID uuid,
-    IS_TEMPLATE boolean,
     --
     primary key (ID)
 )^
@@ -75,6 +71,8 @@ create table AMXD_WIDGET_PARAMETER (
     REFERENCE_TO_ENTITY_VIEW_NAME varchar(255),
     --
     NAME varchar(255),
+    ALIAS varchar(255),
+    MAPPED_ALIAS varchar(255),
     PARAMETER_TYPE integer,
     DASHBOARD_WIDGET_ID uuid,
     DASHBOARD_WIDGET_LINK_ID uuid,
@@ -86,6 +84,7 @@ create table AMXD_WIDGET_PARAMETER (
     LONG_VALUE bigint,
     DOUBLE_VALUE double precision,
     MASTER_PARAMETER_ID uuid,
+    INPUT_TYPE integer,
     --
     primary key (ID)
 )^

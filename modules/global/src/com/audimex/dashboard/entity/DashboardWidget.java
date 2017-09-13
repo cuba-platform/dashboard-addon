@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @NamePattern("%s|caption")
 @Table(name = "AMXD_DASHBOARD_WIDGET")
@@ -63,6 +64,9 @@ public class DashboardWidget extends StandardEntity {
 
     @Transient
     protected com.haulmont.cuba.core.entity.Entity entity;
+
+    @Transient
+    protected Map<String, Object> outerParameters;
 
     public void setIsTemplate(Boolean isTemplate) {
         this.isTemplate = isTemplate;
@@ -172,4 +176,11 @@ public class DashboardWidget extends StandardEntity {
         this.entity = entity;
     }
 
+    public Map<String, Object> getOuterParameters() {
+        return outerParameters;
+    }
+
+    public void setOuterParameters(Map<String, Object> outerParameters) {
+        this.outerParameters = outerParameters;
+    }
 }
