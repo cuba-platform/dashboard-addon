@@ -18,7 +18,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardWidgetDs">
-            <column width="250px">
+            <column width="450px">
                 <field id="widgetId" property="widgetId"/>
                 <field id="caption" property="caption"/>
                 <field id="icon" property="icon"/>
