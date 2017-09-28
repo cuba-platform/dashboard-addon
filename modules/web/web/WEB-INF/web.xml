@@ -11,8 +11,7 @@
     <!-- Application properties config files -->
     <context-param>
         <param-name>appPropertiesConfig</param-name>
-        <param-value>classpath:cuba-web-app.properties
-            classpath:com/audimex/dashboard/web-app.properties
+        <param-value>classpath:com/audimex/dashboard/web-app.properties
             /WEB-INF/local.app.properties
             "file:${catalina.home}/conf/dashboard/local.app.properties"</param-value>
     </context-param>
