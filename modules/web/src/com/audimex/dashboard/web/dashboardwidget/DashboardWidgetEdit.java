@@ -6,7 +6,7 @@ package com.audimex.dashboard.web.dashboardwidget;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
-import com.audimex.dashboard.entity.WidgetViewType;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
@@ -30,7 +30,7 @@ import javax.inject.Named;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static com.audimex.dashboard.entity.WidgetViewType.CHART;
+import static com.audimex.dashboard.web.tools.DashboardTools.*;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
@@ -42,16 +42,16 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     protected CollectionDatasource<WidgetParameter, UUID> widgetParametersDs;
 
     @Inject
-    private ComponentsFactory componentsFactory;
+    protected ComponentsFactory componentsFactory;
 
     @Inject
-    private FieldGroup fieldGroup;
+    protected FieldGroup fieldGroup;
 
     @Inject
     protected ScreensHelper screensHelper;
 
-    @Named("fieldGroup.widgetViewType")
-    protected LookupField widgetViewTypeField;
+    @Inject
+    protected DashboardTools dashboardTools;
 
     @Named("parametersTable.create")
     protected CreateAction parametersTableCreateAction;
@@ -70,6 +70,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     protected List<Field> chartFieldNames;
 
+    protected LookupField lookupWidgetViewTypeField;
+
     protected LookupField reportLookupField;
 
     protected LookupField lookupEntityTypeField;
@@ -79,9 +81,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     @Override
     protected void initNewItem(DashboardWidget item) {
         super.initNewItem(item);
-
-        item.setWidgetViewType(WidgetViewType.COMMON);
         item.setIsTemplate(true);
+        item.setWidgetViewType(COMMON);
     }
 
     @Override
@@ -95,7 +96,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     protected void postInit() {
         super.postInit();
         showComponents(getItem().getWidgetViewType());
-        initWidgetViewTypeValueChangeListener();
 
         reportLookupField.addValueChangeListener(e -> {
             clearParameterDs();
@@ -105,18 +105,55 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void initFieldList() {
+        lookupWidgetViewTypeField = initWidgetViewTypeField();
         lookupFrameIdField = initFrameIdField();
         reportLookupField = initReportField();
         lookupEntityTypeField = initEntityTypeField();
 
-        allFieldNames = ImmutableList.of(
-                lookupFrameIdField,
-                reportLookupField
-        );
+        allFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(reportLookupField);}
+            {add(lookupEntityTypeField);}
+        };
 
-        commonFieldNames = ImmutableList.of(lookupFrameIdField);
-        listFieldNames = ImmutableList.of(lookupFrameIdField);
-        chartFieldNames = ImmutableList.of(reportLookupField);
+        commonFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(lookupEntityTypeField);}
+        };
+
+        listFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(lookupEntityTypeField);}
+        };
+
+        chartFieldNames = new ArrayList<Field>(){
+            {add(reportLookupField);}
+            {add(lookupEntityTypeField);}
+        };
+    }
+
+    protected LookupField initWidgetViewTypeField() {
+        FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("widgetViewType");
+        LookupField widgetViewTypeField = componentsFactory.createComponent(LookupField.class);
+        widgetViewTypeField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
+        entityTypeFieldConfig.setComponent(widgetViewTypeField);
+
+        widgetViewTypeField.setOptionsMap(dashboardTools.getWidgetViewTypes());
+
+        widgetViewTypeField.addValueChangeListener(event -> {
+            if (event.getPrevValue() == null) return;
+
+            if (CHART.equals(dashboardWidgetDs.getItem().getWidgetViewType()) &&
+                    dashboardWidgetDs.getItem().getReport() != null) {
+                createReportParameters(dashboardWidgetDs.getItem().getReport());
+            } else {
+                clearParameterDs();
+            }
+
+            showComponents((String) event.getValue());
+        });
+
+        return widgetViewTypeField;
     }
 
     protected LookupField initFrameIdField() {
@@ -252,18 +289,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         return lookupField;
     }
 
-    protected void initWidgetViewTypeValueChangeListener() {
-        widgetViewTypeField.addValueChangeListener(event -> {
-            if (WidgetViewType.CHART.equals(dashboardWidgetDs.getItem().getWidgetViewType()) &&
-                    dashboardWidgetDs.getItem().getReport() != null) {
-                createReportParameters(dashboardWidgetDs.getItem().getReport());
-            } else {
-                clearParameterDs();
-            }
-
-            showComponents((WidgetViewType) event.getValue());
-        });
-    }
 
     protected void clearParameterDs() {
         Collection<WidgetParameter> parameters = new ArrayList<>(widgetParametersDs.getItems());
@@ -282,7 +307,7 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         });
     }
 
-    protected void showComponents(WidgetViewType type) {
+    protected void showComponents(String type) {
         lookupEntityTypeField.setRequired(false);
         switch (type) {
             case COMMON:

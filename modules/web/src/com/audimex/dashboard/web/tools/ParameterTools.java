@@ -61,6 +61,7 @@ public class ParameterTools {
         param.setDashboardWidgetLink(link);
         param.getReferenceToEntity().setMetaClassName(parameter.getReferenceToEntity().getMetaClassName());
         param.getReferenceToEntity().setViewName(parameter.getReferenceToEntity().getViewName());
+        param.getReferenceToEntity().setEntityId(parameter.getReferenceToEntity().getEntityId());
         return param;
     }
 

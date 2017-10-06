@@ -12,18 +12,24 @@
             <collectionDatasource id="widgetParametersDs" property="parameters"/>
         </datasource>
     </dsContext>
-    <dialogMode height="600"
-                width="600"/>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardWidgetDs">
             <column width="450px">
-                <field id="widgetId" property="widgetId"/>
-                <field id="caption" property="caption"/>
-                <field id="icon" property="icon"/>
-                <field id="description" property="description"/>
-                <field id="widgetViewType" property="widgetViewType"
+                <field id="widgetId"
+                       property="widgetId"/>
+                <field id="caption"
+                       property="caption"/>
+                <field id="icon"
+                       property="icon"/>
+                <field id="description"
+                       property="description"/>
+                <field id="widgetViewType"
+                       property="widgetViewType"
+                       custom="true"
                        required="true"/>
                 <field id="entityTypeField"
                        property="entityType"
@@ -36,7 +42,7 @@
                        custom="true"/>
             </column>
         </fieldGroup>
-        <table id="parametersTable" width="100%" height="250px">
+        <table id="parametersTable" width="550px" height="250px">
             <actions>
                 <action id="create"/>
                 <action id="edit"/>

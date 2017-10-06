@@ -22,6 +22,8 @@ import fi.jasoft.dragdroplayouts.interfaces.HasDragCaptionProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -37,6 +39,10 @@ public class DashboardTools {
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
+
+    public static final String COMMON = "COMMON";
+    public static final String LIST = "LIST";
+    public static final String CHART = "CHART";
 
     public DashboardGridLayout addEmptyLabels(DashboardGridLayout gridLayout, Tree tree) {
         for (int i = 0; i < gridLayout.getRows(); i++) {
@@ -499,5 +505,14 @@ public class DashboardTools {
                 .setId(id)
                 .setView("report.view");
         return dataManager.load(ctx);
+    }
+
+    public Map<String, String> getWidgetViewTypes() {
+        Messages messages = AppBeans.get(Messages.NAME);
+        return new HashMap<String, String>(){
+            { put(messages.getMainMessage("dashboard.widget.common"), COMMON); }
+            { put(messages.getMainMessage("dashboard.widget.list"), LIST); }
+            { put(messages.getMainMessage("dashboard.widget.chart"), CHART); }
+        };
     }
 }

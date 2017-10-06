@@ -33,7 +33,7 @@ create table AMXD_DASHBOARD_WIDGET (
     ICON varchar(255),
     DESCRIPTION varchar(255),
     FRAME_ID varchar(255) not null,
-    WIDGET_VIEW_TYPE integer,
+    WIDGET_VIEW_TYPE varchar(25),
     ENTITY_TYPE varchar(255),
     REPORT_ID uuid,
     IS_TEMPLATE boolean,
