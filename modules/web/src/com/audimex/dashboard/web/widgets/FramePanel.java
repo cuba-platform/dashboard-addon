@@ -197,6 +197,8 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             } else {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetCommonFrame");
+                frame.setWidth("100%");
+                frame.setHeight("100%");
                 frame.getDsContext().refresh();
             }
         } else {
