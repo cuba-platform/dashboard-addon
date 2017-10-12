@@ -7,6 +7,7 @@ import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
 import com.audimex.dashboard.entity.WidgetViewType;
+import com.audimex.dashboard.web.tools.DashboardModelTools;
 import com.google.common.collect.ImmutableList;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
@@ -37,6 +38,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
 
     @Inject
     protected Datasource<DashboardWidget> dashboardWidgetDs;
+
+    @Inject
+    protected DashboardModelTools dashboardModelTools;
 
     @Inject
     protected CollectionDatasource<WidgetParameter, UUID> widgetParametersDs;
@@ -347,5 +351,10 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             getItem().setFrameId("amxd$Empty.frame");
         }
         return super.preCommit();
+    }
+
+    public void propagateWidgetChanges() {
+        dashboardModelTools.propagateWidgetChanges(getItem());
+        showNotification(getMessage("message.theChangesHaveBeenPropagateSuccessful"));
     }
 }

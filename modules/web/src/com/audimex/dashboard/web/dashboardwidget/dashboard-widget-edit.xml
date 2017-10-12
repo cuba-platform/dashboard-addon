@@ -56,7 +56,21 @@
                 <button id="btnRemove" action="parametersTable.remove"/>
             </buttonsPanel>
         </table>
-        <frame id="windowActions"
-               screen="extendedEditWindowActions"/>
+        <hbox id="windowActions"
+              spacing="true"
+              stylename="c-extended-edit-window-actions">
+            <button id="windowCommitAndClose"
+                    action="windowCommitAndClose"
+                    icon="theme://actions.Editor.Ok.icon"/>
+            <button id="windowCommit"
+                    action="windowCommit"/>
+            <button id="windowClose"
+                    action="windowClose"
+                    icon="theme://actions.Editor.Cancel.icon"/>
+            <button id="propagate"
+                    caption="msg://dashboard.button.propagate"
+                    invoke="propagateWidgetChanges"
+                    icon="font-icon:MAIL_FORWARD"/>
+        </hbox>
     </layout>
 </window>

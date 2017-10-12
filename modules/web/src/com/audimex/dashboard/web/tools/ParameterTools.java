@@ -113,29 +113,34 @@ public class ParameterTools {
     public List<WidgetLinkModel> createWidgetLinkModel(FramePanel framePanel) {
         List<WidgetLinkModel> widgetLinksModel = new ArrayList<>();
         framePanel.getWidget().getDashboardLinks().forEach(link -> {
-            WidgetLinkModel wlm = new WidgetLinkModel();
-            wlm.setDashboard(link.getDashboard().getId());
-            wlm.setFilter(link.getFilter());
-
-            List<WidgetParameterModel> widgetParametersModel = new ArrayList<>();
-            link.getDashboardParameters().forEach(parameter -> {
-                WidgetParameterModel par = createWidgetParameterModel(parameter);
-                List<WidgetParameterModel> childWidgetParametersModel = new ArrayList<>();
-                if (parameter.getListParameters() != null) {
-                    parameter.getListParameters().forEach(lp -> {
-                        WidgetParameterModel childPar = createWidgetParameterModel(lp);
-                        childWidgetParametersModel.add(childPar);
-                    });
-                }
-                par.setListParameters(childWidgetParametersModel);
-                widgetParametersModel.add(par);
-            });
-
-            wlm.setDashboardParameters(widgetParametersModel);
+            WidgetLinkModel wlm = createWidgetLinkModel(link);
             widgetLinksModel.add(wlm);
         });
 
         return widgetLinksModel;
+    }
+
+    protected WidgetLinkModel createWidgetLinkModel(DashboardWidgetLink link) {
+        WidgetLinkModel wlm = new WidgetLinkModel();
+        wlm.setDashboard(link.getDashboard().getId());
+        wlm.setFilter(link.getFilter());
+
+        List<WidgetParameterModel> widgetParametersModel = new ArrayList<>();
+        link.getDashboardParameters().forEach(parameter -> {
+            WidgetParameterModel par = createWidgetParameterModel(parameter);
+            List<WidgetParameterModel> childWidgetParametersModel = new ArrayList<>();
+            if (parameter.getListParameters() != null) {
+                parameter.getListParameters().forEach(lp -> {
+                    WidgetParameterModel childPar = createWidgetParameterModel(lp);
+                    childWidgetParametersModel.add(childPar);
+                });
+            }
+            par.setListParameters(childWidgetParametersModel);
+            widgetParametersModel.add(par);
+        });
+
+        wlm.setDashboardParameters(widgetParametersModel);
+        return wlm;
     }
 
     protected WidgetParameterModel createWidgetParameterModel(WidgetParameter parameter) {
