@@ -71,7 +71,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         Map<String, Object> metaClasses = new LinkedHashMap<>();
         metadata.getTools().getAllPersistentMetaClasses()
                 .forEach(metaClass ->
-                        metaClasses.put(metaClass.getName(), metaClass.getName())
+                        metaClasses.put(metaClass.getJavaClass().getSimpleName(), metaClass.getName())
                 );
         metaLookupField.setOptionsMap(metaClasses);
     }

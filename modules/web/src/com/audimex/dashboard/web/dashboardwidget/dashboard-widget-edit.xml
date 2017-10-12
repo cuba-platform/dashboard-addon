@@ -57,6 +57,6 @@
             </buttonsPanel>
         </table>
         <frame id="windowActions"
-               screen="editWindowActions"/>
+               screen="extendedEditWindowActions"/>
     </layout>
 </window>
