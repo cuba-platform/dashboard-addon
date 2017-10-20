@@ -308,6 +308,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void showComponents(String type) {
+        if (type == null)
+            return;
         lookupEntityTypeField.setRequired(false);
         switch (type) {
             case COMMON:
@@ -325,6 +327,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void showComponents(List<Field> componentNames) {
+        if (componentNames == null)
+            return;
         allFieldNames.forEach(field -> {
             if (componentNames.contains(field)) {
                 showComponent(field, true);
