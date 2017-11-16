@@ -14,8 +14,10 @@ Dashboard public methods:
      
 Dashboard parameters:
 
+```
 @WindowParam(name = "DASHBOARD_ENTITY")
 protected Entity entity;
+```
 
 This parameter describe the entity which will using for an algorithm calculation.
 
