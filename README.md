@@ -19,6 +19,36 @@ protected Entity entity;
 
 This parameter describe the entity which will using for an algorithm calculation.
 
+Also the dashboard provides different options for input parameters.
+
+User can input three types of values:
+
+```
+ENTITY(10)
+LIST_ENTITY(20)
+DATE(30)
+INTEGER(40)
+STRING(50)
+DECIMAL(60)
+BOOLEAN(70)
+LONG(80)
+UNDEFINED(90)
+```
+
+As well the user can define a type of the parameter input type. The system supports following input types:
+
+```
+OUTER(10)
+ALGORITHM(20)
+INPUT(30)
+```
+
+The type "OUTER" means that the parameter will fill from outside. This parameter should be filled in a parameter map, which is incoming in the "init()" method.
+The type "ALGORITHM" means that a parameter value will calculated according to an algorithm logic entity.
+The type "INPUT" means that a parameter should be filled during configuration of the dashboard.
+
+The system calculates parameters during execution, before a screen drawing. The values of parameters will be stored into a widget link entity. 
+
 ## Structure
 Main components of this application component:
  - `DashboardFrame` contains main controls and canvas.
