@@ -37,6 +37,7 @@ public class WidgetParameterModel implements Serializable {
     protected UUID masterParameter;
     protected List<WidgetParameterModel> listParameters;
     protected List<WidgetParameterModel> additionalParameters;
+    protected Integer orderNumber;
 
     public String getName() {
         return name;

@@ -33,50 +33,47 @@ import java.util.*;
 import static com.audimex.dashboard.web.tools.DashboardTools.*;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
-    WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
+    protected WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
 
     @Inject
     protected Datasource<DashboardWidget> dashboardWidgetDs;
-
     @Inject
     protected CollectionDatasource<WidgetParameter, UUID> widgetParametersDs;
 
     @Inject
     protected ComponentsFactory componentsFactory;
+    @Inject
+    protected ScreensHelper screensHelper;
+    @Inject
+    protected DashboardTools dashboardTools;
+    @Inject
+    protected Metadata metadata;
 
     @Inject
     protected FieldGroup fieldGroup;
-
     @Inject
-    protected ScreensHelper screensHelper;
-
+    protected Table<WidgetParameter> parametersTable;
     @Inject
-    protected DashboardTools dashboardTools;
+    protected Button btnCreate;
+    @Inject
+    protected Button btnUp;
+    @Inject
+    protected Button btnDown;
 
     @Named("parametersTable.create")
     protected CreateAction parametersTableCreateAction;
 
-    @Inject
-    protected Button btnCreate;
-
-    @Inject
-    protected Metadata metadata;
-
     protected List<Field> allFieldNames;
-
     protected List<Field> commonFieldNames;
-
     protected List<Field> listFieldNames;
-
     protected List<Field> chartFieldNames;
 
     protected LookupField lookupWidgetViewTypeField;
-
     protected LookupField reportLookupField;
-
     protected LookupField lookupEntityTypeField;
-
     protected LookupField lookupFrameIdField;
+
+    protected HashMap<Integer, WidgetParameter> orderNumbers;
 
     @Override
     protected void initNewItem(DashboardWidget item) {
@@ -92,10 +89,55 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         initCreateButtonActions();
     }
 
+    protected Integer regenerateParametersOrderNumbers(WidgetParameter parameter) {
+        Integer orderNumber = 1;
+        Integer parameterOrderNumber = orderNumber;
+
+        for (WidgetParameter param : widgetParametersDs.getItems()) {
+            param.setOrderNum(orderNumber++);
+            if (param.equals(parameter)) {
+                parameterOrderNumber = param.getOrderNum();
+            }
+        }
+
+        fillParametersOrderNumbers();
+
+        return parameterOrderNumber;
+    }
+
+    protected void fillParametersOrderNumbers() {
+        orderNumbers = new HashMap<>();
+        widgetParametersDs.getItems().forEach(wp -> orderNumbers.put(wp.getOrderNum(), wp));
+    }
+
     @Override
     protected void postInit() {
         super.postInit();
         showComponents(getItem().getWidgetViewType());
+        initListeners();
+        fillParametersOrderNumbers();
+        sortParameterTable();
+    }
+
+    protected void initListeners() {
+        widgetParametersDs.addItemChangeListener(event -> {
+            if (event.getItem() != null) {
+                Integer orderNumber = event.getItem().getOrderNum();
+
+                if (orderNumber == null) {
+                    orderNumber = regenerateParametersOrderNumbers(event.getItem());
+                }
+
+                btnUp.setEnabled(true);
+                btnDown.setEnabled(true);
+
+                if (orderNumber == 1){
+                    btnUp.setEnabled(false);
+                } else if (orderNumber == widgetParametersDs.size()) {
+                    btnDown.setEnabled(false);
+                }
+            }
+        });
 
         reportLookupField.addValueChangeListener(e -> {
             clearParameterDs();
@@ -376,5 +418,42 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             getItem().setFrameId("amxd$Empty.frame");
         }
         return super.preCommit();
+    }
+
+    public void parameterUp() {
+        WidgetParameter parameter = parametersTable.getSingleSelected();
+        if (parameter != null) {
+            Integer orderNumber = parameter.getOrderNum();
+            if (orderNumber != 1) {
+                Integer previewOrderNumber = orderNumber - 1;
+                WidgetParameter previewParameter = orderNumbers.get(previewOrderNumber);
+                previewParameter.setOrderNum(orderNumber);
+                parameter.setOrderNum(previewOrderNumber);
+                sortParameterTable();
+            }
+        }
+    }
+
+    public void parameterDown() {
+        WidgetParameter parameter = parametersTable.getSingleSelected();
+        if (parameter != null) {
+            Integer orderNumber = parameter.getOrderNum();
+            if (orderNumber != widgetParametersDs.size()) {
+                Integer nextOrderNumber = orderNumber + 1;
+                WidgetParameter nextParameter = orderNumbers.get(nextOrderNumber);
+                if (nextParameter != null) {
+                    nextParameter.setOrderNum(orderNumber);
+                }
+                parameter.setOrderNum(nextOrderNumber);
+                sortParameterTable();
+            }
+        }
+    }
+
+    protected void sortParameterTable() {
+        parametersTable.sortBy(
+                widgetParametersDs.getMetaClass().getPropertyPath("orderNum"),
+                true
+        );
     }
 }

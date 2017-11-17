@@ -92,6 +92,18 @@ public class WidgetParameter extends StandardEntity {
     @Column(name = "INPUT_TYPE")
     protected Integer inputType;
 
+    @Column(name = "ORDER_NUM")
+    protected Integer orderNum;
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+
     public void setMappedAlias(String mappedAlias) {
         this.mappedAlias = mappedAlias;
     }

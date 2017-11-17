@@ -89,6 +89,7 @@ create table AMXD_WIDGET_PARAMETER (
     DOUBLE_VALUE double precision,
     MASTER_PARAMETER_ID uuid,
     INPUT_TYPE integer,
+    ORDER_NUM integer,
     --
     primary key (ID)
 )^
