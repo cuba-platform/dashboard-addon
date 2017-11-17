@@ -46,7 +46,6 @@ INPUT(30)
 ```
 
 The type "OUTER" means that the parameter will fill from outside. This parameter should be filled in a parameter map, which is incoming in the "init()" method.
-The type "ALGORITHM" means that a parameter value will calculated according to an algorithm logic entity.
 The type "INPUT" means that a parameter should be filled during configuration of the dashboard.
 
 The system calculates parameters during execution, before a screen drawing. The values of parameters will be stored into a widget link entity. 
