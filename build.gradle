@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.7.2'
+    ext.cubaVersion = '6.7.3'
     repositories {
         mavenLocal()
         maven {
@@ -34,7 +34,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'com.audimex.dashboard'
-        version = '0.2'
+        version = '0.3'
         isSnapshot = true
     }
     tomcat {
