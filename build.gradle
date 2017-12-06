@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.5-SNAPSHOT'
+    ext.cubaVersion = '6.7.3'
     repositories {
         mavenLocal()
         maven {
@@ -34,7 +34,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'com.audimex.dashboard'
-        version = '0.2'
+        version = '0.3'
         isSnapshot = true
     }
     tomcat {
@@ -114,17 +114,17 @@ configure(coreModule) {
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'amxd'
-        dbUser = 'cuba'
-        dbPassword = 'cuba'
+        dbName = 'audimex'
+        dbUser = 'root'
+        dbPassword = 'root'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'amxd'
-        dbUser = 'cuba'
-        dbPassword = 'cuba'
+        dbName = 'audimex'
+        dbUser = 'root'
+        dbPassword = 'root'
     }
 }
 
@@ -232,7 +232,7 @@ task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deplo
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '3.4'
 }
 
 apply from: 'extra.gradle'

@@ -195,7 +195,7 @@ public class WidgetConfigWindow extends AbstractWindow {
     protected void parametersInit(DashboardWidget dashboardWidget) {
         dashboardWidget.getDashboardLinks().forEach(link ->
                 link.getDashboardParameters().stream()
-                        .sorted(Comparator.comparing(WidgetParameter::getName))
+                        .sorted(Comparator.comparing(WidgetParameter::getOrderNum))
                         .forEach(param -> {
                             com.haulmont.cuba.gui.components.Component component = createComponent(param);
                             if (component != null) {

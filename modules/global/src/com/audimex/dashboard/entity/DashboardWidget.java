@@ -40,8 +40,8 @@ public class DashboardWidget extends StandardEntity {
     @Column(name = "FRAME_ID", nullable = false)
     protected String frameId;
 
-    @Column(name = "WIDGET_VIEW_TYPE")
-    protected Integer widgetViewType;
+    @Column(name = "WIDGET_VIEW_TYPE", length = 25)
+    protected String widgetViewType;
 
     @Column(name = "ENTITY_TYPE")
     protected String entityType;
@@ -67,6 +67,15 @@ public class DashboardWidget extends StandardEntity {
 
     @Transient
     protected Map<String, Object> outerParameters;
+
+    public String getWidgetViewType() {
+        return widgetViewType;
+    }
+
+    public void setWidgetViewType(String widgetViewType) {
+        this.widgetViewType = widgetViewType;
+    }
+
 
     public void setIsTemplate(Boolean isTemplate) {
         this.isTemplate = isTemplate;
@@ -110,14 +119,6 @@ public class DashboardWidget extends StandardEntity {
         this.dashboardLinks = dashboardLinks;
     }
 
-
-    public void setWidgetViewType(WidgetViewType widgetViewType) {
-        this.widgetViewType = widgetViewType == null ? null : widgetViewType.getId();
-    }
-
-    public WidgetViewType getWidgetViewType() {
-        return widgetViewType == null ? null : WidgetViewType.fromId(widgetViewType);
-    }
 
     public void setEntityType(String entityType) {
         this.entityType = entityType;

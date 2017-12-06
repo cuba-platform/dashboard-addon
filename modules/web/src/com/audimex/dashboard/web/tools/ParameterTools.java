@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -40,10 +41,11 @@ public class ParameterTools {
     protected DashboardWidgetLink createDashboardLink(Dashboard dashboard, DashboardWidget widget) {
         DashboardWidgetLink dashboardWidgetLink = metadata.create(DashboardWidgetLink.class);
 
-        widget.getParameters().forEach(parameter -> {
-            WidgetParameter param = createWidgetLinkParameter(dashboardWidgetLink, parameter);
-            dashboardWidgetLink.addDashboardParameter(param);
-        });
+        widget.getParameters().stream().sorted(Comparator.comparing(WidgetParameter::getOrderNum))
+                .forEach(parameter -> {
+                    WidgetParameter param = createWidgetLinkParameter(dashboardWidgetLink, parameter);
+                    dashboardWidgetLink.addDashboardParameter(param);
+                });
 
         dashboardWidgetLink.setDashboardWidget(widget);
         dashboardWidgetLink.setDashboard(dashboard);
@@ -54,6 +56,7 @@ public class ParameterTools {
     public WidgetParameter createWidgetLinkParameter(DashboardWidgetLink link, WidgetParameter parameter) {
         WidgetParameter param = metadata.create(WidgetParameter.class);
         param.setName(parameter.getName());
+        param.setOrderNum(parameter.getOrderNum());
         param.setAlias(parameter.getAlias());
         param.setMappedAlias(parameter.getMappedAlias());
         param.setInputType(parameter.getInputType());
@@ -61,6 +64,7 @@ public class ParameterTools {
         param.setDashboardWidgetLink(link);
         param.getReferenceToEntity().setMetaClassName(parameter.getReferenceToEntity().getMetaClassName());
         param.getReferenceToEntity().setViewName(parameter.getReferenceToEntity().getViewName());
+        param.getReferenceToEntity().setEntityId(parameter.getReferenceToEntity().getEntityId());
         return param;
     }
 
@@ -146,6 +150,7 @@ public class ParameterTools {
     protected WidgetParameterModel createWidgetParameterModel(WidgetParameter parameter) {
         WidgetParameterModel wpm = new WidgetParameterModel();
         wpm.setName(parameter.getName());
+        wpm.setOrderNumber(parameter.getOrderNum());
         wpm.setAlias(parameter.getAlias());
         wpm.setMappedAlias(parameter.getMappedAlias());
         wpm.setInputType(parameter.getInputType() != null ? parameter.getInputType().getId() : null);
@@ -166,6 +171,7 @@ public class ParameterTools {
             parameter.getAdditionalParameters().forEach(ap -> {
                 WidgetParameterModel additional = new WidgetParameterModel();
                 additional.setName(ap.getName());
+                additional.setOrderNumber(ap.getOrderNum());
                 additional.setAlias(ap.getAlias());
                 additional.setMappedAlias(ap.getMappedAlias());
                 additional.setInputType(ap.getInputType() != null ? ap.getInputType().getId() : null);
@@ -246,6 +252,7 @@ public class ParameterTools {
     protected WidgetParameter createWidgetParameter(WidgetParameterModel parameter) {
         WidgetParameter wp = new WidgetParameter();
         wp.setName(parameter.getName());
+        wp.setOrderNum(parameter.getOrderNumber());
         wp.setAlias(parameter.getAlias());
         wp.setMappedAlias(parameter.getMappedAlias());
         wp.setInputType(ParameterInputType.fromId(parameter.getInputType()));
@@ -276,6 +283,7 @@ public class ParameterTools {
             parameter.getAdditionalParameters().forEach(ap -> {
                 WidgetParameter additional = new WidgetParameter();
                 additional.setName(ap.getName());
+                additional.setOrderNum(ap.getOrderNumber());
                 additional.setAlias(ap.getAlias());
                 additional.setMappedAlias(parameter.getMappedAlias());
                 additional.setInputType(ParameterInputType.fromId(ap.getInputType()));

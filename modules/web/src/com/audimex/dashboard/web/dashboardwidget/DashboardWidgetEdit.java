@@ -6,9 +6,8 @@ package com.audimex.dashboard.web.dashboardwidget;
 import com.audimex.dashboard.entity.DashboardWidget;
 import com.audimex.dashboard.entity.WidgetParameter;
 import com.audimex.dashboard.entity.WidgetParameterType;
-import com.audimex.dashboard.entity.WidgetViewType;
 import com.audimex.dashboard.web.tools.DashboardModelTools;
-import com.google.common.collect.ImmutableList;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
@@ -31,10 +30,10 @@ import javax.inject.Named;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static com.audimex.dashboard.entity.WidgetViewType.CHART;
+import static com.audimex.dashboard.web.tools.DashboardTools.*;
 
 public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
-    WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
+    protected WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
 
     @Inject
     protected Datasource<DashboardWidget> dashboardWidgetDs;
@@ -46,46 +45,45 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     protected CollectionDatasource<WidgetParameter, UUID> widgetParametersDs;
 
     @Inject
-    private ComponentsFactory componentsFactory;
-
-    @Inject
-    private FieldGroup fieldGroup;
-
+    protected ComponentsFactory componentsFactory;
     @Inject
     protected ScreensHelper screensHelper;
+    @Inject
+    protected DashboardTools dashboardTools;
+    @Inject
+    protected Metadata metadata;
 
-    @Named("fieldGroup.widgetViewType")
-    protected LookupField widgetViewTypeField;
+    @Inject
+    protected FieldGroup fieldGroup;
+    @Inject
+    protected Table<WidgetParameter> parametersTable;
+    @Inject
+    protected Button btnCreate;
+    @Inject
+    protected Button btnUp;
+    @Inject
+    protected Button btnDown;
 
     @Named("parametersTable.create")
     protected CreateAction parametersTableCreateAction;
 
-    @Inject
-    protected Button btnCreate;
-
-    @Inject
-    protected Metadata metadata;
-
     protected List<Field> allFieldNames;
-
     protected List<Field> commonFieldNames;
-
     protected List<Field> listFieldNames;
-
     protected List<Field> chartFieldNames;
 
+    protected LookupField lookupWidgetViewTypeField;
     protected LookupField reportLookupField;
-
     protected LookupField lookupEntityTypeField;
-
     protected LookupField lookupFrameIdField;
+
+    protected HashMap<Integer, WidgetParameter> orderNumbers;
 
     @Override
     protected void initNewItem(DashboardWidget item) {
         super.initNewItem(item);
-
-        item.setWidgetViewType(WidgetViewType.COMMON);
         item.setIsTemplate(true);
+        item.setWidgetViewType(COMMON);
     }
 
     @Override
@@ -95,11 +93,55 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         initCreateButtonActions();
     }
 
+    protected Integer regenerateParametersOrderNumbers(WidgetParameter parameter) {
+        Integer orderNumber = 1;
+        Integer parameterOrderNumber = orderNumber;
+
+        for (WidgetParameter param : widgetParametersDs.getItems()) {
+            param.setOrderNum(orderNumber++);
+            if (param.equals(parameter)) {
+                parameterOrderNumber = param.getOrderNum();
+            }
+        }
+
+        fillParametersOrderNumbers();
+
+        return parameterOrderNumber;
+    }
+
+    protected void fillParametersOrderNumbers() {
+        orderNumbers = new HashMap<>();
+        widgetParametersDs.getItems().forEach(wp -> orderNumbers.put(wp.getOrderNum(), wp));
+    }
+
     @Override
     protected void postInit() {
         super.postInit();
         showComponents(getItem().getWidgetViewType());
-        initWidgetViewTypeValueChangeListener();
+        initListeners();
+        fillParametersOrderNumbers();
+        sortParameterTable();
+    }
+
+    protected void initListeners() {
+        widgetParametersDs.addItemChangeListener(event -> {
+            if (event.getItem() != null) {
+                Integer orderNumber = event.getItem().getOrderNum();
+
+                if (orderNumber == null) {
+                    orderNumber = regenerateParametersOrderNumbers(event.getItem());
+                }
+
+                btnUp.setEnabled(true);
+                btnDown.setEnabled(true);
+
+                if (orderNumber == 1){
+                    btnUp.setEnabled(false);
+                } else if (orderNumber == widgetParametersDs.size()) {
+                    btnDown.setEnabled(false);
+                }
+            }
+        });
 
         reportLookupField.addValueChangeListener(e -> {
             clearParameterDs();
@@ -109,18 +151,55 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void initFieldList() {
+        lookupWidgetViewTypeField = initWidgetViewTypeField();
         lookupFrameIdField = initFrameIdField();
         reportLookupField = initReportField();
         lookupEntityTypeField = initEntityTypeField();
 
-        allFieldNames = ImmutableList.of(
-                lookupFrameIdField,
-                reportLookupField
-        );
+        allFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(reportLookupField);}
+            {add(lookupEntityTypeField);}
+        };
 
-        commonFieldNames = ImmutableList.of(lookupFrameIdField);
-        listFieldNames = ImmutableList.of(lookupFrameIdField);
-        chartFieldNames = ImmutableList.of(reportLookupField);
+        commonFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(lookupEntityTypeField);}
+        };
+
+        listFieldNames = new ArrayList<Field>(){
+            {add(lookupFrameIdField);}
+            {add(lookupEntityTypeField);}
+        };
+
+        chartFieldNames = new ArrayList<Field>(){
+            {add(reportLookupField);}
+            {add(lookupEntityTypeField);}
+        };
+    }
+
+    protected LookupField initWidgetViewTypeField() {
+        FieldGroup.FieldConfig entityTypeFieldConfig = fieldGroup.getField("widgetViewType");
+        LookupField widgetViewTypeField = componentsFactory.createComponent(LookupField.class);
+        widgetViewTypeField.setDatasource(dashboardWidgetDs, entityTypeFieldConfig.getProperty());
+        entityTypeFieldConfig.setComponent(widgetViewTypeField);
+
+        widgetViewTypeField.setOptionsMap(dashboardTools.getWidgetViewTypes());
+
+        widgetViewTypeField.addValueChangeListener(event -> {
+            if (event.getPrevValue() == null) return;
+
+            if (CHART.equals(dashboardWidgetDs.getItem().getWidgetViewType()) &&
+                    dashboardWidgetDs.getItem().getReport() != null) {
+                createReportParameters(dashboardWidgetDs.getItem().getReport());
+            } else {
+                clearParameterDs();
+            }
+
+            showComponents((String) event.getValue());
+        });
+
+        return widgetViewTypeField;
     }
 
     protected LookupField initFrameIdField() {
@@ -256,18 +335,6 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         return lookupField;
     }
 
-    protected void initWidgetViewTypeValueChangeListener() {
-        widgetViewTypeField.addValueChangeListener(event -> {
-            if (WidgetViewType.CHART.equals(dashboardWidgetDs.getItem().getWidgetViewType()) &&
-                    dashboardWidgetDs.getItem().getReport() != null) {
-                createReportParameters(dashboardWidgetDs.getItem().getReport());
-            } else {
-                clearParameterDs();
-            }
-
-            showComponents((WidgetViewType) event.getValue());
-        });
-    }
 
     protected void clearParameterDs() {
         Collection<WidgetParameter> parameters = new ArrayList<>(widgetParametersDs.getItems());
@@ -286,7 +353,9 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
         });
     }
 
-    protected void showComponents(WidgetViewType type) {
+    protected void showComponents(String type) {
+        if (type == null)
+            return;
         lookupEntityTypeField.setRequired(false);
         switch (type) {
             case COMMON:
@@ -304,6 +373,8 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
     }
 
     protected void showComponents(List<Field> componentNames) {
+        if (componentNames == null)
+            return;
         allFieldNames.forEach(field -> {
             if (componentNames.contains(field)) {
                 showComponent(field, true);
@@ -351,6 +422,43 @@ public class DashboardWidgetEdit extends AbstractEditor<DashboardWidget> {
             getItem().setFrameId("amxd$Empty.frame");
         }
         return super.preCommit();
+    }
+
+    public void parameterUp() {
+        WidgetParameter parameter = parametersTable.getSingleSelected();
+        if (parameter != null) {
+            Integer orderNumber = parameter.getOrderNum();
+            if (orderNumber != 1) {
+                Integer previewOrderNumber = orderNumber - 1;
+                WidgetParameter previewParameter = orderNumbers.get(previewOrderNumber);
+                previewParameter.setOrderNum(orderNumber);
+                parameter.setOrderNum(previewOrderNumber);
+                sortParameterTable();
+            }
+        }
+    }
+
+    public void parameterDown() {
+        WidgetParameter parameter = parametersTable.getSingleSelected();
+        if (parameter != null) {
+            Integer orderNumber = parameter.getOrderNum();
+            if (orderNumber != widgetParametersDs.size()) {
+                Integer nextOrderNumber = orderNumber + 1;
+                WidgetParameter nextParameter = orderNumbers.get(nextOrderNumber);
+                if (nextParameter != null) {
+                    nextParameter.setOrderNum(orderNumber);
+                }
+                parameter.setOrderNum(nextOrderNumber);
+                sortParameterTable();
+            }
+        }
+    }
+
+    protected void sortParameterTable() {
+        parametersTable.sortBy(
+                widgetParametersDs.getMetaClass().getPropertyPath("orderNum"),
+                true
+        );
     }
 
     public void propagateWidgetChanges() {

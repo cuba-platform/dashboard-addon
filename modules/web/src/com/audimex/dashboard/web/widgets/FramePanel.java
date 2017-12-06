@@ -42,6 +42,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.audimex.dashboard.web.tools.DashboardTools.CHART;
+import static com.audimex.dashboard.web.tools.DashboardTools.LIST;
 import static com.haulmont.cuba.gui.components.Window.COMMIT_ACTION_ID;
 
 public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, HasMainLayout, HasDragCaption {
@@ -91,7 +93,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             treeHandler.accept(tree);
         });
 
-        if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
+        if (LIST.equals(widget.getWidgetViewType())) {
             initFilterButton(buttonsPanel);
         }
 
@@ -176,12 +178,12 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
                                     Pair::getSecond
                             )
                     );
-            if (WidgetViewType.LIST.equals(widget.getWidgetViewType())) {
+            if (LIST.equals(widget.getWidgetViewType())) {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetListFrame");
                 replaceFilter(frame);
                 frame.getDsContext().refresh();
-            } else if (WidgetViewType.CHART.equals(widget.getWidgetViewType())) {
+            } else if (CHART.equals(widget.getWidgetViewType())) {
                 ReportOutputDocument document = reportGuiManager.getReportResult(widget.getReport(), params, null);
 
                 HashMap<String, Object> screenParams = new HashMap<>();
@@ -195,6 +197,8 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
             } else {
                 frame = windowManager.openFrame(parentFrame, null, windowInfo, params);
                 frame.setId("widgetCommonFrame");
+                frame.setWidth("100%");
+                frame.setHeight("100%");
                 frame.getDsContext().refresh();
             }
         } else {

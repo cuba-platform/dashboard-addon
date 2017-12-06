@@ -767,6 +767,7 @@ public class DashboardFrame extends AbstractFrame {
 
                     framePanel.setWidgetCaption(widgetModel.getCaption());
                     framePanel.setWidgetIcon(widgetModel.getIcon());
+                    framePanel.setWeight(widgetModel.getWeight());
                     framePanel.setTemplateWidget(
                             dashboardTools.getWidget(
                                     widgetModel.getTemplateWidgetId()

@@ -14,11 +14,14 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FieldGroup;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.DsContext;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -47,6 +50,21 @@ public class WidgetParameterEdit extends AbstractEditor<WidgetParameter> {
 
         item.setParameterType(WidgetParameterType.STRING);
         item.setInputType(ParameterInputType.INPUT);
+
+        setOrderNum(item);
+    }
+
+    protected void setOrderNum(WidgetParameter item) {
+        DsContext parentDs = getDsContext().getParent();
+        if (parentDs == null) {
+            item.setOrderNum(1);
+            return;
+        }
+
+        CollectionDatasource datasource = (CollectionDatasource) parentDs.get("widgetParametersDs");
+        if (datasource != null) {
+            item.setOrderNum(datasource.size() + 1);
+        }
     }
 
     @Override

@@ -12,18 +12,24 @@
             <collectionDatasource id="widgetParametersDs" property="parameters"/>
         </datasource>
     </dsContext>
-    <dialogMode height="600"
-                width="600"/>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardWidgetDs">
             <column width="450px">
-                <field id="widgetId" property="widgetId"/>
-                <field id="caption" property="caption"/>
-                <field id="icon" property="icon"/>
-                <field id="description" property="description"/>
-                <field id="widgetViewType" property="widgetViewType"
+                <field id="widgetId"
+                       property="widgetId"/>
+                <field id="caption"
+                       property="caption"/>
+                <field id="icon"
+                       property="icon"/>
+                <field id="description"
+                       property="description"/>
+                <field id="widgetViewType"
+                       property="widgetViewType"
+                       custom="true"
                        required="true"/>
                 <field id="entityTypeField"
                        property="entityType"
@@ -36,24 +42,46 @@
                        custom="true"/>
             </column>
         </fieldGroup>
-        <table id="parametersTable" width="100%" height="250px">
+        <table id="parametersTable" width="550px" height="250px">
             <actions>
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="up"
+                        icon="font-icon:ARROW_UP"
+                        invoke="parameterUp"
+                        trackSelection="true"/>
+                <action id="down"
+                        icon="font-icon:ARROW_DOWN"
+                        invoke="parameterDown"
+                        trackSelection="true"/>
             </actions>
             <columns>
-                <column id="name"/>
-                <column id="alias"/>
-                <column id="parameterType"/>
-                <column id="referenceToEntity.metaClassName"/>
-                <column id="referenceToEntity.viewName"/>
+                <column id="orderNum"
+                        visible="false"/>
+                <column id="name"
+                        sortable="false"/>
+                <column id="alias"
+                        sortable="false"/>
+                <column id="parameterType"
+                        sortable="false"/>
+                <column id="referenceToEntity.metaClassName"
+                        sortable="false"/>
+                <column id="referenceToEntity.viewName"
+                        sortable="false"/>
             </columns>
             <rows datasource="widgetParametersDs"/>
             <buttonsPanel>
-                <button id="btnCreate" action="parametersTable.create"/>
-                <button id="btnEdit" action="parametersTable.edit"/>
-                <button id="btnRemove" action="parametersTable.remove"/>
+                <button id="btnCreate"
+                        action="parametersTable.create"/>
+                <button id="btnEdit"
+                        action="parametersTable.edit"/>
+                <button id="btnRemove"
+                        action="parametersTable.remove"/>
+                <button id="btnUp"
+                        action="parametersTable.up"/>
+                <button id="btnDown"
+                        action="parametersTable.down"/>
             </buttonsPanel>
         </table>
         <hbox id="windowActions"
