@@ -5,18 +5,17 @@ package com.audimex.dashboard.web.dashboard;
 
 import com.audimex.dashboard.entity.Dashboard;
 import com.audimex.dashboard.web.model.DashboardModel;
+import com.audimex.dashboard.web.tools.DashboardTools;
 import com.google.gson.Gson;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractEditor;
-import com.haulmont.cuba.gui.components.FieldGroup;
-import com.haulmont.cuba.gui.components.LookupField;
-import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
+import org.apache.commons.lang.BooleanUtils;
 
 import javax.inject.Inject;
 import java.util.LinkedHashMap;
@@ -58,6 +57,12 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected LookupField metaLookupField;
 
+    @Inject
+    protected CheckBox showMainRefreshButton;
+
+    @Inject
+    protected CheckBox showWidgetsRefreshButtons;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -71,9 +76,17 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         Map<String, Object> metaClasses = new LinkedHashMap<>();
         metadata.getTools().getAllPersistentMetaClasses()
                 .forEach(metaClass ->
-                        metaClasses.put(metaClass.getJavaClass().getSimpleName(), metaClass.getName())
+                        metaClasses.put(
+                                metaClass.getJavaClass()
+                                        .getSimpleName(),
+                                metaClass.getName()
+                        )
                 );
         metaLookupField.setOptionsMap(metaClasses);
+
+
+        setMainButtonRefreshShowingListener();
+        setWidgetsButtonsRefreshShowingListener();
     }
 
     @Override
@@ -110,5 +123,33 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         getItem().setUser(userSession.getUser());
 
         return super.preCommit();
+    }
+
+    protected void setMainButtonRefreshShowingListener() {
+        showMainRefreshButton.addValueChangeListener(e ->
+                showMainRefreshButton((Boolean) e.getValue())
+        );
+    }
+
+    protected void setWidgetsButtonsRefreshShowingListener() {
+        showWidgetsRefreshButtons.addValueChangeListener(e ->
+                showWidgetsRefreshButtons((Boolean) e.getValue())
+        );
+    }
+
+    protected void showMainRefreshButton(Boolean isShowing) {
+        dashboardDesignerVBox.removeStyleName(DashboardTools.AMXD_MAIN_LAYOUT_CONTROLS_SHOW);
+
+        if (BooleanUtils.isTrue(isShowing)) {
+            dashboardDesignerVBox.addStyleName(DashboardTools.AMXD_MAIN_LAYOUT_CONTROLS_SHOW);
+        }
+    }
+
+    protected void showWidgetsRefreshButtons(Boolean isShowing) {
+        dashboardDesignerVBox.removeStyleName(DashboardTools.AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW);
+
+        if (BooleanUtils.isTrue(isShowing)) {
+            dashboardDesignerVBox.addStyleName(DashboardTools.AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW);
+        }
     }
 }

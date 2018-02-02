@@ -37,8 +37,12 @@ public class DashboardTools {
     public static final String AMXD_SHADOW_BORDER = "amxd-shadow-border";
     public static final String AMXD_GRID_CELL_SHADOW_BORDER = "amxd-grid-cell-shadow-border";
     public static final String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
+    public static final String AMXD_MAIN_LAYOUT_CONTROLS_SHOW = "amxd-main-layout-controls-show";
+    public static final String AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW = "amxd-widgets-layout-controls-show";
     public static final String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     public static final String AMXD_NOT_AVAILABLE = "amxd-not-available";
+    public static final String AMXD_EDIT_BUTTON = "amxd-edit-button";
+    public static final String AMXD_VIEW_BUTTON = "amxd-view-button";
 
     public static final String COMMON = "COMMON";
     public static final String LIST = "LIST";

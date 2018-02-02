@@ -29,6 +29,18 @@
                        custom="true"/>
             </column>
         </fieldGroup>
+        <hbox id="buttonBox"
+              spacing="true">
+            <checkBox id="showMainRefreshButton"
+                      datasource="dashboardDs"
+                      property="showMainRefreshButton"
+                      caption="msg://checkbox.caption.showMainRefreshButton"/>
+            <checkBox id="showWidgetsRefreshButtons"
+                      align="MIDDLE_LEFT"
+                      datasource="dashboardDs"
+                      property="showWidgetsRefreshButtons"
+                      caption="msg://checkbox.caption.showWidgetsRefreshButtons"/>
+        </hbox>
         <vbox id="dashboardDesignerVBox"/>
         <frame id="windowActions"
                screen="extendedEditWindowActions"/>

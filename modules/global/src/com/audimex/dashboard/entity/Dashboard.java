@@ -39,6 +39,29 @@ public class Dashboard extends StandardEntity {
     @Column(name = "ENTITY_TYPE")
     protected String entityType;
 
+    @Column(name = "SHOW_MAIN_REFRESH_BUTTON")
+    protected Boolean showMainRefreshButton;
+
+    @Column(name = "SHOW_WIDGETS_REFRESH_BUTTONS")
+    protected Boolean showWidgetsRefreshButtons;
+
+    public void setShowMainRefreshButton(Boolean showMainRefreshButton) {
+        this.showMainRefreshButton = showMainRefreshButton;
+    }
+
+    public Boolean getShowMainRefreshButton() {
+        return showMainRefreshButton;
+    }
+
+    public void setShowWidgetsRefreshButtons(Boolean showWidgetsRefreshButtons) {
+        this.showWidgetsRefreshButtons = showWidgetsRefreshButtons;
+    }
+
+    public Boolean getShowWidgetsRefreshButtons() {
+        return showWidgetsRefreshButtons;
+    }
+
+
     public void setWidgetLinks(List<DashboardWidgetLink> widgetLinks) {
         this.widgetLinks = widgetLinks;
     }

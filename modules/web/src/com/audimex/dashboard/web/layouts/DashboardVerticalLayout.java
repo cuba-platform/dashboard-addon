@@ -45,6 +45,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
 
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
+        configButton.addStyleName("amxd-edit-button");
         configButton.addClickListener(event -> {
             Map<String, Object> params = new HashMap<>();
             params.put("widget", this);
@@ -56,6 +57,7 @@ public class DashboardVerticalLayout extends CssLayout implements HasMainLayout,
             windowManager.openWindow(windowInfo, WindowManager.OpenType.DIALOG, params);
         });
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
+        removeButton.addStyleName("amxd-edit-button");
         removeButton.addClickListener(event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);

@@ -13,6 +13,8 @@ create table AMXD_DASHBOARD (
     TITLE varchar(255),
     MODEL text,
     ENTITY_TYPE varchar(255),
+    SHOW_MAIN_REFRESH_BUTTON boolean,
+    SHOW_WIDGETS_REFRESH_BUTTONS boolean,
     --
     primary key (ID)
 )^

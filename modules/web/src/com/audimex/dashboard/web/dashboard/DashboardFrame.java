@@ -45,6 +45,7 @@ import fi.jasoft.dragdroplayouts.DDCssLayout;
 import fi.jasoft.dragdroplayouts.DragCaption;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
+import org.apache.commons.lang.BooleanUtils;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -72,6 +73,9 @@ public class DashboardFrame extends AbstractFrame {
     protected VBoxLayout containers;
 
     @Inject
+    protected HBoxLayout mainLayout;
+
+    @Inject
     protected VBoxLayout dropLayout;
 
     @Inject
@@ -82,6 +86,12 @@ public class DashboardFrame extends AbstractFrame {
 
     @Inject
     protected SplitPanel palette;
+
+    @Inject
+    protected CheckBox btnShowMainRefresh;
+
+    @Inject
+    protected CheckBox btnShowWidgetsRefresh;
 
     @Inject
     protected DashboardSettings dashboardSettings;
@@ -218,7 +228,26 @@ public class DashboardFrame extends AbstractFrame {
 
         convertToTree();
         enableViewMode();
+        showMainRefreshButton(dashboard.getShowMainRefreshButton());
+        showWidgetsRefreshButtons(dashboard.getShowWidgetsRefreshButtons());
     }
+
+    protected void showMainRefreshButton(Boolean isShowing) {
+        getParent().removeStyleName(DashboardTools.AMXD_MAIN_LAYOUT_CONTROLS_SHOW);
+
+        if (BooleanUtils.isTrue(isShowing)) {
+            getParent().addStyleName(DashboardTools.AMXD_MAIN_LAYOUT_CONTROLS_SHOW);
+        }
+    }
+
+    protected void showWidgetsRefreshButtons(Boolean isShowing) {
+        getParent().removeStyleName(DashboardTools.AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW);
+
+        if (BooleanUtils.isTrue(isShowing)) {
+            getParent().addStyleName(DashboardTools.AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW);
+        }
+    }
+
 
     protected void addTreeValueChangeListener() {
         tree.addValueChangeListener(e -> {
@@ -438,7 +467,7 @@ public class DashboardFrame extends AbstractFrame {
 
                 for (int i = 0; i < gridLayout.getRows(); i++) {
                     for (int j = 0; j < gridLayout.getColumns(); j++) {
-                        com.vaadin.ui.Component innerComponent = gridLayout.getComponent(j, i);
+                        Component innerComponent = gridLayout.getComponent(j, i);
                         if (innerComponent != null && innerComponent instanceof GridCell) {
                             gridLayout.removeComponent(j, i);
                             tree.removeItem(innerComponent);
@@ -818,6 +847,47 @@ public class DashboardFrame extends AbstractFrame {
             }
 
             idx++;
+        }
+    }
+
+    public void refreshAll() {
+        refreshWidgets(rootDashboardPanel);
+    }
+
+    protected void refreshWidgets(Object parent) {
+        Collection<?> children = tree.getChildren(parent);
+        if (children != null) {
+            for (Object child : children) {
+                if (child instanceof FramePanel) {
+                    FramePanel framePanel = (FramePanel) child;
+                    framePanel.refreshWidget();
+                }
+
+                if (tree.getChildren(child) != null) {
+                    refreshWidgets(child);
+                }
+            }
+        }
+    }
+
+    public void refreshWidget(String widgetId) {
+        refreshWidgets(rootDashboardPanel, widgetId);
+    }
+
+    protected void refreshWidgets(Object parent, String widgetId) {
+        Collection<?> children = tree.getChildren(parent);
+        if (children != null) {
+            for (Object child : children) {
+                if (child instanceof FramePanel &&
+                        ((FramePanel) child).getWidget().getWidgetId().equals(widgetId)) {
+                    FramePanel framePanel = (FramePanel) child;
+                    framePanel.refreshWidget();
+                }
+
+                if (tree.getChildren(child) != null) {
+                    refreshWidgets(child);
+                }
+            }
         }
     }
 }

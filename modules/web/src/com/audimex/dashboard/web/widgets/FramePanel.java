@@ -87,11 +87,17 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
         HorizontalLayout buttonsPanel = new HorizontalLayout();
         Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
         configButton.addClickListener(event -> showConfigWindow());
+        configButton.addStyleName(DashboardTools.AMXD_EDIT_BUTTON);
         Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         removeButton.addClickListener((Button.ClickListener) event -> {
             dashboardTools.removeComponent(tree, tree.getValue());
             treeHandler.accept(tree);
         });
+        removeButton.addStyleName(DashboardTools.AMXD_EDIT_BUTTON);
+
+        Button refreshButton = new Button(WebComponentsHelper.getIcon("font-icon:RECYCLE"));
+        refreshButton.addStyleName(DashboardTools.AMXD_VIEW_BUTTON);
+        refreshButton.addClickListener(e -> refreshWidget());
 
         if (LIST.equals(widget.getWidgetViewType())) {
             initFilterButton(buttonsPanel);
@@ -99,6 +105,7 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);
+        buttonsPanel.addComponent(refreshButton);
         buttonsPanel.addStyleName(DashboardTools.AMXD_LAYOUT_CONTROLS);
 
         contentLayout.setSizeFull();
@@ -389,5 +396,9 @@ public class FramePanel extends CssLayout implements HasWeight, HasGridSpan, Has
 
     public void setTemplateWidget(DashboardWidget templateWidget) {
         this.templateWidget = templateWidget;
+    }
+
+    public void refreshWidget() {
+        initContent();
     }
 }

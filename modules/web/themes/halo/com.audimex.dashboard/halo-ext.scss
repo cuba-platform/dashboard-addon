@@ -89,14 +89,18 @@
         border-bottom-left-radius: 5px;
         opacity: 0.7;
         z-index: 10;
-        display: none;
-    }
-
-    .amxd-tree-selected > .amxd-layout-controls {
         display: inline-block;
     }
 
-    .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls {
+    .amxd-layout-controls .amxd-edit-button {
+        display: none;
+    }
+
+    .amxd-tree-selected > .amxd-layout-controls .amxd-edit-button {
+        display: inline-block;
+    }
+
+    .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls .amxd-edit-button {
         display: none;
     }
 
@@ -105,6 +109,35 @@
     }
 
     .amxd-layout-controls .v-button {
+        color: white;
+        border: none;
+        box-shadow: none;
+        background: none;
+    }
+
+    .amxd-layout-controls .amxd-view-button {
+        display: none;
+    }
+
+    .amxd-widgets-layout-controls-show .amxd-layout-controls .amxd-view-button {
+        display: inline-block;
+    }
+
+    .amxd-main-layout-controls {
+        position: absolute;
+        left: 0;
+        background: black;
+        border-bottom-right-radius: 5px;
+        opacity: 0.7;
+        z-index: 10;
+        display: none;
+    }
+
+    .amxd-main-layout-controls-show .amxd-main-layout-controls {
+        display: inline-block;
+    }
+
+    .amxd-main-layout-controls .v-button {
         color: white;
         border: none;
         box-shadow: none;
