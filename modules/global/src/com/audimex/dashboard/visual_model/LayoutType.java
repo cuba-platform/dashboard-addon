@@ -1,26 +1,25 @@
 /*
- * Copyright (c) 2016-2017 Haulmont. All rights reserved.
+ * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.entity;
+package com.audimex.dashboard.visual_model;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 import javax.annotation.Nullable;
 
 
-public enum WidgetType implements EnumClass<String> {
+public enum LayoutType implements EnumClass<String> {
 
     VERTICAL_LAYOUT("VERTICAL_LAYOUT"),
     HORIZONTAL_LAYOUT("HORIZONTAL_LAYOUT"),
     GRID_LAYOUT("GRID_LAYOUT"),
-    FRAME_PANEL("FRAME_PANEL"),
-    GRID_CELL("GRID_CELL"),
-    GRID_ROW("GRID_ROW");
+    GRID_AREA("GRID_AREA"),
+    FRAME_PANEL("FRAME_PANEL");
 
     private String id;
 
-    WidgetType(String value) {
+    LayoutType(String value) {
         this.id = value;
     }
 
@@ -29,8 +28,8 @@ public enum WidgetType implements EnumClass<String> {
     }
 
     @Nullable
-    public static WidgetType fromId(String id) {
-        for (WidgetType at : WidgetType.values()) {
+    public static LayoutType fromId(String id) {
+        for (LayoutType at : LayoutType.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

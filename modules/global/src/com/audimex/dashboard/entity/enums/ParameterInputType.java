@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2016-2017 Haulmont. All rights reserved.
+ * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.entity;
+package com.audimex.dashboard.entity.enums;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 

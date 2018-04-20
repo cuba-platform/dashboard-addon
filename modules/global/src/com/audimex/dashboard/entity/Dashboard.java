@@ -3,15 +3,12 @@
  */
 package com.audimex.dashboard.entity;
 
-import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import com.haulmont.cuba.security.entity.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @NamePattern("%s|title")
@@ -20,85 +17,54 @@ import java.util.List;
 public class Dashboard extends StandardEntity {
     private static final long serialVersionUID = 8876942042181481797L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    protected User user;
-
     @Column(name = "TITLE")
     protected String title;
 
     @Lob
-    @Column(name = "MODEL")
-    protected String model;
+    @Column(name = "VISUAL_MODEL")
+    protected String visualModel;
 
-    @Composition
+    @Column(name = "IS_TEMPLATE")
+    protected Boolean isTemplate;
+
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "dashboard")
-    protected List<DashboardWidgetLink> widgetLinks;
+    protected List<Widget> widgets;
 
-    @Column(name = "ENTITY_TYPE")
-    protected String entityType;
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "dashboard")
+    protected List<Parameter> parameters;
 
-    @Column(name = "SHOW_MAIN_REFRESH_BUTTON")
-    protected Boolean showMainRefreshButton;
-
-    @Column(name = "SHOW_WIDGETS_REFRESH_BUTTONS")
-    protected Boolean showWidgetsRefreshButtons;
-
-    public void setShowMainRefreshButton(Boolean showMainRefreshButton) {
-        this.showMainRefreshButton = showMainRefreshButton;
+    public void setWidgets(List<Widget> widgets) {
+        this.widgets = widgets;
     }
 
-    public Boolean getShowMainRefreshButton() {
-        return showMainRefreshButton;
+    public List<Widget> getWidgets() {
+        return widgets;
     }
 
-    public void setShowWidgetsRefreshButtons(Boolean showWidgetsRefreshButtons) {
-        this.showWidgetsRefreshButtons = showWidgetsRefreshButtons;
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
     }
 
-    public Boolean getShowWidgetsRefreshButtons() {
-        return showWidgetsRefreshButtons;
+    public List<Parameter> getParameters() {
+        return parameters;
     }
 
-
-    public void setWidgetLinks(List<DashboardWidgetLink> widgetLinks) {
-        this.widgetLinks = widgetLinks;
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
     }
 
-    public void addWidgetLink(DashboardWidgetLink widgetLink) {
-        if (widgetLinks == null) {
-            widgetLinks = new ArrayList<>();
-        }
-        widgetLinks.add(widgetLink);
+    public Boolean getIsTemplate() {
+        return isTemplate;
     }
 
-    public void removeWidgetLink(DashboardWidgetLink widgetLink) {
-        if (widgetLinks == null) {
-            widgetLinks = new ArrayList<>();
-        }
-        widgetLinks.remove(widgetLink);
+    public void setVisualModel(String visualModel) {
+        this.visualModel = visualModel;
     }
 
-    public List<DashboardWidgetLink> getWidgetLinks() {
-        return widgetLinks;
-    }
-
-    public void setEntityType(String entityType) {
-        this.entityType = entityType;
-    }
-
-    public String getEntityType() {
-        return entityType;
-    }
-
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
+    public String getVisualModel() {
+        return visualModel;
     }
 
     public void setTitle(String title) {
@@ -108,14 +74,4 @@ public class Dashboard extends StandardEntity {
     public String getTitle() {
         return title;
     }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-
 }

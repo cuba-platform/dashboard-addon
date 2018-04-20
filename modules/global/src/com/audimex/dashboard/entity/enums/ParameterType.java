@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2016-2017 Haulmont. All rights reserved.
+ * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.entity;
+package com.audimex.dashboard.entity.enums;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 import javax.annotation.Nullable;
 
 
-public enum WidgetParameterType implements EnumClass<Integer> {
+public enum ParameterType implements EnumClass<Integer> {
 
     ENTITY(10),
     LIST_ENTITY(20),
@@ -22,7 +22,7 @@ public enum WidgetParameterType implements EnumClass<Integer> {
 
     private Integer id;
 
-    WidgetParameterType(Integer value) {
+    ParameterType(Integer value) {
         this.id = value;
     }
 
@@ -31,8 +31,8 @@ public enum WidgetParameterType implements EnumClass<Integer> {
     }
 
     @Nullable
-    public static WidgetParameterType fromId(Integer id) {
-        for (WidgetParameterType at : WidgetParameterType.values()) {
+    public static ParameterType fromId(Integer id) {
+        for (ParameterType at : ParameterType.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

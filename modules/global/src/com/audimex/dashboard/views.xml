@@ -3,69 +3,29 @@
     <view class="com.audimex.dashboard.entity.Dashboard"
           extends="_local"
           name="dashboard-view">
-        <property name="user"
-                  view="_minimal"/>
-        <property name="widgetLinks"
-                  view="_local"/>
     </view>
-    <view class="com.audimex.dashboard.entity.WidgetParameter"
+    <view class="com.audimex.dashboard.entity.Parameter"
           extends="_local"
           name="widgetParameter-view">
-        <property name="dashboardWidgetLink"
-                  view="_minimal"/>
-        <property name="listParameters"
-                  view="_minimal"/>
-        <property name="referenceToEntity"
-                  view="_local"/>
-        <property name="additionalParameters"
-                  view="_minimal"/>
     </view>
-    <view class="com.audimex.dashboard.entity.WidgetParameter"
+    <view class="com.audimex.dashboard.entity.Parameter"
           extends="_local"
           name="master-widgetParameter-view">
-        <property name="dashboardWidget"
+        <property name="widget"
                   view="_minimal"/>
-        <property name="listParameters"
-                  view="slave-widgetParameter-view"/>
-        <property name="referenceToEntity"
+        <property name="stringParameter"
                   view="_local"/>
-        <property name="additionalParameters"
-                  view="_minimal"/>
     </view>
-    <view class="com.audimex.dashboard.entity.WidgetParameter"
+    <view class="com.audimex.dashboard.entity.Parameter"
           extends="_local"
           name="slave-widgetParameter-view">
-        <property name="dashboardWidget"
-                  view="_minimal"/>
-        <property name="referenceToEntity"
-                  view="_local"/>
-        <property name="additionalParameters"
+        <property name="widget"
                   view="_minimal"/>
     </view>
-    <view class="com.audimex.dashboard.entity.DashboardWidget"
+    <view class="com.audimex.dashboard.entity.Widget"
           extends="_local"
           name="dashboardWidget-view">
-        <property name="report"
-                  view="report.view"/>
-        <property name="dashboardLinks"
-                  view="_local">
-            <property name="dashboardParameters"
-                      view="_local">
-                <property name="referenceToEntity"
-                          view="_local"/>
-            </property>
-        </property>
         <property name="parameters"
                   view="master-widgetParameter-view"/>
-    </view>
-    <view class="com.audimex.dashboard.entity.DashboardWidgetLink"
-          extends="_local"
-          name="dashboardWidgetLink-view">
-        <property name="dashboard"
-                  view="_minimal"/>
-        <property name="dashboardWidget"
-                  view="_minimal"/>
-        <property name="dashboardParameters"
-                  view="widgetParameter-view"/>
     </view>
 </views>

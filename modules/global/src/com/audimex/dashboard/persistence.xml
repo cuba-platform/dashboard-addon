@@ -4,9 +4,15 @@
     <persistence-unit name="audimex-dashboards"
                       transaction-type="RESOURCE_LOCAL">
         <class>com.audimex.dashboard.entity.Dashboard</class>
-        <class>com.audimex.dashboard.entity.DashboardWidget</class>
-        <class>com.audimex.dashboard.entity.DashboardWidgetLink</class>
-        <class>com.audimex.dashboard.entity.WidgetParameter</class>
-        <class>com.audimex.dashboard.entity.ReferenceToEntity</class>
+        <class>com.audimex.dashboard.entity.Widget</class>
+        <class>com.audimex.dashboard.entity.Parameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.StringParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.EntityParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.ListEntityParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.DateParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.IntegerParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.DecimalParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.BooleanParameter</class>
+        <class>com.audimex.dashboard.entity.parameter_types.LongParameter</class>
     </persistence-unit>
 </persistence>
