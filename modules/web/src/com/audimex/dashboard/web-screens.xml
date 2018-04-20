@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <include file="com/audimex/dashboard/screens.xml"/>
-    <screen id="dashboard-frame"
-            template="com/audimex/dashboard/web/dashboard/dashboard-frame.xml"/>
-    <screen id="amxd$widgetConfigWindow"
-            template="com/audimex/dashboard/web/screens/widget-config-window.xml"/>
-    <screen id="amxd$Dashboard.browse"
-            template="com/audimex/dashboard/web/dashboard/dashboard-browse.xml"/>
-    <screen id="amxd$Dashboard.edit"
-            template="com/audimex/dashboard/web/dashboard/dashboard-edit.xml"/>
-    <screen id="amxd$DashboardWidget.browse"
-            template="com/audimex/dashboard/web/dashboardwidget/dashboard-widget-browse.xml"/>
-    <screen id="amxd$DashboardWidget.edit"
-            template="com/audimex/dashboard/web/dashboardwidget/dashboard-widget-edit.xml"/>
-    <screen id="amxd$WidgetParameter.edit"
-            template="com/audimex/dashboard/web/widgetparameter/widget-parameter-edit.xml"/>
-    <screen id="amxd$UndefinedParameters.frame"
-            template="com/audimex/dashboard/web/widgets/frames/undefined-parameters-frame.xml"/>
-    <screen id="amxd$Empty.frame"
-            template="com/audimex/dashboard/web/widgets/frames/empty-frame.xml"/>
-    <screen id="amxd$Lookup.frame"
-            template="com/audimex/dashboard/web/screens/frames/lookup-frame.xml"/>
-    <screen id="amxd$ShowChartController.frame"
-            template="com/audimex/dashboard/web/widgets/chart/show-chart.xml"/>
 </screen-config>

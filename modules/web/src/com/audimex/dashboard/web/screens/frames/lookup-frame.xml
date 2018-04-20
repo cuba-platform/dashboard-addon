@@ -1,6 +1,0 @@
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.screens.frames.LookupFrame">
-    <dsContext/>
-    <layout>
-    </layout>
-</window>
