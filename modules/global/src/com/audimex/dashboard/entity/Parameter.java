@@ -10,6 +10,14 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
 
+import com.audimex.dashboard.entity.enums.ParameterType;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import static com.audimex.dashboard.entity.enums.ParameterType.*;
+
 @NamePattern("%s|name")
 @Table(name = "AMXD_PARAMETER")
 @Entity(name = "amxd$Parameter")
@@ -31,32 +39,25 @@ public class Parameter extends StandardEntity {
     @Column(name = "INPUT_TYPE")
     protected Integer inputType;
 
+    @Column(name = "PARAMETER_TYPE")
+    protected Integer parameterType;
+
     @Embedded
     protected EntityParameter entityParameter;
     @Embedded
     protected ListEntityParameter listEntityParameter;
-    @AttributeOverrides({
-        @AttributeOverride(name = "dateValue", column = @Column(name = "DATE_PARAMETER_DATE_VALUE"))
-    })
     @Embedded
     protected DateParameter dateParameter;
-    @AttributeOverrides({
-        @AttributeOverride(name = "integerValue", column = @Column(name = "INTEGER_PARAMETER_INTEGER_VALUE"))
-    })
     @Embedded
     protected IntegerParameter integerParameter;
     @Embedded
     protected StringParameter stringParameter;
-    @AttributeOverrides({
-        @AttributeOverride(name = "decimalValue", column = @Column(name = "DECIMAL_PARAMETER_DECIMAL_VALUE"))
-    })
     @Embedded
     protected DecimalParameter decimalParameter;
     @Embedded
     protected BooleanParameter booleanParameter;
     @Embedded
     protected LongParameter longParameter;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DASHBOARD_ID")
@@ -66,69 +67,61 @@ public class Parameter extends StandardEntity {
     @JoinColumn(name = "WIDGET_ID")
     protected Widget widget;
 
-    public EntityParameter getEntityParameter() {
-        return entityParameter;
+    public Object getParameter() {
+        switch (getParameterType()) {
+            case BOOLEAN:
+                return booleanParameter.getBooleanValue();
+            case DATE:
+                return dateParameter.getDateValue();
+            case DECIMAL:
+                return decimalParameter.getDecimalValue();
+            case ENTITY:
+                return entityParameter;
+            case INTEGER:
+                return integerParameter.getIntegerValue();
+            case LIST_ENTITY:
+                return listEntityParameter;
+            case LONG:
+                return longParameter.getLongValue();
+            case STRING:
+                return stringParameter.getStringValue();
+            case UNDEFINED:
+            default:
+                return null;
+        }
     }
 
-    public void setEntityParameter(EntityParameter entityParameter) {
-        this.entityParameter = entityParameter;
+    public void setParameter(Object value) {
+        if (value instanceof Boolean) {
+            setParameterType(BOOLEAN);
+            booleanParameter.setBooleanValue((Boolean) value);
+        } else if (value instanceof Date) {
+            setParameterType(DATE);
+            dateParameter.setDateValue((Date) value);
+        } else if (value instanceof BigDecimal) {
+            setParameterType(DECIMAL);
+            decimalParameter.setDecimalValue((BigDecimal) value);
+        } else if (value instanceof EntityParameter) {
+            setParameterType(ENTITY);
+            //todo add parametr
+        } else if (value instanceof Integer) {
+            setParameterType(INTEGER);
+            integerParameter.setIntegerValue((Integer) value);
+        } else if (value instanceof ListEntityParameter) {
+            setParameterType(LIST_ENTITY);
+            //todo add parametr
+        } else if (value instanceof Long) {
+            setParameterType(LONG);
+            longParameter.setLongValue((Long) value);
+        } else if (value instanceof String) {
+            setParameterType(STRING);
+            stringParameter.setStringValue((String) value);
+        } else {
+            setParameterType(UNDEFINED);
+        }
     }
 
-    public ListEntityParameter getListEntityParameter() {
-        return listEntityParameter;
-    }
 
-    public void setListEntityParameter(ListEntityParameter listEntityParameter) {
-        this.listEntityParameter = listEntityParameter;
-    }
-
-    public DateParameter getDateParameter() {
-        return dateParameter;
-    }
-
-    public void setDateParameter(DateParameter dateParameter) {
-        this.dateParameter = dateParameter;
-    }
-
-    public IntegerParameter getIntegerParameter() {
-        return integerParameter;
-    }
-
-    public void setIntegerParameter(IntegerParameter integerParameter) {
-        this.integerParameter = integerParameter;
-    }
-
-    public StringParameter getStringParameter() {
-        return stringParameter;
-    }
-
-    public void setStringParameter(StringParameter stringParameter) {
-        this.stringParameter = stringParameter;
-    }
-
-    public DecimalParameter getDecimalParameter() {
-        return decimalParameter;
-    }
-
-    public void setDecimalParameter(DecimalParameter decimalParameter) {
-        this.decimalParameter = decimalParameter;
-    }
-
-    public BooleanParameter getBooleanParameter() {
-        return booleanParameter;
-    }
-
-    public void setBooleanParameter(BooleanParameter booleanParameter) {
-        this.booleanParameter = booleanParameter;
-    }
-
-    public LongParameter getLongParameter() {
-        return longParameter;
-    }
-
-    public void setLongParameter(LongParameter longParameter) {
-        this.longParameter = longParameter;
-    }
 
     public String getName() {
         return name;
@@ -176,6 +169,14 @@ public class Parameter extends StandardEntity {
 
     public ParameterInputType getInputType() {
         return inputType == null ? null : ParameterInputType.fromId(inputType);
+    }
+
+    public ParameterType getParameterType() {
+        return parameterType == null ? ParameterType.UNDEFINED : ParameterType.fromId(parameterType);
+    }
+
+    protected void setParameterType(ParameterType type) {
+        parameterType = type == null ? ParameterType.UNDEFINED.getId() : type.getId();
     }
 
     public void setAlias(String alias) {
