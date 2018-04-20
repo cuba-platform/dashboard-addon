@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <include file="com/audimex/dashboard/screens.xml"/>
-    <!--components-->
+    <!--dashboard components-->
     <screen id="widgets-palette"
             template="com/audimex/dashboard/web/dashboard/components/widgets-palette.xml"/>
+    <!--widget-->
+    <screen id="amxd$Widget.browse"
+            template="com/audimex/dashboard/web/widget/widget-browse.xml"/>
+    <screen id="amxd$Widget.edit"
+            template="com/audimex/dashboard/web/widget/widget-edit.xml"/>
 </screen-config>
