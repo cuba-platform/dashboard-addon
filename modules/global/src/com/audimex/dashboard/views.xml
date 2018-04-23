@@ -1,24 +1,3 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <view class="com.audimex.dashboard.entity.Dashboard"
-          extends="_local"
-          name="dashboard-view">
-    </view>
-    <view class="com.audimex.dashboard.entity.Widget"
-          extends="_local"
-          name="widget-params">
-        <property name="parameters" view="_local"/>
-    </view>
-    <view class="com.audimex.dashboard.entity.Parameter"
-          extends="_local"
-          name="parameter-with-values">
-        <property name="booleanParameter" view="_local"/>
-        <property name="dateParameter" view="_local"/>
-        <property name="decimalParameter" view="_local"/>
-        <property name="entityParameter" view="_local"/>
-        <property name="integerParameter" view="_local"/>
-        <property name="listEntityParameter" view="_local"/>
-        <property name="longParameter" view="_local"/>
-        <property name="stringParameter" view="_local"/>
-    </view>
 </views>

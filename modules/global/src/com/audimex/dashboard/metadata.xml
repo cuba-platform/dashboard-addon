@@ -2,5 +2,8 @@
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
     <metadata-model namespace="amxd"
                     root-package="com.audimex.dashboard">
+        <class>com.audimex.dashboard.model.Dashboard</class>
+        <class>com.audimex.dashboard.model.Widget</class>
+        <class>com.audimex.dashboard.model.Parameter</class>
     </metadata-model>
 </metadata>

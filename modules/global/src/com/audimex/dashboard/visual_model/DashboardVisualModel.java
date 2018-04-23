@@ -4,27 +4,22 @@
 
 package com.audimex.dashboard.visual_model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
-public class DashboardVisualModel implements Serializable {
-    protected String title;
-    protected List<DashboardLayout> layouts = new ArrayList<>();
+@MetaClass(name = "amxd$DashboardVisualModel")
+public class DashboardVisualModel extends BaseUuidEntity {
+    private static final long serialVersionUID = -3608201967546718634L;
 
-    public String getTitle() {
-        return title;
+    @MetaProperty
+    protected DashboardLayout layout;
+
+    public DashboardLayout getLayout() {
+        return layout;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<DashboardLayout> getLayouts() {
-        return layouts;
-    }
-
-    public void setLayouts(List<DashboardLayout> layouts) {
-        this.layouts = layouts;
+    public void setLayout(DashboardLayout layout) {
+        this.layout = layout;
     }
 }

@@ -4,16 +4,22 @@
 
 package com.audimex.dashboard.visual_model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
+
 import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
-public class DashboardLayout implements Serializable {
+@MetaClass(name = "amxd$DashboardLayout")
+public class DashboardLayout extends BaseUuidEntity {
+    private static final long serialVersionUID = -3608267237546718634L;
+
+    @MetaProperty
     protected UUID layoutId;
-    protected Integer weight = 1;
+    @MetaProperty
     protected String layoutType;
+    @MetaProperty
     protected LinkedList<DashboardLayout> children = new LinkedList<>();
 
     public UUID getLayoutId() {
@@ -22,14 +28,6 @@ public class DashboardLayout implements Serializable {
 
     public void setLayoutId(UUID layoutId) {
         this.layoutId = layoutId;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
     }
 
     public String getLayoutType() {

@@ -4,8 +4,16 @@
 
 package com.audimex.dashboard.visual_model;
 
+import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.chile.core.annotations.MetaProperty;
+
+@MetaClass(name = "amxd$GridLayout")
 public class GridLayout extends DashboardLayout {
+    private static final long serialVersionUID = 8357123234732258634L;
+
+    @MetaProperty
     protected Integer rows;
+    @MetaProperty
     protected Integer columns;
 
     public Integer getRows() {

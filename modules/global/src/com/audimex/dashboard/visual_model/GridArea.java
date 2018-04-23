@@ -4,11 +4,23 @@
 
 package com.audimex.dashboard.visual_model;
 
+
+import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.chile.core.annotations.MetaProperty;
+
+@MetaClass(name = "amxd$GridArea")
 public class GridArea extends DashboardLayout {
+    private static final long serialVersionUID = -3608267234732258634L;
+
+    @MetaProperty
     protected DashboardLayout component;
+    @MetaProperty
     protected Integer column1;
+    @MetaProperty
     protected Integer row1;
+    @MetaProperty
     protected Integer column2;
+    @MetaProperty
     protected Integer row2;
 
     public GridArea() {
