@@ -4,9 +4,7 @@
 
 package com.audimex.dashboard.model.param_types;
 
-import java.io.Serializable;
-
-public class EnumParameter implements Serializable {
+public class EnumParameter implements Value {
     protected String enumerationClass;
     protected String enumValue;
 

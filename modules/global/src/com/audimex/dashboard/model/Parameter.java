@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.model;
 
+import com.audimex.dashboard.model.param_types.Value;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
@@ -24,13 +25,13 @@ public class Parameter extends BaseUuidEntity {
     @MetaProperty
     protected String valueType;
     @MetaProperty
-    protected String value;
+    protected Value value;
 
-    public void setValue(String value) {
+    public void setValue(Value value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public Value getValue() {
         return value;
     }
 

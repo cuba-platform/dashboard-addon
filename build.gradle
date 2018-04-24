@@ -1,4 +1,3 @@
-
 buildscript {
     ext.cubaVersion = '6.7.3'
     repositories {
@@ -28,7 +27,7 @@ def globalModule = project(':dashboard-global')
 def coreModule = project(':dashboard-core')
 def guiModule = project(':dashboard-gui')
 def webModule = project(':dashboard-web')
-def webThemesModule= project(':dashboard-web-themes')
+def webThemesModule = project(':dashboard-web-themes')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
@@ -46,7 +45,8 @@ cuba {
         dir = "$project.rootDir/build/tomcat"
     }
     ide {
-        copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.''' // Copyright Notice for IDEA project  
+        copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.'''
+        // Copyright Notice for IDEA project
         vcs = 'Git'
     }
 }
@@ -64,9 +64,20 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'maven')
     apply(plugin: 'idea')
     apply(plugin: 'cuba')
+    apply(plugin: 'groovy')
+
+    sourceSets {
+        test {
+            groovy {
+                srcDirs = ['test']
+            }
+        }
+    }
 
     dependencies {
+        compile('org.codehaus.groovy:groovy-all:2.4.11')
         testCompile('junit:junit:4.12')
+        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
         compile('org.javatuples:javatuples:1.2')
     }
 
@@ -89,8 +100,6 @@ configure(globalModule) {
             attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
         }
     }
-    
-    
 }
 
 configure(coreModule) {
@@ -162,7 +171,7 @@ configure(webModule) {
         compile(guiModule)
 
     }
-    
+
     task webArchive(type: Zip) {
         from file("$buildDir/web")
         from file('web')

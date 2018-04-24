@@ -6,7 +6,7 @@ package com.audimex.dashboard.model.param_types;
 
 import java.util.List;
 
-public class ListEntitiesParameter {
+public class ListEntitiesParameter implements Value {
     protected List<EntityParameter> entityParameters;
 
     public List<EntityParameter> getEntityParameters() {

@@ -4,9 +4,7 @@
 
 package com.audimex.dashboard.model.param_types;
 
-import java.io.Serializable;
-
-public class EntityParameter implements Serializable {
+public class EntityParameter implements Value {
     protected String entityMetaClass;
     protected String entityId;
     protected String viewName;
