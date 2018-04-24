@@ -21,11 +21,17 @@ public class Parameter extends BaseUuidEntity {
     @MetaProperty
     protected String mappedAlias;
     @MetaProperty
-    protected String orderNum;
-    @MetaProperty
-    protected String valueType;
+    protected Integer orderNum;
     @MetaProperty
     protected Value value;
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
 
     public void setValue(Value value) {
         this.value = value;
@@ -33,14 +39,6 @@ public class Parameter extends BaseUuidEntity {
 
     public Value getValue() {
         return value;
-    }
-
-    public void setValueType(ParameterType valueType) {
-        this.valueType = valueType == null ? null : valueType.getId();
-    }
-
-    public ParameterType getValueType() {
-        return valueType == null ? null : ParameterType.fromId(valueType);
     }
 
     public void setName(String name) {
@@ -65,13 +63,5 @@ public class Parameter extends BaseUuidEntity {
 
     public String getMappedAlias() {
         return mappedAlias;
-    }
-
-    public void setOrderNum(String orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public String getOrderNum() {
-        return orderNum;
     }
 }

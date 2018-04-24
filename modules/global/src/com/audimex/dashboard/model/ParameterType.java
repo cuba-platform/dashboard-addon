@@ -11,7 +11,7 @@ public enum ParameterType implements EnumClass<String> {
 
     ENTITY("ENTITY"),
     LIST_ENTITY("LIST_ENTITY"),
-    ENUM("ENUM"),
+    ENUM_STRING("ENUM_STRING"),
     DATE("DATE"),
     DATETIME("DATETIME"),
     TIME("TIME"),

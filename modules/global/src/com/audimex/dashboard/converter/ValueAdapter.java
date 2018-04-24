@@ -10,8 +10,8 @@ import java.lang.reflect.Type;
 
 public class ValueAdapter implements JsonSerializer, JsonDeserializer {
 
-    protected static final String CLASSNAME = "CLASSNAME";
-    protected static final String DATA = "DATA";
+    protected static final String CLASSNAME = "className";
+    protected static final String DATA = "data";
 
     @Override
     public Object deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

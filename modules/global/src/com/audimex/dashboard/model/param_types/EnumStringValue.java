@@ -4,9 +4,9 @@
 
 package com.audimex.dashboard.model.param_types;
 
-public class EnumParameter implements Value {
+public class EnumStringValue implements Value {
     protected String enumerationClass;
-    protected String enumValue;
+    protected String enumStringValue;
 
     public String getEnumerationClass() {
         return enumerationClass;
@@ -16,11 +16,11 @@ public class EnumParameter implements Value {
         this.enumerationClass = enumerationClass;
     }
 
-    public String getEnumValue() {
-        return enumValue;
+    public String getEnumStringValue() {
+        return enumStringValue;
     }
 
-    public void setEnumValue(String enumValue) {
-        this.enumValue = enumValue;
+    public void setEnumStringValue(String enumStringValue) {
+        this.enumStringValue = enumStringValue;
     }
 }

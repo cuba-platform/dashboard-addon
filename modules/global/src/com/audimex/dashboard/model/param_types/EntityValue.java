@@ -4,7 +4,7 @@
 
 package com.audimex.dashboard.model.param_types;
 
-public class EntityParameter implements Value {
+public class EntityValue implements Value {
     protected String entityMetaClass;
     protected String entityId;
     protected String viewName;

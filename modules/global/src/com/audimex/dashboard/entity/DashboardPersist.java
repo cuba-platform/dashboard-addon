@@ -15,16 +15,17 @@ public class DashboardPersist extends StandardEntity {
     private static final long serialVersionUID = 3580405340289107373L;
 
     @Lob
-    @Column(name = "JSON_MODEL")
-    protected String jsonModel;
+    @Column(name = "DASHBOARD_MODEL")
+    protected String dashboardModel;
 
-    public void setJsonModel(String jsonModel) {
-        this.jsonModel = jsonModel;
+    public void setDashboardModel(String dashboardModel) {
+        this.dashboardModel = dashboardModel;
     }
 
-    public String getJsonModel() {
-        return jsonModel;
+    public String getDashboardModel() {
+        return dashboardModel;
     }
+
 
 
 }
