@@ -9,9 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.Lob;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
-@Table(name = "AMXD_WIDGET_PERSIST")
-@Entity(name = "amxd$WidgetPersist")
-public class WidgetPersist extends StandardEntity {
+@Table(name = "AMXD_WIDGET_TEMPLATE")
+@Entity(name = "amxd$WidgetTemplate")
+public class WidgetTemplate extends StandardEntity {
     private static final long serialVersionUID = -2121278399449430493L;
 
     @Lob

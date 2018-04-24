@@ -3,7 +3,7 @@
  */
 package com.audimex.dashboard.model;
 
-import com.audimex.dashboard.model.param_types.Value;
+import com.audimex.dashboard.model.param_value_types.Value;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;

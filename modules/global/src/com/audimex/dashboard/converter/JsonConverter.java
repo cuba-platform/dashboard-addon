@@ -7,7 +7,7 @@ package com.audimex.dashboard.converter;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.param_types.Value;
+import com.audimex.dashboard.model.param_value_types.Value;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.stereotype.Component;

@@ -5,9 +5,9 @@
 package com.audimex.dashboard.converter
 
 import com.audimex.dashboard.model.Parameter
-import com.audimex.dashboard.model.param_types.EntityValue
-import com.audimex.dashboard.model.param_types.EnumStringValue
-import com.audimex.dashboard.model.param_types.ListEntitiesValue
+import com.audimex.dashboard.model.param_value_types.EntityValue
+import com.audimex.dashboard.model.param_value_types.EnumStringValue
+import com.audimex.dashboard.model.param_value_types.ListEntitiesValue
 import spock.lang.Specification
 
 class JsonConverterTest extends Specification {
@@ -35,7 +35,7 @@ class JsonConverterTest extends Specification {
 
     def "test deserialization parameters"() {
         given:
-        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"value\":{\"className\":\"com.audimex.dashboard.model.param_types.EntityValue\",\"data\":{\"entityMetaClass\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
+        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"value\":{\"className\":\"com.audimex.dashboard.model.param_value_types.EntityValue\",\"data\":{\"entityMetaClass\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
 
         when:
         Parameter param = converter.parameterFromJson(json)

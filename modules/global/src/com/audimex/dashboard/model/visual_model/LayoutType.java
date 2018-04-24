@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.visual_model;
+package com.audimex.dashboard.model.visual_model;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 

@@ -8,7 +8,8 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.List;
-import com.audimex.dashboard.visual_model.DashboardVisualModel;
+
+import com.audimex.dashboard.model.visual_model.DashboardVisualModel;
 
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Dashboard")
@@ -21,7 +22,6 @@ public class Dashboard extends BaseUuidEntity {
     protected List<Widget> widgets;
     @MetaProperty
     protected DashboardVisualModel visualModel;
-
     @MetaProperty
     protected List<Parameter> parameters;
 
@@ -32,7 +32,6 @@ public class Dashboard extends BaseUuidEntity {
     public DashboardVisualModel getVisualModel() {
         return visualModel;
     }
-
 
     public List<Parameter> getParameters() {
         return parameters;
@@ -57,6 +56,5 @@ public class Dashboard extends BaseUuidEntity {
     public String getTitle() {
         return title;
     }
-
 
 }

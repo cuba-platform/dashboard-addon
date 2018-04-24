@@ -5,10 +5,10 @@
         <class>com.audimex.dashboard.model.Dashboard</class>
         <class>com.audimex.dashboard.model.Widget</class>
         <class>com.audimex.dashboard.model.Parameter</class>
-        <class>com.audimex.dashboard.visual_model.DashboardLayout</class>
-        <class>com.audimex.dashboard.visual_model.DashboardVisualModel</class>
-        <class>com.audimex.dashboard.visual_model.FramePanel</class>
-        <class>com.audimex.dashboard.visual_model.GridArea</class>
-        <class>com.audimex.dashboard.visual_model.GridLayout</class>
+        <class>com.audimex.dashboard.model.visual_model.DashboardLayout</class>
+        <class>com.audimex.dashboard.model.visual_model.DashboardVisualModel</class>
+        <class>com.audimex.dashboard.model.visual_model.FramePanel</class>
+        <class>com.audimex.dashboard.model.visual_model.GridArea</class>
+        <class>com.audimex.dashboard.model.visual_model.GridLayout</class>
     </metadata-model>
 </metadata>
