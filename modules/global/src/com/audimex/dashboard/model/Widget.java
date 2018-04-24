@@ -7,11 +7,12 @@ import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+
 import java.util.List;
 
 @NamePattern("%s|caption")
 @MetaClass(name = "amxd$Widget")
-public class Widget extends BaseUuidEntity  implements HasParameters {
+public class Widget extends BaseUuidEntity implements HasParameters {
     private static final long serialVersionUID = 2343551192474818297L;
 
     @MetaProperty

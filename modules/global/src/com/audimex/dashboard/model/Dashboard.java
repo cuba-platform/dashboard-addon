@@ -13,7 +13,7 @@ import com.audimex.dashboard.model.visual_model.DashboardVisualModel;
 
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Dashboard")
-public class Dashboard extends BaseUuidEntity {
+public class Dashboard extends BaseUuidEntity implements HasParameters {
     private static final long serialVersionUID = -3608201761546718634L;
 
     @MetaProperty
@@ -33,6 +33,7 @@ public class Dashboard extends BaseUuidEntity {
         return visualModel;
     }
 
+    @Override
     public List<Parameter> getParameters() {
         return parameters;
     }

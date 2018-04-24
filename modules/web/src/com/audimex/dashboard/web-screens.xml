@@ -4,6 +4,9 @@
     <!--dashboard components-->
     <screen id="widgets-palette"
             template="com/audimex/dashboard/web/dashboard/components/widgets-palette.xml"/>
+    <!--parameters-->
+    <screen id="amdx$Parameter.browse"
+            template="com/audimex/dashboard/web/parameter/parameter-browse.xml"/>
     <!--widget-->
     <screen id="amxd$Widget.browse"
             template="com/audimex/dashboard/web/widget/widget-browse.xml"/>

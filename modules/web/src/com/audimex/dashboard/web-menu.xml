@@ -3,5 +3,6 @@
     <menu id="dashboard"
           insertBefore="administration">
         <item screen="amxd$Widget.browse"/>
+        <item screen="amdx$Parameter.browse"/>
     </menu>
 </menu-config>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://parameters"
+        class="com.audimex.dashboard.web.parameter.ParameterBrowse"
+        focusComponent="parametersTable"
+        lookupComponent="parametersTable">
+    <dsContext>
+        <groupDatasource id="parametersDs"
+                        class="com.audimex.dashboard.model.Parameter"/>
+    </dsContext>
+    <layout expand="parametersTable"
+            spacing="true">
+        <!--todo filter-->
+        <table id="parametersTable"
+               width="100%">
+            <rows datasource="parametersDs"/>
+            <rowsCount/>
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="id"/>
+                <column id="name"/>
+                <column id="alias"/>
+                <column id="mappedAlias"/>
+                <!--<column id="value"/>-->
+            </columns>
+
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="parametersTable.create"/>
+                <button id="editBtn"
+                        action="parametersTable.edit"/>
+                <button id="removeBtn"
+                        action="parametersTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>
