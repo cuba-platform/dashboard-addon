@@ -3,8 +3,8 @@
  */
 package com.audimex.dashboard.web.widget;
 
+import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractEditor;
-import com.audimex.dashboard.entity.Widget;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
 }

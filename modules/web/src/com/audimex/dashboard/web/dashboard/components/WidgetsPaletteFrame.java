@@ -4,11 +4,10 @@
 
 package com.audimex.dashboard.web.dashboard.components;
 
-import com.audimex.dashboard.entity.Widget;
+import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
-import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
@@ -24,8 +23,8 @@ public class WidgetsPaletteFrame extends AbstractFrame {
 
     @Inject
     protected VBoxLayout widgetsContainer;
-    @Inject
-    protected IconResolver iconResolver;
+//    @Inject
+//    protected IconResolver iconResolver;
 
     protected DDVerticalLayout ddVerticalLayout;
 
@@ -54,8 +53,8 @@ public class WidgetsPaletteFrame extends AbstractFrame {
             String icon = widget.getIcon() != null ? widget.getIcon() : "";
 
             PaletteButton paletteButton = new PaletteButton(
-                    messages.getMainMessage(caption),
-                    iconResolver.getIconResource(icon)
+                    messages.getMainMessage(caption), null
+//                    iconResolver.getIconResource(icon)
             );
             paletteButton.setWidget(widget);
             ddVerticalLayout.addComponent(paletteButton);

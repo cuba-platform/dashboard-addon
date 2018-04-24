@@ -22,7 +22,7 @@ public class Parameter extends BaseUuidEntity {
     protected String mappedAlias;
     @MetaProperty
     protected Integer orderNum;
-    @MetaProperty
+
     protected Value value;
 
     public Integer getOrderNum() {

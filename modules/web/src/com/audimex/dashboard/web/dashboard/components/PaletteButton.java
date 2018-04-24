@@ -4,7 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.components;
 
-import com.audimex.dashboard.entity.Widget;
+import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.visual_model.LayoutType;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;

@@ -2,16 +2,16 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
         class="com.audimex.dashboard.web.widget.WidgetEdit"
-        datasource="widgetDs"
         focusComponent="fieldGroup"
         messagesPack="com.audimex.dashboard.web.widget">
-    <dsContext>
-        <datasource id="widgetDs"
-                    class="com.audimex.dashboard.entity.Widget"
-                    view="widget-params">
-            <collectionDatasource id="paramsDs" property="parameters"/>
-        </datasource>
-    </dsContext>
+    <!--datasource="widgetDs"-->
+    <!--<dsContext>-->
+        <!--<datasource id="widgetDs"-->
+                    <!--class="com.audimex.dashboard.entity.Widget"-->
+                    <!--view="widget-params">-->
+            <!--<collectionDatasource id="paramsDs" property="parameters"/>-->
+        <!--</datasource>-->
+    <!--</dsContext>-->
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"

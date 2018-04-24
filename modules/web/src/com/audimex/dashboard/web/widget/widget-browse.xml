@@ -2,51 +2,53 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
         class="com.audimex.dashboard.web.widget.WidgetBrowse"
-        focusComponent="widgetsTable"
-        lookupComponent="widgetsTable"
+
         messagesPack="com.audimex.dashboard.web.widget">
-    <dsContext>
-        <groupDatasource id="widgetsDs"
-                         class="com.audimex.dashboard.entity.Widget"
-                         view="_local">
-            <query>
-                <![CDATA[select e from amxd$Widget e where e.isTemplate = true]]>
-            </query>
-        </groupDatasource>
-    </dsContext>
-    <layout expand="widgetsTable"
+    <!--focusComponent="widgetsTable"-->
+    <!--lookupComponent="widgetsTable"-->
+    <!--<dsContext>-->
+        <!--<groupDatasource id="widgetsDs"-->
+                         <!--class="com.audimex.dashboard.entity.Widget"-->
+                         <!--view="_local">-->
+            <!--<query>-->
+                <!--<![CDATA[select e from amxd$Widget e where e.isTemplate = true]]>-->
+            <!--</query>-->
+        <!--</groupDatasource>-->
+    <!--</dsContext>-->
+    <layout
             spacing="true">
-        <filter id="filter"
-                applyTo="widgetsTable"
-                datasource="widgetsDs">
-            <properties include=".*"/>
-        </filter>
-        <groupTable id="widgetsTable"
-                    width="100%">
-            <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
-            </actions>
-            <columns>
-                <column id="widgetId"/>
-                <column id="caption"/>
-                <column id="icon"/>
-                <column id="description"/>
-                <column id="frameId"/>
-                <column id="isTemplate"/>
-            </columns>
-            <rows datasource="widgetsDs"/>
-            <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createBtn"
-                        action="widgetsTable.create"/>
-                <button id="editBtn"
-                        action="widgetsTable.edit"/>
-                <button id="removeBtn"
-                        action="widgetsTable.remove"/>
-            </buttonsPanel>
-        </groupTable>
+        <!--expand="widgetsTable"-->
+        <!--<filter id="filter"-->
+                <!--applyTo="widgetsTable"-->
+                <!--datasource="widgetsDs">-->
+            <!--<properties include=".*"/>-->
+        <!--</filter>-->
+        <!--<groupTable id="widgetsTable"-->
+                    <!--width="100%">-->
+            <!--<actions>-->
+                <!--<action id="create"/>-->
+                <!--<action id="edit"/>-->
+                <!--<action id="remove"/>-->
+            <!--</actions>-->
+            <!--<columns>-->
+                <!--<column id="widgetId"/>-->
+                <!--<column id="caption"/>-->
+                <!--<column id="icon"/>-->
+                <!--<column id="description"/>-->
+                <!--<column id="frameId"/>-->
+                <!--<column id="isTemplate"/>-->
+            <!--</columns>-->
+            <!--&lt;!&ndash;<rows datasource="widgetsDs"/>&ndash;&gt;-->
+            <!--<rowsCount/>-->
+            <!--<buttonsPanel id="buttonsPanel"-->
+                          <!--alwaysVisible="true">-->
+                <!--<button id="createBtn"-->
+                        <!--action="widgetsTable.create"/>-->
+                <!--<button id="editBtn"-->
+                        <!--action="widgetsTable.edit"/>-->
+                <!--<button id="removeBtn"-->
+                        <!--action="widgetsTable.remove"/>-->
+            <!--</buttonsPanel>-->
+        <!--</groupTable>-->
     </layout>
 </window>
