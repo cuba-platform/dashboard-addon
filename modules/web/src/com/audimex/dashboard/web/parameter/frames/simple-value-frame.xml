@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.parameter.frames.SimpleValueFrame">
+    <layout spacing="true">
+        <hbox id="hBox"
+              spacing="true">
+            <label id="valueLabel"
+                   width="85px"
+                   value="msg://value"
+                   align="MIDDLE_LEFT"/>
+            <textField id="textField"
+                       visible="false"/>
+            <checkBox id="checkBox"
+                      visible="false"/>
+            <dateField id="dateField"
+                       visible="false"/>
+            <timeField id="timeField"
+                       visible="false"/>
+            <vbox/>
+        </hbox>
+    </layout>
+</window>

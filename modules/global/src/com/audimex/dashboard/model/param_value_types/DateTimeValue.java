@@ -10,6 +10,13 @@ import java.util.Date;
 public class DateTimeValue implements Value {
     protected Date value;
 
+    public DateTimeValue() {
+    }
+
+    public DateTimeValue(Date value) {
+        this.value = value;
+    }
+
     public Date getValue() {
         return value;
     }

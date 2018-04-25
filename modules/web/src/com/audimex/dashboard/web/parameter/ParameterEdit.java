@@ -6,14 +6,17 @@ package com.audimex.dashboard.web.parameter;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.ParameterType;
 import com.audimex.dashboard.model.param_value_types.*;
-import com.haulmont.chile.core.datatypes.DatatypeRegistry;
+import com.audimex.dashboard.web.parameter.frames.SimpleValueFrame;
+import com.audimex.dashboard.web.parameter.frames.ValueFrame;
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
 
 import static com.audimex.dashboard.model.ParameterType.*;
+import static com.audimex.dashboard.web.parameter.frames.SimpleValueFrame.VALUE;
+import static com.audimex.dashboard.web.parameter.frames.SimpleValueFrame.VALUE_TYPE;
 
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
@@ -22,39 +25,17 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected LookupField typeLookup;
     @Inject
     protected VBoxLayout valueBox;
-    @Inject
-    protected ComponentsFactory compFactory;
-    @Inject
-    protected DatatypeRegistry datatypes;
 
-    protected TextField textField;
-    protected DateField dateField;
-    protected TimeField timeField;
-    protected CheckBox checkBox;
-    protected Label valueLabel;
-    protected HBoxLayout hBox;
+    protected ValueFrame valueFrame;
 
     @Override
     protected void postInit() {
         super.postInit();
-        initValueFields();
-        initValueTypeForScreen();
-        typeLookup.addValueChangeListener(this::valueTypeChanged);
+        initParameter();
+        typeLookup.addValueChangeListener(this::parameterTypeChanged);
     }
 
-    protected void initValueFields() {
-        valueLabel = compFactory.createComponent(Label.class);
-        valueLabel.setValue(getMessage("value"));
-        valueLabel.setWidth("85px");
-        checkBox = compFactory.createComponent(CheckBox.class);
-        hBox = compFactory.createComponent(HBoxLayout.class);
-        hBox.setSpacing(true);
-        textField = compFactory.createComponent(TextField.class);
-        dateField = compFactory.createComponent(DateField.class);
-        timeField = compFactory.createComponent(TimeField.class);
-    }
-
-    protected void initValueTypeForScreen() {
+    protected void initParameter() {
         Value value = parameterDs.getItem().getValue();
 
         if (value instanceof EntityValue) {
@@ -65,52 +46,46 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             typeLookup.setValue(ENUM_STRING);
         } else if (value instanceof DateValue) {
             typeLookup.setValue(DATE);
+            openSimpleValueFrame(DATE, value);
         } else if (value instanceof DateTimeValue) {
             typeLookup.setValue(DATETIME);
+            openSimpleValueFrame(DATETIME, value);
         } else if (value instanceof TimeValue) {
             typeLookup.setValue(TIME);
+            openSimpleValueFrame(TIME, value);
         } else if (value instanceof UuidValue) {
             typeLookup.setValue(UUID);
+            openSimpleValueFrame(UUID, value);
         } else if (value instanceof IntegerValue) {
             typeLookup.setValue(INTEGER);
+            openSimpleValueFrame(INTEGER, value);
         } else if (value instanceof StringValue) {
             typeLookup.setValue(STRING);
+            openSimpleValueFrame(STRING, value);
         } else if (value instanceof DecimalValue) {
             typeLookup.setValue(DECIMAL);
+            openSimpleValueFrame(DECIMAL, value);
         } else if (value instanceof BooleanValue) {
             typeLookup.setValue(BOOLEAN);
+            openSimpleValueFrame(BOOLEAN, value);
         } else { //if UNDEFINED
             typeLookup.setValue(UNDEFINED);
         }
     }
 
-    protected void valueTypeChanged(ValueChangeEvent e) {
+    protected void parameterTypeChanged(ValueChangeEvent e) {
         ParameterType type = (ParameterType) e.getValue();
 
         switch (type) {
             case DATETIME:
-                initDateField("DD/MM/yyyy hh:mm");
-                break;
             case TIME:
-                initTimeField();
-                break;
             case DATE:
-                initDateField("DD/MM/yyyy");
-                break;
             case DECIMAL:
-                initTextField("decimal");
-                break;
             case INTEGER:
-                initTextField("int");
-                break;
             case LONG:
-                initTextField("long");
-                break;
             case STRING:
-                initTextField(null);
-                break;
             case BOOLEAN:
-                initCheckBox();
+                valueFrame = openSimpleValueFrame(type, null);
                 break;
             case UNDEFINED:
             default:
@@ -119,34 +94,12 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         }
     }
 
-    protected void initDateField(String format) {
-        dateField.setValue(null);
-        dateField.setDateFormat(format);
-        initSimpleField(dateField);
-    }
-
-    protected void initTimeField() {
-        timeField.setValue(null);
-        initSimpleField(timeField);
-    }
-
-    protected void initTextField(String dataType) {
-        textField.setValue("");
-        textField.setDatatype(dataType == null ? null : datatypes.get(dataType));
-        initSimpleField(textField);
-    }
-
-    protected void initCheckBox() {
-        checkBox.setValue(false);
-        initSimpleField(checkBox);
-    }
-
-    protected void initSimpleField(Component field) {
-        hBox.removeAll();
-        hBox.add(valueLabel);
-        hBox.add(field);
-        valueBox.removeAll();
-        valueBox.add(hBox);
+    protected SimpleValueFrame openSimpleValueFrame(ParameterType type, Value value) {
+        return (SimpleValueFrame) openFrame(
+                valueBox,
+                "simpleValueFrame",
+                ParamsMap.of(VALUE_TYPE, type, VALUE, value)
+        );
     }
 
 }

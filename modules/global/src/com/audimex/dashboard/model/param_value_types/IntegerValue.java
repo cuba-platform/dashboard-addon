@@ -7,6 +7,13 @@ package com.audimex.dashboard.model.param_value_types;
 public class IntegerValue implements Value {
     protected Integer value;
 
+    public IntegerValue() {
+    }
+
+    public IntegerValue(Integer value) {
+        this.value = value;
+    }
+
     public Integer getValue() {
         return value;
     }

@@ -9,6 +9,13 @@ import java.util.Date;
 public class DateValue implements Value {
     protected Date value;
 
+    public DateValue() {
+    }
+
+    public DateValue(Date value) {
+        this.value = value;
+    }
+
     public Date getValue() {
         return value;
     }

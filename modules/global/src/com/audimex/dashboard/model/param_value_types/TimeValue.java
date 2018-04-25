@@ -9,6 +9,13 @@ import java.util.Date;
 public class TimeValue implements Value {
     protected Date value;
 
+    public TimeValue() {
+    }
+
+    public TimeValue(Date value) {
+        this.value = value;
+    }
+
     public Date getValue() {
         return value;
     }

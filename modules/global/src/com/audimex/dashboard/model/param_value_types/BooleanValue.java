@@ -7,6 +7,13 @@ package com.audimex.dashboard.model.param_value_types;
 public class BooleanValue implements Value {
     protected Boolean value;
 
+    public BooleanValue() {
+    }
+
+    public BooleanValue(Boolean value) {
+        this.value = value;
+    }
+
     public Boolean getValue() {
         return value;
     }

@@ -4,8 +4,15 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class LongValue {
+public class LongValue implements Value {
     protected Long value;
+
+    public LongValue() {
+    }
+
+    public LongValue(Long value) {
+        this.value = value;
+    }
 
     public Long getValue() {
         return value;

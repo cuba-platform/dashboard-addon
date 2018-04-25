@@ -9,6 +9,13 @@ import java.math.BigDecimal;
 public class DecimalValue implements Value {
     BigDecimal value;
 
+    public DecimalValue() {
+    }
+
+    public DecimalValue(BigDecimal value) {
+        this.value = value;
+    }
+
     public BigDecimal getValue() {
         return value;
     }
