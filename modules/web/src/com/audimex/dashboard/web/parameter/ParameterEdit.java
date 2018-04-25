@@ -6,17 +6,19 @@ package com.audimex.dashboard.web.parameter;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.ParameterType;
 import com.audimex.dashboard.model.param_value_types.*;
+import com.audimex.dashboard.web.parameter.frames.EnumValueFrame;
 import com.audimex.dashboard.web.parameter.frames.SimpleValueFrame;
 import com.audimex.dashboard.web.parameter.frames.ValueFrame;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
 
 import static com.audimex.dashboard.model.ParameterType.*;
-import static com.audimex.dashboard.web.parameter.frames.SimpleValueFrame.VALUE;
-import static com.audimex.dashboard.web.parameter.frames.SimpleValueFrame.VALUE_TYPE;
+import static com.audimex.dashboard.web.parameter.frames.ValueFrame.*;
 
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
@@ -42,32 +44,33 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             typeLookup.setValue(ENTITY);
         } else if (value instanceof ListEntitiesValue) {
             typeLookup.setValue(LIST_ENTITY);
-        } else if (value instanceof EnumStringValue) {
+        } else if (value instanceof EnumValue) {
             typeLookup.setValue(ENUM_STRING);
+            valueFrame = openEnumValueFrame(value);
         } else if (value instanceof DateValue) {
             typeLookup.setValue(DATE);
-            openSimpleValueFrame(DATE, value);
+            valueFrame = openSimpleValueFrame(DATE, value);
         } else if (value instanceof DateTimeValue) {
             typeLookup.setValue(DATETIME);
-            openSimpleValueFrame(DATETIME, value);
+            valueFrame = openSimpleValueFrame(DATETIME, value);
         } else if (value instanceof TimeValue) {
             typeLookup.setValue(TIME);
-            openSimpleValueFrame(TIME, value);
+            valueFrame = openSimpleValueFrame(TIME, value);
         } else if (value instanceof UuidValue) {
             typeLookup.setValue(UUID);
-            openSimpleValueFrame(UUID, value);
+            valueFrame = openSimpleValueFrame(UUID, value);
         } else if (value instanceof IntegerValue) {
             typeLookup.setValue(INTEGER);
-            openSimpleValueFrame(INTEGER, value);
+            valueFrame = openSimpleValueFrame(INTEGER, value);
         } else if (value instanceof StringValue) {
             typeLookup.setValue(STRING);
-            openSimpleValueFrame(STRING, value);
+            valueFrame = openSimpleValueFrame(STRING, value);
         } else if (value instanceof DecimalValue) {
             typeLookup.setValue(DECIMAL);
-            openSimpleValueFrame(DECIMAL, value);
+            valueFrame = openSimpleValueFrame(DECIMAL, value);
         } else if (value instanceof BooleanValue) {
             typeLookup.setValue(BOOLEAN);
-            openSimpleValueFrame(BOOLEAN, value);
+            valueFrame = openSimpleValueFrame(BOOLEAN, value);
         } else { //if UNDEFINED
             typeLookup.setValue(UNDEFINED);
         }
@@ -77,6 +80,9 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         ParameterType type = (ParameterType) e.getValue();
 
         switch (type) {
+            case ENUM_STRING:
+                valueFrame = openEnumValueFrame(null);
+                break;
             case DATETIME:
             case TIME:
             case DATE:
@@ -89,6 +95,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
                 break;
             case UNDEFINED:
             default:
+                valueFrame = null;
                 valueBox.removeAll();
                 break;
         }
@@ -99,6 +106,14 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
                 valueBox,
                 "simpleValueFrame",
                 ParamsMap.of(VALUE_TYPE, type, VALUE, value)
+        );
+    }
+
+    protected EnumValueFrame openEnumValueFrame(Value value) {
+        return (EnumValueFrame) openFrame(
+                valueBox,
+                "enumValueFrame",
+                ParamsMap.of(VALUE, value)
         );
     }
 

@@ -14,9 +14,6 @@ import java.util.Map;
 
 
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
-    public static final String VALUE_TYPE = "VALUE_TYPE";
-    public static final String VALUE = "VALUE";
-
     @Inject
     protected TextField textField;
     @Inject
@@ -42,6 +39,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
 
     @Override
     public Value getValue() {
+        //todo add validation and validate exception
         switch (type) {
             case DATETIME:
                 return new DateTimeValue(dateField.getValue());

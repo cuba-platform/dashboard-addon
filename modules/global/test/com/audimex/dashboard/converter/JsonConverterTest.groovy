@@ -6,7 +6,7 @@ package com.audimex.dashboard.converter
 
 import com.audimex.dashboard.model.Parameter
 import com.audimex.dashboard.model.param_value_types.EntityValue
-import com.audimex.dashboard.model.param_value_types.EnumStringValue
+import com.audimex.dashboard.model.param_value_types.EnumValue
 import com.audimex.dashboard.model.param_value_types.ListEntitiesValue
 import spock.lang.Specification
 
@@ -29,7 +29,7 @@ class JsonConverterTest extends Specification {
         parameter               | result
         baseParameter()         | ['"name":"name"', '"alias":"alias"', '"mappedAlias":"mappedAlias"', '"orderNum":1']
         entityParameter()       | ['"entityId":"entityId"', '"entityMetaClass":"sec$User"', '"viewName":"_local"']
-        enumStringParameter()   | ['"enumerationClass":"someEnumClass"', '"enumStringValue":"someValue"']
+        enumStringParameter()   | ['"enumClassName":"someEnumClass"', '"enumValue":"someValue"']
         listEntitiesParameter() | ['"entityId":"entity1"', '"entityId":"entity2"']
     }
 
@@ -73,9 +73,9 @@ class JsonConverterTest extends Specification {
     }
 
     Parameter enumStringParameter() {
-        EnumStringValue value = new EnumStringValue()
-        value.enumerationClass = 'someEnumClass'
-        value.enumStringValue = 'someValue'
+        EnumValue value = new EnumValue()
+        value.enumClassName = 'someEnumClass'
+        value.enumValue = 'someValue'
 
         Parameter p = baseParameter()
         p.value = value
