@@ -5,6 +5,5 @@
                       transaction-type="RESOURCE_LOCAL">
         <class>com.audimex.dashboard.entity.DashboardPersist</class>
         <class>com.audimex.dashboard.entity.WidgetTemplate</class>
-        <class>com.audimex.dashboard.entity.ParameterPersist</class>
     </persistence-unit>
 </persistence>

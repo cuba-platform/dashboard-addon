@@ -6,15 +6,12 @@
         lookupComponent="parametersTable">
     <dsContext>
         <groupDatasource id="parametersDs"
-                        class="com.audimex.dashboard.model.Parameter"/>
+                         class="com.audimex.dashboard.model.Parameter"/>
     </dsContext>
-    <layout expand="parametersTable"
-            spacing="true">
-        <!--todo filter-->
+    <layout spacing="true">
         <table id="parametersTable"
+               height="100%"
                width="100%">
-            <rows datasource="parametersDs"/>
-            <rowsCount/>
             <actions>
                 <action id="create"/>
                 <action id="edit"/>
@@ -25,9 +22,9 @@
                 <column id="name"/>
                 <column id="alias"/>
                 <column id="mappedAlias"/>
-                <!--<column id="value"/>-->
             </columns>
-
+            <rows datasource="parametersDs"/>
+            <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"

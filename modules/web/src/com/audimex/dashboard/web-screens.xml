@@ -7,6 +7,8 @@
     <!--parameters-->
     <screen id="amdx$Parameter.browse"
             template="com/audimex/dashboard/web/parameter/parameter-browse.xml"/>
+    <screen id="amxd$Parameter.edit"
+            template="com/audimex/dashboard/web/parameter/parameter-edit.xml"/>
     <!--widget-->
     <screen id="amxd$Widget.browse"
             template="com/audimex/dashboard/web/widget/widget-browse.xml"/>
