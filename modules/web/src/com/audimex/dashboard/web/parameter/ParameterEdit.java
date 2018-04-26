@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.parameter;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.ParameterType;
 import com.audimex.dashboard.model.param_value_types.*;
+import com.audimex.dashboard.web.parameter.frames.EntityValueFrame;
 import com.audimex.dashboard.web.parameter.frames.EnumValueFrame;
 import com.audimex.dashboard.web.parameter.frames.SimpleValueFrame;
 import com.audimex.dashboard.web.parameter.frames.ValueFrame;
@@ -34,7 +35,14 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected void postInit() {
         super.postInit();
         initParameter();
-        typeLookup.addValueChangeListener(this::parameterTypeChanged);
+        typeLookup.addValueChangeListener(e -> parameterTypeChanged((ParameterType) e.getValue()));
+    }
+
+    @Override
+    protected boolean preCommit() {
+        Value value = valueFrame == null ? null : valueFrame.getValue();
+        parameterDs.getItem().setValue(value);
+        return super.preCommit();
     }
 
     protected void initParameter() {
@@ -42,11 +50,12 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
         if (value instanceof EntityValue) {
             typeLookup.setValue(ENTITY);
+            valueFrame = openEntityValueFrame((EntityValue) value);
         } else if (value instanceof ListEntitiesValue) {
             typeLookup.setValue(LIST_ENTITY);
         } else if (value instanceof EnumValue) {
-            typeLookup.setValue(ENUM_STRING);
-            valueFrame = openEnumValueFrame(value);
+            typeLookup.setValue(ENUM);
+            valueFrame = openEnumValueFrame((EnumValue) value);
         } else if (value instanceof DateValue) {
             typeLookup.setValue(DATE);
             valueFrame = openSimpleValueFrame(DATE, value);
@@ -76,11 +85,12 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         }
     }
 
-    protected void parameterTypeChanged(ValueChangeEvent e) {
-        ParameterType type = (ParameterType) e.getValue();
-
+    protected void parameterTypeChanged(ParameterType type) {
         switch (type) {
-            case ENUM_STRING:
+            case ENTITY:
+                valueFrame = openEntityValueFrame(null);
+                break;
+            case ENUM:
                 valueFrame = openEnumValueFrame(null);
                 break;
             case DATETIME:
@@ -109,7 +119,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         );
     }
 
-    protected EnumValueFrame openEnumValueFrame(Value value) {
+    protected EnumValueFrame openEnumValueFrame(EnumValue value) {
         return (EnumValueFrame) openFrame(
                 valueBox,
                 "enumValueFrame",
@@ -117,4 +127,11 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         );
     }
 
+    protected EntityValueFrame openEntityValueFrame(EntityValue value) {
+        return (EntityValueFrame) openFrame(
+                valueBox,
+                "entityValueFrame",
+                ParamsMap.of(VALUE, value)
+        );
+    }
 }

@@ -28,14 +28,14 @@ class JsonConverterTest extends Specification {
         where:
         parameter               | result
         baseParameter()         | ['"name":"name"', '"alias":"alias"', '"mappedAlias":"mappedAlias"', '"orderNum":1']
-        entityParameter()       | ['"entityId":"entityId"', '"entityMetaClass":"sec$User"', '"viewName":"_local"']
+        entityParameter()       | ['"entityId":"entityId"', '"metaClassName":"sec$User"', '"viewName":"_local"']
         enumStringParameter()   | ['"enumClassName":"someEnumClass"', '"enumValue":"someValue"']
         listEntitiesParameter() | ['"entityId":"entity1"', '"entityId":"entity2"']
     }
 
     def "test deserialization parameters"() {
         given:
-        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"value\":{\"className\":\"com.audimex.dashboard.model.param_value_types.EntityValue\",\"data\":{\"entityMetaClass\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
+        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"value\":{\"className\":\"com.audimex.dashboard.model.param_value_types.EntityValue\",\"data\":{\"metaClassName\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
 
         when:
         Parameter param = converter.parameterFromJson(json)
@@ -49,14 +49,14 @@ class JsonConverterTest extends Specification {
 
         def value = param.value as EntityValue
         value.entityId == 'entityId'
-        value.entityMetaClass == 'sec$User'
+        value.metaClassName == 'sec$User'
         value.viewName == '_local'
     }
 
     Parameter entityParameter() {
         EntityValue value = new EntityValue()
         value.entityId = 'entityId'
-        value.entityMetaClass = 'sec$User'
+        value.metaClassName = 'sec$User'
         value.viewName = '_local'
 
         Parameter p = baseParameter()
@@ -67,7 +67,7 @@ class JsonConverterTest extends Specification {
     EntityValue someEntityValue() {
         EntityValue value = new EntityValue()
         value.entityId = 'entityId'
-        value.entityMetaClass = 'sec$User'
+        value.metaClassName = 'sec$User'
         value.viewName = '_local'
         return value
     }

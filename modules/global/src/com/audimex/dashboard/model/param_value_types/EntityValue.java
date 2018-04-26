@@ -5,16 +5,16 @@
 package com.audimex.dashboard.model.param_value_types;
 
 public class EntityValue implements Value {
-    protected String entityMetaClass;
+    protected String metaClassName;
     protected String entityId;
     protected String viewName;
 
-    public String getEntityMetaClass() {
-        return entityMetaClass;
+    public String getMetaClassName() {
+        return metaClassName;
     }
 
-    public void setEntityMetaClass(String entityMetaClass) {
-        this.entityMetaClass = entityMetaClass;
+    public void setMetaClassName(String metaClassName) {
+        this.metaClassName = metaClassName;
     }
 
     public String getEntityId() {

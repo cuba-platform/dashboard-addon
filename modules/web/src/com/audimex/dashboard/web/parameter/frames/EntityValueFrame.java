@@ -1,0 +1,123 @@
+package com.audimex.dashboard.web.parameter.frames;
+
+import com.audimex.dashboard.model.param_value_types.EntityValue;
+import com.audimex.dashboard.model.param_value_types.Value;
+import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.LookupField;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
+public class EntityValueFrame extends AbstractFrame implements ValueFrame {
+    @Inject
+    protected LookupField metaClassLookup;
+    @Inject
+    protected LookupField entitisLookup;
+    @Inject
+    protected LookupField viewLookup;
+    @Inject
+    protected Metadata metadata;
+    @Inject
+    protected DataManager dataManager;
+
+    @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        loadAllPersistentClasses();
+        selectIfExist((EntityValue) params.get(VALUE));
+        metaClassLookup.addValueChangeListener(e -> metaClassValueChanged((MetaClass) e.getValue()));
+    }
+
+
+    @Override
+    public Value getValue() {
+        EntityValue value = new EntityValue();
+        MetaClass metaClass = metaClassLookup.getValue();
+
+        if (metaClass != null) {
+            value.setMetaClassName(metaClass.getName());
+
+            Entity entity = entitisLookup.getValue();
+            value.setEntityId(entity == null ? null : entity.getId().toString());
+
+            String viewName = viewLookup.getValue();
+            value.setViewName(viewName);
+        }
+
+        return value;
+    }
+
+    protected void loadAllPersistentClasses() {
+        List<MetaClass> metaClasses = new ArrayList<>(metadata.getTools().getAllPersistentMetaClasses());
+        metaClassLookup.setOptionsList(metaClasses);
+    }
+
+    protected void selectIfExist(EntityValue value) {
+        if (value != null && isNotBlank(value.getMetaClassName())) {
+            String metaClassName = value.getMetaClassName();
+
+            Optional<MetaClass> classOpt = ((List<MetaClass>) metaClassLookup.getOptionsList())
+                    .stream()
+                    .filter(clazz -> metaClassName.equals(clazz.getName()))
+                    .findFirst();
+
+            if (classOpt.isPresent()) {
+                MetaClass metaClass = classOpt.get();
+                metaClassLookup.setValue(metaClass);
+                loadEntities(metaClass);
+                loadViewNames(metaClass);
+
+                String entityId = value.getEntityId();
+                if (isNotBlank(entityId)) {
+                    ((List<Entity>) entitisLookup.getOptionsList())
+                            .stream()
+                            .filter(entity -> entityId.equals(entity.getId().toString()))
+                            .findFirst()
+                            .ifPresent(entity -> entitisLookup.setValue(entity));
+                }
+
+                String viewName = value.getViewName();
+                if (isNotBlank(viewName) && viewLookup.getOptionsList().contains(viewName)) {
+                    viewLookup.setValue(viewName);
+                }
+            }
+        }
+    }
+
+
+    protected void metaClassValueChanged(MetaClass metaClass) {
+        if (metaClass == null) {
+            entitisLookup.setValue(null);
+            entitisLookup.setOptionsList(null);
+            viewLookup.setValue(null);
+            viewLookup.setOptionsList(null);
+        }
+
+        loadEntities(metaClass);
+        loadViewNames(metaClass);
+    }
+
+    protected void loadEntities(MetaClass metaClass) {
+        LoadContext loadContext = LoadContext.create(metaClass.getJavaClass())
+                .setQuery(LoadContext.createQuery(format("select e from %s e", metaClass.getName())));
+        List entities = dataManager.loadList(loadContext);
+        entitisLookup.setOptionsList(entities);
+    }
+
+    protected void loadViewNames(MetaClass metaClass) {
+        List<String> viewNames = new ArrayList<>(metadata.getViewRepository().getViewNames(metaClass));
+        viewLookup.setOptionsList(viewNames);
+    }
+
+}

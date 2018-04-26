@@ -9,7 +9,6 @@
                    value="msg://enumClass"
                    align="MIDDLE_LEFT"/>
             <lookupField id="enumClassLookup"/>
-            <vbox/>
         </hbox>
     </layout>
 </window>

@@ -21,8 +21,6 @@ public class EnumValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
     protected Metadata metadata;
 
-    protected List<Class> allEnums;
-
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -33,24 +31,23 @@ public class EnumValueFrame extends AbstractFrame implements ValueFrame {
     @Override
     public Value getValue() {
         Class value = enumClassLookup.getValue();
-        return new EnumValue(value == null? null: value.getName());
+        return new EnumValue(value == null ? null : value.getName());
     }
 
-
-
     protected void loadEnumClasses() {
-        allEnums = new ArrayList<>(metadata.getTools().getAllEnums());
+        List<Class> allEnums = new ArrayList<>(metadata.getTools().getAllEnums());
         enumClassLookup.setOptionsList(allEnums);
     }
 
     protected void selectIfExist(EnumValue enumValue) {
-        if(enumValue == null || isBlank(enumValue.getEnumClassName())){
+        if (enumValue == null || isBlank(enumValue.getEnumClassName())) {
             return;
         }
 
         String className = enumValue.getEnumClassName();
 
-        allEnums.stream()
+        ((List<Class>) enumClassLookup.getOptionsList())
+                .stream()
                 .filter(clazz -> className.equals(clazz.getName()))
                 .findFirst()
                 .ifPresent(enumClass -> enumClassLookup.setValue(enumClass));
