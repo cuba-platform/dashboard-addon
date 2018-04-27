@@ -39,7 +39,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
 
     @Override
     public Value getValue() {
-        //todo add validation and validate exception
+        //todo add validation and validate exception, UUID
         switch (type) {
             case DATETIME:
                 return new DateTimeValue(dateField.getValue());
@@ -54,6 +54,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case LONG:
                 return new LongValue(textField.getValue());
             case STRING:
+            case UUID:
                 return new StringValue(textField.getValue());
             case BOOLEAN:
                 return new BooleanValue(checkBox.getValue());
@@ -83,6 +84,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
                 setLong((LongValue) value);
                 break;
             case STRING:
+            case UUID:
                 setString((StringValue) value);
                 break;
             case BOOLEAN:

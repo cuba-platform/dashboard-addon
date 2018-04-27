@@ -9,6 +9,15 @@ public class EntityValue implements Value {
     protected String entityId;
     protected String viewName;
 
+    public EntityValue() {
+    }
+
+    public EntityValue(String metaClassName, String entityId, String viewName) {
+        this.metaClassName = metaClassName;
+        this.entityId = entityId;
+        this.viewName = viewName;
+    }
+
     public String getMetaClassName() {
         return metaClassName;
     }

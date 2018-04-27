@@ -8,7 +8,8 @@
                    width="85px"
                    value="msg://metaClass"
                    align="MIDDLE_LEFT"/>
-            <lookupField id="metaClassLookup"/>
+            <lookupField id="metaClassLookup"
+                         required="true"/>
         </hbox>
         <hbox id="hBoxEntity"
               spacing="true">
@@ -16,7 +17,8 @@
                    width="85px"
                    value="msg://entity"
                    align="MIDDLE_LEFT"/>
-            <lookupField id="entitisLookup"/>
+            <lookupField id="entitiesLookup"
+                         required="true"/>
         </hbox>
         <hbox id="hBoxView"
               spacing="true">

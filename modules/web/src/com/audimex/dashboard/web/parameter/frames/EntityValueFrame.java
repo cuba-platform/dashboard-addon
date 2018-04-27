@@ -23,7 +23,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
     protected LookupField metaClassLookup;
     @Inject
-    protected LookupField entitisLookup;
+    protected LookupField entitiesLookup;
     @Inject
     protected LookupField viewLookup;
     @Inject
@@ -48,7 +48,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         if (metaClass != null) {
             value.setMetaClassName(metaClass.getName());
 
-            Entity entity = entitisLookup.getValue();
+            Entity entity = entitiesLookup.getValue();
             value.setEntityId(entity == null ? null : entity.getId().toString());
 
             String viewName = viewLookup.getValue();
@@ -63,7 +63,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         metaClassLookup.setOptionsList(metaClasses);
     }
 
-    protected void selectIfExist(EntityValue value) {
+    public void selectIfExist(EntityValue value) {
         if (value != null && isNotBlank(value.getMetaClassName())) {
             String metaClassName = value.getMetaClassName();
 
@@ -80,11 +80,11 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
                 String entityId = value.getEntityId();
                 if (isNotBlank(entityId)) {
-                    ((List<Entity>) entitisLookup.getOptionsList())
+                    ((List<Entity>) entitiesLookup.getOptionsList())
                             .stream()
                             .filter(entity -> entityId.equals(entity.getId().toString()))
                             .findFirst()
-                            .ifPresent(entity -> entitisLookup.setValue(entity));
+                            .ifPresent(entity -> entitiesLookup.setValue(entity));
                 }
 
                 String viewName = value.getViewName();
@@ -98,8 +98,8 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
     protected void metaClassValueChanged(MetaClass metaClass) {
         if (metaClass == null) {
-            entitisLookup.setValue(null);
-            entitisLookup.setOptionsList(null);
+            entitiesLookup.setValue(null);
+            entitiesLookup.setOptionsList(null);
             viewLookup.setValue(null);
             viewLookup.setOptionsList(null);
         }
@@ -112,7 +112,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         LoadContext loadContext = LoadContext.create(metaClass.getJavaClass())
                 .setQuery(LoadContext.createQuery(format("select e from %s e", metaClass.getName())));
         List entities = dataManager.loadList(loadContext);
-        entitisLookup.setOptionsList(entities);
+        entitiesLookup.setOptionsList(entities);
     }
 
     protected void loadViewNames(MetaClass metaClass) {

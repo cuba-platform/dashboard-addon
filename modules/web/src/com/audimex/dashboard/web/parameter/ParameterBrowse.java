@@ -26,18 +26,7 @@ public class ParameterBrowse extends AbstractLookup {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        Value value = new StringValue("strValue");
-
-        Parameter p = new Parameter();
-        p.setName("newName");
-        p.setAlias("newAlias");
-        p.setMappedAlias("newMappedAlias");
-        p.setOrderNum(1);
-        p.setValue(value);
-
-        parametersDs.addItem(p);
-
-//        initDs(params);
+        initDs(params);
         //todo add work with orderNum
         //todo add filter
     }
@@ -45,13 +34,12 @@ public class ParameterBrowse extends AbstractLookup {
     protected void initDs(Map<String, Object> params) {
         HasParameters object = (HasParameters) params.get(OBJECT_WITH_PARAMETERS);
 
-        if(object == null || object.getParameters() == null){
-            showNotification(getMessage("noObject"), ERROR);
+        if (object == null || object.getParameters() == null) {
             return;
         }
 
         for (Parameter param : object.getParameters()) {
-           parametersDs.addItem(param);
+            parametersDs.addItem(param);
         }
     }
 }

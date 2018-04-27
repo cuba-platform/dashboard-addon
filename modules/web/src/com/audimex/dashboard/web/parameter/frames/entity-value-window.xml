@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://entityEdit"
+        class="com.audimex.dashboard.web.parameter.frames.EntityValueWindow">
+    <layout expand="windowActions"
+            spacing="true">
+        <frame id="entityValueFrame" screen="entityValueFrame"/>
+        <buttonsPanel id="windowActions">
+            <button id="okBtn"
+                    caption="msg://OK"
+                    invoke="commitAndClose"/>
+            <button id="cancelBtn"
+                    caption="msg://cancel"
+                    invoke="cancelAndClose"/>
+        </buttonsPanel>
+    </layout>
+</window>

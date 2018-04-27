@@ -6,10 +6,7 @@ package com.audimex.dashboard.web.parameter;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.ParameterType;
 import com.audimex.dashboard.model.param_value_types.*;
-import com.audimex.dashboard.web.parameter.frames.EntityValueFrame;
-import com.audimex.dashboard.web.parameter.frames.EnumValueFrame;
-import com.audimex.dashboard.web.parameter.frames.SimpleValueFrame;
-import com.audimex.dashboard.web.parameter.frames.ValueFrame;
+import com.audimex.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
@@ -18,8 +15,11 @@ import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
 
+import java.util.Map;
+
 import static com.audimex.dashboard.model.ParameterType.*;
-import static com.audimex.dashboard.web.parameter.frames.ValueFrame.*;
+import static com.audimex.dashboard.web.parameter.frames.ValueFrame.VALUE;
+import static com.audimex.dashboard.web.parameter.frames.ValueFrame.VALUE_TYPE;
 
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
@@ -30,6 +30,11 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected VBoxLayout valueBox;
 
     protected ValueFrame valueFrame;
+
+    @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+    }
 
     @Override
     protected void postInit() {
@@ -53,6 +58,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             valueFrame = openEntityValueFrame((EntityValue) value);
         } else if (value instanceof ListEntitiesValue) {
             typeLookup.setValue(LIST_ENTITY);
+            valueFrame = openEntitiesListValueFrame((ListEntitiesValue) value);
         } else if (value instanceof EnumValue) {
             typeLookup.setValue(ENUM);
             valueFrame = openEnumValueFrame((EnumValue) value);
@@ -87,11 +93,14 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     protected void parameterTypeChanged(ParameterType type) {
         switch (type) {
+            case LIST_ENTITY:
+                valueFrame = openEntitiesListValueFrame(new ListEntitiesValue());
+                break;
             case ENTITY:
-                valueFrame = openEntityValueFrame(null);
+                valueFrame = openEntityValueFrame(new EntityValue());
                 break;
             case ENUM:
-                valueFrame = openEnumValueFrame(null);
+                valueFrame = openEnumValueFrame(new EnumValue());
                 break;
             case DATETIME:
             case TIME:
@@ -101,6 +110,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             case LONG:
             case STRING:
             case BOOLEAN:
+            case UUID:
                 valueFrame = openSimpleValueFrame(type, null);
                 break;
             case UNDEFINED:
@@ -131,6 +141,14 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return (EntityValueFrame) openFrame(
                 valueBox,
                 "entityValueFrame",
+                ParamsMap.of(VALUE, value)
+        );
+    }
+
+    protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesValue value) {
+        return (EntitiesListValueFrame) openFrame(
+                valueBox,
+                "entitiesListValueFrame",
                 ParamsMap.of(VALUE, value)
         );
     }
