@@ -22,7 +22,8 @@ public class JsonConverter {
 
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Value.class, new ValueAdapter());
+        builder.registerTypeAdapter(Value.class, new InheritanceAdapter());
+        builder.registerTypeAdapter(Widget.class, new InheritanceAdapter());
         gson = builder.create();
     }
 

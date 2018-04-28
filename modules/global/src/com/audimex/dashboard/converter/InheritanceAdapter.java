@@ -8,7 +8,7 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class ValueAdapter implements JsonSerializer, JsonDeserializer {
+public class InheritanceAdapter implements JsonSerializer, JsonDeserializer {
 
     protected static final String CLASSNAME = "className";
     protected static final String DATA = "data";

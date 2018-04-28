@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.widget_types.screen.ScreenWidget">
+    <layout expand="screenFrame"
+            spacing="true">
+        <frame id="screenFrame"
+               width="100%"/>
+    </layout>
+</window>
