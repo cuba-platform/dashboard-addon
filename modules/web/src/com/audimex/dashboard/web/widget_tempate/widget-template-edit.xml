@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
-        class="com.audimex.dashboard.web.widget.WidgetEdit"
+        class="com.audimex.dashboard.web.widget_tempate.WidgetTemplateEdit"
         focusComponent="fieldGroup"
-        messagesPack="com.audimex.dashboard.web.widget">
-    <!--datasource="widgetDs"-->
-    <!--<dsContext>-->
-        <!--<datasource id="widgetDs"-->
-                    <!--class="com.audimex.dashboard.entity.Widget"-->
-                    <!--view="widget-params">-->
-            <!--<collectionDatasource id="paramsDs" property="parameters"/>-->
-        <!--</datasource>-->
-    <!--</dsContext>-->
+        datasource="widgetDs"
+        messagesPack="com.audimex.dashboard.web.widget_tempate">
+    <dsContext>
+        <datasource id="widgetDs"
+                    class="com.audimex.dashboard.model.Widget">
+        </datasource>
+    </dsContext>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="widgetDs">
             <column width="450px">
-                <field property="widgetId"/>
                 <field property="caption"/>
                 <field property="icon"/>
                 <field property="description"/>
@@ -25,8 +22,9 @@
                        custom="true"/>
             </column>
         </fieldGroup>
-        <!--<frame id="paramsFrame"-->
-               <!--screen="params-frame.xml"/>-->
+        <frame id="paramsFrame"
+               caption="msg://parameters"
+               screen="amdx$Parameter.browse"/>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

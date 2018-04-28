@@ -19,9 +19,9 @@
             template="com/audimex/dashboard/web/parameter/frames/entity-value-frame.xml"/>
     <screen id="entityValueWindow"
             template="com/audimex/dashboard/web/parameter/frames/entity-value-window.xml"/>
-    <!--widget-->
-    <screen id="amxd$Widget.browse"
-            template="com/audimex/dashboard/web/widget/widget-browse.xml"/>
-    <screen id="amxd$Widget.edit"
-            template="com/audimex/dashboard/web/widget/widget-edit.xml"/>
+    <!--widget_tempate-->
+    <screen id="widgetTemplateBrowse"
+            template="com/audimex/dashboard/web/widget_tempate/widget-template-browse.xml"/>
+    <screen id="widgetTemplateEdit"
+            template="com/audimex/dashboard/web/widget_tempate/widget-template-edit.xml"/>
 </screen-config>

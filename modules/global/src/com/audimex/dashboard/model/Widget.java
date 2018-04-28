@@ -12,7 +12,7 @@ import java.util.List;
 
 @NamePattern("%s|caption")
 @MetaClass(name = "amxd$Widget")
-public class Widget extends BaseUuidEntity implements HasParameters {
+public class Widget extends BaseUuidEntity {
     private static final long serialVersionUID = 2343551192474818297L;
 
     @MetaProperty
@@ -28,13 +28,12 @@ public class Widget extends BaseUuidEntity implements HasParameters {
     @MetaProperty
     protected List<Parameter> parameters;
 
-    public void setParameters(List<Parameter> parameters) {
-        this.parameters = parameters;
-    }
-
-    @Override
     public List<Parameter> getParameters() {
         return parameters;
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
     }
 
     public void setCaption(String caption) {
