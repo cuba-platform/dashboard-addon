@@ -2,13 +2,17 @@
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
     <metadata-model namespace="amxd"
                     root-package="com.audimex.dashboard">
+        <!--widget model-->
         <class>com.audimex.dashboard.model.Dashboard</class>
         <class>com.audimex.dashboard.model.Widget</class>
         <class>com.audimex.dashboard.model.Parameter</class>
+        <!--widget visual model-->
         <class>com.audimex.dashboard.model.visual_model.DashboardLayout</class>
         <class>com.audimex.dashboard.model.visual_model.DashboardVisualModel</class>
         <class>com.audimex.dashboard.model.visual_model.FramePanel</class>
         <class>com.audimex.dashboard.model.visual_model.GridArea</class>
         <class>com.audimex.dashboard.model.visual_model.GridLayout</class>
+        <!--widget types-->
+        <class>com.audimex.dashboard.model.widget_types.ScreenWidget</class>
     </metadata-model>
 </metadata>

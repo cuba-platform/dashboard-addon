@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.model.widget_types;
 
+import com.audimex.dashboard.annotation.WidgetType;
 import com.audimex.dashboard.model.Widget;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;

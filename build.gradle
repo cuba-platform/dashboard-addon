@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '6.7.3'
+    ext.cubaVersion = '6.8.7'
     repositories {
 
         maven {
@@ -38,7 +38,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'com.audimex.dashboard'
-        version = '0.3.2'
+        version = '2.0'
         isSnapshot = true
     }
     tomcat {
@@ -253,7 +253,7 @@ task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deplo
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
+    gradleVersion = '4.3.1'
 }
 
 apply from: 'extra.gradle'

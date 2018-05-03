@@ -33,7 +33,7 @@ public class WidgetTemplateEdit extends AbstractEditor<Widget> {
 
     @Override
     protected void postInit() {
-        initFrameIdField();
+//        initFrameIdField();
 
         paramsFrame.init(ParamsMap.of(
                 PARAMETERS,

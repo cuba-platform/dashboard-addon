@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.config.widget_types_config;
+package com.audimex.dashboard.annotation_analyzer;
 
 import java.io.Serializable;
 
@@ -10,8 +10,18 @@ public class WidgetTypeInfo implements Serializable {
 
     protected Class typeClass;
     protected String caption;
-    protected String browseClass;
-    protected String editClass;
+    protected Class browseClass;
+    protected Class editClass;
+
+    public WidgetTypeInfo() {
+    }
+
+    public WidgetTypeInfo(Class typeClass, String caption, Class browseClass, Class editClass) {
+        this.typeClass = typeClass;
+        this.caption = caption;
+        this.browseClass = browseClass;
+        this.editClass = editClass;
+    }
 
     public Class getTypeClass() {
         return typeClass;
@@ -29,19 +39,19 @@ public class WidgetTypeInfo implements Serializable {
         this.caption = caption;
     }
 
-    public String getBrowseClass() {
+    public Class getBrowseClass() {
         return browseClass;
     }
 
-    public void setBrowseClass(String browseClass) {
+    public void setBrowseClass(Class browseClass) {
         this.browseClass = browseClass;
     }
 
-    public String getEditClass() {
+    public Class getEditClass() {
         return editClass;
     }
 
-    public void setEditClass(String editClass) {
+    public void setEditClass(Class editClass) {
         this.editClass = editClass;
     }
 }
