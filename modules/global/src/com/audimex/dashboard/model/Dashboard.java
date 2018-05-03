@@ -14,8 +14,6 @@ import com.audimex.dashboard.model.visual_model.DashboardVisualModel;
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Dashboard")
 public class Dashboard extends BaseUuidEntity {
-    private static final long serialVersionUID = -3608201761546718634L;
-
     @MetaProperty
     protected String title;
     @MetaProperty

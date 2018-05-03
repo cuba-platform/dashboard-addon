@@ -13,8 +13,6 @@ import java.util.UUID;
 
 @MetaClass(name = "amxd$DashboardLayout")
 public class DashboardLayout extends BaseUuidEntity {
-    private static final long serialVersionUID = -3608267237546718634L;
-
     @MetaProperty
     protected UUID layoutId;
     @MetaProperty

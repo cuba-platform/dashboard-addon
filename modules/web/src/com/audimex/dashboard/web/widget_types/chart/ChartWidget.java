@@ -25,7 +25,7 @@ public class ChartWidget extends AbstractFrame {
     protected Report report;
     protected String templateCode;
 
-    //todo: rewrite this ... (copy-pasted from branch release_1)
+    //todo: delete depends:  the reports and the chart
     @Override
     public void init(final Map<String, Object> params) {
         super.init(params);

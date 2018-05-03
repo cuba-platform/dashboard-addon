@@ -10,8 +10,6 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 @MetaClass(name = "amxd$GridArea")
 public class GridArea extends DashboardLayout {
-    private static final long serialVersionUID = -3608267234732258634L;
-
     @MetaProperty
     protected DashboardLayout component;
     @MetaProperty

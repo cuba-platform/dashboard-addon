@@ -12,8 +12,6 @@ import com.haulmont.chile.core.annotations.NamePattern;
 @NamePattern("%s|name")
 @MetaClass(name = "amxd$Parameter")
 public class Parameter extends BaseUuidEntity {
-    private static final long serialVersionUID = 1663882253659615600L;
-
     @MetaProperty
     protected String name;
     @MetaProperty

@@ -52,6 +52,7 @@ cuba {
 }
 
 dependencies {
+    //todo: delete depends:  the reports and the chart
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("com.haulmont.reports:reports-global:$cubaVersion")
     appComponent("com.haulmont.charts:charts-global:$cubaVersion")

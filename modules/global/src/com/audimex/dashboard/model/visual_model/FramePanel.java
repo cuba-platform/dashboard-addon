@@ -11,8 +11,6 @@ import java.util.UUID;
 
 @MetaClass(name = "amxd$FramePanel")
 public class FramePanel extends DashboardLayout {
-    private static final long serialVersionUID = -7216551967546718634L;
-
     @MetaProperty
     protected UUID widgetId;
 

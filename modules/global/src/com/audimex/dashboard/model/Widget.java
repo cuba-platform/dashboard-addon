@@ -13,16 +13,12 @@ import java.util.List;
 @NamePattern("%s|caption")
 @MetaClass(name = "amxd$Widget")
 public class Widget extends BaseUuidEntity {
-    private static final long serialVersionUID = 2343551192474818297L;
-
     @MetaProperty
     protected String caption;
     @MetaProperty
     protected String icon;
     @MetaProperty
     protected String description;
-    @MetaProperty
-    protected String frameId;
     @MetaProperty
     protected Boolean isTemplate;
     @MetaProperty
@@ -58,14 +54,6 @@ public class Widget extends BaseUuidEntity {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setFrameId(String frameId) {
-        this.frameId = frameId;
-    }
-
-    public String getFrameId() {
-        return frameId;
     }
 
     public void setIsTemplate(Boolean isTemplate) {

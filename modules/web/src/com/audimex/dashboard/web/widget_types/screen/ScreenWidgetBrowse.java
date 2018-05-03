@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-public class ScreenWidget extends AbstractWidget {
+public class ScreenWidgetBrowse extends AbstractWidget {
     @Inject
     protected Frame screenFrame;
 

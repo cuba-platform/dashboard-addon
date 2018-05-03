@@ -9,8 +9,6 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 @MetaClass(name = "amxd$GridLayout")
 public class GridLayout extends DashboardLayout {
-    private static final long serialVersionUID = 8357123234732258634L;
-
     @MetaProperty
     protected Integer rows;
     @MetaProperty

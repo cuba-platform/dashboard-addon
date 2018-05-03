@@ -10,8 +10,6 @@ import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 @MetaClass(name = "amxd$DashboardVisualModel")
 public class DashboardVisualModel extends BaseUuidEntity {
-    private static final long serialVersionUID = -3608201967546718634L;
-
     @MetaProperty
     protected DashboardLayout layout;
 
