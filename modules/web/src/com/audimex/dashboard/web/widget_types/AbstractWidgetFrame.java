@@ -9,7 +9,7 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.Map;
 
-public class AbstractWidget extends AbstractFrame {
+public class AbstractWidgetFrame extends AbstractFrame {
     public static final String WIDGET = "WIDGET";
     public static final String PARAMETERS = "PARAMETERS";
 

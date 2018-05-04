@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer.NAME;
-import static java.lang.String.format;
 
 @Service(NAME)
 public class WidgetTypeAnalyzerImpl implements WidgetTypeAnalyzer {
@@ -34,8 +33,8 @@ public class WidgetTypeAnalyzerImpl implements WidgetTypeAnalyzer {
                     return new WidgetTypeInfo(
                             metaClass.getJavaClass(),
                             ann.caption(),
-                            getClassByName(ann.browseClass()),
-                            getClassByName(ann.editClass())
+                            ann.browseFrameId(),
+                            ann.editFrameId()
                     );
                 }).collect(Collectors.toList());
     }
@@ -45,14 +44,5 @@ public class WidgetTypeAnalyzerImpl implements WidgetTypeAnalyzer {
                 .stream()
                 .filter(metaClass -> metaClass.getJavaClass().isAnnotationPresent(WidgetType.class))
                 .collect(Collectors.toList());
-    }
-
-    protected Class getClassByName(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            //todo: replace RuntimeException to own exception
-            throw new RuntimeException(format("Class not found by name %s, when was try to read annotation @WidgetType.class", className), e);
-        }
     }
 }

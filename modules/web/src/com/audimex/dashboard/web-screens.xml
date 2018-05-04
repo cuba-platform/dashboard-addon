@@ -24,4 +24,9 @@
             template="com/audimex/dashboard/web/widget_tempate/widget-template-browse.xml"/>
     <screen id="widgetTemplateEdit"
             template="com/audimex/dashboard/web/widget_tempate/widget-template-edit.xml"/>
+    <!--widget types-->
+    <screen id="screenWidgetBrowse"
+            template="com/audimex/dashboard/web/widget_types/screen/screen-widget-browse.xml"/>
+    <screen id="screenWidgetEdit"
+            template="com/audimex/dashboard/web/widget_types/screen/screen-widget-edit.xml"/>
 </screen-config>

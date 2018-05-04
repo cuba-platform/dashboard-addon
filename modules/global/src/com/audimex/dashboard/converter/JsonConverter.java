@@ -10,6 +10,7 @@ import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.param_value_types.Value;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 
 import static com.audimex.dashboard.converter.JsonConverter.NAME;
@@ -27,8 +28,8 @@ public class JsonConverter {
         gson = builder.create();
     }
 
-    public String toJson(Object obj) {
-        return gson.toJson(obj);
+    public String widgetToJson(Widget widget) {
+        return gson.toJson(widget, new TypeToken<Widget>(){}.getType());
     }
 
     public Dashboard dashboardFromJson(String json) {

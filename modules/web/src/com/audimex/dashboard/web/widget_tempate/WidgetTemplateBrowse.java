@@ -77,7 +77,7 @@ public class WidgetTemplateBrowse extends AbstractLookup {
 
     protected void addOrUpdateWidgetTemplate(Widget item) {
         UUID widgetId = item.getId();
-        String jsonModel = converter.toJson(item);
+        String jsonModel = converter.widgetToJson(item);
 
         Optional persWidgetOpt = widgetTemplatesDs.getItems().stream()
                 .filter(widget -> widgetId.equals(widget.getId()))

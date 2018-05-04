@@ -10,17 +10,17 @@ public class WidgetTypeInfo implements Serializable {
 
     protected Class typeClass;
     protected String caption;
-    protected Class browseClass;
-    protected Class editClass;
+    protected String browseFrameId;
+    protected String editFrameId;
 
     public WidgetTypeInfo() {
     }
 
-    public WidgetTypeInfo(Class typeClass, String caption, Class browseClass, Class editClass) {
+    public WidgetTypeInfo(Class typeClass, String caption, String browseFrameId, String editFrameId) {
         this.typeClass = typeClass;
         this.caption = caption;
-        this.browseClass = browseClass;
-        this.editClass = editClass;
+        this.browseFrameId = browseFrameId;
+        this.editFrameId = editFrameId;
     }
 
     public Class getTypeClass() {
@@ -39,19 +39,19 @@ public class WidgetTypeInfo implements Serializable {
         this.caption = caption;
     }
 
-    public Class getBrowseClass() {
-        return browseClass;
+    public String getBrowseFrameId() {
+        return browseFrameId;
     }
 
-    public void setBrowseClass(Class browseClass) {
-        this.browseClass = browseClass;
+    public void setBrowseFrameId(String browseFrameId) {
+        this.browseFrameId = browseFrameId;
     }
 
-    public Class getEditClass() {
-        return editClass;
+    public String getEditFrameId() {
+        return editFrameId;
     }
 
-    public void setEditClass(Class editClass) {
-        this.editClass = editClass;
+    public void setEditFrameId(String editFrameId) {
+        this.editFrameId = editFrameId;
     }
 }

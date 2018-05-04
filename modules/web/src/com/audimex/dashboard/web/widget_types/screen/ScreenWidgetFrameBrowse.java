@@ -5,15 +5,14 @@
 package com.audimex.dashboard.web.widget_types.screen;
 
 import com.audimex.dashboard.model.Parameter;
-import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.web.widget_types.AbstractWidget;
+import com.audimex.dashboard.web.widget_types.AbstractWidgetFrame;
 import com.haulmont.cuba.gui.components.Frame;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-public class ScreenWidgetBrowse extends AbstractWidget {
+public class ScreenWidgetFrameBrowse extends AbstractWidgetFrame {
     @Inject
     protected Frame screenFrame;
 

@@ -11,17 +11,17 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 @MetaClass(name = "amxd$ScreenWidget")
 @WidgetType(caption = "Screen",
-        browseClass = "com.audimex.dashboard.web.widget_types.screen.ScreenWidgetBrowse",
-        editClass = "com.audimex.dashboard.web.widget_types.screen.ScreenWidgetEdit")
+        browseFrameId = "screenWidgetBrowse",
+        editFrameId = "screenWidgetEdit")
 public class ScreenWidget extends Widget {
     @MetaProperty
-    protected String frameId;
+    protected String screenId;
 
-    public String getFrameId() {
-        return frameId;
+    public String getScreenId() {
+        return screenId;
     }
 
-    public void setFrameId(String frameId) {
-        this.frameId = frameId;
+    public void setScreenId(String screenId) {
+        this.screenId = screenId;
     }
 }

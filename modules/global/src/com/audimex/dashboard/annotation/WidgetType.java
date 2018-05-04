@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface WidgetType {
     String caption();
-    String browseClass();
-    String editClass();
+    String browseFrameId();
+    String editFrameId();
 }

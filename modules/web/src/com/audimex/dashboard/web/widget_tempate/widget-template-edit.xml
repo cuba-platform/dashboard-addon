@@ -18,13 +18,25 @@
                 <field property="caption"/>
                 <field property="icon"/>
                 <field property="description"/>
-                <!--<field property="frameId"-->
-                       <!--custom="true"/>-->
             </column>
         </fieldGroup>
-        <frame id="paramsFrame"
-               caption="msg://parameters"
-               screen="amdx$Parameter.browse"/>
+        <hbox id="typeHbox"
+              spacing="true">
+            <label id="typeLabel"
+                   width="85px"
+                   value="msg://widgetType"/>
+            <lookupField id="typeLookup"
+                         nullOptionVisible="false"
+                         required="true"/>
+        </hbox>
+        <vbox id="widgetEditBox"/>
+        <groupBox id="paramsBox"
+                  caption="msg://widgetParameters"
+                  collapsable="true"
+                  width="100%">
+            <frame id="paramsFrame"
+                   screen="amdx$Parameter.browse"/>
+        </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

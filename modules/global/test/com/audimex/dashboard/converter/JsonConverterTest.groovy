@@ -20,7 +20,7 @@ class JsonConverterTest extends Specification {
 
     def "test serialisation parameters"() {
         when:
-        String json = converter.toJson(parameter)
+        String json = converter.widgetToJson(parameter)
 
         then:
         result.stream().allMatch({ r -> json.contains(r as CharSequence) })
