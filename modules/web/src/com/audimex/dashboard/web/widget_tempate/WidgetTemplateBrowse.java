@@ -41,7 +41,7 @@ public class WidgetTemplateBrowse extends AbstractLookup {
         modelWidgetsDs.clear();
         for (WidgetTemplate persWidget : widgetTemplatesDs.getItems()) {
             Widget model = converter.widgetFromJson(persWidget.getWidgetModel());
-            modelWidgetsDs.addItem(model);
+            modelWidgetsDs.includeItem(model);
         }
     }
 
@@ -71,7 +71,7 @@ public class WidgetTemplateBrowse extends AbstractLookup {
     }
 
     protected void openWidgetEditor(Widget widget) {
-        AbstractEditor editor = openEditor("widgetTemplateEdit", widget, THIS_TAB);
+        AbstractEditor editor = openEditor("widgetTemplateEdit", widget, THIS_TAB, modelWidgetsDs);
         editor.addCloseWithCommitListener(() -> addOrUpdateWidgetTemplate((Widget) editor.getItem()));
     }
 
