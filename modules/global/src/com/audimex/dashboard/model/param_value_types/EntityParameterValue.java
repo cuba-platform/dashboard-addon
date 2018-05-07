@@ -4,18 +4,31 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class EntityValue implements Value {
+import java.util.HashMap;
+
+public class EntityParameterValue implements ParameterValue {
     protected String metaClassName;
     protected String entityId;
     protected String viewName;
 
-    public EntityValue() {
+    public EntityParameterValue() {
     }
 
-    public EntityValue(String metaClassName, String entityId, String viewName) {
+    public EntityParameterValue(String metaClassName, String entityId, String viewName) {
         this.metaClassName = metaClassName;
         this.entityId = entityId;
         this.viewName = viewName;
+    }
+
+    @Override
+    public Object getValue() {
+        return new HashMap<String, String>() {
+            {
+                put("metaClassName", metaClassName);
+                put("entityId", entityId);
+                put("viewName", viewName);
+            }
+        };
     }
 
     public String getMetaClassName() {

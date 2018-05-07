@@ -33,72 +33,72 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
         type = (ParameterType) params.get(VALUE_TYPE);
-        Value value = (Value) params.get(VALUE);
-        showField(value);
+        ParameterValue parameterValue = (ParameterValue) params.get(VALUE);
+        showField(parameterValue);
     }
 
     @Override
-    public Value getValue() {
+    public ParameterValue getValue() {
         //todo add validation and validate exception, UUID
         switch (type) {
             case DATETIME:
-                return new DateTimeValue(dateField.getValue());
+                return new DateTimeParameterValue(dateField.getValue());
             case TIME:
-                return new TimeValue(timeField.getValue());
+                return new TimeParameterValue(timeField.getValue());
             case DATE:
-                return new DateValue(dateField.getValue());
+                return new DateParameterValue(dateField.getValue());
             case DECIMAL:
-                return new DecimalValue(textField.getValue());
+                return new DecimalParameterValue(textField.getValue());
             case INTEGER:
-                return new IntegerValue(textField.getValue());
+                return new IntegerParameterValue(textField.getValue());
             case LONG:
-                return new LongValue(textField.getValue());
+                return new LongParameterValue(textField.getValue());
             case STRING:
             case UUID:
-                return new StringValue(textField.getValue());
+                return new StringParameterValue(textField.getValue());
             case BOOLEAN:
-                return new BooleanValue(checkBox.getValue());
+                return new BooleanParameterValue(checkBox.getValue());
             default:
                 return null;
         }
     }
 
-    protected void showField(Value value) {
+    protected void showField(ParameterValue parameterValue) {
         switch (type) {
             case DATETIME:
-                setDateTime((DateTimeValue) value);
+                setDateTime((DateTimeParameterValue) parameterValue);
                 break;
             case TIME:
-                setTime((TimeValue) value);
+                setTime((TimeParameterValue) parameterValue);
                 break;
             case DATE:
-                setDate((DateValue) value);
+                setDate((DateParameterValue) parameterValue);
                 break;
             case DECIMAL:
-                setDecimal((DecimalValue) value);
+                setDecimal((DecimalParameterValue) parameterValue);
                 break;
             case INTEGER:
-                setInteger((IntegerValue) value);
+                setInteger((IntegerParameterValue) parameterValue);
                 break;
             case LONG:
-                setLong((LongValue) value);
+                setLong((LongParameterValue) parameterValue);
                 break;
             case STRING:
             case UUID:
-                setString((StringValue) value);
+                setString((StringParameterValue) parameterValue);
                 break;
             case BOOLEAN:
-                setBoolean((BooleanValue) value);
+                setBoolean((BooleanParameterValue) parameterValue);
                 break;
         }
     }
 
-    protected void setDateTime(DateTimeValue value) {
+    protected void setDateTime(DateTimeParameterValue value) {
         dateField.setValue(value == null ? null : value.getValue());
         initDateField("DD/MM/yyyy hh:mm");
     }
 
-    protected void setDate(DateValue value) {
+    protected void setDate(DateParameterValue value) {
         dateField.setValue(value == null ? null : value.getValue());
         initDateField("DD/MM/yyyy");
     }
@@ -108,27 +108,27 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
         dateField.setVisible(true);
     }
 
-    protected void setTime(TimeValue value) {
+    protected void setTime(TimeParameterValue value) {
         timeField.setValue(value == null ? null : value.getValue());
         timeField.setVisible(true);
     }
 
-    protected void setDecimal(DecimalValue value) {
+    protected void setDecimal(DecimalParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
         initTextField("decimal");
     }
 
-    protected void setInteger(IntegerValue value) {
+    protected void setInteger(IntegerParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
         initTextField("int");
     }
 
-    protected void setLong(LongValue value) {
+    protected void setLong(LongParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
         initTextField("long");
     }
 
-    protected void setString(StringValue value) {
+    protected void setString(StringParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
         initTextField(null);
     }
@@ -138,7 +138,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
         textField.setVisible(true);
     }
 
-    protected void setBoolean(BooleanValue value) {
+    protected void setBoolean(BooleanParameterValue value) {
         checkBox.setValue(value == null ? null : value.getValue());
         checkBox.setVisible(true);
     }

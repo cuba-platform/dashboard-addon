@@ -3,7 +3,7 @@
  */
 package com.audimex.dashboard.model;
 
-import com.audimex.dashboard.model.param_value_types.Value;
+import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
@@ -21,7 +21,7 @@ public class Parameter extends BaseUuidEntity {
     @MetaProperty
     protected Integer orderNum;
 
-    protected Value value;
+    protected ParameterValue parameterValue;
 
     public Integer getOrderNum() {
         return orderNum;
@@ -31,12 +31,12 @@ public class Parameter extends BaseUuidEntity {
         this.orderNum = orderNum;
     }
 
-    public void setValue(Value value) {
-        this.value = value;
+    public void setParameterValue(ParameterValue parameterValue) {
+        this.parameterValue = parameterValue;
     }
 
-    public Value getValue() {
-        return value;
+    public ParameterValue getParameterValue() {
+        return parameterValue;
     }
 
     public void setName(String name) {

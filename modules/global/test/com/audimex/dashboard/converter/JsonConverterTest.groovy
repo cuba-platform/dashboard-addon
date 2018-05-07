@@ -5,9 +5,9 @@
 package com.audimex.dashboard.converter
 
 import com.audimex.dashboard.model.Parameter
-import com.audimex.dashboard.model.param_value_types.EntityValue
-import com.audimex.dashboard.model.param_value_types.EnumValue
-import com.audimex.dashboard.model.param_value_types.ListEntitiesValue
+import com.audimex.dashboard.model.param_value_types.EntityParameterValue
+import com.audimex.dashboard.model.param_value_types.EnumParameterValue
+import com.audimex.dashboard.model.param_value_types.ListEntitiesParameterValue
 import spock.lang.Specification
 
 class JsonConverterTest extends Specification {
@@ -35,7 +35,7 @@ class JsonConverterTest extends Specification {
 
     def "test deserialization parameters"() {
         given:
-        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"value\":{\"className\":\"com.audimex.dashboard.model.param_value_types.EntityValue\",\"data\":{\"metaClassName\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
+        String json = "{\"name\":\"name\",\"alias\":\"alias\",\"mappedAlias\":\"mappedAlias\",\"orderNum\":1,\"parameterValue\":{\"className\":\"com.audimex.dashboard.model.param_value_types.EntityParameterValue\",\"data\":{\"metaClassName\":\'sec\$User\',\"entityId\":\"entityId\",\"viewName\":\"_local\"}},\"id\":\"858d70c8-a536-6a7d-57a0-8ac9e64edf89\",\"__new\":true,\"__detached\":false,\"__removed\":false}"
 
         when:
         Parameter param = converter.parameterFromJson(json)
@@ -45,27 +45,27 @@ class JsonConverterTest extends Specification {
         param.alias == 'alias'
         param.mappedAlias == 'mappedAlias'
         param.orderNum == 1
-        param.value.getClass() == EntityValue.class
+        param.parameterValue.getClass() == EntityParameterValue.class
 
-        def value = param.value as EntityValue
+        def value = param.parameterValue as EntityParameterValue
         value.entityId == 'entityId'
         value.metaClassName == 'sec$User'
         value.viewName == '_local'
     }
 
     Parameter entityParameter() {
-        EntityValue value = new EntityValue()
+        EntityParameterValue value = new EntityParameterValue()
         value.entityId = 'entityId'
         value.metaClassName = 'sec$User'
         value.viewName = '_local'
 
         Parameter p = baseParameter()
-        p.value = value
+        p.parameterValue = value
         return p
     }
 
-    EntityValue someEntityValue() {
-        EntityValue value = new EntityValue()
+    EntityParameterValue someEntityValue() {
+        EntityParameterValue value = new EntityParameterValue()
         value.entityId = 'entityId'
         value.metaClassName = 'sec$User'
         value.viewName = '_local'
@@ -73,26 +73,26 @@ class JsonConverterTest extends Specification {
     }
 
     Parameter enumStringParameter() {
-        EnumValue value = new EnumValue()
-        value.enumClassName = 'someEnumClass'
+        EnumParameterValue value = new EnumParameterValue()
+        value.value = 'someEnumClass'
         value.enumValue = 'someValue'
 
         Parameter p = baseParameter()
-        p.value = value
+        p.parameterValue = value
         return p
     }
 
     Parameter listEntitiesParameter() {
-        EntityValue ent1 = new EntityValue()
+        EntityParameterValue ent1 = new EntityParameterValue()
         ent1.entityId = 'entity1'
-        EntityValue ent2 = new EntityValue()
+        EntityParameterValue ent2 = new EntityParameterValue()
         ent2.entityId = 'entity2'
 
-        ListEntitiesValue value = new ListEntitiesValue()
-        value.entityValues = [ent1, ent2]
+        ListEntitiesParameterValue value = new ListEntitiesParameterValue()
+        value.value = [ent1, ent2]
 
         Parameter p = baseParameter()
-        p.value = value
+        p.parameterValue = value
         return p
     }
 

@@ -6,13 +6,13 @@ package com.audimex.dashboard.model.param_value_types;
 
 import java.math.BigDecimal;
 
-public class DecimalValue implements Value {
+public class DecimalParameterValue implements ParameterValue {
     BigDecimal value;
 
-    public DecimalValue() {
+    public DecimalParameterValue() {
     }
 
-    public DecimalValue(BigDecimal value) {
+    public DecimalParameterValue(BigDecimal value) {
         this.value = value;
     }
 

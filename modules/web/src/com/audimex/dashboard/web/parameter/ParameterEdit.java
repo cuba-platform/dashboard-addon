@@ -45,47 +45,47 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     @Override
     protected boolean preCommit() {
-        Value value = valueFrame == null ? null : valueFrame.getValue();
-        parameterDs.getItem().setValue(value);
+        ParameterValue parameterValue = valueFrame == null ? null : valueFrame.getValue();
+        parameterDs.getItem().setParameterValue(parameterValue);
         return super.preCommit();
     }
 
     protected void initParameter() {
-        Value value = parameterDs.getItem().getValue();
+        ParameterValue parameterValue = parameterDs.getItem().getParameterValue();
 
-        if (value instanceof EntityValue) {
+        if (parameterValue instanceof EntityParameterValue) {
             typeLookup.setValue(ENTITY);
-            valueFrame = openEntityValueFrame((EntityValue) value);
-        } else if (value instanceof ListEntitiesValue) {
+            valueFrame = openEntityValueFrame((EntityParameterValue) parameterValue);
+        } else if (parameterValue instanceof ListEntitiesParameterValue) {
             typeLookup.setValue(LIST_ENTITY);
-            valueFrame = openEntitiesListValueFrame((ListEntitiesValue) value);
-        } else if (value instanceof EnumValue) {
+            valueFrame = openEntitiesListValueFrame((ListEntitiesParameterValue) parameterValue);
+        } else if (parameterValue instanceof EnumParameterValue) {
             typeLookup.setValue(ENUM);
-            valueFrame = openEnumValueFrame((EnumValue) value);
-        } else if (value instanceof DateValue) {
+            valueFrame = openEnumValueFrame((EnumParameterValue) parameterValue);
+        } else if (parameterValue instanceof DateParameterValue) {
             typeLookup.setValue(DATE);
-            valueFrame = openSimpleValueFrame(DATE, value);
-        } else if (value instanceof DateTimeValue) {
+            valueFrame = openSimpleValueFrame(DATE, parameterValue);
+        } else if (parameterValue instanceof DateTimeParameterValue) {
             typeLookup.setValue(DATETIME);
-            valueFrame = openSimpleValueFrame(DATETIME, value);
-        } else if (value instanceof TimeValue) {
+            valueFrame = openSimpleValueFrame(DATETIME, parameterValue);
+        } else if (parameterValue instanceof TimeParameterValue) {
             typeLookup.setValue(TIME);
-            valueFrame = openSimpleValueFrame(TIME, value);
-        } else if (value instanceof UuidValue) {
+            valueFrame = openSimpleValueFrame(TIME, parameterValue);
+        } else if (parameterValue instanceof UuidParameterValue) {
             typeLookup.setValue(UUID);
-            valueFrame = openSimpleValueFrame(UUID, value);
-        } else if (value instanceof IntegerValue) {
+            valueFrame = openSimpleValueFrame(UUID, parameterValue);
+        } else if (parameterValue instanceof IntegerParameterValue) {
             typeLookup.setValue(INTEGER);
-            valueFrame = openSimpleValueFrame(INTEGER, value);
-        } else if (value instanceof StringValue) {
+            valueFrame = openSimpleValueFrame(INTEGER, parameterValue);
+        } else if (parameterValue instanceof StringParameterValue) {
             typeLookup.setValue(STRING);
-            valueFrame = openSimpleValueFrame(STRING, value);
-        } else if (value instanceof DecimalValue) {
+            valueFrame = openSimpleValueFrame(STRING, parameterValue);
+        } else if (parameterValue instanceof DecimalParameterValue) {
             typeLookup.setValue(DECIMAL);
-            valueFrame = openSimpleValueFrame(DECIMAL, value);
-        } else if (value instanceof BooleanValue) {
+            valueFrame = openSimpleValueFrame(DECIMAL, parameterValue);
+        } else if (parameterValue instanceof BooleanParameterValue) {
             typeLookup.setValue(BOOLEAN);
-            valueFrame = openSimpleValueFrame(BOOLEAN, value);
+            valueFrame = openSimpleValueFrame(BOOLEAN, parameterValue);
         } else { //if UNDEFINED
             typeLookup.setValue(UNDEFINED);
         }
@@ -94,13 +94,13 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected void parameterTypeChanged(ParameterType type) {
         switch (type) {
             case LIST_ENTITY:
-                valueFrame = openEntitiesListValueFrame(new ListEntitiesValue());
+                valueFrame = openEntitiesListValueFrame(new ListEntitiesParameterValue());
                 break;
             case ENTITY:
-                valueFrame = openEntityValueFrame(new EntityValue());
+                valueFrame = openEntityValueFrame(new EntityParameterValue());
                 break;
             case ENUM:
-                valueFrame = openEnumValueFrame(new EnumValue());
+                valueFrame = openEnumValueFrame(new EnumParameterValue());
                 break;
             case DATETIME:
             case TIME:
@@ -121,15 +121,15 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         }
     }
 
-    protected SimpleValueFrame openSimpleValueFrame(ParameterType type, Value value) {
+    protected SimpleValueFrame openSimpleValueFrame(ParameterType type, ParameterValue parameterValue) {
         return (SimpleValueFrame) openFrame(
                 valueBox,
                 "simpleValueFrame",
-                ParamsMap.of(VALUE_TYPE, type, VALUE, value)
+                ParamsMap.of(VALUE_TYPE, type, VALUE, parameterValue)
         );
     }
 
-    protected EnumValueFrame openEnumValueFrame(EnumValue value) {
+    protected EnumValueFrame openEnumValueFrame(EnumParameterValue value) {
         return (EnumValueFrame) openFrame(
                 valueBox,
                 "enumValueFrame",
@@ -137,7 +137,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         );
     }
 
-    protected EntityValueFrame openEntityValueFrame(EntityValue value) {
+    protected EntityValueFrame openEntityValueFrame(EntityParameterValue value) {
         return (EntityValueFrame) openFrame(
                 valueBox,
                 "entityValueFrame",
@@ -145,7 +145,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         );
     }
 
-    protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesValue value) {
+    protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesParameterValue value) {
         return (EntitiesListValueFrame) openFrame(
                 valueBox,
                 "entitiesListValueFrame",

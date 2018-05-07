@@ -4,21 +4,21 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class EnumValue implements Value {
+public class EnumParameterValue implements ParameterValue {
     protected String enumClassName;
 
-    public EnumValue() {
+    public EnumParameterValue() {
     }
 
-    public EnumValue(String enumClassName) {
+    public EnumParameterValue(String enumClassName) {
         this.enumClassName = enumClassName;
     }
 
-    public String getEnumClassName() {
+    public String getValue() {
         return enumClassName;
     }
 
-    public void setEnumClassName(String enumClassName) {
+    public void setValue(String enumClassName) {
         this.enumClassName = enumClassName;
     }
 }

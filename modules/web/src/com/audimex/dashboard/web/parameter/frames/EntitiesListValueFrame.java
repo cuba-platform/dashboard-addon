@@ -1,9 +1,9 @@
 
 package com.audimex.dashboard.web.parameter.frames;
 
-import com.audimex.dashboard.model.param_value_types.EntityValue;
-import com.audimex.dashboard.model.param_value_types.ListEntitiesValue;
-import com.audimex.dashboard.model.param_value_types.Value;
+import com.audimex.dashboard.model.param_value_types.EntityParameterValue;
+import com.audimex.dashboard.model.param_value_types.ListEntitiesParameterValue;
+import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -20,7 +20,7 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
     @Inject
     protected ValueCollectionDatasourceImpl entitiesDs;
 
-    protected Map<KeyValueEntity, EntityValue> tableValues = new HashMap<>();
+    protected Map<KeyValueEntity, EntityParameterValue> tableValues = new HashMap<>();
     protected KeyValueEntity oldValue;
 
     @Override
@@ -30,18 +30,18 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
     }
 
     @Override
-    public Value getValue() {
-        return new ListEntitiesValue(new ArrayList<>(tableValues.values()));
+    public ParameterValue getValue() {
+        return new ListEntitiesParameterValue(new ArrayList<>(tableValues.values()));
     }
 
     protected void initDs(Map<String, Object> params) {
-        ListEntitiesValue value = (ListEntitiesValue) params.get(VALUE);
+        ListEntitiesParameterValue value = (ListEntitiesParameterValue) params.get(VALUE);
 
-        if (value == null || value.getEntityValues() == null) {
-            value = new ListEntitiesValue();
+        if (value == null || value.getValue() == null) {
+            value = new ListEntitiesParameterValue();
         }
 
-        for (EntityValue entityValue : value.getEntityValues()) {
+        for (EntityParameterValue entityValue : value.getValue()) {
             KeyValueEntity keyValueEntity = createKeyValueEntity(entityValue);
             entitiesDs.addItem(keyValueEntity);
             tableValues.put(keyValueEntity, entityValue);
@@ -69,18 +69,18 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
         }
     }
 
-    protected void openEntityValueWindow(EntityValue value) {
+    protected void openEntityValueWindow(EntityParameterValue value) {
         EntityValueWindow editValueWindow = (EntityValueWindow) openWindow("entityValueWindow", DIALOG,
                 ParamsMap.of(VALUE, value));
 
         editValueWindow.addCloseListener(actionId -> {
             if ("commit".equals(actionId)) {
-                saveWindowValue((EntityValue) editValueWindow.getValue());
+                saveWindowValue((EntityParameterValue) editValueWindow.getValue());
             }
         });
     }
 
-    protected void saveWindowValue(EntityValue windowValue) {
+    protected void saveWindowValue(EntityParameterValue windowValue) {
         if (oldValue != null) {
             entitiesDs.removeItem(oldValue);
             tableValues.remove(oldValue);
@@ -92,7 +92,7 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
         tableValues.put(newValue, windowValue);
     }
 
-    protected KeyValueEntity createKeyValueEntity(EntityValue value) {
+    protected KeyValueEntity createKeyValueEntity(EntityParameterValue value) {
         KeyValueEntity keyValueEntity = new KeyValueEntity();
         keyValueEntity.setValue("metaClassName", value.getMetaClassName());
         keyValueEntity.setValue("entityId", value.getEntityId());

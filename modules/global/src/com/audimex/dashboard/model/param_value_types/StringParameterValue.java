@@ -4,13 +4,13 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class StringValue implements Value {
+public class StringParameterValue implements ParameterValue {
     protected String value;
 
-    public StringValue() {
+    public StringParameterValue() {
     }
 
-    public StringValue(String value) {
+    public StringParameterValue(String value) {
         this.value = value;
     }
 

@@ -4,13 +4,13 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class IntegerValue implements Value {
+public class IntegerParameterValue implements ParameterValue {
     protected Integer value;
 
-    public IntegerValue() {
+    public IntegerParameterValue() {
     }
 
-    public IntegerValue(Integer value) {
+    public IntegerParameterValue(Integer value) {
         this.value = value;
     }
 

@@ -9,11 +9,15 @@ import com.audimex.dashboard.model.Widget;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 
+import static com.audimex.dashboard.model.widget_types.ScreenWidget.CAPTION;
+
 @MetaClass(name = "amxd$ScreenWidget")
-@WidgetType(caption = "Screen",
+@WidgetType(caption = CAPTION,
         browseFrameId = "screenWidgetBrowse",
         editFrameId = "screenWidgetEdit")
 public class ScreenWidget extends Widget {
+    public static final String CAPTION = "Screen";
+
     @MetaProperty
     protected String screenId;
 

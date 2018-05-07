@@ -4,13 +4,13 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class LongValue implements Value {
+public class LongParameterValue implements ParameterValue {
     protected Long value;
 
-    public LongValue() {
+    public LongParameterValue() {
     }
 
-    public LongValue(Long value) {
+    public LongParameterValue(Long value) {
         this.value = value;
     }
 

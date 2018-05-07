@@ -7,7 +7,7 @@ package com.audimex.dashboard.converter;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.param_value_types.Value;
+import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +23,7 @@ public class JsonConverter {
 
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Value.class, new InheritanceAdapter());
+        builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
         builder.registerTypeAdapter(Widget.class, new InheritanceAdapter());
         gson = builder.create();
     }

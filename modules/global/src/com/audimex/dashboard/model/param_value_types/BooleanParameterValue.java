@@ -4,13 +4,13 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-public class BooleanValue implements Value {
+public class BooleanParameterValue implements ParameterValue {
     protected Boolean value;
 
-    public BooleanValue() {
+    public BooleanParameterValue() {
     }
 
-    public BooleanValue(Boolean value) {
+    public BooleanParameterValue(Boolean value) {
         this.value = value;
     }
 

@@ -6,13 +6,13 @@ package com.audimex.dashboard.model.param_value_types;
 
 import java.util.Date;
 
-public class DateValue implements Value {
+public class DateParameterValue implements ParameterValue {
     protected Date value;
 
-    public DateValue() {
+    public DateParameterValue() {
     }
 
-    public DateValue(Date value) {
+    public DateParameterValue(Date value) {
         this.value = value;
     }
 

@@ -6,7 +6,7 @@ package com.audimex.dashboard.model.param_value_types;
 
 import java.util.UUID;
 
-public class UuidValue implements Value {
+public class UuidParameterValue implements ParameterValue {
     protected UUID value;
 
     public UUID getValue() {

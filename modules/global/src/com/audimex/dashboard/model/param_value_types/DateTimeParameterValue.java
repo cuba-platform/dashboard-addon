@@ -4,16 +4,15 @@
 
 package com.audimex.dashboard.model.param_value_types;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-public class DateTimeValue implements Value {
+public class DateTimeParameterValue implements ParameterValue {
     protected Date value;
 
-    public DateTimeValue() {
+    public DateTimeParameterValue() {
     }
 
-    public DateTimeValue(Date value) {
+    public DateTimeParameterValue(Date value) {
         this.value = value;
     }
 

@@ -1,6 +1,6 @@
 package com.audimex.dashboard.web.parameter.frames;
 
-import com.audimex.dashboard.model.param_value_types.Value;
+import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ public class EntityValueWindow extends AbstractWindow implements ValueFrame {
     }
 
     @Override
-    public Value getValue() {
+    public ParameterValue getValue() {
         return entityValueFrame.getValue();
     }
 

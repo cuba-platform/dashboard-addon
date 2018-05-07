@@ -6,5 +6,6 @@ package com.audimex.dashboard.model.param_value_types;
 
 import java.io.Serializable;
 
-public interface Value extends Serializable {
+public interface ParameterValue extends Serializable {
+    Object getValue();
 }

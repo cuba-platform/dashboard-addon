@@ -1,7 +1,7 @@
 package com.audimex.dashboard.web.parameter.frames;
 
-import com.audimex.dashboard.model.param_value_types.EntityValue;
-import com.audimex.dashboard.model.param_value_types.Value;
+import com.audimex.dashboard.model.param_value_types.EntityParameterValue;
+import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
@@ -35,14 +35,14 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
         loadAllPersistentClasses();
-        selectIfExist((EntityValue) params.get(VALUE));
+        selectIfExist((EntityParameterValue) params.get(VALUE));
         metaClassLookup.addValueChangeListener(e -> metaClassValueChanged((MetaClass) e.getValue()));
     }
 
 
     @Override
-    public Value getValue() {
-        EntityValue value = new EntityValue();
+    public ParameterValue getValue() {
+        EntityParameterValue value = new EntityParameterValue();
         MetaClass metaClass = metaClassLookup.getValue();
 
         if (metaClass != null) {
@@ -63,7 +63,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         metaClassLookup.setOptionsList(metaClasses);
     }
 
-    public void selectIfExist(EntityValue value) {
+    public void selectIfExist(EntityParameterValue value) {
         if (value != null && isNotBlank(value.getMetaClassName())) {
             String metaClassName = value.getMetaClassName();
 
