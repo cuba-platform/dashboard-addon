@@ -32,6 +32,10 @@ public class JsonConverter {
         return gson.toJson(widget, new TypeToken<Widget>(){}.getType());
     }
 
+    public String dashboardToJson(Dashboard dashboard) {
+        return gson.toJson(dashboard, new TypeToken<Dashboard>(){}.getType());
+    }
+
     public Dashboard dashboardFromJson(String json) {
         return gson.fromJson(json, Dashboard.class);
     }

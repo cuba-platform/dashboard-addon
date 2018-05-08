@@ -2,6 +2,7 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="dashboard"
           insertBefore="administration">
+        <item screen="dashboardBrowse"/>
         <item screen="widgetTemplateBrowse"/>
     </menu>
 </menu-config>

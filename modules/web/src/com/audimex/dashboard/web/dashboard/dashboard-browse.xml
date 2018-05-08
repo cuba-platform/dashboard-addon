@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://dashboardsCaption"
+        class="com.audimex.dashboard.web.dashboard.DashboardBrowse"
+        focusComponent="dashboardsTable"
+        lookupComponent="dashboardsTable"
+        datasource="modelDashboardsDs">
+    <dsContext>
+        <collectionDatasource id="persDashboardsDs"
+                              class="com.audimex.dashboard.entity.DashboardPersist"
+                              view="_local">
+            <query>
+                <![CDATA[select e from amxd$DashboardPersist e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="modelDashboardsDs"
+                              class="com.audimex.dashboard.model.Dashboard"/>
+    </dsContext>
+    <layout spacing="true">
+        <table id="dashboardsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create" caption="msg://create" invoke="createDashboard"/>
+                <action id="edit" caption="msg://edit" invoke="editDashboard"/>
+                <action id="remove" caption="msg://remove" invoke="removeDashboard"/>
+            </actions>
+            <columns>
+                <column id="title"/>
+            </columns>
+            <rows datasource="modelDashboardsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dashboardsTable.create"/>
+                <button id="editBtn"
+                        action="dashboardsTable.edit"/>
+                <button id="removeBtn"
+                        action="dashboardsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>
