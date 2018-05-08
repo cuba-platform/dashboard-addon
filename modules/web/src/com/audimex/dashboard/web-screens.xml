@@ -29,4 +29,8 @@
             template="com/audimex/dashboard/web/widget_types/screen/screen-widget-browse.xml"/>
     <screen id="screenWidgetEdit"
             template="com/audimex/dashboard/web/widget_types/screen/screen-widget-edit.xml"/>
+    <screen id="lookupWidgetBrowse"
+            template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-browse.xml"/>
+    <screen id="lookupWidgetEdit"
+            template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-edit.xml"/>
 </screen-config>

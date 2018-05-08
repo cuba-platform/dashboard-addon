@@ -14,5 +14,6 @@
         <class>com.audimex.dashboard.model.visual_model.GridLayout</class>
         <!--widget types-->
         <class>com.audimex.dashboard.model.widget_types.ScreenWidget</class>
+        <class>com.audimex.dashboard.model.widget_types.LookupWidget</class>
     </metadata-model>
 </metadata>

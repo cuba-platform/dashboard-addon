@@ -30,7 +30,6 @@
                 <column id="caption"/>
                 <column id="icon"/>
                 <column id="description"/>
-                <!--<column id="screenId"/>-->
             </columns>
             <rows datasource="modelWidgetsDs"/>
             <rowsCount/>

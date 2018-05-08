@@ -55,8 +55,6 @@ public class WidgetTemplateEdit extends AbstractEditor<Widget> {
         initParametersFrame();
     }
 
-
-
     protected List<String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {
         return typesInfo.stream()
                 .map(WidgetTypeInfo::getCaption)
@@ -100,7 +98,6 @@ public class WidgetTemplateEdit extends AbstractEditor<Widget> {
     protected boolean preCommit() {
         List<Parameter> parameters = paramsFrame.getParameters();
         getItem().setParameters(parameters);
-        getItem().setIsTemplate(true);
         return super.preCommit();
     }
 }

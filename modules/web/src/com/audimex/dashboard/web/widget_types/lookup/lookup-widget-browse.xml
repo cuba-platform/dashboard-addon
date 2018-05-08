@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+    <layout expand="lookupBox"
+            spacing="true">
+        <vbox id="lookupBox"
+              width="100%"/>
+    </layout>
+</window>
