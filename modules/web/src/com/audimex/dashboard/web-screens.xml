@@ -7,8 +7,10 @@
     <screen id="dashboardEdit"
             template="com/audimex/dashboard/web/dashboard/dashboard-edit.xml"/>
     <!--dashboard frames-->
-    <screen id="widgets-palette"
-            template="com/audimex/dashboard/web/dashboard/frames/widgets-palette.xml"/>
+    <screen id="paletteFrame"
+            template="com/audimex/dashboard/web/dashboard/frames/palette-frame.xml"/>
+    <screen id="canvasFrame"
+            template="com/audimex/dashboard/web/dashboard/frames/canvas-frame.xml"/>
     <!--parameters-->
     <screen id="amdx$Parameter.browse"
             template="com/audimex/dashboard/web/parameter/parameter-browse.xml"/>
@@ -39,4 +41,6 @@
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-browse.xml"/>
     <screen id="lookupWidgetEdit"
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-edit.xml"/>
+    <screen id="screen"
+            template="com/audimex/dashboard/web/screens/screen.xml"/>
 </screen-config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
+        class="com.audimex.dashboard.web.dashboard.frames.PaletteFrame">
+    <layout spacing="true">
+        <label id="paletteLabel"
+               align="MIDDLE_CENTER"
+               value="msg://palette"/>
+        <dnd:dndVBoxLayout id="palette"
+                           dragMode="CLONE"
+                           spacing="true"
+                           width="100%">
+            <button caption="Test Button"/>
+        </dnd:dndVBoxLayout>
+    </layout>
+</window>

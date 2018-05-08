@@ -1,5 +1,9 @@
 /* Define your theme modifications inside next mixin */
 @mixin com_audimex_dashboard-halo-ext {
+    .min-height{
+            min-height:50px;
+        }
+
     .amxd-shadow-border {
         box-shadow: inset 0 0 10px #e0e0e0;
         border: 2px solid transparent;

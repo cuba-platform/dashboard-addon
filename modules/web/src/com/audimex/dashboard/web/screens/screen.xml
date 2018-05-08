@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.audimex.dashboard.web.screens.Screen"
+        messagesPack="com.audimex.dashboard.web.screens"
+        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd">
+    <dialogMode height="600"
+                width="800"/>
+    <layout stylename="min-height">
+        <hbox id="root"
+              expand="rootSpacer"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <groupBox id="rootPalette"
+                      caption="Todo actions"
+                      height="100%"
+                      width="200px">
+                <dnd:dndVBoxLayout id="palette"
+                                   dragMode="CLONE"
+                                   height="AUTO"
+                                   spacing="true"
+                                   width="100%">
+                    <button id="call"
+                            caption="Call"
+                            height="40px"
+                            width="100%"/>
+                    <button id="chat"
+                            caption="Chat"
+                            height="40px"
+                            width="100%"/>
+                    <button id="meeting"
+                            caption="Meeting"
+                            height="40px"
+                            width="100%"/>
+                    <button id="buy"
+                            caption="Buy"
+                            height="40px"
+                            width="100%"/>
+                </dnd:dndVBoxLayout>
+            </groupBox>
+            <groupBox id="rootDashboard"
+                      caption="Todo today"
+                      height="100%"
+                      width="500px">
+                <scrollBox height="100%">
+                    <dnd:dndVBoxLayout id="dashboard"
+                                       dragMode="CLONE"
+                                       stylename="min-height"
+                                       height="AUTO"
+                                       spacing="true"
+                                       width="100%">
+                    </dnd:dndVBoxLayout>
+                </scrollBox>
+            </groupBox>
+            <label id="rootSpacer"/>
+        </hbox>
+    </layout>
+</window>

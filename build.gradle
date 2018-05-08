@@ -9,13 +9,13 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        maven {
-            url 'https://repo.cuba-platform.com/content/groups/premium'
-            credentials {
-                username(rootProject.hasProperty('premiumRepoUser') ? rootProject['premiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
-                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
-            }
-        }
+//        maven {
+//            url 'https://repo.cuba-platform.com/content/groups/premium'
+//            credentials {
+//                username(rootProject.hasProperty('premiumRepoUser') ? rootProject['premiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
+//                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
+//            }
+//        }
 
     }
     dependencies {
@@ -52,10 +52,10 @@ cuba {
 }
 
 dependencies {
-    //todo: delete depends:  the reports and the chart
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("com.haulmont.reports:reports-global:$cubaVersion")
-    appComponent("com.haulmont.charts:charts-global:$cubaVersion")
+    appComponent("com.haulmont.addon.dnd:cuba-dnd-global:1.2.0")
+//    appComponent("com.haulmont.reports:reports-global:$cubaVersion")
+//    appComponent("com.haulmont.charts:charts-global:$cubaVersion")
 }
 
 def postgres = 'org.postgresql:postgresql:9.4.1212'
