@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://dashboardEdit"
+        class="com.audimex.dashboard.web.dashboard.DashboardEdit"
+        focusComponent="fieldGroup"
+        datasource="dashboardDs">
+    <dsContext>
+        <datasource id="dashboardDs"
+                    class="com.audimex.dashboard.model.Dashboard">
+        </datasource>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dashboardDs">
+            <column width="450px">
+                <field property="title"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="paramsBox"
+                  caption="msg://dashboardParameters"
+                  collapsable="true"
+                  collapsed="true"
+                  width="100%">
+            <frame id="paramsFrame"
+                   screen="amdx$Parameter.browse"/>
+        </groupBox>
+        <frame id="windowActions"
+               screen="extendedEditWindowActions"/>
+    </layout>
+</window>
