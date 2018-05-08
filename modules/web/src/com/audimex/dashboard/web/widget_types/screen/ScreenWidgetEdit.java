@@ -47,6 +47,7 @@ public class ScreenWidgetEdit extends AbstractFrame {
         widgetDs = (Datasource<Widget>) params.get(ITEM_DS);
         Widget widget = widgetDs.getItem();
 
+        //todo: create AbstractWidgetEdit
         if (!(widget instanceof ScreenWidget)) {
             ScreenWidget screenWidget = metadata.create(ScreenWidget.class);
             BeanUtils.copyProperties(widget, screenWidget);

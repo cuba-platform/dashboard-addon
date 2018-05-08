@@ -92,16 +92,14 @@ public class LookupWidgetEdit extends AbstractFrame {
         Element element = screenXmlLoader.load(winInfo.getTemplate(), winInfo.getId(), ParamsMap.empty());
         String screenClassName = element.attributeValue("class");
 
-        if (isNotBlank(screenClassName)) {
-            try {
-                Class<?> screenClass = Class.forName(screenClassName);
+        try {
+            Class<?> screenClass = Class.forName(screenClassName);
 
-                if (AbstractLookup.class.isAssignableFrom(screenClass)) {
-                    return true;
-                }
-            } catch (ClassNotFoundException e) {
-                return false;
+            if (AbstractLookup.class.isAssignableFrom(screenClass)) {
+                return true;
             }
+        } catch (NullPointerException | ClassNotFoundException e) {
+            return false;
         }
         return false;
     }

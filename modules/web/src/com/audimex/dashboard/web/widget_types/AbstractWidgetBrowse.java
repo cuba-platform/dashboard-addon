@@ -4,14 +4,20 @@
 
 package com.audimex.dashboard.web.widget_types;
 
+import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
+import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
+import javax.inject.Inject;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class AbstractWidgetFrame extends AbstractFrame {
+public class AbstractWidgetBrowse extends AbstractFrame {
     public static final String WIDGET = "WIDGET";
-    public static final String PARAMETERS = "PARAMETERS";
+
+    @Inject
+    protected WidgetTypeAnalyzer typeAnalyzer;
 
     protected Widget widget;
 
@@ -24,5 +30,13 @@ public class AbstractWidgetFrame extends AbstractFrame {
             //todo create DashboardException
             throw new RuntimeException("Can't get a Widget object in input parameters");
         }
+    }
+
+    public Map<String, Object> getParamsForFrame() {
+        return widget.getParameters().stream()
+                .collect(Collectors.toMap(
+                        Parameter::getName,
+                        parameter -> parameter.getParameterValue().getValue()
+                ));
     }
 }
