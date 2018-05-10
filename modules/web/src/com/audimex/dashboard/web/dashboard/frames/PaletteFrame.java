@@ -7,8 +7,13 @@ package com.audimex.dashboard.web.dashboard.frames;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.LayoutType;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
+import com.haulmont.addon.dnd.components.DropHandler;
+import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
+import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
+import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.vaadin.server.PaintTarget;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -35,7 +40,42 @@ public class PaletteFrame extends AbstractFrame {
         super.init(params);
 
         widgets = (List<Widget>) params.getOrDefault(WIDGETS, emptyList());
+        setPaletteSettings();
         addButtons();
+    }
+
+    protected void setPaletteSettings() {
+        palette.setDropHandler(new DropHandler() {
+            @Override
+            public void drop(DragAndDropEvent event) {
+
+            }
+
+            @Override
+            public AcceptCriterion getCriterion() {
+                return (AcceptCriterionWrapper) () -> new com.vaadin.event.dd.acceptcriteria.AcceptCriterion() {
+                    @Override
+                    public boolean isClientSideVerifiable() {
+                        return true;
+                    }
+
+                    @Override
+                    public void paint(PaintTarget target) {
+
+                    }
+
+                    @Override
+                    public void paintResponse(PaintTarget target) {
+
+                    }
+
+                    @Override
+                    public boolean accept(com.vaadin.event.dd.DragAndDropEvent dragEvent) {
+                        return false;
+                    }
+                };
+            }
+        });
     }
 
     protected void addButtons() {
