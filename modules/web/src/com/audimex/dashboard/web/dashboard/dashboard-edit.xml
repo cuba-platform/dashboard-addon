@@ -9,6 +9,13 @@
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.model.Dashboard">
         </datasource>
+        <collectionDatasource id="widgetTemplatesDs"
+                              class="com.audimex.dashboard.entity.WidgetTemplate"
+                              view="_local">
+            <query>
+                <![CDATA[select e from amxd$WidgetTemplate e]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <layout spacing="true"
             expand="dashboardLayoutBox">
@@ -21,6 +28,7 @@
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"
                   collapsable="true"
+                  collapsed="true"
                   width="100%">
             <frame id="paramsFrame"
                    screen="amdx$Parameter.browse"/>
@@ -31,7 +39,7 @@
                    width="100%"
                    height="100%"
                    orientation="horizontal"
-                   pos="20">
+                   pos="30">
                 <vbox id="paletteBox"
                       spacing="true"
                       margin="true"

@@ -55,6 +55,8 @@
                   value="+com/audimex/dashboard/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+com.audimex.dashboard.gui com.audimex.dashboard.web"/>
+        <property name="cuba.iconsConfig"
+                  value="+com.audimex.dashboard.web.DashboardIcon"/>
     </module>
     <module name="web-themes">
         <artifact name="dashboard-web-themes"/>
