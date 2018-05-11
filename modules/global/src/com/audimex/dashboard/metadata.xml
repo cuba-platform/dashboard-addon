@@ -8,8 +8,9 @@
         <class>com.audimex.dashboard.model.Parameter</class>
         <!--widget visual model-->
         <class>com.audimex.dashboard.model.visual_model.DashboardLayout</class>
-        <class>com.audimex.dashboard.model.visual_model.DashboardVisualModel</class>
-        <class>com.audimex.dashboard.model.visual_model.FramePanel</class>
+        <class>com.audimex.dashboard.model.visual_model.VerticalLayout</class>
+        <class>com.audimex.dashboard.model.visual_model.HorizontalLayout</class>
+        <class>com.audimex.dashboard.model.visual_model.WidgetLayout</class>
         <class>com.audimex.dashboard.model.visual_model.GridArea</class>
         <class>com.audimex.dashboard.model.visual_model.GridLayout</class>
         <!--widget types-->

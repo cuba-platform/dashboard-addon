@@ -4,8 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
-import com.audimex.dashboard.model.visual_model.LayoutType;
-import com.audimex.dashboard.web.components.WebPaletteButton;
+import com.audimex.dashboard.gui.Draggable;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;
@@ -62,9 +61,8 @@ public abstract class HorizontalLayoutDropHandler implements DropHandler {
             } else {
                 targetLayout.add(component);
             }
-        } else if (component instanceof WebPaletteButton) {
-            LayoutType layoutType = ((WebPaletteButton) component).getLayoutType();
-            component = getLayout(layoutType);
+        } else if (component instanceof Draggable) {
+            component = getComponent((Draggable) component);
 
             HorizontalDropLocation loc = details.getDropLocation();
             if (loc == HorizontalDropLocation.CENTER
@@ -84,5 +82,5 @@ public abstract class HorizontalLayoutDropHandler implements DropHandler {
         return AcceptCriterion.ACCEPT_ALL;
     }
 
-    public abstract Component getLayout(LayoutType type);
+    public abstract Component getComponent(Draggable component);
 }

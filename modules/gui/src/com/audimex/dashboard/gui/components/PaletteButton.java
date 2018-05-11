@@ -1,18 +1,9 @@
 package com.audimex.dashboard.gui.components;
 
-import com.audimex.dashboard.model.visual_model.LayoutType;
+import com.audimex.dashboard.gui.Draggable;
 import com.haulmont.cuba.gui.components.Button;
 
-import java.util.UUID;
-
-public interface PaletteButton extends Button {
+public interface PaletteButton extends Button, Draggable {
     String NAME = "paletteButton";
 
-    LayoutType getLayoutType();
-
-    void setLayoutType(LayoutType layoutType);
-
-    UUID getWidgetUuid();
-
-    void setWidgetUuid(UUID widgetUuid);
 }

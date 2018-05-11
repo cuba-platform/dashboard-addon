@@ -6,22 +6,22 @@ package com.audimex.dashboard.web.dashboard.frames.palette;
 
 import com.audimex.dashboard.gui.components.PaletteButton;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.model.visual_model.WidgetLayout;
+import com.audimex.dashboard.model.visual_model.GridLayout;
+import com.audimex.dashboard.model.visual_model.HorizontalLayout;
+import com.audimex.dashboard.model.visual_model.VerticalLayout;
+import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
-import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
-import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
-import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
 import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.vaadin.server.PaintTarget;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.audimex.dashboard.model.visual_model.LayoutType.*;
 import static com.audimex.dashboard.web.DashboardIcon.*;
 import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_DASHBOARD_BUTTON;
 import static java.util.Collections.emptyList;
@@ -35,6 +35,10 @@ public class PaletteFrame extends AbstractFrame {
     protected ComponentsFactory factory;
     @Inject
     protected Messages messages;
+    @Inject
+    protected Metadata metadata;
+    @Inject
+    protected NotDropHandler handler;
 
     protected List<Widget> widgets;
 
@@ -50,37 +54,7 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     protected void setPaletteSettings() {
-        palette.setDropHandler(new DropHandler() {
-            @Override
-            public void drop(DragAndDropEvent event) {
-
-            }
-
-            @Override
-            public AcceptCriterion getCriterion() {
-                return (AcceptCriterionWrapper) () -> new com.vaadin.event.dd.acceptcriteria.AcceptCriterion() {
-                    @Override
-                    public boolean isClientSideVerifiable() {
-                        return true;
-                    }
-
-                    @Override
-                    public void paint(PaintTarget target) {
-
-                    }
-
-                    @Override
-                    public void paintResponse(PaintTarget target) {
-
-                    }
-
-                    @Override
-                    public boolean accept(com.vaadin.event.dd.DragAndDropEvent dragEvent) {
-                        return false;
-                    }
-                };
-            }
-        });
+        palette.setDropHandler(handler);
     }
 
     //todo refactoring
@@ -88,7 +62,7 @@ public class PaletteFrame extends AbstractFrame {
         PaletteButton verticalLayoutBtn = factory.createComponent(PaletteButton.class);
         verticalLayoutBtn.setCaption(getMessage("verticalLayout"));
         verticalLayoutBtn.setIconFromSet(VERTICAL_LAYOUT_ICON);
-        verticalLayoutBtn.setLayoutType(VERTICAL_LAYOUT);
+        verticalLayoutBtn.setLayout(metadata.create(VerticalLayout.class));
         verticalLayoutBtn.setWidth("100%");
         verticalLayoutBtn.setHeight("50px");
         verticalLayoutBtn.setStyleName(AMXD_DASHBOARD_BUTTON);
@@ -96,7 +70,7 @@ public class PaletteFrame extends AbstractFrame {
         PaletteButton horizontalLayoutBtn = factory.createComponent(PaletteButton.class);
         horizontalLayoutBtn.setCaption(getMessage("horizontalLayout"));
         horizontalLayoutBtn.setIconFromSet(HORIZONTAL_LAYOUT_ICON);
-        horizontalLayoutBtn.setLayoutType(HORIZONTAL_LAYOUT);
+        horizontalLayoutBtn.setLayout(metadata.create(HorizontalLayout.class));
         horizontalLayoutBtn.setWidth("100%");
         horizontalLayoutBtn.setHeight("50px");
         horizontalLayoutBtn.setStyleName(AMXD_DASHBOARD_BUTTON);
@@ -104,7 +78,7 @@ public class PaletteFrame extends AbstractFrame {
         PaletteButton gridLayoutBtn = factory.createComponent(PaletteButton.class);
         gridLayoutBtn.setCaption(getMessage("gridLayout"));
         gridLayoutBtn.setIconFromSet(GRID_LAYOUT_ICON);
-        gridLayoutBtn.setLayoutType(GRID_LAYOUT);
+        gridLayoutBtn.setLayout(metadata.create(GridLayout.class));
         gridLayoutBtn.setWidth("100%");
         gridLayoutBtn.setHeight("50px");
         gridLayoutBtn.setStyleName(AMXD_DASHBOARD_BUTTON);
@@ -125,8 +99,9 @@ public class PaletteFrame extends AbstractFrame {
             PaletteButton btn = factory.createComponent(PaletteButton.class);
             btn.setCaption(messages.getMainMessage(widget.getCaption() != null ? widget.getCaption() : ""));
             btn.setIcon(widget.getIcon() != null ? widget.getIcon() : "");
-            btn.setLayoutType(FRAME_PANEL);
-            btn.setWidgetUuid(widget.getUuid());
+            WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
+            widgetLayout.setWidget(widget);
+            btn.setLayout(widgetLayout);
             btn.setWidth("100%");
             btn.setHeight("50px");
             btn.setStyleName(AMXD_DASHBOARD_BUTTON);

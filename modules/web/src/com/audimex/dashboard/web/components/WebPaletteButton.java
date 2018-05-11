@@ -1,32 +1,21 @@
 package com.audimex.dashboard.web.components;
 
 import com.audimex.dashboard.gui.components.PaletteButton;
-import com.audimex.dashboard.model.visual_model.LayoutType;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.cuba.web.gui.components.WebButton;
 
-import java.util.UUID;
-
 public class WebPaletteButton extends WebButton implements PaletteButton {
-    protected LayoutType layoutType;
-    protected UUID widgetUuid;
+    protected DashboardLayout layout;
 
     public WebPaletteButton() {
 
     }
 
-    public LayoutType getLayoutType() {
-        return layoutType;
+    public DashboardLayout getLayout() {
+        return layout;
     }
 
-    public void setLayoutType(LayoutType layoutType) {
-        this.layoutType = layoutType;
-    }
-
-    public UUID getWidgetUuid() {
-        return widgetUuid;
-    }
-
-    public void setWidgetUuid(UUID widgetUuid) {
-        this.widgetUuid = widgetUuid;
+    public void setLayout(DashboardLayout layout) {
+        this.layout = layout;
     }
 }

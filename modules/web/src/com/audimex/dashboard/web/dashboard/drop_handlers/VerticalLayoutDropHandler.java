@@ -1,7 +1,6 @@
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
-import com.audimex.dashboard.model.visual_model.LayoutType;
-import com.audimex.dashboard.web.components.WebPaletteButton;
+import com.audimex.dashboard.gui.Draggable;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;
@@ -59,9 +58,8 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
             } else {
                 targetLayout.add(component);
             }
-        } else if (component instanceof WebPaletteButton) {
-            LayoutType layoutType = ((WebPaletteButton) component).getLayoutType();
-            component = getLayout(layoutType);
+        } else if (component instanceof Draggable) {
+            component = getComponent((Draggable) component);
 
             VerticalDropLocation loc = details.getDropLocation();
             if (loc == VerticalDropLocation.MIDDLE
@@ -82,5 +80,5 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
         return AcceptCriterion.ACCEPT_ALL;
     }
 
-    public abstract Component getLayout(LayoutType type);
+    public abstract Component getComponent(Draggable component);
 }

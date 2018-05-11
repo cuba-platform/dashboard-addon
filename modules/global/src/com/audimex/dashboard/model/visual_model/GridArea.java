@@ -11,8 +11,6 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 @MetaClass(name = "amxd$GridArea")
 public class GridArea extends DashboardLayout {
     @MetaProperty
-    protected DashboardLayout component;
-    @MetaProperty
     protected Integer column1;
     @MetaProperty
     protected Integer row1;
@@ -21,23 +19,11 @@ public class GridArea extends DashboardLayout {
     @MetaProperty
     protected Integer row2;
 
-    public GridArea() {
-    }
-
-    public GridArea(DashboardLayout component, Integer column1, Integer row1, Integer column2, Integer row2) {
-        this.component = component;
+    public GridArea(Integer column1, Integer row1, Integer column2, Integer row2) {
         this.column1 = column1;
         this.row1 = row1;
         this.column2 = column2;
         this.row2 = row2;
-    }
-
-    public DashboardLayout getComponent() {
-        return component;
-    }
-
-    public void setComponent(DashboardLayout component) {
-        this.component = component;
     }
 
     public Integer getColumn1() {

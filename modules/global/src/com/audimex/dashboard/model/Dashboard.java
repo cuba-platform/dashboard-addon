@@ -3,13 +3,13 @@
  */
 package com.audimex.dashboard.model;
 
+import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
-import java.util.List;
 
-import com.audimex.dashboard.model.visual_model.DashboardVisualModel;
+import java.util.List;
 
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Dashboard")
@@ -17,18 +17,16 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected String title;
     @MetaProperty
-    protected List<Widget> widgets;
-    @MetaProperty
-    protected DashboardVisualModel visualModel;
+    protected VerticalLayout visualModel;
     @MetaProperty
     protected List<Parameter> parameters;
 
-    public void setVisualModel(DashboardVisualModel visualModel) {
-        this.visualModel = visualModel;
+    public VerticalLayout getVisualModel() {
+        return visualModel;
     }
 
-    public DashboardVisualModel getVisualModel() {
-        return visualModel;
+    public void setVisualModel(VerticalLayout visualModel) {
+        this.visualModel = visualModel;
     }
 
     public List<Parameter> getParameters() {
@@ -37,14 +35,6 @@ public class Dashboard extends BaseUuidEntity {
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
-    }
-
-    public List<Widget> getWidgets() {
-        return widgets;
-    }
-
-    public void setWidgets(List<Widget> widgets) {
-        this.widgets = widgets;
     }
 
     public void setTitle(String title) {

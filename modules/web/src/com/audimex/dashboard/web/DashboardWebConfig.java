@@ -4,62 +4,47 @@
 
 package com.audimex.dashboard.web;
 
-import com.audimex.dashboard.model.visual_model.LayoutType;
+import com.audimex.dashboard.gui.Draggable;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.factory.LayoutFactory;
 import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.cuba.gui.components.Component;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@ComponentScan(basePackages = "com.audimex.dashboard.web")
 public class DashboardWebConfig {
 
     @Bean
     public LayoutFactory layoutFactory() {
         return new LayoutFactory() {
             @Override
-            public DropHandler getDropHandler(LayoutType type) {
-                return dropHandler((type));
+            public DropHandler getVerticalDropHandler() {
+                return verticalDropHandler();
+            }
+
+            @Override
+            public DropHandler getHorizontalDropHandler() {
+                return horizontalDropHandler();
             }
         };
     }
 
     @Bean
     @Scope("prototype")
-    public Component layout(LayoutType type) {
-        return layoutFactory().createLayout(type);
+    public Component component(Draggable component) {
+        return layoutFactory().createComponent(component);
     }
-
-    protected DropHandler dropHandler(LayoutType type) {
-        switch (type) {
-            case VERTICAL_LAYOUT:
-                return verticalDropHandler();
-            case HORIZONTAL_LAYOUT:
-                return horizontalDropHandler();
-            case GRID_LAYOUT:
-                return null;
-            case FRAME_PANEL:
-                return null;
-            case GRID_AREA:
-                return null;
-            default:
-                return null;
-        }
-    }
-
 
     @Bean
     @Scope("prototype")
     public VerticalLayoutDropHandler verticalDropHandler() {
         return new VerticalLayoutDropHandler() {
             @Override
-            public Component getLayout(LayoutType type) {
-                return layout(type);
+            public Component getComponent(Draggable component) {
+                return component(component);
             }
         };
     }
@@ -69,9 +54,15 @@ public class DashboardWebConfig {
     public HorizontalLayoutDropHandler horizontalDropHandler() {
         return new HorizontalLayoutDropHandler() {
             @Override
-            public Component getLayout(LayoutType type) {
-                return layout(type);
+            public Component getComponent(Draggable component) {
+                return component(component);
             }
         };
     }
+
+//    @Bean
+//    @Scope("prototype")
+//    public NotDropHandler notDropHandler() {
+//        return new NotDropHandler();
+//    }
 }
