@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
-import static com.audimex.dashboard.model.visual_model.LayoutType.VERTICAL_LAYOUT;
+import static com.audimex.dashboard.model.visual_model.LayoutType.*;
 
 @Component
 public abstract class LayoutFactory {
@@ -43,14 +43,19 @@ public abstract class LayoutFactory {
     protected DDVerticalLayout createVerticalLayout() {
         DDVerticalLayout verticalLayout = componentsFactory.createComponent(DDVerticalLayout.class);
         verticalLayout.setMargin(true);
-        verticalLayout.setHeightFull();
+        verticalLayout.setSizeFull();
         verticalLayout.setStyleName("amxd-shadow-border");
         verticalLayout.setDropHandler(getDropHandler(VERTICAL_LAYOUT));
         return verticalLayout;
     }
 
     protected DDHorizontalLayout createHorizontalLayout() {
-        return null;
+        DDHorizontalLayout horizontalLayout = componentsFactory.createComponent(DDHorizontalLayout.class);
+        horizontalLayout.setMargin(true);
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setStyleName("amxd-shadow-border");
+        horizontalLayout.setDropHandler(getDropHandler(HORIZONTAL_LAYOUT));
+        return horizontalLayout;
     }
 
     protected DDGridLayout createGridLayout() {

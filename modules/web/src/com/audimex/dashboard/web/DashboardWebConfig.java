@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web;
 
 import com.audimex.dashboard.model.visual_model.LayoutType;
+import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.factory.LayoutFactory;
 import com.haulmont.addon.dnd.components.DropHandler;
@@ -39,7 +40,7 @@ public class DashboardWebConfig {
             case VERTICAL_LAYOUT:
                 return verticalDropHandler();
             case HORIZONTAL_LAYOUT:
-                return null;
+                return horizontalDropHandler();
             case GRID_LAYOUT:
                 return null;
             case FRAME_PANEL:
@@ -56,6 +57,17 @@ public class DashboardWebConfig {
     @Scope("prototype")
     public VerticalLayoutDropHandler verticalDropHandler() {
         return new VerticalLayoutDropHandler() {
+            @Override
+            public Component getLayout(LayoutType type) {
+                return layout(type);
+            }
+        };
+    }
+
+    @Bean
+    @Scope("prototype")
+    public HorizontalLayoutDropHandler horizontalDropHandler() {
+        return new HorizontalLayoutDropHandler() {
             @Override
             public Component getLayout(LayoutType type) {
                 return layout(type);

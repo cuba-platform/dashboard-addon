@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.dashboard.palette.PaletteFrame.WIDGETS;
+import static com.audimex.dashboard.web.dashboard.frames.palette.PaletteFrame.WIDGETS;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {

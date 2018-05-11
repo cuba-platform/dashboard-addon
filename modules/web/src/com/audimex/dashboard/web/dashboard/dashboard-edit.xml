@@ -34,8 +34,7 @@
                    screen="amdx$Parameter.browse"/>
         </groupBox>
         <groupBox id="dashboardLayoutBox"
-                  width="100%"
-                  height="100%">
+                  width="100%">
             <split id="splitPanel"
                    width="100%"
                    height="100%"

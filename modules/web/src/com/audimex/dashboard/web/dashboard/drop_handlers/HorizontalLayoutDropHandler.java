@@ -1,30 +1,36 @@
+/*
+ * Copyright (c) 2016-2018 Haulmont. All rights reserved.
+ */
+
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
 import com.audimex.dashboard.model.visual_model.LayoutType;
 import com.audimex.dashboard.web.components.WebPaletteButton;
-import com.haulmont.addon.dnd.components.DDVerticalLayout;
-import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
+import com.haulmont.addon.dnd.components.DDHorizontalLayout;
+import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
 import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
-import com.haulmont.addon.dnd.components.enums.VerticalDropLocation;
+import com.haulmont.addon.dnd.components.dragevent.Transferable;
+import com.haulmont.addon.dnd.components.enums.HorizontalDropLocation;
 import com.haulmont.cuba.gui.components.Component;
 import org.springframework.context.annotation.Scope;
 
 @org.springframework.stereotype.Component
 @Scope("prototype")
-public abstract class VerticalLayoutDropHandler implements DropHandler {
+public abstract class HorizontalLayoutDropHandler implements DropHandler {
 
     @Override
     public void drop(DragAndDropEvent event) {
-        DDVerticalLayoutTargetDetails details = (DDVerticalLayoutTargetDetails) event.getTargetDetails();
-        LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
+        DDHorizontalLayoutTargetDetails details = (DDHorizontalLayoutTargetDetails) event.getTargetDetails();
+        Transferable t = event.getTransferable();
 
-        Component component = t.getTransferableComponent();
-        DDVerticalLayout targetLayout = (DDVerticalLayout) details.getTarget();
-
+        DDHorizontalLayout targetLayout = (DDHorizontalLayout) details.getTarget();
+        Component component = ((LayoutBoundTransferable) t).getTransferableComponent();
         Component sourceLayout = t.getSourceComponent();
+        int indexTo = details.getOverIndex();
+        int indexFrom = targetLayout.indexOf(component);
 
         if (component == null) {
             return;
@@ -38,9 +44,6 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
             parent = parent.getParent();
         }
 
-        int indexTo = details.getOverIndex();
-        int indexFrom = targetLayout.indexOf(component);
-
         if (sourceLayout == targetLayout) {
             if (indexFrom == indexTo) {
                 return;
@@ -49,9 +52,9 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
             if (indexTo > indexFrom) {
                 indexTo--;
             }
-            VerticalDropLocation loc = details.getDropLocation();
-            if (loc == VerticalDropLocation.MIDDLE
-                    || loc == VerticalDropLocation.BOTTOM) {
+            HorizontalDropLocation loc = details.getDropLocation();
+            if (loc == HorizontalDropLocation.CENTER
+                    || loc == HorizontalDropLocation.RIGHT) {
                 indexTo++;
             }
             if (indexTo >= 0) {
@@ -63,12 +66,11 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
             LayoutType layoutType = ((WebPaletteButton) component).getLayoutType();
             component = getLayout(layoutType);
 
-            VerticalDropLocation loc = details.getDropLocation();
-            if (loc == VerticalDropLocation.MIDDLE
-                    || loc == VerticalDropLocation.BOTTOM) {
+            HorizontalDropLocation loc = details.getDropLocation();
+            if (loc == HorizontalDropLocation.CENTER
+                    || loc == HorizontalDropLocation.RIGHT) {
                 indexTo++;
             }
-
             if (indexTo >= 0) {
                 targetLayout.add(component, indexTo);
             } else {
