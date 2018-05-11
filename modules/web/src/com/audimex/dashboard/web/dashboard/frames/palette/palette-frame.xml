@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
-        class="com.audimex.dashboard.web.dashboard.frames.PaletteFrame">
+        class="com.audimex.dashboard.web.dashboard.palette.PaletteFrame">
     <layout spacing="true">
         <label id="paletteLabel"
                align="MIDDLE_CENTER"

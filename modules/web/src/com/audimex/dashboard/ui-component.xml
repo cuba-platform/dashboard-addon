@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
+    <component>
+        <!--<tag>palette-button</tag>-->
+        <name>paletteButton</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.ButtonLoader</componentLoader>
+        <class>com.audimex.dashboard.web.components.WebPaletteButton</class>
+    </component>
+</components>

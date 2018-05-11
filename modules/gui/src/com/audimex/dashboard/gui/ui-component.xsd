@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
+  -->
+
+<xs:schema xmlns="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd"
+           xmlns:cuba="http://schemas.haulmont.com/cuba/window.xsd"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="palette-button">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="cuba:buttonComponent">
+                    <!--todo add attrs-->
+                    <!--<xs:attribute name="layoutType" type="xs:string"/>-->
+                    <!--<xs:attribute name="widgetUuid" type="xs:string"/>-->
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -8,9 +8,9 @@
             template="com/audimex/dashboard/web/dashboard/dashboard-edit.xml"/>
     <!--dashboard frames-->
     <screen id="paletteFrame"
-            template="com/audimex/dashboard/web/dashboard/frames/palette-frame.xml"/>
+            template="/com/audimex/dashboard/web/dashboard/frames/palette/palette-frame.xml"/>
     <screen id="canvasFrame"
-            template="com/audimex/dashboard/web/dashboard/frames/canvas-frame.xml"/>
+            template="/com/audimex/dashboard/web/dashboard/frames/canvas/canvas-frame.xml"/>
     <!--parameters-->
     <screen id="amdx$Parameter.browse"
             template="com/audimex/dashboard/web/parameter/parameter-browse.xml"/>

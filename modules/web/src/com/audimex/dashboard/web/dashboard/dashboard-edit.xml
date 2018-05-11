@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
         caption="msg://dashboardEdit"
         class="com.audimex.dashboard.web.dashboard.DashboardEdit"
         focusComponent="fieldGroup"
@@ -18,7 +17,8 @@
         </collectionDatasource>
     </dsContext>
     <layout spacing="true"
-            expand="dashboardLayoutBox">
+            expand="dashboardLayoutBox"
+            height="100%">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardDs">
             <column width="450px">
@@ -34,7 +34,8 @@
                    screen="amdx$Parameter.browse"/>
         </groupBox>
         <groupBox id="dashboardLayoutBox"
-                  width="100%">
+                  width="100%"
+                  height="100%">
             <split id="splitPanel"
                    width="100%"
                    height="100%"
@@ -43,9 +44,11 @@
                 <vbox id="paletteBox"
                       spacing="true"
                       margin="true"
-                      width="100%"/>
+                      width="100%"
+                      height="100%"/>
                 <vbox id="canvasBox"
                       width="100%"
+                      height="100%"
                       spacing="true"
                       margin="true">
                 </vbox>
