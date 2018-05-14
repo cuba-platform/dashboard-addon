@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 public class AbstractWidgetBrowse extends AbstractFrame {
     public static final String WIDGET = "WIDGET";
 
-    @Inject
-    protected WidgetTypeAnalyzer typeAnalyzer;
-
     protected Widget widget;
 
     @Override
