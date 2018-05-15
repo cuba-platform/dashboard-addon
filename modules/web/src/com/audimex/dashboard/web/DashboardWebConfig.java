@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 public class DashboardWebConfig {
 
     @Bean
+    @Scope("prototype")
     public LayoutFactory layoutFactory() {
         return new LayoutFactory() {
             @Override

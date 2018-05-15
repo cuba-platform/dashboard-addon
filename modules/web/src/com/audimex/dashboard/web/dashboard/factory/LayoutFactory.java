@@ -13,15 +13,10 @@ import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component.Container;
-import com.haulmont.cuba.gui.components.Window;
-import com.haulmont.cuba.gui.config.WindowConfig;
-import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.haulmont.cuba.web.App;
+import org.springframework.context.annotation.Scope;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -29,11 +24,19 @@ import java.util.Optional;
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 
 @org.springframework.stereotype.Component
+@Scope("prototype")
 public abstract class LayoutFactory {
     @Inject
     protected ComponentsFactory componentsFactory;
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
+
+    //todo: hack, replace to something else
+    protected Frame parentFrame;
+
+    public void setParentFrame(Frame parentFrame) {
+        this.parentFrame = parentFrame;
+    }
 
     public Container createContainer(DashboardLayout layout) {
         if (layout instanceof VerticalLayout) {
@@ -80,22 +83,8 @@ public abstract class LayoutFactory {
                 .findFirst();
 
         if (widgetTypeOpt.isPresent()) {
-            //todo: replace to inject ???
-            WindowManager windowManager = App.getInstance().getWindowManager();
-            WindowConfig windowConfig = AppBeans.get(WindowConfig.class);
-
             String frameId = widgetTypeOpt.get().getBrowseFrameId();
-            WindowInfo windowInfo = windowConfig.getWindowInfo(frameId);
-
-            //todo replace editWindow to real parent frame
-            Window editWindow = windowManager.getOpenWindows().stream()
-                    .filter(window -> "dashboardEdit".equals(window.getId()))
-                    .findFirst()
-                    .get();
-
-            AbstractFrame widgetFrame = (AbstractFrame) windowManager.openFrame(
-                    editWindow.getFrame(), null, windowInfo, ParamsMap.of(WIDGET, widget)
-            );
+            Frame widgetFrame = parentFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
 
             widgetFrame.setSizeFull();
             widgetFrame.setStyleName("amxd-widget-content");

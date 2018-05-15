@@ -8,6 +8,7 @@ import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.param_value_types.ParameterValue;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +26,7 @@ public class JsonConverter {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
         builder.registerTypeAdapter(Widget.class, new InheritanceAdapter());
+        builder.registerTypeAdapter(DashboardLayout.class, new InheritanceAdapter());
         gson = builder.create();
     }
 

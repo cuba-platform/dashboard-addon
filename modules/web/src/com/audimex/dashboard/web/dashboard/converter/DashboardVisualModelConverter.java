@@ -34,6 +34,10 @@ public class DashboardVisualModelConverter {
     @Inject
     protected LayoutFactory layoutFactory;
 
+    public LayoutFactory getLayoutFactory() {
+        return layoutFactory;
+    }
+
     public VerticalLayout convertVisualToModel(VBoxLayout rootContainer) {
         VerticalLayout model = metadata.create(VerticalLayout.class);
 

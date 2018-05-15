@@ -28,6 +28,8 @@ public class CanvasFrame extends AbstractFrame {
         DashboardLayout model = (DashboardLayout) params.get(VISUAL_MODEL);
 
         if (model != null) {
+            //todo: hack
+            converter.getLayoutFactory().setParentFrame(this);
             converter.convertModelToVisual(canvas, model);
         }
     }
