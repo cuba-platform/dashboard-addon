@@ -33,26 +33,19 @@
             <frame id="paramsFrame"
                    screen="amdx$Parameter.browse"/>
         </groupBox>
-        <groupBox id="dashboardLayoutBox"
-                  width="100%">
-            <split id="splitPanel"
-                   width="100%"
-                   height="100%"
-                   orientation="horizontal"
-                   pos="30">
-                <vbox id="paletteBox"
+        <hbox id="dashboardLayoutBox"
+              width="100%"
+              expand="canvasBox"
+              margin="true"
+              spacing="true">
+            <groupBox id="paletteBox"
                       spacing="true"
-                      margin="true"
-                      width="100%"
+                      width="300px"
                       height="100%"/>
-                <vbox id="canvasBox"
-                      width="100%"
+            <groupBox id="canvasBox"
                       height="100%"
-                      spacing="true"
-                      margin="true">
-                </vbox>
-            </split>
-        </groupBox>
+                      spacing="true"/>
+        </hbox>
         <frame id="windowActions"
                screen="extendedEditWindowActions"/>
     </layout>

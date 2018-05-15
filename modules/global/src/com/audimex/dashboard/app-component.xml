@@ -60,5 +60,7 @@
     </module>
     <module name="web-themes">
         <artifact name="dashboard-web-themes"/>
+        <property name="cuba.iconsConfig"
+                  value="+com.audimex.dashboard.web.DashboardIcon"/>
     </module>
 </app-component>

@@ -37,9 +37,9 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     protected ParameterBrowse paramsFrame;
     @Inject
-    protected VBoxLayout paletteBox;
+    protected GroupBoxLayout paletteBox;
     @Inject
-    protected VBoxLayout canvasBox;
+    protected GroupBoxLayout canvasBox;
     @Inject
     protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
     @Inject

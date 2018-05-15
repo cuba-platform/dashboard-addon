@@ -4,6 +4,5 @@
           insertBefore="administration">
         <item screen="dashboardBrowse"/>
         <item screen="widgetTemplateBrowse"/>
-        <item screen="screen"/>
     </menu>
 </menu-config>

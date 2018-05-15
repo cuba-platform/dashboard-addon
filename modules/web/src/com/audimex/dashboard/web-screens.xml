@@ -41,6 +41,4 @@
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-browse.xml"/>
     <screen id="lookupWidgetEdit"
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-edit.xml"/>
-    <screen id="screen"
-            template="com/audimex/dashboard/web/screens/screen.xml"/>
 </screen-config>

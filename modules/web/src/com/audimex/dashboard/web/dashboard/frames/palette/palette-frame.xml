@@ -2,15 +2,23 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
         class="com.audimex.dashboard.web.dashboard.frames.palette.PaletteFrame">
-    <layout spacing="true">
+    <layout spacing="true"
+            expand="scrollBox"
+            width="100%"
+            height="100%">
         <label id="paletteLabel"
                align="MIDDLE_CENTER"
                value="msg://palette"/>
-        <dnd:dndVBoxLayout id="palette"
-                           dragMode="CLONE"
-                           spacing="true"
-                           height="100%"
-                           width="100%">
-        </dnd:dndVBoxLayout>
+        <scrollBox id="scrollBox"
+                   scrollBars="vertical"
+                   width="100%"
+                   spacing="true">
+            <dnd:dndVBoxLayout id="palette"
+                               dragMode="CLONE"
+                               spacing="true"
+                               height="100%"
+                               width="100%">
+            </dnd:dndVBoxLayout>
+        </scrollBox>
     </layout>
 </window>
