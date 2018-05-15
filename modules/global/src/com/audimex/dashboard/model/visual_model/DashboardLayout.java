@@ -8,18 +8,19 @@ import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 @MetaClass(name = "amxd$DashboardLayout")
 public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
-    protected LinkedList<DashboardLayout> children = new LinkedList<>();
+    protected List<DashboardLayout> children = new ArrayList<>();
 
-    public LinkedList<DashboardLayout> getChildren() {
+    public List<DashboardLayout> getChildren() {
         return children;
     }
 
-    public void setChildren(LinkedList<DashboardLayout> children) {
+    public void setChildren(List<DashboardLayout> children) {
         this.children = children;
     }
 }

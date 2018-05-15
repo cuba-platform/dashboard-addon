@@ -4,12 +4,12 @@
 
 package com.audimex.dashboard.web;
 
-import com.audimex.dashboard.gui.Draggable;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.factory.LayoutFactory;
 import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Component.Container;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -34,8 +34,8 @@ public class DashboardWebConfig {
 
     @Bean
     @Scope("prototype")
-    public Component component(Draggable component) {
-        return layoutFactory().createComponent(component);
+    public Container component(DashboardLayout layout) {
+        return layoutFactory().createContainer(layout);
     }
 
     @Bean
@@ -43,8 +43,8 @@ public class DashboardWebConfig {
     public VerticalLayoutDropHandler verticalDropHandler() {
         return new VerticalLayoutDropHandler() {
             @Override
-            public Component getComponent(Draggable component) {
-                return component(component);
+            public Container getContainer(DashboardLayout layout) {
+                return component(layout);
             }
         };
     }
@@ -54,8 +54,8 @@ public class DashboardWebConfig {
     public HorizontalLayoutDropHandler horizontalDropHandler() {
         return new HorizontalLayoutDropHandler() {
             @Override
-            public Component getComponent(Draggable component) {
-                return component(component);
+            public Container getContainer(DashboardLayout layout) {
+                return component(layout);
             }
         };
     }

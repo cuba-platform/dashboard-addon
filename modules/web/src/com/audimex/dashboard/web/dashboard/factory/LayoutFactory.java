@@ -6,7 +6,6 @@ package com.audimex.dashboard.web.dashboard.factory;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
-import com.audimex.dashboard.gui.Draggable;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
 import com.haulmont.addon.dnd.components.DDGridLayout;
@@ -17,31 +16,26 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Frame;
-import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.Window;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.App;
-import com.vaadin.ui.Layout;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 
-@Component
+@org.springframework.stereotype.Component
 public abstract class LayoutFactory {
     @Inject
     protected ComponentsFactory componentsFactory;
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
 
-    public com.haulmont.cuba.gui.components.Component createComponent(Draggable component) {
-        DashboardLayout layout = component.getLayout();
-
+    public Container createContainer(DashboardLayout layout) {
         if (layout instanceof VerticalLayout) {
             return createVerticalLayout();
         } else if (layout instanceof HorizontalLayout) {
@@ -80,7 +74,7 @@ public abstract class LayoutFactory {
     }
 
 
-    protected com.haulmont.cuba.gui.components.Component createWidgetLayout(Widget widget) {
+    protected Container createWidgetLayout(Widget widget) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();

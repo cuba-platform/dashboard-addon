@@ -9,22 +9,23 @@ import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.model.visual_model.VerticalLayout;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractEditor;
-import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.FieldGroup;
-import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.VISUAL_MODEL;
 import static com.audimex.dashboard.web.dashboard.frames.palette.PaletteFrame.WIDGETS;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
@@ -49,6 +50,8 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected Dashboard inputItem;
 
     protected List<Widget> widgetTemplates;
+    protected AbstractFrame paletteFrame;
+    protected CanvasFrame canvasFrame;
 
     @Override
     public void postInit() {
@@ -63,6 +66,10 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected boolean preCommit() {
         List<Parameter> parameters = paramsFrame.getParameters();
         getItem().setParameters(parameters);
+
+        VerticalLayout model = canvasFrame.getDashboardModel();
+        getItem().setVisualModel(model);
+
         return super.preCommit();
     }
 
@@ -81,13 +88,14 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     protected void initPaletteFrame() {
-        AbstractFrame paletteFrame = openFrame(paletteBox, "paletteFrame", ParamsMap.of(
+        paletteFrame = openFrame(paletteBox, "paletteFrame", ParamsMap.of(
                 WIDGETS, widgetTemplates
         ));
     }
 
     protected void initCanvasFrame() {
-        //todo add dashboardDs link to parameters
-        AbstractFrame paletteFrame = openFrame(canvasBox, "canvasFrame");
+        canvasFrame = (CanvasFrame) openFrame(canvasBox, "canvasFrame", ParamsMap.of(
+                VISUAL_MODEL, getItem().getVisualModel()
+        ));
     }
 }

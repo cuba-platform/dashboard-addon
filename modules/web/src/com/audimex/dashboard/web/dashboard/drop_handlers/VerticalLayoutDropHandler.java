@@ -1,6 +1,7 @@
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
 import com.audimex.dashboard.gui.Draggable;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;
@@ -9,6 +10,7 @@ import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
 import com.haulmont.addon.dnd.components.enums.VerticalDropLocation;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Component.Container;
 import org.springframework.context.annotation.Scope;
 
 @org.springframework.stereotype.Component
@@ -59,7 +61,7 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
                 targetLayout.add(component);
             }
         } else if (component instanceof Draggable) {
-            component = getComponent((Draggable) component);
+            component = getContainer(((Draggable) component).getLayout());
 
             VerticalDropLocation loc = details.getDropLocation();
             if (loc == VerticalDropLocation.MIDDLE
@@ -80,5 +82,5 @@ public abstract class VerticalLayoutDropHandler implements DropHandler {
         return AcceptCriterion.ACCEPT_ALL;
     }
 
-    public abstract Component getComponent(Draggable component);
+    public abstract Container getContainer(DashboardLayout layout);
 }

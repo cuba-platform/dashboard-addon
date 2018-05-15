@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
 import com.audimex.dashboard.gui.Draggable;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;
@@ -62,7 +63,7 @@ public abstract class HorizontalLayoutDropHandler implements DropHandler {
                 targetLayout.add(component);
             }
         } else if (component instanceof Draggable) {
-            component = getComponent((Draggable) component);
+            component = getContainer(((Draggable) component).getLayout());
 
             HorizontalDropLocation loc = details.getDropLocation();
             if (loc == HorizontalDropLocation.CENTER
@@ -82,5 +83,5 @@ public abstract class HorizontalLayoutDropHandler implements DropHandler {
         return AcceptCriterion.ACCEPT_ALL;
     }
 
-    public abstract Component getComponent(Draggable component);
+    public abstract Component.Container getContainer(DashboardLayout layout);
 }

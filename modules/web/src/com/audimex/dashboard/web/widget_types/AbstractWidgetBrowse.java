@@ -4,12 +4,10 @@
 
 package com.audimex.dashboard.web.widget_types;
 
-import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
-import javax.inject.Inject;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -35,5 +33,9 @@ public class AbstractWidgetBrowse extends AbstractFrame {
                         Parameter::getName,
                         parameter -> parameter.getParameterValue().getValue()
                 ));
+    }
+
+    public Widget getWidget() {
+        return widget;
     }
 }
