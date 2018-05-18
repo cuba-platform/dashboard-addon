@@ -37,24 +37,16 @@ public class PaletteFrame extends AbstractFrame {
     protected Messages messages;
     @Inject
     protected Metadata metadata;
-    @Inject
-    protected NotDropHandler handler;
 
     protected List<Widget> widgets;
 
-
-    //todo: icons not show
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
 
         widgets = (List<Widget>) params.getOrDefault(WIDGETS, emptyList());
-        setPaletteSettings();
+        palette.setDropHandler(new NotDropHandler());
         addButtons();
-    }
-
-    protected void setPaletteSettings() {
-        palette.setDropHandler(handler);
     }
 
     //todo refactoring

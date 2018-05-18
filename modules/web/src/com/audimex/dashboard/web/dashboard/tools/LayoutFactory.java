@@ -2,82 +2,58 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.factory;
+package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.*;
+import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
-import com.haulmont.addon.dnd.components.DropHandler;
+import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 
-@org.springframework.stereotype.Component
-@Scope("prototype")
-public abstract class LayoutFactory {
+@Component
+public class LayoutFactory {
     @Inject
     protected ComponentsFactory componentsFactory;
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
 
-    //todo: hack, replace to something else
-    protected Frame parentFrame;
-
-    public void setParentFrame(Frame parentFrame) {
-        this.parentFrame = parentFrame;
-    }
-
-    public Container createContainer(DashboardLayout layout) {
-        if (layout instanceof VerticalLayout) {
-            return createVerticalLayout();
-        } else if (layout instanceof HorizontalLayout) {
-            return createHorizontalLayout();
-        } else if (layout instanceof GridLayout) {
-            return createGridLayout();
-        } else if (layout instanceof GridArea) {
-            return null;
-//            return createGridArea();
-        } else if (layout instanceof WidgetLayout) {
-            return createWidgetLayout(((WidgetLayout) layout).getWidget());
-        }
-        return null;
-    }
-
-    public abstract DropHandler getVerticalDropHandler();
-
-    public abstract DropHandler getHorizontalDropHandler();
-
-    protected DDVerticalLayout createVerticalLayout() {
+    public DDVerticalLayout createVerticalLayout(DropLayoutTool tool) {
         DDVerticalLayout verticalLayout = componentsFactory.createComponent(DDVerticalLayout.class);
         verticalLayout.setMargin(true);
         verticalLayout.setSizeFull();
         verticalLayout.setStyleName("amxd-shadow-border");
-        verticalLayout.setDropHandler(getVerticalDropHandler());
+        verticalLayout.setDragMode(LayoutDragMode.CLONE);
+        verticalLayout.setDropHandler(new VerticalLayoutDropHandler(tool));
         return verticalLayout;
     }
 
-    protected DDHorizontalLayout createHorizontalLayout() {
+    public DDHorizontalLayout createHorizontalLayout(DropLayoutTool tool) {
         DDHorizontalLayout horizontalLayout = componentsFactory.createComponent(DDHorizontalLayout.class);
         horizontalLayout.setMargin(true);
         horizontalLayout.setSizeFull();
         horizontalLayout.setStyleName("amxd-shadow-border");
-        horizontalLayout.setDropHandler(getHorizontalDropHandler());
+        horizontalLayout.setDragMode(LayoutDragMode.CLONE);
+        horizontalLayout.setDropHandler(new HorizontalLayoutDropHandler(tool));
         return horizontalLayout;
     }
 
 
-    protected Container createWidgetLayout(Widget widget) {
+    public Container createWidgetLayout(Widget widget, Frame parentFrame) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
@@ -95,8 +71,17 @@ public abstract class LayoutFactory {
         return null;
     }
 
-    protected DDGridLayout createGridLayout() {
-        return null;
+    public DDGridLayout createGridLayout(int cols, int rows, DropLayoutTool tool) {
+        DDGridLayout container = componentsFactory.createComponent(DDGridLayout.class);
+        container.setColumns(cols);
+        container.setRows(rows);
+        container.setMargin(true);
+        container.setSizeFull();
+        container.setStyleName("amxd-layout-content");
+        container.setDragMode(LayoutDragMode.CLONE);
+        container.setDropHandler(new GridLayoutDropHandler(tool));
+
+        return container;
     }
 
 

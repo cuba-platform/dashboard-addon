@@ -6,20 +6,20 @@ package com.audimex.dashboard.web.dashboard.drop_handlers;
 
 import com.audimex.dashboard.gui.Draggable;
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
+import com.audimex.dashboard.web.dashboard.tools.DropLayoutTool;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
-import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
-import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
 import com.haulmont.addon.dnd.components.dragevent.Transferable;
 import com.haulmont.addon.dnd.components.enums.HorizontalDropLocation;
 import com.haulmont.cuba.gui.components.Component;
-import org.springframework.context.annotation.Scope;
 
-@org.springframework.stereotype.Component
-@Scope("prototype")
-public abstract class HorizontalLayoutDropHandler implements DropHandler {
+public class HorizontalLayoutDropHandler extends AbstractLayoutDropHandler {
+
+    public HorizontalLayoutDropHandler(DropLayoutTool tool) {
+        super(tool);
+    }
 
     @Override
     public void drop(DragAndDropEvent event) {
@@ -63,25 +63,19 @@ public abstract class HorizontalLayoutDropHandler implements DropHandler {
                 targetLayout.add(component);
             }
         } else if (component instanceof Draggable) {
-            component = getContainer(((Draggable) component).getLayout());
-
             HorizontalDropLocation loc = details.getDropLocation();
             if (loc == HorizontalDropLocation.CENTER
                     || loc == HorizontalDropLocation.RIGHT) {
                 indexTo++;
             }
+            DashboardLayout layout = ((Draggable) component).getLayout();
+
             if (indexTo >= 0) {
-                targetLayout.add(component, indexTo);
+                tool.addComponent(targetLayout, layout, indexTo);
             } else {
-                targetLayout.add(component);
+                tool.addComponent(targetLayout, layout);
             }
         }
     }
-
-    @Override
-    public AcceptCriterion getCriterion() {
-        return AcceptCriterion.ACCEPT_ALL;
-    }
-
-    public abstract Component.Container getContainer(DashboardLayout layout);
 }
+

@@ -1,9 +1,8 @@
 package com.audimex.dashboard.web.dashboard.frames.canvas;
 
-import com.audimex.dashboard.model.visual_model.DashboardLayout;
-import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.converter.DashboardVisualModelConverter;
+import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.tools.DropLayoutTool;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
@@ -16,25 +15,24 @@ public class CanvasFrame extends AbstractFrame {
     @Inject
     protected DDVerticalLayout canvas;
     @Inject
-    protected VerticalLayoutDropHandler handler;
-    @Inject
-    protected DashboardVisualModelConverter converter;
+    protected DropLayoutTool tool;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        canvas.setDropHandler(handler);
+        tool.setFrame(this);
 
+        canvas.setDropHandler(new VerticalLayoutDropHandler(tool));
         DashboardLayout model = (DashboardLayout) params.get(VISUAL_MODEL);
 
         if (model != null) {
-            //todo: hack
-            converter.getLayoutFactory().setParentFrame(this);
-            converter.convertModelToVisual(canvas, model);
+//            converter.convertModelToVisual(canvas, model);
         }
     }
 
     public VerticalLayout getDashboardModel() {
-        return converter.convertVisualToModel(canvas);
+        return null;
+//        return converter.convertVisualToModel(canvas);
     }
+
 }

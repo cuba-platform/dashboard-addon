@@ -8,7 +8,7 @@ import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.HorizontalLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
-import com.audimex.dashboard.web.dashboard.factory.LayoutFactory;
+import com.audimex.dashboard.web.dashboard.tools.LayoutFactory;
 import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
@@ -34,10 +34,7 @@ public class DashboardVisualModelConverter {
     @Inject
     protected LayoutFactory layoutFactory;
 
-    public LayoutFactory getLayoutFactory() {
-        return layoutFactory;
-    }
-
+    //todo: converter must work!
     public VerticalLayout convertVisualToModel(VBoxLayout rootContainer) {
         VerticalLayout model = metadata.create(VerticalLayout.class);
 
@@ -48,19 +45,19 @@ public class DashboardVisualModelConverter {
     }
 
     public void convertModelToVisual(Container container, DashboardLayout model) {
-        List<DashboardLayout> children = model.getChildren();
-
-        for (DashboardLayout child : children) {
-            Container childContainer = layoutFactory.createContainer(child);
-
-            if (childContainer != null && isNotEmpty(child.getChildren())) {
-                convertModelToVisual(childContainer, child);
-            }
-
-            if (childContainer != null) {
-                container.add(childContainer);
-            }
-        }
+//        List<DashboardLayout> children = model.getChildren();
+//
+//        for (DashboardLayout child : children) {
+//            Container childContainer = layoutFactory.createContainer(child);
+//
+//            if (childContainer != null && isNotEmpty(child.getChildren())) {
+//                convertModelToVisual(childContainer, child);
+//            }
+//
+//            if (childContainer != null) {
+//                container.add(childContainer);
+//            }
+//        }
     }
 
     protected List<DashboardLayout> containerToModel(Container container) {

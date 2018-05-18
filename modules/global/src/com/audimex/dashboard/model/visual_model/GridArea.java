@@ -1,60 +1,68 @@
 /*
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-
 package com.audimex.dashboard.model.visual_model;
-
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import javax.validation.constraints.NotNull;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 @MetaClass(name = "amxd$GridArea")
-public class GridArea extends DashboardLayout {
-    @MetaProperty
-    protected Integer column1;
-    @MetaProperty
+public class GridArea extends BaseUuidEntity {
+    private static final long serialVersionUID = 5378347946733397250L;
+
+    @NotNull
+    @MetaProperty(mandatory = true)
+    protected DashboardLayout component;
+    @NotNull
+    @MetaProperty(mandatory = true)
     protected Integer row1;
+    @NotNull
+    @MetaProperty(mandatory = true)
+    protected Integer col1;
     @MetaProperty
-    protected Integer column2;
+    protected String row2;
     @MetaProperty
-    protected Integer row2;
+    protected String col2;
 
-    public GridArea(Integer column1, Integer row1, Integer column2, Integer row2) {
-        this.column1 = column1;
-        this.row1 = row1;
-        this.column2 = column2;
-        this.row2 = row2;
+    public void setComponent(DashboardLayout component) {
+        this.component = component;
     }
 
-    public Integer getColumn1() {
-        return column1;
-    }
-
-    public void setColumn1(Integer column1) {
-        this.column1 = column1;
-    }
-
-    public Integer getRow1() {
-        return row1;
+    public DashboardLayout getComponent() {
+        return component;
     }
 
     public void setRow1(Integer row1) {
         this.row1 = row1;
     }
 
-    public Integer getColumn2() {
-        return column2;
+    public Integer getRow1() {
+        return row1;
     }
 
-    public void setColumn2(Integer column2) {
-        this.column2 = column2;
+    public void setCol1(Integer col1) {
+        this.col1 = col1;
     }
 
-    public Integer getRow2() {
+    public Integer getCol1() {
+        return col1;
+    }
+
+    public void setRow2(String row2) {
+        this.row2 = row2;
+    }
+
+    public String getRow2() {
         return row2;
     }
 
-    public void setRow2(Integer row2) {
-        this.row2 = row2;
+    public void setCol2(String col2) {
+        this.col2 = col2;
+    }
+
+    public String getCol2() {
+        return col2;
     }
 }

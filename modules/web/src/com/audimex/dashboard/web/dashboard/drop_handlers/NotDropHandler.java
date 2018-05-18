@@ -9,10 +9,7 @@ import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
 import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
 import com.vaadin.server.PaintTarget;
-import org.springframework.context.annotation.Scope;
 
-@org.springframework.stereotype.Component
-@Scope("prototype")
 public class NotDropHandler implements DropHandler {
     @Override
     public void drop(DragAndDropEvent event) {

@@ -7,12 +7,24 @@ package com.audimex.dashboard.model.visual_model;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 
+import java.util.Set;
+
 @MetaClass(name = "amxd$GridLayout")
 public class GridLayout extends DashboardLayout {
     @MetaProperty
     protected Integer rows;
     @MetaProperty
     protected Integer columns;
+    @MetaProperty
+    protected Set<GridArea> areas;
+
+    public void setAreas(Set<GridArea> areas) {
+        this.areas = areas;
+    }
+
+    public Set<GridArea> getAreas() {
+        return areas;
+    }
 
     public Integer getRows() {
         return rows;

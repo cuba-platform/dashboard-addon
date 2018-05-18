@@ -7,6 +7,4 @@
 
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.audimex.dashboard"/>
-
-    <bean name="DashboardWebConfig" class="com.audimex.dashboard.web.DashboardWebConfig"/>
 </beans>

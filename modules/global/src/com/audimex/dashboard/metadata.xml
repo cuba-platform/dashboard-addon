@@ -11,8 +11,8 @@
         <class>com.audimex.dashboard.model.visual_model.VerticalLayout</class>
         <class>com.audimex.dashboard.model.visual_model.HorizontalLayout</class>
         <class>com.audimex.dashboard.model.visual_model.WidgetLayout</class>
-        <class>com.audimex.dashboard.model.visual_model.GridArea</class>
         <class>com.audimex.dashboard.model.visual_model.GridLayout</class>
+        <class>com.audimex.dashboard.model.visual_model.GridArea</class>
         <!--widget types-->
         <class>com.audimex.dashboard.model.widget_types.ScreenWidget</class>
         <class>com.audimex.dashboard.model.widget_types.LookupWidget</class>
