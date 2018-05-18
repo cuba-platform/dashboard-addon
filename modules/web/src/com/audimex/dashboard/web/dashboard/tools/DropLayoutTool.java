@@ -7,16 +7,23 @@ package com.audimex.dashboard.web.dashboard.tools;
 import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.grid_dialog.GridDialog;
+import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
+import com.haulmont.addon.dnd.components.DDLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.gui.components.BoxLayout;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
+import com.haulmont.cuba.gui.components.Frame;
 
 import javax.inject.Inject;
+
+import java.util.Collection;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
@@ -25,14 +32,11 @@ public class DropLayoutTool {
     @Inject
     protected LayoutFactory factory;
 
-    protected CanvasFrame frame;
+    protected Frame targetFrame;
 
-    public CanvasFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(CanvasFrame frame) {
-        this.frame = frame;
+    public void init(Frame targetFrame, DDLayout rootContainer) {
+        this.targetFrame = targetFrame;
+        addDropHandler(rootContainer);
     }
 
     public void addComponent(BoxLayout targetLayout, DashboardLayout layout) {
@@ -49,7 +53,7 @@ public class DropLayoutTool {
             horizontalLayout.setDropHandler(new HorizontalLayoutDropHandler(this));
             target.add(horizontalLayout, indexTo);
         } else if (layout instanceof GridLayout) {
-            GridDialog dialog = (GridDialog) frame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
+            GridDialog dialog = (GridDialog) targetFrame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if (GridDialog.APPLY.equals(actionId)) {
                     DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows());
@@ -62,7 +66,7 @@ public class DropLayoutTool {
                 }
             });
         } else if (layout instanceof WidgetLayout) {
-            Container widgetLayout = factory.createWidgetLayout(((WidgetLayout) layout).getWidget(), frame);
+            Container widgetLayout = factory.createWidgetLayout(((WidgetLayout) layout).getWidget(), targetFrame);
             target.add(widgetLayout, indexTo);
         }
     }
@@ -75,7 +79,7 @@ public class DropLayoutTool {
 //            DDHorizontalLayout horizontalLayout = factory.createHorizontalLayout(this);
 //            target.add(horizontalLayout, row, col);
 //        } else if (layout instanceof GridLayout) {
-//            GridDialog dialog = (GridDialog) frame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
+//            GridDialog dialog = (GridDialog) targetFrame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
 //            dialog.addCloseListener(actionId -> {
 //                if (GridDialog.APPLY.equals(actionId)) {
 //                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows(), this);
@@ -83,8 +87,29 @@ public class DropLayoutTool {
 //                }
 //            });
 //        } else if (layout instanceof WidgetLayout) {
-//            Container widgetLayout = factory.createWidgetLayout(((WidgetLayout) layout).getWidget(), frame);
+//            Container widgetLayout = factory.createWidgetLayout(((WidgetLayout) layout).getWidget(), targetFrame);
 //            target.add(widgetLayout, row, col);
 //        }
+    }
+
+    public void addDropHandler(DDLayout container) {
+        if (container instanceof DDVerticalLayout) {
+            container.setDropHandler(new VerticalLayoutDropHandler(this));
+            addDropHandlers(((DDVerticalLayout) container).getOwnComponents());
+        } else if (container instanceof DDHorizontalLayout) {
+            container.setDropHandler(new HorizontalLayoutDropHandler(this));
+            addDropHandlers(((DDHorizontalLayout) container).getOwnComponents());
+        } else if (container instanceof AbstractWidgetBrowse) {
+            container.setDropHandler(new NotDropHandler());
+        } else if (container instanceof DDGridLayout) {
+            container.setDropHandler(new GridLayoutDropHandler(this));
+            addDropHandlers(((DDGridLayout) container).getOwnComponents());
+        }
+    }
+
+    protected void addDropHandlers(Collection<Component> containers) {
+        for (Component container : containers) {
+            addDropHandler((DDLayout) container);
+        }
     }
 }

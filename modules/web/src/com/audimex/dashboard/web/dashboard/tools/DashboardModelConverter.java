@@ -13,16 +13,11 @@ import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
+import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import static org.apache.commons.collections4.CollectionUtils.*;
 
 @org.springframework.stereotype.Component
 public class DashboardModelConverter {
@@ -41,21 +36,35 @@ public class DashboardModelConverter {
         return model;
     }
 
-    public Container modelToContainer(DashboardLayout model) {
-//        List<DashboardLayout> children = model.getChildren();
-//
-//        for (DashboardLayout child : children) {
-//            Container childContainer = factory.createContainer(child);
-//
-//            if (childContainer != null && isNotEmpty(child.getChildren())) {
-//                convertModelToVisual(childContainer, child);
-//            }
-//
-//            if (childContainer != null) {
-//                container.add(childContainer);
-//            }
-//        }
-        return null;
+    public Container modelToContainer(Frame parentFrame, DashboardLayout model) {
+        Container container = null;
+
+        if (model instanceof VerticalLayout) {
+            container = factory.createVerticalLayout();
+        } else if (model instanceof HorizontalLayout) {
+            container = factory.createHorizontalLayout();
+        } else if (model instanceof GridLayout) {
+            Integer cols = ((GridLayout) model).getColumns();
+            Integer rows = ((GridLayout) model).getRows();
+            container = factory.createGridLayout(cols, rows);
+        } else if (model instanceof WidgetLayout) {
+            container = factory.createWidgetLayout(((WidgetLayout) model).getWidget(), parentFrame);
+        }
+
+        if (container != null && !(model instanceof WidgetLayout)) {
+            if (container instanceof DDGridLayout) {
+                for (GridArea area : ((GridLayout) model).getAreas()) {
+                    Container child = modelToContainer(parentFrame, area.getComponent());
+                    ((DDGridLayout) container).add(child, area.getCol1(), area.getRow1());
+                }
+            } else {
+                for (DashboardLayout child : model.getChildren()) {
+                    container.add(modelToContainer(parentFrame, child));
+                }
+            }
+        }
+
+        return container;
     }
 
     protected DashboardLayout containerToModel(Container container) {

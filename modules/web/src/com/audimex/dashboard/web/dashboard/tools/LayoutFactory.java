@@ -7,6 +7,7 @@ package com.audimex.dashboard.web.dashboard.tools;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
@@ -50,14 +51,14 @@ public class LayoutFactory {
     }
 
 
-    public Container createWidgetLayout(Widget widget, Frame parentFrame) {
+    public AbstractWidgetBrowse createWidgetLayout(Widget widget, Frame parentFrame) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
 
         if (widgetTypeOpt.isPresent()) {
             String frameId = widgetTypeOpt.get().getBrowseFrameId();
-            Frame widgetFrame = parentFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
+            AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) parentFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
 
             widgetFrame.setSizeFull();
             widgetFrame.addStyleName(AMXD_WIDGET_CONTENT);
