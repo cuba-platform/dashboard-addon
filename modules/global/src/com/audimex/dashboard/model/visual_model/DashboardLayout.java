@@ -23,4 +23,8 @@ public abstract class DashboardLayout extends BaseUuidEntity {
     public void setChildren(List<DashboardLayout> children) {
         this.children = children;
     }
+
+    public void addChild(DashboardLayout child) {
+        children.add(child);
+    }
 }

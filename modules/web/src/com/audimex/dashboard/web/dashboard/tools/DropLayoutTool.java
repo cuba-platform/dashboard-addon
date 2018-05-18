@@ -5,6 +5,9 @@
 package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.visual_model.*;
+import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.grid_dialog.GridDialog;
 import com.haulmont.addon.dnd.components.DDGridLayout;
@@ -38,16 +41,23 @@ public class DropLayoutTool {
 
     public void addComponent(BoxLayout target, DashboardLayout layout, int indexTo) {
         if (layout instanceof VerticalLayout) {
-            DDVerticalLayout verticalLayout = factory.createVerticalLayout(this);
+            DDVerticalLayout verticalLayout = factory.createVerticalLayout();
+            verticalLayout.setDropHandler(new VerticalLayoutDropHandler(this));
             target.add(verticalLayout, indexTo);
         } else if (layout instanceof HorizontalLayout) {
-            DDHorizontalLayout horizontalLayout = factory.createHorizontalLayout(this);
+            DDHorizontalLayout horizontalLayout = factory.createHorizontalLayout();
+            horizontalLayout.setDropHandler(new HorizontalLayoutDropHandler(this));
             target.add(horizontalLayout, indexTo);
         } else if (layout instanceof GridLayout) {
             GridDialog dialog = (GridDialog) frame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if (GridDialog.APPLY.equals(actionId)) {
-                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows(), this);
+                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows());
+                    gridLayout.setDropHandler(new GridLayoutDropHandler(this));
+                    gridLayout.getOwnComponents().forEach(vLayout ->
+                            ((DDVerticalLayout) vLayout).setDropHandler(new VerticalLayoutDropHandler(this))
+                    );
+
                     target.add(gridLayout, indexTo);
                 }
             });
@@ -58,8 +68,23 @@ public class DropLayoutTool {
     }
 
     public void addComponentToGridCell(DDGridLayout target, DashboardLayout layout, int row, int col) {
-        frame.showNotification("Row " + row + " col " + col);
+//        if (layout instanceof VerticalLayout) {
+//            DDVerticalLayout verticalLayout = factory.createVerticalLayout(this);
+//            target.add(verticalLayout, row, col);
+//        } else if (layout instanceof HorizontalLayout) {
+//            DDHorizontalLayout horizontalLayout = factory.createHorizontalLayout(this);
+//            target.add(horizontalLayout, row, col);
+//        } else if (layout instanceof GridLayout) {
+//            GridDialog dialog = (GridDialog) frame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
+//            dialog.addCloseListener(actionId -> {
+//                if (GridDialog.APPLY.equals(actionId)) {
+//                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows(), this);
+//                    target.add(gridLayout, row, col);
+//                }
+//            });
+//        } else if (layout instanceof WidgetLayout) {
+//            Container widgetLayout = factory.createWidgetLayout(((WidgetLayout) layout).getWidget(), frame);
+//            target.add(widgetLayout, row, col);
+//        }
     }
-
-
 }

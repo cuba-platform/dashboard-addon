@@ -2,6 +2,7 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 
 import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTool;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -16,6 +17,8 @@ public class CanvasFrame extends AbstractFrame {
     protected DDVerticalLayout canvas;
     @Inject
     protected DropLayoutTool tool;
+    @Inject
+    protected DashboardModelConverter converter;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -31,8 +34,7 @@ public class CanvasFrame extends AbstractFrame {
     }
 
     public VerticalLayout getDashboardModel() {
-        return null;
-//        return converter.convertVisualToModel(canvas);
+        return converter.containerToModel(canvas);
     }
 
 }

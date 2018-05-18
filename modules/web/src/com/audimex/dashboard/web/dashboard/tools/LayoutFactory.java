@@ -7,9 +7,6 @@ package com.audimex.dashboard.web.dashboard.tools;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
-import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
-import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
@@ -23,6 +20,8 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.util.Optional;
 
+import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_SHADOW_BORDER;
+import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_WIDGET_CONTENT;
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 
 @Component
@@ -32,23 +31,21 @@ public class LayoutFactory {
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
 
-    public DDVerticalLayout createVerticalLayout(DropLayoutTool tool) {
+    public DDVerticalLayout createVerticalLayout() {
         DDVerticalLayout verticalLayout = componentsFactory.createComponent(DDVerticalLayout.class);
         verticalLayout.setMargin(true);
         verticalLayout.setSizeFull();
-        verticalLayout.setStyleName("amxd-shadow-border");
+        verticalLayout.addStyleName(AMXD_SHADOW_BORDER);
         verticalLayout.setDragMode(LayoutDragMode.CLONE);
-        verticalLayout.setDropHandler(new VerticalLayoutDropHandler(tool));
         return verticalLayout;
     }
 
-    public DDHorizontalLayout createHorizontalLayout(DropLayoutTool tool) {
+    public DDHorizontalLayout createHorizontalLayout() {
         DDHorizontalLayout horizontalLayout = componentsFactory.createComponent(DDHorizontalLayout.class);
         horizontalLayout.setMargin(true);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setStyleName("amxd-shadow-border");
+        horizontalLayout.addStyleName(AMXD_SHADOW_BORDER);
         horizontalLayout.setDragMode(LayoutDragMode.CLONE);
-        horizontalLayout.setDropHandler(new HorizontalLayoutDropHandler(tool));
         return horizontalLayout;
     }
 
@@ -63,7 +60,7 @@ public class LayoutFactory {
             Frame widgetFrame = parentFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
 
             widgetFrame.setSizeFull();
-            widgetFrame.setStyleName("amxd-widget-content");
+            widgetFrame.addStyleName(AMXD_WIDGET_CONTENT);
             widgetFrame.setMargin(true);
             return widgetFrame;
         }
@@ -71,15 +68,20 @@ public class LayoutFactory {
         return null;
     }
 
-    public DDGridLayout createGridLayout(int cols, int rows, DropLayoutTool tool) {
+    public DDGridLayout createGridLayout(int cols, int rows) {
         DDGridLayout container = componentsFactory.createComponent(DDGridLayout.class);
         container.setColumns(cols);
         container.setRows(rows);
         container.setMargin(true);
         container.setSizeFull();
-        container.setStyleName("amxd-layout-content");
+        container.addStyleName(AMXD_SHADOW_BORDER);
         container.setDragMode(LayoutDragMode.CLONE);
-        container.setDropHandler(new GridLayoutDropHandler(tool));
+
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
+                container.add(createVerticalLayout(), i, j);
+            }
+        }
 
         return container;
     }

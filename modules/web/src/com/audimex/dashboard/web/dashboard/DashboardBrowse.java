@@ -85,7 +85,7 @@ public class DashboardBrowse extends AbstractLookup {
         String jsonModel = converter.dashboardToJson(dashboard);
 
         Optional<DashboardPersist> persDashOpt = persDashboardsDs.getItems().stream()
-                .filter(item -> dashId.equals(dashboard.getId()))
+                .filter(item -> dashId.equals(item.getId()))
                 .findFirst();
 
         if (persDashOpt.isPresent()) {
