@@ -69,7 +69,7 @@ public class LayoutFactory {
         return null;
     }
 
-    public DDGridLayout createGridLayout(int cols, int rows) {
+    public DDGridLayout createGridLayout(int cols, int rows, boolean withChildren) {
         DDGridLayout container = componentsFactory.createComponent(DDGridLayout.class);
         container.setColumns(cols);
         container.setRows(rows);
@@ -78,9 +78,11 @@ public class LayoutFactory {
         container.addStyleName(AMXD_SHADOW_BORDER);
         container.setDragMode(LayoutDragMode.CLONE);
 
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
-                container.add(createVerticalLayout(), i, j);
+        if (withChildren) {
+            for (int i = 0; i < cols; i++) {
+                for (int j = 0; j < rows; j++) {
+                    container.add(createVerticalLayout(), i, j);
+                }
             }
         }
 

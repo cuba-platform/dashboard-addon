@@ -38,6 +38,7 @@ public class CanvasFrame extends AbstractFrame {
         if (model != null) {
             Container container = converter.modelToContainer(this, model);
             for (Component component : container.getOwnComponents()) {
+                component.setParent(null);
                 canvas.add(component);
             }
         }

@@ -56,7 +56,7 @@ public class DropLayoutTool {
             GridDialog dialog = (GridDialog) targetFrame.openWindow(GridDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if (GridDialog.APPLY.equals(actionId)) {
-                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows());
+                    DDGridLayout gridLayout = factory.createGridLayout(dialog.getCols(), dialog.getRows(), true);
                     gridLayout.setDropHandler(new GridLayoutDropHandler(this));
                     gridLayout.getOwnComponents().forEach(vLayout ->
                             ((DDVerticalLayout) vLayout).setDropHandler(new VerticalLayoutDropHandler(this))

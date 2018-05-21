@@ -46,7 +46,7 @@ public class DashboardModelConverter {
         } else if (model instanceof GridLayout) {
             Integer cols = ((GridLayout) model).getColumns();
             Integer rows = ((GridLayout) model).getRows();
-            container = factory.createGridLayout(cols, rows);
+            container = factory.createGridLayout(cols, rows, false);
         } else if (model instanceof WidgetLayout) {
             container = factory.createWidgetLayout(((WidgetLayout) model).getWidget(), parentFrame);
         }
