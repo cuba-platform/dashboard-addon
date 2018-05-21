@@ -35,7 +35,6 @@ public class DashboardBrowse extends AbstractLookup {
         initDs();
     }
 
-
     protected void initDs() {
         persDashboardsDs.addCollectionChangeListener(e -> updateTable());
         persDashboardsDs.refresh();
@@ -77,29 +76,8 @@ public class DashboardBrowse extends AbstractLookup {
 
     protected void openDashboardEditor(Dashboard dashboard) {
         AbstractEditor editor = openEditor("dashboardEdit", dashboard, THIS_TAB, modelDashboardsDs);
-        editor.addCloseWithCommitListener(() -> addOrUpdateDashboardPersist((Dashboard) editor.getItem()));
-    }
-
-    protected void addOrUpdateDashboardPersist(Dashboard dashboard) {
-        UUID dashId = dashboard.getId();
-        String jsonModel = converter.dashboardToJson(dashboard);
-
-        Optional<DashboardPersist> persDashOpt = persDashboardsDs.getItems().stream()
-                .filter(item -> dashId.equals(item.getId()))
-                .findFirst();
-
-        if (persDashOpt.isPresent()) {
-            DashboardPersist persDash = persDashOpt.get();
-            persDash.setDashboardModel(jsonModel);
-            persDashboardsDs.updateItem(persDash);
-        } else {
-            DashboardPersist persDash = metadata.create(DashboardPersist.class);
-            persDash.setId(dashId);
-            persDash.setDashboardModel(jsonModel);
-            persDashboardsDs.addItem(persDash);
-        }
-
-        persDashboardsDs.commit();
-        persDashboardsDs.refresh();
+        editor.addCloseListener(actionId -> {
+            persDashboardsDs.refresh();
+        });
     }
 }

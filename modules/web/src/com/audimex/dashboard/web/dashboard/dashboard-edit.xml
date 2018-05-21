@@ -2,12 +2,18 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://dashboardEdit"
         class="com.audimex.dashboard.web.dashboard.DashboardEdit"
-        focusComponent="fieldGroup"
-        datasource="dashboardDs">
+        datasource="dashboardDs"
+        focusComponent="fieldGroup">
     <dsContext>
         <datasource id="dashboardDs"
-                    class="com.audimex.dashboard.model.Dashboard">
-        </datasource>
+                    class="com.audimex.dashboard.model.Dashboard"/>
+        <collectionDatasource id="persDashboardsDs"
+                              class="com.audimex.dashboard.entity.DashboardPersist"
+                              view="_local">
+            <query>
+                <![CDATA[select e from amxd$DashboardPersist e]]>
+            </query>
+        </collectionDatasource>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.audimex.dashboard.entity.WidgetTemplate"
                               view="_local">
@@ -16,9 +22,9 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <layout spacing="true"
-            expand="dashboardLayoutBox"
-            height="100%">
+    <layout expand="dashboardLayoutBox"
+            height="100%"
+            spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardDs">
             <column width="450px">
@@ -28,25 +34,36 @@
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"
                   collapsable="true"
-                  collapsed="true"
-                  width="100%">
+                  collapsed="true">
             <frame id="paramsFrame"
                    screen="amdx$Parameter.browse"/>
         </groupBox>
         <hbox id="dashboardLayoutBox"
-              width="100%"
               expand="canvasBox"
               margin="true"
-              spacing="true">
+              spacing="true"
+              width="100%">
             <groupBox id="paletteBox"
+                      height="100%"
                       spacing="true"
-                      width="300px"
-                      height="100%"/>
+                      width="300px"/>
             <groupBox id="canvasBox"
                       height="100%"
                       spacing="true"/>
         </hbox>
-        <frame id="windowActions"
-               screen="extendedEditWindowActions"/>
+        <buttonsPanel id="buttonsPanel"
+                      alwaysVisible="true">
+            <button id="okBtn"
+                    caption="msg://ok"
+                    icon="EDITOR_OK"
+                    invoke="applyAndClose"/>
+            <button id="applyBtn"
+                    caption="msg://apply"
+                    invoke="apply"/>
+            <button id="cancelBtn"
+                    caption="msg://cancel"
+                    icon="EDITOR_CANCEL"
+                    invoke="cancel"/>
+        </buttonsPanel>
     </layout>
 </window>
