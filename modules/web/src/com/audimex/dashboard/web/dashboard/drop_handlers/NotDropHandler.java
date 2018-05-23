@@ -9,8 +9,6 @@ import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
-import com.vaadin.event.dd.acceptcriteria.ClientSideCriterion;
-import com.vaadin.event.dd.acceptcriteria.Not;
 
 public class NotDropHandler implements DropHandler {
     @Override
@@ -20,7 +18,6 @@ public class NotDropHandler implements DropHandler {
 
     @Override
     public AcceptCriterion getAcceptCriterion() {
-//        return new Not((ClientSideCriterion) AcceptAll.get());
         return AcceptAll.get();
     }
 }

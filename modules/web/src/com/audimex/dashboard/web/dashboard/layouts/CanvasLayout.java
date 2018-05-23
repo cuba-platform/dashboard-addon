@@ -8,7 +8,7 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.DropTarget;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
-public interface DdDashboardLayout extends LayoutDragSource, DropTarget {
+public interface CanvasLayout extends LayoutDragSource, DropTarget {
 
 
     void setDropHandler(DropHandler dropHandler);

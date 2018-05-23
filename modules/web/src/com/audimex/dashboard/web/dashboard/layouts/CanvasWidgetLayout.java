@@ -13,7 +13,7 @@ import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
 import java.util.Map;
 
-public class DdDashboardWidgetLayout extends CssLayout implements DdDashboardLayout {
+public class CanvasWidgetLayout extends CssLayout implements CanvasLayout {
 
 
     @Override

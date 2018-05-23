@@ -12,7 +12,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout;
+import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
@@ -20,11 +20,11 @@ import java.util.Map;
 
 import static com.audimex.dashboard.web.DashboardStyleConstants.*;
 
-public class DdDashboardVerticalLayout extends CssLayout implements DdDashboardLayout {
-    protected DDVerticalLayout verticalLayout = new DDVerticalLayout();
+public class CanvasHorizontalLayout extends CssLayout implements CanvasLayout {
+    protected DDHorizontalLayout horizontalLayout = new DDHorizontalLayout();
     protected HorizontalLayout buttonsPanel = new HorizontalLayout();
 
-    public DdDashboardVerticalLayout() {
+    public CanvasHorizontalLayout() {
         super();
 
 //        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
@@ -39,14 +39,18 @@ public class DdDashboardVerticalLayout extends CssLayout implements DdDashboardL
         buttonsPanel.addComponent(removeButton);
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
 
-        verticalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
-        verticalLayout.setSizeFull();
-        verticalLayout.setSpacing(true);
-        verticalLayout.setMargin(true);
-        verticalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
+        horizontalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        horizontalLayout.setMargin(true);
+        horizontalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
 
         super.addComponent(buttonsPanel);
-        super.addComponent(verticalLayout);
+        super.addComponent(horizontalLayout);
+
+        this.setDragMode(LayoutDragMode.CLONE);
+        this.setSizeFull();
+        this.addStyleName(AMXD_SHADOW_BORDER);
     }
 
 
@@ -56,66 +60,66 @@ public class DdDashboardVerticalLayout extends CssLayout implements DdDashboardL
 
     @Override
     public void addComponent(Component c) {
-        verticalLayout.addComponent(c);
+        horizontalLayout.addComponent(c);
     }
 
     @Override
     public void addComponentAsFirst(Component c) {
-        verticalLayout.addComponentAsFirst(c);
+        horizontalLayout.addComponentAsFirst(c);
     }
 
     @Override
     public void addComponent(Component c, int index) {
-        verticalLayout.addComponent(c, index);
+        horizontalLayout.addComponent(c, index);
     }
 
     @Override
     public void addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        verticalLayout.addLayoutClickListener(listener);
+        horizontalLayout.addLayoutClickListener(listener);
     }
 
     @Override
     public void removeLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        verticalLayout.removeLayoutClickListener(listener);
+        horizontalLayout.removeLayoutClickListener(listener);
     }
 
     @Override
     public DropHandler getDropHandler() {
-        return verticalLayout.getDropHandler();
+        return horizontalLayout.getDropHandler();
     }
 
     @Override
     public void setDropHandler(DropHandler dropHandler) {
-        verticalLayout.setDropHandler(dropHandler);
+        horizontalLayout.setDropHandler(dropHandler);
     }
 
     @Override
     public TargetDetails translateDropTargetDetails(Map<String, Object> map) {
-        return verticalLayout.translateDropTargetDetails(map);
+        return horizontalLayout.translateDropTargetDetails(map);
     }
 
     @Override
     public LayoutDragMode getDragMode() {
-        return verticalLayout.getDragMode();
+        return horizontalLayout.getDragMode();
     }
 
     @Override
     public void setDragMode(LayoutDragMode layoutDragMode) {
-        verticalLayout.setDragMode(layoutDragMode);
+        horizontalLayout.setDragMode(layoutDragMode);
     }
 
     @Override
     public DragFilter getDragFilter() {
-        return verticalLayout.getDragFilter();
+        return horizontalLayout.getDragFilter();
     }
 
     @Override
     public void setDragFilter(DragFilter dragFilter) {
-        verticalLayout.setDragFilter(dragFilter);
+        horizontalLayout.setDragFilter(dragFilter);
     }
 
     @Override
     public Transferable getTransferable(Map<String, Object> map) {
-        return verticalLayout.getTransferable(map);
+        return horizontalLayout.getTransferable(map);
     }
 }

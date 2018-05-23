@@ -12,7 +12,7 @@
     <screen id="canvasFrame"
             template="/com/audimex/dashboard/web/dashboard/frames/canvas/canvas-frame.xml"/>
     <screen id="grid-dialog"
-            template="com/audimex/dashboard/web/dashboard/frames/grid_dialog/grid-dialog.xml"/>
+            template="com/audimex/dashboard/web/dashboard/frames/grid_creation_dialog/grid-creation-dialog.xml"/>
     <!--parameters-->
     <screen id="amdx$Parameter.browse"
             template="com/audimex/dashboard/web/parameter/parameter-browse.xml"/>

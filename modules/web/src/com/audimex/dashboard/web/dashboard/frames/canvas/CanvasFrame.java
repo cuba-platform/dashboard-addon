@@ -2,7 +2,7 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.layouts.DdDashboardVerticalLayout;
+import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.cuba.gui.components.*;
@@ -24,21 +24,15 @@ public class CanvasFrame extends AbstractFrame {
     @Inject
     protected DashboardModelConverter converter;
 
-    protected DdDashboardVerticalLayout ddCanvas = new DdDashboardVerticalLayout();
+    protected CanvasVerticalLayout ddCanvas = new CanvasVerticalLayout();
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        ddCanvas.setDragMode(LayoutDragMode.CLONE);
-        ddCanvas.setSizeFull();
-
-        canvas.unwrap(Layout.class).addComponent(ddCanvas);
-        ddCanvas.addStyleName(AMXD_SHADOW_BORDER);
-
-
 //        initDashboardModel(params);
         tool.init(this, ddCanvas);
+        canvas.unwrap(Layout.class).addComponent(ddCanvas);
         addLayoutClickListener();
     }
 
@@ -59,11 +53,8 @@ public class CanvasFrame extends AbstractFrame {
     }
 
     public void addLayoutClickListener() {
-        ddCanvas.addLayoutClickListener(event -> {
+        ddCanvas.addLayoutClickListener(e -> {
                     showNotification("asdas");
-                    com.vaadin.ui.Component clickedComponent = event.getClickedComponent();
-
-
                 }
         );
     }

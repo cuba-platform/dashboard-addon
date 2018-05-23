@@ -10,7 +10,7 @@ import com.vaadin.ui.Button;
 
 import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_DASHBOARD_BUTTON;
 
-public class PaletteButton extends Button {
+public class PaletteButton extends Button implements Draggable {
     protected DashboardLayout layout;
 
     public PaletteButton() {

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.web.dashboard.frames.grid_dialog;
+package com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
@@ -13,7 +13,7 @@ import com.vaadin.ui.Slider;
 import javax.inject.Inject;
 import java.util.Map;
 
-public class GridDialog extends AbstractWindow {
+public class GridCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "grid-dialog";
     public static final String APPLY = "apply";
     public static final String CANCEL = "cancel";
