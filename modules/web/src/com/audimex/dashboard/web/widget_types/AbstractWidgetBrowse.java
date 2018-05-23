@@ -6,21 +6,15 @@ package com.audimex.dashboard.web.widget_types;
 
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
-import com.haulmont.addon.dnd.components.DDLayout;
-import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AbstractWidgetBrowse extends AbstractFrame implements DDLayout {
+public class AbstractWidgetBrowse extends AbstractFrame {
     public static final String WIDGET = "WIDGET";
 
     protected Widget widget;
-    protected LayoutDragMode dragMode = LayoutDragMode.CLONE;
-    protected DropHandler dropHandler = new NotDropHandler();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -45,23 +39,4 @@ public class AbstractWidgetBrowse extends AbstractFrame implements DDLayout {
         return widget;
     }
 
-    @Override
-    public void setDragMode(LayoutDragMode startMode) {
-        dragMode = startMode;
-    }
-
-    @Override
-    public LayoutDragMode getDragMode() {
-        return dragMode;
-    }
-
-    @Override
-    public void setDropHandler(DropHandler handler) {
-        dropHandler = handler;
-    }
-
-    @Override
-    public DropHandler getDropHandler() {
-        return this.dropHandler;
-    }
 }

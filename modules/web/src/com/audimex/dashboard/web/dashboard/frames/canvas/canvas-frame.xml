@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
         class="com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame">
     <layout spacing="true"
             width="100%"
             height="100%">
-        <dnd:dndVBoxLayout id="canvas"
-                           dragMode="CLONE"
-                           spacing="true"
-                           height="100%"
-                           width="100%">
-        </dnd:dndVBoxLayout>
+        <vbox id="canvas"
+              width="100%"
+              height="100%">
+        </vbox>
     </layout>
 </window>

@@ -4,40 +4,23 @@
 
 package com.audimex.dashboard.web.dashboard.drop_handlers;
 
-import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
-import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
-import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
-import com.vaadin.server.PaintTarget;
+
+import com.vaadin.event.dd.DragAndDropEvent;
+import com.vaadin.event.dd.DropHandler;
+import com.vaadin.event.dd.acceptcriteria.AcceptAll;
+import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
+import com.vaadin.event.dd.acceptcriteria.ClientSideCriterion;
+import com.vaadin.event.dd.acceptcriteria.Not;
 
 public class NotDropHandler implements DropHandler {
     @Override
     public void drop(DragAndDropEvent event) {
-
+        //do nothing
     }
 
     @Override
-    public AcceptCriterion getCriterion() {
-        return (AcceptCriterionWrapper) () -> new com.vaadin.event.dd.acceptcriteria.AcceptCriterion() {
-            @Override
-            public boolean isClientSideVerifiable() {
-                return true;
-            }
-
-            @Override
-            public void paint(PaintTarget target) {
-
-            }
-
-            @Override
-            public void paintResponse(PaintTarget target) {
-
-            }
-
-            @Override
-            public boolean accept(com.vaadin.event.dd.DragAndDropEvent dragEvent) {
-                return false;
-            }
-        };
+    public AcceptCriterion getAcceptCriterion() {
+//        return new Not((ClientSideCriterion) AcceptAll.get());
+        return AcceptAll.get();
     }
 }
