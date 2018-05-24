@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.layouts;
+package com.audimex.dashboard.web.dashboard.vaadin_components.layouts;
 
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
@@ -51,6 +51,10 @@ public class CanvasWidgetLayout extends CssLayout implements CanvasLayout {
         this.setDragMode(LayoutDragMode.CLONE);
         this.setSizeFull();
         this.addStyleName(AMXD_SHADOW_BORDER);
+    }
+
+    public DDVerticalLayout getVerticalLayout() {
+        return verticalLayout;
     }
 
     public HorizontalLayout getButtonsPanel() {

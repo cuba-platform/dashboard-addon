@@ -4,9 +4,6 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
-import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
-import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
-import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
@@ -14,20 +11,15 @@ import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog.GridCreationDialog;
-import com.audimex.dashboard.web.dashboard.layouts.*;
-import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
-import com.haulmont.bali.util.ParamsMap;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -35,7 +27,7 @@ import static java.util.Collections.singletonList;
 @org.springframework.stereotype.Component
 public class DropLayoutTools {
     @Inject
-    protected WidgetTypeAnalyzer typeAnalyzer;
+    protected VaadinComponentsFactory vaadinFactory;
 
     protected CanvasFrame targetFrame;
 
@@ -59,7 +51,6 @@ public class DropLayoutTools {
         }});
     }
 
-    //todo move creation components to fabric
     protected void addComponent(AbstractLayout target, DashboardLayout layout, List<Object> args) {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) targetFrame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
@@ -68,16 +59,15 @@ public class DropLayoutTools {
                     int cols = dialog.getCols();
                     int rows = dialog.getRows();
 
-                    CanvasGridLayout canvasLayout = new CanvasGridLayout(cols, rows);
+                    CanvasGridLayout canvasLayout = vaadinFactory.createCanvasGridLayout(cols, rows);
 
                     for (int i = 0; i < cols; i++) {
                         for (int j = 0; j < rows; j++) {
-                            CanvasVerticalLayout verticalLayout = new CanvasVerticalLayout();
+                            CanvasVerticalLayout verticalLayout = vaadinFactory.createCanvasVerticalLayout();
                             addDropHandler(verticalLayout);
                             canvasLayout.addComponent(verticalLayout, i, j);
                         }
                     }
-
                     addDropHandler(canvasLayout);
                     addCanvasLayout(canvasLayout, target, args);
                 }
@@ -86,25 +76,11 @@ public class DropLayoutTools {
             CanvasLayout canvasLayout = null;
 
             if (layout instanceof VerticalLayout) {
-                canvasLayout = new CanvasVerticalLayout();
+                canvasLayout = vaadinFactory.createCanvasVerticalLayout();
             } else if (layout instanceof HorizontalLayout) {
-                canvasLayout = new CanvasHorizontalLayout();
+                canvasLayout = vaadinFactory.createCanvasHorizontalLayout();
             } else if (layout instanceof WidgetLayout) {
-                Widget widget = ((WidgetLayout) layout).getWidget();
-
-                Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
-                        .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
-                        .findFirst();
-
-                if (widgetTypeOpt.isPresent()) {
-                    String frameId = widgetTypeOpt.get().getBrowseFrameId();
-                    AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
-                    widgetFrame.setSizeFull();
-                    widgetFrame.setMargin(true);
-
-                    canvasLayout = new CanvasWidgetLayout();
-                    ((CanvasWidgetLayout) canvasLayout).addComponent(widgetFrame.unwrap(Layout.class));
-                }
+                canvasLayout = vaadinFactory.createCanvasWidgetLayout(targetFrame, (WidgetLayout) layout);
             }
 
             if (canvasLayout != null) {

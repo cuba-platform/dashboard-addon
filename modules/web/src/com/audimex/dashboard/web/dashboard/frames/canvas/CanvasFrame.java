@@ -2,14 +2,17 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
+import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
+import com.audimex.dashboard.web.dashboard.tools.VaadinComponentsFactory;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasLayout;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.cuba.gui.components.*;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
+import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -25,13 +28,15 @@ public class CanvasFrame extends AbstractFrame {
     protected DropLayoutTools tool;
     @Inject
     protected DashboardModelConverter converter;
+    @Inject
+    protected VaadinComponentsFactory factory;
 
-    protected CanvasVerticalLayout ddCanvas = new CanvasVerticalLayout();
+    protected CanvasVerticalLayout ddCanvas;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
+        ddCanvas = factory.createCanvasVerticalLayout();
 //        initDashboardModel(params);
         tool.init(this, ddCanvas);
         canvas.unwrap(Layout.class).addComponent(ddCanvas);
@@ -52,6 +57,13 @@ public class CanvasFrame extends AbstractFrame {
 //                ddCanvas.addComponent(component);
             }
         }
+    }
+
+    @EventListener
+    public void onRemoveLayout(LayoutRemoveEvent event) {
+        CanvasLayout source = event.getSource();
+        AbstractLayout parent = (AbstractLayout) source.getParent();
+        parent.removeComponent(source);
     }
 
     public void addLayoutClickListener() {
