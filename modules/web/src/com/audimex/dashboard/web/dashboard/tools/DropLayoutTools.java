@@ -4,29 +4,38 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
-import com.audimex.dashboard.model.visual_model.DashboardLayout;
-import com.audimex.dashboard.model.visual_model.GridLayout;
-import com.audimex.dashboard.model.visual_model.HorizontalLayout;
-import com.audimex.dashboard.model.visual_model.VerticalLayout;
+import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
+import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
+import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.layouts.*;
+import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
+import com.haulmont.bali.util.ParamsMap;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 @org.springframework.stereotype.Component
 public class DropLayoutTools {
+    @Inject
+    protected WidgetTypeAnalyzer typeAnalyzer;
 
     protected CanvasFrame targetFrame;
 
@@ -50,6 +59,7 @@ public class DropLayoutTools {
         }});
     }
 
+    //todo move creation components to fabric
     protected void addComponent(AbstractLayout target, DashboardLayout layout, List<Object> args) {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) targetFrame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
@@ -79,6 +89,22 @@ public class DropLayoutTools {
                 canvasLayout = new CanvasVerticalLayout();
             } else if (layout instanceof HorizontalLayout) {
                 canvasLayout = new CanvasHorizontalLayout();
+            } else if (layout instanceof WidgetLayout) {
+                Widget widget = ((WidgetLayout) layout).getWidget();
+
+                Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
+                        .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
+                        .findFirst();
+
+                if (widgetTypeOpt.isPresent()) {
+                    String frameId = widgetTypeOpt.get().getBrowseFrameId();
+                    AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
+                    widgetFrame.setSizeFull();
+                    widgetFrame.setMargin(true);
+
+                    canvasLayout = new CanvasWidgetLayout();
+                    ((CanvasWidgetLayout) canvasLayout).addComponent(widgetFrame.unwrap(Layout.class));
+                }
             }
 
             if (canvasLayout != null) {
@@ -106,7 +132,7 @@ public class DropLayoutTools {
         } else if (layout instanceof CanvasGridLayout) {
             layout.setDropHandler(new GridLayoutDropHandler(this));
         } else if (layout instanceof CanvasWidgetLayout) {
-
+            layout.setDropHandler(new NotDropHandler());
         }
     }
 }
