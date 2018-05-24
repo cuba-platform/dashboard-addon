@@ -8,7 +8,6 @@ import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.TargetDetails;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -18,41 +17,19 @@ import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
 import java.util.Map;
 
-import static com.audimex.dashboard.web.DashboardStyleConstants.*;
-
 public class CanvasHorizontalLayout extends CssLayout implements CanvasLayout {
     protected DDHorizontalLayout horizontalLayout = new DDHorizontalLayout();
     protected HorizontalLayout buttonsPanel = new HorizontalLayout();
 
     public CanvasHorizontalLayout() {
         super();
-
-//        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
-        Button configButton = new Button("Config");
-        configButton.addStyleName(AMXD_EDIT_BUTTON);
-
-//        Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
-        Button removeButton = new Button("Remove");
-        removeButton.addStyleName(AMXD_EDIT_BUTTON);
-
-        buttonsPanel.addComponent(configButton);
-        buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
-
-        horizontalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
-        horizontalLayout.setSizeFull();
-        horizontalLayout.setSpacing(true);
-        horizontalLayout.setMargin(true);
-        horizontalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
-
         super.addComponent(buttonsPanel);
         super.addComponent(horizontalLayout);
-
-        this.setDragMode(LayoutDragMode.CLONE);
-        this.setSizeFull();
-        this.addStyleName(AMXD_SHADOW_BORDER);
     }
 
+    public DDHorizontalLayout getHorizontalLayout() {
+        return horizontalLayout;
+    }
 
     public HorizontalLayout getButtonsPanel() {
         return buttonsPanel;

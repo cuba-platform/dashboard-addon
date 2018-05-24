@@ -22,6 +22,8 @@ import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
+import fi.jasoft.dragdroplayouts.DDGridLayout;
+import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
@@ -32,6 +34,7 @@ import static com.audimex.dashboard.web.DashboardIcon.GEAR_ICON;
 import static com.audimex.dashboard.web.DashboardIcon.TRASH_ICON;
 import static com.audimex.dashboard.web.DashboardStyleConstants.*;
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
+import static java.lang.String.format;
 
 @org.springframework.stereotype.Component
 public class VaadinComponentsFactory {
@@ -60,7 +63,7 @@ public class VaadinComponentsFactory {
         buttonsPanel.addComponent(removeButton);
 
         DDVerticalLayout verticalLayout = layout.getVerticalLayout();
-        verticalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
+        verticalLayout.setDragMode(LayoutDragMode.CLONE);
         verticalLayout.setSizeFull();
         verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
@@ -70,31 +73,97 @@ public class VaadinComponentsFactory {
     }
 
     public CanvasHorizontalLayout createCanvasHorizontalLayout() {
-        return new CanvasHorizontalLayout();
+        CanvasHorizontalLayout layout = new CanvasHorizontalLayout();
+        layout.setDragMode(LayoutDragMode.CLONE);
+        layout.setSizeFull();
+        layout.addStyleName(AMXD_SHADOW_BORDER);
+
+        Button removeButton = createRemoveButton();
+        removeButton.addClickListener(e -> {
+            events.publish(new LayoutRemoveEvent(layout));
+        });
+
+        HorizontalLayout buttonsPanel = layout.getButtonsPanel();
+        buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addComponent(removeButton);
+
+        DDHorizontalLayout horizontalLayout = layout.getHorizontalLayout();
+        horizontalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        horizontalLayout.setMargin(true);
+        horizontalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
+
+        return layout;
     }
 
     public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
-        return new CanvasGridLayout(cols, rows);
+        CanvasGridLayout layout = new CanvasGridLayout(cols, rows);
+        layout.setDragMode(LayoutDragMode.CLONE);
+        layout.setSizeFull();
+        layout.addStyleName(AMXD_SHADOW_BORDER);
+
+        Button removeButton = createRemoveButton();
+        removeButton.addClickListener(e -> {
+            events.publish(new LayoutRemoveEvent(layout));
+        });
+
+        HorizontalLayout buttonsPanel = layout.getButtonsPanel();
+        buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addComponent(removeButton);
+
+        DDGridLayout gridLayout = layout.getGridLayout();
+        gridLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
+        gridLayout.setSizeFull();
+        gridLayout.setSpacing(true);
+        gridLayout.setMargin(true);
+        gridLayout.addStyleName(AMXD_LAYOUT_CONTENT);
+
+        return layout;
     }
 
-    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame targetFrame, WidgetLayout layout) {
-        CanvasWidgetLayout component = null;
-        Widget widget = layout.getWidget();
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame targetFrame, WidgetLayout widgetLayout) {
+        Widget widget = widgetLayout.getWidget();
 
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
 
-        if (widgetTypeOpt.isPresent()) {
-            String frameId = widgetTypeOpt.get().getBrowseFrameId();
-            AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
-            widgetFrame.setSizeFull();
-            widgetFrame.setMargin(true);
-
-            component = new CanvasWidgetLayout();
-            component.addComponent(widgetFrame.unwrap(Layout.class));
+        if (!widgetTypeOpt.isPresent()) {
+            //todo add dashboard exception;
+            throw new RuntimeException(format("There isn't found a screen for the widget class %s", widget.getClass()));
         }
-        return component;
+
+        String frameId = widgetTypeOpt.get().getBrowseFrameId();
+        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
+        widgetFrame.setSizeFull();
+        widgetFrame.setMargin(true);
+
+        CanvasWidgetLayout layout = new CanvasWidgetLayout();
+        layout.addComponent(widgetFrame.unwrap(Layout.class));
+
+        layout.setDragMode(LayoutDragMode.CLONE);
+        layout.setSizeFull();
+        layout.addStyleName(AMXD_SHADOW_BORDER);
+
+        Button removeButton = createRemoveButton();
+        removeButton.addClickListener(e -> {
+            events.publish(new LayoutRemoveEvent(layout));
+        });
+
+        HorizontalLayout buttonsPanel = layout.getButtonsPanel();
+        buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
+        buttonsPanel.addComponent(removeButton);
+
+        DDVerticalLayout verticalLayout = layout.getVerticalLayout();
+        verticalLayout.setDragMode(LayoutDragMode.CLONE);
+        verticalLayout.setSizeFull();
+        verticalLayout.setSpacing(true);
+        verticalLayout.setMargin(true);
+        verticalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
+
+        return layout;
+
     }
 
     protected Button createConfigButton() {

@@ -26,31 +26,8 @@ public class CanvasWidgetLayout extends CssLayout implements CanvasLayout {
 
     public CanvasWidgetLayout() {
         super();
-        //todo move creation to factory
-//        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
-        Button configButton = new Button("Config");
-        configButton.addStyleName(AMXD_EDIT_BUTTON);
-
-//        Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
-        Button removeButton = new Button("Remove");
-        removeButton.addStyleName(AMXD_EDIT_BUTTON);
-
-        buttonsPanel.addComponent(configButton);
-        buttonsPanel.addComponent(removeButton);
-        buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
-
-        verticalLayout.setDragMode(fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.CLONE);
-        verticalLayout.setSizeFull();
-        verticalLayout.setSpacing(true);
-        verticalLayout.setMargin(true);
-        verticalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
-
         super.addComponent(buttonsPanel);
         super.addComponent(verticalLayout);
-
-        this.setDragMode(LayoutDragMode.CLONE);
-        this.setSizeFull();
-        this.addStyleName(AMXD_SHADOW_BORDER);
     }
 
     public DDVerticalLayout getVerticalLayout() {
