@@ -13,6 +13,7 @@ public interface DashboardStyleConstants {
     String AMXD_TREE_SELECTED = "amxd-tree-selected";
     String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     String AMXD_LAYOUT_CONTENT = "amxd-layout-content";
+    String AMXD_LAYOUT_SELECTED = "amxd-layout-selected";
     String AMXD_MAIN_LAYOUT_CONTROLS_SHOW = "amxd-main-layout-controls-show";
     String AMXD_WIDGETS_LAYOUT_CONTROLS_SHOW = "amxd-widgets-layout-controls-show";
     String AMXD_NOT_AVAILABLE = "amxd-not-available";

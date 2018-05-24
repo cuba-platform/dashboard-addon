@@ -6,9 +6,10 @@ package com.audimex.dashboard.web.dashboard.layouts;
 
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.DropTarget;
+import com.vaadin.ui.HasComponents;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
-public interface CanvasLayout extends LayoutDragSource, DropTarget {
+public interface CanvasLayout extends HasComponents, LayoutDragSource, DropTarget {
 
 
     void setDropHandler(DropHandler dropHandler);

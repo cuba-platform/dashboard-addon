@@ -4,6 +4,8 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DropHandler;
@@ -18,6 +20,8 @@ import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
 import java.util.Map;
 
+import static com.audimex.dashboard.web.DashboardIcon.GEAR_ICON;
+import static com.audimex.dashboard.web.DashboardIcon.TRASH_ICON;
 import static com.audimex.dashboard.web.DashboardStyleConstants.*;
 
 public class CanvasVerticalLayout extends CssLayout implements CanvasLayout {
@@ -27,13 +31,15 @@ public class CanvasVerticalLayout extends CssLayout implements CanvasLayout {
     public CanvasVerticalLayout() {
         super();
         //todo move creation to factory
-//        Button configButton = new Button(WebComponentsHelper.getIcon("icons/gear.png"));
         Button configButton = new Button("Config");
         configButton.addStyleName(AMXD_EDIT_BUTTON);
 
-//        Button removeButton = new Button(WebComponentsHelper.getIcon("icons/trash.png"));
         Button removeButton = new Button("Remove");
         removeButton.addStyleName(AMXD_EDIT_BUTTON);
+
+        IconResolver iconResolver = AppBeans.get(IconResolver.class);
+        removeButton.setIcon(iconResolver.getIconResource(TRASH_ICON.source()));
+        configButton.setIcon(iconResolver.getIconResource(GEAR_ICON.source()));
 
         buttonsPanel.addComponent(configButton);
         buttonsPanel.addComponent(removeButton);

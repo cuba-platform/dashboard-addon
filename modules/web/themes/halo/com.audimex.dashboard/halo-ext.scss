@@ -100,7 +100,12 @@
         display: none;
     }
 
-    .amxd-tree-selected > .amxd-layout-controls .amxd-edit-button {
+    .amxd-layout-selected {
+        border: 2px solid $v-selection-color;
+        border-radius: 3px;
+    }
+
+    .amxd-layout-selected > .amxd-layout-controls .amxd-edit-button {
         display: inline-block;
     }
 
