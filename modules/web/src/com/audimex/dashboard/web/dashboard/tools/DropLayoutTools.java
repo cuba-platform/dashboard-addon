@@ -14,6 +14,8 @@ import com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog.GridCreat
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HasComponents;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 
 import javax.inject.Inject;
@@ -28,12 +30,26 @@ import static java.util.Collections.singletonList;
 public class DropLayoutTools {
     @Inject
     protected VaadinComponentsFactory vaadinFactory;
+    @Inject
+    protected DashboardModelConverter modelConverter;
 
     protected CanvasFrame targetFrame;
 
     public void init(CanvasFrame targetFrame, CanvasLayout rootContainer) {
         this.targetFrame = targetFrame;
-        addDropHandler(rootContainer);
+        initDropHandler(rootContainer);
+    }
+
+    public void addDropHandler(CanvasLayout layout) {
+        if (layout instanceof CanvasVerticalLayout) {
+            layout.setDropHandler(new VerticalLayoutDropHandler(this));
+        } else if (layout instanceof CanvasHorizontalLayout) {
+            layout.setDropHandler(new HorizontalLayoutDropHandler(this));
+        } else if (layout instanceof CanvasGridLayout) {
+            layout.setDropHandler(new GridLayoutDropHandler(this));
+        } else if (layout instanceof CanvasWidgetLayout) {
+            layout.setDropHandler(new NotDropHandler());
+        }
     }
 
     public void addComponent(AbstractLayout target, DashboardLayout layout) {
@@ -49,6 +65,17 @@ public class DropLayoutTools {
             add(column);
             add(row);
         }});
+    }
+
+    protected void initDropHandler(Component component) {
+        if (component instanceof CanvasLayout) {
+            addDropHandler((CanvasLayout) component);
+        }
+        if (component instanceof HasComponents) {
+            for (Component child : ((HasComponents) component)) {
+                initDropHandler(child);
+            }
+        }
     }
 
     protected void addComponent(AbstractLayout target, DashboardLayout layout, List<Object> args) {
@@ -73,15 +100,7 @@ public class DropLayoutTools {
                 }
             });
         } else {
-            CanvasLayout canvasLayout = null;
-
-            if (layout instanceof VerticalLayout) {
-                canvasLayout = vaadinFactory.createCanvasVerticalLayout();
-            } else if (layout instanceof HorizontalLayout) {
-                canvasLayout = vaadinFactory.createCanvasHorizontalLayout();
-            } else if (layout instanceof WidgetLayout) {
-                canvasLayout = vaadinFactory.createCanvasWidgetLayout(targetFrame, ((WidgetLayout) layout).getWidget());
-            }
+            CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout);
 
             if (canvasLayout != null) {
                 addDropHandler(canvasLayout);
@@ -97,18 +116,6 @@ public class DropLayoutTools {
             ((AbstractOrderedLayout) target).addComponent(canvasLayout, (int) args.get(0));
         } else if (args.size() == 2) {
             ((DDGridLayout) target).addComponent(canvasLayout, (int) args.get(0), (int) args.get(1));
-        }
-    }
-
-    public void addDropHandler(CanvasLayout layout) {
-        if (layout instanceof CanvasVerticalLayout) {
-            layout.setDropHandler(new VerticalLayoutDropHandler(this));
-        } else if (layout instanceof CanvasHorizontalLayout) {
-            layout.setDropHandler(new HorizontalLayoutDropHandler(this));
-        } else if (layout instanceof CanvasGridLayout) {
-            layout.setDropHandler(new GridLayoutDropHandler(this));
-        } else if (layout instanceof CanvasWidgetLayout) {
-            layout.setDropHandler(new NotDropHandler());
         }
     }
 }

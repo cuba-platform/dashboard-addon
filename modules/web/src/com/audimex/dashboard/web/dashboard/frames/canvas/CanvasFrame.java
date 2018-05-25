@@ -1,7 +1,6 @@
 package com.audimex.dashboard.web.dashboard.frames.canvas;
 
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
@@ -13,7 +12,6 @@ import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerti
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Layout;
@@ -38,15 +36,15 @@ public class CanvasFrame extends AbstractFrame {
     @Inject
     protected VaadinComponentsFactory factory;
 
-    protected CanvasVerticalLayout ddCanvas;
+    protected CanvasVerticalLayout vLayout;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        ddCanvas = factory.createCanvasVerticalLayout();
-//        initDashboardModel(params);
-        tools.init(this, ddCanvas);
-        canvas.unwrap(Layout.class).addComponent(ddCanvas);
+        vLayout = factory.createCanvasVerticalLayout();
+        initDashboardModel(params);
+        tools.init(this, vLayout);
+        canvas.unwrap(Layout.class).addComponent(vLayout);
         addLayoutClickListener();
     }
 
@@ -74,26 +72,22 @@ public class CanvasFrame extends AbstractFrame {
     }
 
     public VerticalLayout getDashboardModel() {
-        return (VerticalLayout) converter.containerToModel(ddCanvas);
+        return converter.containerToModel(vLayout);
     }
 
 
     protected void initDashboardModel(Map<String, Object> params) {
-        DashboardLayout model = (DashboardLayout) params.get(VISUAL_MODEL);
+        VerticalLayout model = (VerticalLayout) params.get(VISUAL_MODEL);
 
         if (model != null) {
-//            Container container = converter.modelToContainer(this, model);
-//            for (Component component : container.getOwnComponents()) {
-//                component.setParent(null);
-////                ddCanvas.addComponent(component);
-//            }
+            vLayout = (CanvasVerticalLayout) converter.modelToContainer(this, model);
         }
     }
 
     protected void addLayoutClickListener() {
-        ddCanvas.addLayoutClickListener(e -> {
+        vLayout.addLayoutClickListener(e -> {
                     if (e.getClickedComponent() != null) {
-                        deselectChildren(ddCanvas);
+                        deselectChildren(vLayout);
                         selectLayout(e.getClickedComponent());
                     }
                 }
