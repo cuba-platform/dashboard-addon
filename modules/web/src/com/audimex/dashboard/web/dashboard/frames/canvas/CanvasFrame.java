@@ -50,22 +50,6 @@ public class CanvasFrame extends AbstractFrame {
         addLayoutClickListener();
     }
 
-    public VerticalLayout getDashboardModel() {
-        return converter.containerToModel(canvas);
-    }
-
-    protected void initDashboardModel(Map<String, Object> params) {
-        DashboardLayout model = (DashboardLayout) params.get(VISUAL_MODEL);
-
-        if (model != null) {
-            Container container = converter.modelToContainer(this, model);
-            for (Component component : container.getOwnComponents()) {
-                component.setParent(null);
-//                ddCanvas.addComponent(component);
-            }
-        }
-    }
-
     @EventListener
     public void onRemoveLayout(LayoutRemoveEvent event) {
         CanvasLayout source = event.getSource();
@@ -89,7 +73,24 @@ public class CanvasFrame extends AbstractFrame {
         });
     }
 
-    public void addLayoutClickListener() {
+    public VerticalLayout getDashboardModel() {
+        return (VerticalLayout) converter.containerToModel(ddCanvas);
+    }
+
+
+    protected void initDashboardModel(Map<String, Object> params) {
+        DashboardLayout model = (DashboardLayout) params.get(VISUAL_MODEL);
+
+        if (model != null) {
+//            Container container = converter.modelToContainer(this, model);
+//            for (Component component : container.getOwnComponents()) {
+//                component.setParent(null);
+////                ddCanvas.addComponent(component);
+//            }
+        }
+    }
+
+    protected void addLayoutClickListener() {
         ddCanvas.addLayoutClickListener(e -> {
                     if (e.getClickedComponent() != null) {
                         deselectChildren(ddCanvas);

@@ -44,7 +44,7 @@ public class GridLayoutDropHandler extends DefaultGridLayoutDropHandler {
 
             // If no components exist in the grid, then just add the
             // component
-            if (!layout.getComponentIterator().hasNext()) {
+            if (!layout.iterator().hasNext()) {
                 layout.addComponent(comp, column, row);
                 return;
             }

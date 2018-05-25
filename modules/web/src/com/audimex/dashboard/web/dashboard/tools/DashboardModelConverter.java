@@ -6,13 +6,14 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
-import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasGridLayout;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasHorizontalLayout;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.Component.Container;
-import com.haulmont.cuba.gui.components.Frame;
-import com.haulmont.cuba.gui.components.GridLayout.Area;
-import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HasComponents;
+import fi.jasoft.dragdroplayouts.DDGridLayout;
 
 import javax.inject.Inject;
 
@@ -21,82 +22,61 @@ public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
 
-    public VerticalLayout containerToModel(VBoxLayout rootContainer) {
+    public VerticalLayout containerToModel(CanvasVerticalLayout container) {
         VerticalLayout model = metadata.create(VerticalLayout.class);
-
-        for (Component container : rootContainer.getOwnComponents()) {
-            model.addChild(containerToModel((Container) container));
-        }
-
+        containerToModel(model, container);
         return model;
     }
 
-    public Container modelToContainer(Frame parentFrame, DashboardLayout model) {
-        Container container = null;
+    protected void containerToModel(DashboardLayout model, Component container) {
+        for (Component childComponent : ((HasComponents) container)) {
+            DashboardLayout childModel = createDashboardLayout(childComponent);
 
-//        if (model instanceof VerticalLayout) {
-//            container = factory.createVerticalLayout();
-//        } else if (model instanceof HorizontalLayout) {
-//            container = factory.createHorizontalLayout();
-//        } else if (model instanceof GridLayout) {
-//            Integer cols = ((GridLayout) model).getColumns();
-//            Integer rows = ((GridLayout) model).getRows();
-//            container = factory.createGridLayout(cols, rows, false);
-//        } else if (model instanceof WidgetLayout) {
-//            container = factory.createWidgetLayout(((WidgetLayout) model).getWidget(), parentFrame);
-//        }
+            if (childModel == null && childComponent instanceof HasComponents) {
+                containerToModel(model, childComponent);
+            } else if (childModel instanceof GridLayout) {
+                GridLayout gridModel = (GridLayout) childModel;
+                DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getGridLayout();
+                model.addChild(gridModel);
 
-        if (container != null && !(model instanceof WidgetLayout)) {
-//            if (container instanceof DDGridLayout) {
-//                for (GridArea area : ((GridLayout) model).getAreas()) {
-//                    Container child = modelToContainer(parentFrame, area.getComponent());
-//                    ((DDGridLayout) container).add(child, area.getCol1(), area.getRow1());
-//                }
-//            } else {
-//                for (DashboardLayout child : model.getChildren()) {
-//                    container.add(modelToContainer(parentFrame, child));
-//                }
-//            }
+                for (Component gridChild : gridComponent) {
+                    GridArea modelArea = metadata.create(GridArea.class);
+                    com.vaadin.ui.GridLayout.Area area = gridComponent.getComponentArea(gridChild);
+
+                    DashboardLayout modelChildGridArea = createDashboardLayout(gridChild);
+                    containerToModel(modelChildGridArea, gridChild);
+
+                    modelArea.setCol1(area.getColumn1());
+                    modelArea.setRow1(area.getRow1());
+                    modelArea.setComponent(modelChildGridArea);
+                    gridModel.addArea(modelArea);
+                }
+            } else if (childModel != null) {
+                model.addChild(childModel);
+                if (!(childModel instanceof WidgetLayout)) {
+                    containerToModel(childModel, childComponent);
+                }
+            }
         }
-
-        return container;
     }
 
-    protected DashboardLayout containerToModel(Container container) {
-        DashboardLayout model = null;
-
-//        if (container instanceof DDVerticalLayout) {
-//            model = metadata.create(VerticalLayout.class);
-//        } else if (container instanceof DDHorizontalLayout) {
-//            model = metadata.create(HorizontalLayout.class);
-//        } else if (container instanceof AbstractWidgetBrowse) {
-//            model = metadata.create(WidgetLayout.class);
-//            Widget widget = ((AbstractWidgetBrowse) container).getWidget();
-//            ((WidgetLayout) model).setWidget(widget);
-//        } else if (container instanceof DDGridLayout) {
-//            model = metadata.create(GridLayout.class);
-//            ((GridLayout) model).setRows(((DDGridLayout) container).getRows());
-//            ((GridLayout) model).setColumns(((DDGridLayout) container).getColumns());
-//        }
-//
-//        if (model != null && !(model instanceof WidgetLayout)) {
-//            for (Component child : container.getOwnComponents()) {
-//                if (model instanceof GridLayout) {
-//                    GridArea gridArea = metadata.create(GridArea.class);
-//
-//                    Area area = ((DDGridLayout) container).getComponentArea(child);
-//                    gridArea.setCol1(area.getColumn1());
-//                    gridArea.setRow1(area.getRow1());
-//
-//                    gridArea.setComponent(containerToModel((Container) child));
-//                    ((GridLayout) model).addArea(gridArea);
-//                } else {
-//                    model.addChild(containerToModel((Container) child));
-//                }
-//            }
-//        }
-
-        return model;
+    protected DashboardLayout createDashboardLayout(Component component) {
+        if (component instanceof CanvasVerticalLayout) {
+            return metadata.create(VerticalLayout.class);
+        } else if (component instanceof CanvasHorizontalLayout) {
+            return metadata.create(HorizontalLayout.class);
+        } else if (component instanceof CanvasWidgetLayout) {
+            WidgetLayout layout = metadata.create(WidgetLayout.class);
+            Widget widget = ((CanvasWidgetLayout) component).getWidget();
+            layout.setWidget(widget);
+            return layout;
+        } else if (component instanceof CanvasGridLayout) {
+            GridLayout layout = metadata.create(GridLayout.class);
+            DDGridLayout gridLayout = ((CanvasGridLayout) component).getGridLayout();
+            layout.setRows(gridLayout.getRows());
+            layout.setColumns(gridLayout.getColumns());
+            return layout;
+        }
+        return null;
     }
-
 }
