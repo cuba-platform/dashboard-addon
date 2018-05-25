@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
-        class="com.audimex.dashboard.web.widget_tempate.WidgetTemplateBrowse"
+        class="com.audimex.dashboard.web.widget.WidgetTemplateBrowse"
         focusComponent="widgetsTable"
         lookupComponent="widgetsTable"
         datasource="modelWidgetsDs"
-        messagesPack="com.audimex.dashboard.web.widget_tempate">
+        messagesPack="com.audimex.dashboard.web.widget">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.audimex.dashboard.entity.WidgetTemplate"

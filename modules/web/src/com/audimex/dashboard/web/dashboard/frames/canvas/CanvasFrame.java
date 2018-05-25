@@ -1,16 +1,21 @@
 package com.audimex.dashboard.web.dashboard.frames.canvas;
 
+import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
+import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
+import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.audimex.dashboard.web.dashboard.tools.VaadinComponentsFactory;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
-import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.haulmont.cuba.gui.components.*;
+import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
+import com.audimex.dashboard.web.widget.WidgetEdit;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 import org.springframework.context.event.EventListener;
 
@@ -18,6 +23,8 @@ import javax.inject.Inject;
 import java.util.Map;
 
 import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_LAYOUT_SELECTED;
+import static com.audimex.dashboard.web.widget.WidgetEdit.SCREEN_NAME;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
 public class CanvasFrame extends AbstractFrame {
     public static final String VISUAL_MODEL = "VISUAL_MODEL";
@@ -25,7 +32,7 @@ public class CanvasFrame extends AbstractFrame {
     @Inject
     protected VBoxLayout canvas;
     @Inject
-    protected DropLayoutTools tool;
+    protected DropLayoutTools tools;
     @Inject
     protected DashboardModelConverter converter;
     @Inject
@@ -38,7 +45,7 @@ public class CanvasFrame extends AbstractFrame {
         super.init(params);
         ddCanvas = factory.createCanvasVerticalLayout();
 //        initDashboardModel(params);
-        tool.init(this, ddCanvas);
+        tools.init(this, ddCanvas);
         canvas.unwrap(Layout.class).addComponent(ddCanvas);
         addLayoutClickListener();
     }
@@ -66,11 +73,27 @@ public class CanvasFrame extends AbstractFrame {
         parent.removeComponent(source);
     }
 
+    @EventListener
+    public void onOpenWidgetEditor(OpenWidgetEditorEvent event) {
+        CanvasWidgetLayout source = event.getSource();
+        Widget widget = source.getWidget();
+
+        WidgetEdit editor = (WidgetEdit) openEditor(SCREEN_NAME, widget, THIS_TAB);
+        editor.addCloseWithCommitListener(() -> {
+            AbstractLayout parent = (AbstractLayout) source.getParent();
+            parent.removeComponent(source);
+
+            CanvasWidgetLayout newLayout = factory.createCanvasWidgetLayout(this, editor.getItem());
+            tools.addDropHandler(newLayout);
+            parent.addComponent(newLayout);
+        });
+    }
+
     public void addLayoutClickListener() {
         ddCanvas.addLayoutClickListener(e -> {
                     if (e.getClickedComponent() != null) {
                         deselectChildren(ddCanvas);
-                        selectLayout((HasComponents) e.getClickedComponent());
+                        selectLayout(e.getClickedComponent());
                     }
                 }
         );
@@ -85,12 +108,12 @@ public class CanvasFrame extends AbstractFrame {
         });
     }
 
-    protected void selectLayout(HasComponents component) {
+    protected void selectLayout(com.vaadin.ui.Component component) {
         CanvasLayout layout = (CanvasLayout) getCanvasLayoutParent(component);
         layout.addStyleName(AMXD_LAYOUT_SELECTED);
     }
 
-    protected HasComponents getCanvasLayoutParent(HasComponents layout) {
+    protected com.vaadin.ui.Component getCanvasLayoutParent(com.vaadin.ui.Component layout) {
         if (layout instanceof CanvasLayout) {
             return layout;
         } else {

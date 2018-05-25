@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.widget_tempate.WidgetTemplateEdit.ITEM_DS;
+import static com.audimex.dashboard.web.widget.WidgetEdit.ITEM_DS;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class ScreenWidgetEdit extends AbstractFrame {

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.audimex.dashboard.web.widget_tempate.WidgetTemplateEdit.ITEM_DS;
+import static com.audimex.dashboard.web.widget.WidgetEdit.ITEM_DS;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class LookupWidgetEdit extends AbstractFrame {

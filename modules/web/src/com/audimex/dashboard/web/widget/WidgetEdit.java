@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.web.widget_tempate;
+package com.audimex.dashboard.web.widget;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class WidgetTemplateEdit extends AbstractEditor<Widget> {
+public class WidgetEdit extends AbstractEditor<Widget> {
+    public static final String SCREEN_NAME = "widgetEdit";
     public static final String ITEM_DS = "ITEM_DS";
 
     @Inject

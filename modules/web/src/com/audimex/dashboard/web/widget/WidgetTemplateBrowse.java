@@ -1,4 +1,4 @@
-package com.audimex.dashboard.web.widget_tempate;
+package com.audimex.dashboard.web.widget;
 
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.WidgetTemplate;
@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.audimex.dashboard.web.widget.WidgetEdit.SCREEN_NAME;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
 public class WidgetTemplateBrowse extends AbstractLookup {
@@ -73,7 +74,7 @@ public class WidgetTemplateBrowse extends AbstractLookup {
     }
 
     protected void openWidgetEditor(Widget widget) {
-        AbstractEditor editor = openEditor("widgetTemplateEdit", widget, THIS_TAB, modelWidgetsDs);
+        AbstractEditor editor = openEditor(SCREEN_NAME, widget, THIS_TAB, modelWidgetsDs);
         editor.addCloseWithCommitListener(() -> addOrUpdateWidgetTemplate((Widget) editor.getItem()));
     }
 

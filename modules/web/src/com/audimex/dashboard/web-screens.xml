@@ -29,11 +29,11 @@
             template="com/audimex/dashboard/web/parameter/frames/entity-value-frame.xml"/>
     <screen id="entityValueWindow"
             template="com/audimex/dashboard/web/parameter/frames/entity-value-window.xml"/>
-    <!--widget_tempate-->
+    <!--widget-->
     <screen id="widgetTemplateBrowse"
-            template="com/audimex/dashboard/web/widget_tempate/widget-template-browse.xml"/>
-    <screen id="widgetTemplateEdit"
-            template="com/audimex/dashboard/web/widget_tempate/widget-template-edit.xml"/>
+            template="com/audimex/dashboard/web/widget/widget-template-browse.xml"/>
+    <screen id="widgetEdit"
+            template="com/audimex/dashboard/web/widget/widget-edit.xml"/>
     <!--widget types-->
     <screen id="screenWidgetBrowse"
             template="com/audimex/dashboard/web/widget_types/screen/screen-widget-browse.xml"/>

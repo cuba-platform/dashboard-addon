@@ -80,7 +80,7 @@ public class DropLayoutTools {
             } else if (layout instanceof HorizontalLayout) {
                 canvasLayout = vaadinFactory.createCanvasHorizontalLayout();
             } else if (layout instanceof WidgetLayout) {
-                canvasLayout = vaadinFactory.createCanvasWidgetLayout(targetFrame, (WidgetLayout) layout);
+                canvasLayout = vaadinFactory.createCanvasWidgetLayout(targetFrame, ((WidgetLayout) layout).getWidget());
             }
 
             if (canvasLayout != null) {

@@ -4,11 +4,11 @@
 
 package com.audimex.dashboard.web.dashboard.vaadin_components.layouts;
 
+import com.audimex.dashboard.model.Widget;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.TargetDetails;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -18,11 +18,10 @@ import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
 import java.util.Map;
 
-import static com.audimex.dashboard.web.DashboardStyleConstants.*;
-
 public class CanvasWidgetLayout extends CssLayout implements CanvasLayout {
     protected DDVerticalLayout verticalLayout = new DDVerticalLayout();
     protected HorizontalLayout buttonsPanel = new HorizontalLayout();
+    protected Widget widget = null;
 
     public CanvasWidgetLayout() {
         super();
@@ -36,6 +35,14 @@ public class CanvasWidgetLayout extends CssLayout implements CanvasLayout {
 
     public HorizontalLayout getButtonsPanel() {
         return buttonsPanel;
+    }
+
+    public Widget getWidget() {
+        return widget;
+    }
+
+    public void setWidget(Widget widget) {
+        this.widget = widget;
     }
 
     @Override

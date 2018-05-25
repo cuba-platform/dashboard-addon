@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
-        class="com.audimex.dashboard.web.widget_tempate.WidgetTemplateEdit"
+        class="com.audimex.dashboard.web.widget.WidgetEdit"
         focusComponent="fieldGroup"
         datasource="widgetDs"
-        messagesPack="com.audimex.dashboard.web.widget_tempate">
+        messagesPack="com.audimex.dashboard.web.widget">
     <dsContext>
         <datasource id="widgetDs"
                     class="com.audimex.dashboard.model.Widget">

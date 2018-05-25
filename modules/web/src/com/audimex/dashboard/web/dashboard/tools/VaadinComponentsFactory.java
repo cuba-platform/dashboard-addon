@@ -7,8 +7,8 @@ package com.audimex.dashboard.web.dashboard.tools;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
+import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasHorizontalLayout;
@@ -122,9 +122,7 @@ public class VaadinComponentsFactory {
         return layout;
     }
 
-    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame targetFrame, WidgetLayout widgetLayout) {
-        Widget widget = widgetLayout.getWidget();
-
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame targetFrame, Widget widget) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
@@ -141,6 +139,7 @@ public class VaadinComponentsFactory {
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
         layout.addComponent(widgetFrame.unwrap(Layout.class));
+        layout.setWidget(widget);
 
         layout.setDragMode(LayoutDragMode.CLONE);
         layout.setSizeFull();
@@ -150,10 +149,15 @@ public class VaadinComponentsFactory {
         removeButton.addClickListener(e -> {
             events.publish(new LayoutRemoveEvent(layout));
         });
+        Button editButton = createEditButton();
+        editButton.addClickListener(e -> {
+            events.publish(new OpenWidgetEditorEvent(layout));
+        });
 
         HorizontalLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
+        buttonsPanel.addComponent(editButton);
 
         DDVerticalLayout verticalLayout = layout.getVerticalLayout();
         verticalLayout.setDragMode(LayoutDragMode.CLONE);
@@ -166,11 +170,11 @@ public class VaadinComponentsFactory {
 
     }
 
-    protected Button createConfigButton() {
-        Button configButton = new Button();
-        configButton.addStyleName(AMXD_EDIT_BUTTON);
-        configButton.setIcon(iconResolver.getIconResource(GEAR_ICON.source()));
-        return configButton;
+    protected Button createEditButton() {
+        Button editButton = new Button();
+        editButton.addStyleName(AMXD_EDIT_BUTTON);
+        editButton.setIcon(iconResolver.getIconResource(GEAR_ICON.source()));
+        return editButton;
     }
 
     protected Button createRemoveButton() {
