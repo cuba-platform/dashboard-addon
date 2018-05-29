@@ -33,25 +33,23 @@ public class CanvasFrame extends AbstractFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        initLayout(factory);
-        initDashboardModel(params);
+        initLayout(factory, params);
     }
 
     public VerticalLayout getDashboardModel() {
         return converter.containerToModel(vLayout);
     }
 
-    protected void initLayout(VaadinComponentsFactory factory) {
+    protected void initLayout(VaadinComponentsFactory factory, Map<String, Object> params) {
         converter.setFactory(factory);
         vLayout = factory.createCanvasVerticalLayout();
-        canvas.unwrap(Layout.class).addComponent(vLayout);
-    }
 
-    protected void initDashboardModel(Map<String, Object> params) {
         VerticalLayout model = (VerticalLayout) params.get(VISUAL_MODEL);
 
         if (model != null) {
             vLayout = (CanvasVerticalLayout) converter.modelToContainer(this, model);
         }
+
+        canvas.unwrap(Layout.class).addComponent(vLayout);
     }
 }

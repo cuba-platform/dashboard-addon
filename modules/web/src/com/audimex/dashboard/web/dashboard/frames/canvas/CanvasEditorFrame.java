@@ -35,8 +35,7 @@ public class CanvasEditorFrame extends CanvasFrame {
 
     @Override
     public void init(Map<String, Object> params) {
-        initLayout(factory);
-        initDashboardModel(params);
+        initLayout(factory, params);
 
         tools.init(this, vLayout);
         addLayoutClickListener();
