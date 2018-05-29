@@ -32,7 +32,6 @@ public class CanvasFrame extends AbstractFrame {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
         initLayout(factory, params);
     }
 

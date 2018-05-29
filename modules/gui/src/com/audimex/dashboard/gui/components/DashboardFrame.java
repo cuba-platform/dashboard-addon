@@ -16,7 +16,7 @@ public interface DashboardFrame extends Frame {
 
     UUID getDashboardId();
 
-    void setDashboardId(String dashboardId);
+    void setDashboardId(UUID dashboardId);
 
     String getJsonPath();
 

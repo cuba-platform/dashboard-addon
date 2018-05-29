@@ -144,8 +144,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     @Override
-    public void setDashboardId(String dashboardId) {
-        this.dashboardId = UUID.fromString(dashboardId);
+    public void setDashboardId(UUID dashboardId) {
+        this.dashboardId = dashboardId;
     }
 
     @Override
