@@ -16,7 +16,6 @@ import fi.jasoft.dragdroplayouts.DDGridLayout;
 
 import javax.inject.Inject;
 
-@org.springframework.stereotype.Component
 public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
@@ -27,6 +26,7 @@ public class DashboardModelConverter {
         return factory;
     }
 
+    @Inject
     public void setFactory(VaadinComponentsFactory factory) {
         this.factory = factory;
     }

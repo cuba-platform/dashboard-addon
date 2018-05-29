@@ -18,9 +18,8 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HasComponents;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
-import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +29,7 @@ import static java.util.Collections.singletonList;
 
 @org.springframework.stereotype.Component
 public class DropLayoutTools {
-    @Inject
-    @Qualifier("amdx_VaadinDropComponentsFactory")
-    protected VaadinComponentsFactory vaadinFactory;
-    @Inject
+    @Named("dropModelConverter")
     protected DashboardModelConverter modelConverter;
 
     protected Frame targetFrame;
@@ -89,11 +85,11 @@ public class DropLayoutTools {
                     int cols = dialog.getCols();
                     int rows = dialog.getRows();
 
-                    CanvasGridLayout canvasLayout = vaadinFactory.createCanvasGridLayout(cols, rows);
+                    CanvasGridLayout canvasLayout = modelConverter.getFactory().createCanvasGridLayout(cols, rows);
 
                     for (int i = 0; i < cols; i++) {
                         for (int j = 0; j < rows; j++) {
-                            CanvasVerticalLayout verticalLayout = vaadinFactory.createCanvasVerticalLayout();
+                            CanvasVerticalLayout verticalLayout = modelConverter.getFactory().createCanvasVerticalLayout();
                             addDropHandler(verticalLayout);
                             canvasLayout.addComponent(verticalLayout, i, j);
                         }

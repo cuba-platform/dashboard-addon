@@ -7,8 +7,8 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
+import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.audimex.dashboard.web.dashboard.tools.VaadinComponentsFactory;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.widget.WidgetEdit;
@@ -28,17 +28,22 @@ public class CanvasEditorFrame extends CanvasFrame {
 
     @Inject
     protected VBoxLayout canvas;
+    @Named("dropModelConverter")
+    protected DashboardModelConverter converter;
     @Inject
     protected DropLayoutTools tools;
-    @Named("amdx_VaadinDropComponentsFactory")
-    protected VaadinComponentsFactory factory;
 
     @Override
     public void init(Map<String, Object> params) {
-        initLayout(factory, params);
+        initLayout(params);
 
         tools.init(this, vLayout);
         addLayoutClickListener();
+    }
+
+    @Override
+    protected DashboardModelConverter getConverter() {
+        return converter;
     }
 
     @EventListener
@@ -58,7 +63,7 @@ public class CanvasEditorFrame extends CanvasFrame {
             AbstractLayout parent = (AbstractLayout) source.getParent();
             parent.removeComponent(source);
 
-            CanvasWidgetLayout newLayout = factory.createCanvasWidgetLayout(this, editor.getItem());
+            CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem());
             tools.addDropHandler(newLayout);
             parent.addComponent(newLayout);
         });
