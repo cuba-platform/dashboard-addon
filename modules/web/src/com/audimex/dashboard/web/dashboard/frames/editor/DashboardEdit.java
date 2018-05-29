@@ -2,16 +2,15 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard;
+package com.audimex.dashboard.web.dashboard.frames.editor;
 
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.DashboardPersist;
 import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
-import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
@@ -30,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.VISUAL_MODEL;
-import static com.audimex.dashboard.web.dashboard.frames.palette.PaletteFrame.WIDGETS;
+import static com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame.WIDGETS;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
@@ -59,7 +58,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected List<Widget> widgetTemplates;
     protected AbstractFrame paletteFrame;
-    protected CanvasFrame canvasFrame;
+    protected CanvasEditorFrame canvasFrame;
 
     @Override
     public void postInit() {
@@ -85,13 +84,13 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     protected void initPaletteFrame() {
-        paletteFrame = openFrame(paletteBox, "paletteFrame", ParamsMap.of(
+        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
                 WIDGETS, widgetTemplates
         ));
     }
 
     protected void initCanvasFrame() {
-        canvasFrame = (CanvasFrame) openFrame(canvasBox, "canvasFrame", ParamsMap.of(
+        canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
                 VISUAL_MODEL, getItem().getVisualModel()
         ));
     }

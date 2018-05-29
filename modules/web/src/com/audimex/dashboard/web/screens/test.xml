@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        xmlns:cubadshb="http://schemas.haulmont.com/cubadshb/ui-component.xsd"
+        caption="msg://caption"
+        class="com.audimex.dashboard.web.screens.Test"
+        messagesPack="com.audimex.dashboard.web.screens">
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" height="100%">
+        <cubadshb:dashboard id="dash1"
+                            dashboardId="b90208ad-94ea-0848-5de9-bd5fad2c3935">
+            <cubadshb:parameter name="name1" value="value1"/>
+        </cubadshb:dashboard>
+    </layout>
+</window>

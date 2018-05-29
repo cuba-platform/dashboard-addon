@@ -2,15 +2,15 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.frames.palette;
+package com.audimex.dashboard.web.dashboard.frames.editor.palette;
 
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.model.visual_model.GridLayout;
 import com.audimex.dashboard.model.visual_model.HorizontalLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.vaadin_components.PaletteButton;
+import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
+import com.audimex.dashboard.web.dashboard.vaadin_components.PaletteButton;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -21,7 +21,6 @@ import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import static com.audimex.dashboard.web.DashboardIcon.*;
 import static java.util.Collections.emptyList;
 
 public class PaletteFrame extends AbstractFrame {
+    public static final String SCREEN_NAME = "paletteFrame";
     public static final String WIDGETS = "WIDGETS";
 
     @Inject

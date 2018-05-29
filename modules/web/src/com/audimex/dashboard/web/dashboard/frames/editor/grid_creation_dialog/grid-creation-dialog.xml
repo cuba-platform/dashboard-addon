@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
+  -->
+
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://gridSettings"
-        class="com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog.GridCreationDialog"
+        class="com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog"
         messagesPack="com.audimex.dashboard.web.dashboard">
     <dialogMode height="200"
                 width="480"/>

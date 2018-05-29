@@ -4,19 +4,21 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
-import com.audimex.dashboard.model.visual_model.*;
+import com.audimex.dashboard.model.visual_model.DashboardLayout;
+import com.audimex.dashboard.model.visual_model.GridLayout;
 import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
-import com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog.GridCreationDialog;
+import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
+import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HasComponents;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -29,13 +31,14 @@ import static java.util.Collections.singletonList;
 @org.springframework.stereotype.Component
 public class DropLayoutTools {
     @Inject
+    @Qualifier("amdx_VaadinDropComponentsFactory")
     protected VaadinComponentsFactory vaadinFactory;
     @Inject
     protected DashboardModelConverter modelConverter;
 
-    protected CanvasFrame targetFrame;
+    protected Frame targetFrame;
 
-    public void init(CanvasFrame targetFrame, CanvasLayout rootContainer) {
+    public void init(Frame targetFrame, CanvasLayout rootContainer) {
         this.targetFrame = targetFrame;
         initDropHandler(rootContainer);
     }

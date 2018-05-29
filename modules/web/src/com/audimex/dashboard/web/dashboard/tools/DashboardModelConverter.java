@@ -6,9 +6,9 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HasComponents;
@@ -20,8 +20,16 @@ import javax.inject.Inject;
 public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
-    @Inject
+
     protected VaadinComponentsFactory factory;
+
+    public VaadinComponentsFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(VaadinComponentsFactory factory) {
+        this.factory = factory;
+    }
 
     public VerticalLayout containerToModel(CanvasVerticalLayout container) {
         VerticalLayout model = metadata.create(VerticalLayout.class);
@@ -29,7 +37,7 @@ public class DashboardModelConverter {
         return model;
     }
 
-    public CanvasLayout modelToContainer(CanvasFrame frame, DashboardLayout model) {
+    public CanvasLayout modelToContainer(Frame frame, DashboardLayout model) {
         CanvasLayout canvasLayout = null;
 
         if (model instanceof VerticalLayout) {

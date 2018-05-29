@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard;
+package com.audimex.dashboard.web.dashboard.frames.browse;
 
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.DashboardPersist;
@@ -14,7 +14,6 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.inject.Inject;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;

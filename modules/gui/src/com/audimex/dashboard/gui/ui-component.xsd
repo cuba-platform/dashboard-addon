@@ -3,11 +3,11 @@
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
 
-<xs:schema xmlns="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd"
+<xs:schema xmlns="http://schemas.haulmont.com/cubadshb/ui-component.xsd"
            xmlns:cuba="http://schemas.haulmont.com/cuba/window.xsd"
            attributeFormDefault="unqualified"
            elementFormDefault="qualified"
-           targetNamespace="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd"
+           targetNamespace="http://schemas.haulmont.com/cubadshb/ui-component.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:element name="dashboard">
@@ -15,18 +15,17 @@
             <xs:complexContent>
                 <xs:extension base="cuba:baseComponent">
                     <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="parameter" type="dshbparamtype"/>
+                        <xs:element name="parameter" type="parameterType"/>
                     </xs:sequence>
-                    <xs:attribute name="id" type="xs:string"/>
-                    <xs:attribute name="srcRef" type="xs:string"/>
-                    <xs:attribute name="srcPath" type="xs:string"/>
+                    <xs:attribute name="dashboardId" type="xs:string"/>
+                    <xs:attribute name="jsonPath" type="xs:string"/>
                     <xs:attribute name="class" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="dshbparamtype">
+    <xs:complexType name="parameterType">
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>

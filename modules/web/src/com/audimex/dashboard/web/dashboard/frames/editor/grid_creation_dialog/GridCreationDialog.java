@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.audimex.dashboard.web.dashboard.frames.grid_creation_dialog;
+package com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
