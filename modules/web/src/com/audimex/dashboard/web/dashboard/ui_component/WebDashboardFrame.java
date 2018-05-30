@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.VISUAL_MODEL;
+import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -134,7 +134,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateCanvasFrame(Dashboard dashboard) {
         canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
-                VISUAL_MODEL, dashboard.getVisualModel()
+                DASHBOARD, dashboard
         ));
     }
 

@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
@@ -22,6 +23,8 @@ public class DashboardModelConverter {
 
     protected VaadinComponentsFactory factory;
 
+    protected Dashboard dashboard;
+
     public VaadinComponentsFactory getFactory() {
         return factory;
     }
@@ -37,6 +40,12 @@ public class DashboardModelConverter {
         return model;
     }
 
+    public CanvasLayout modelToContainer(Frame frame, Dashboard dashboard) {
+        VerticalLayout model = dashboard.getVisualModel();
+        this.dashboard = dashboard;
+        return modelToContainer(frame, model);
+    }
+
     public CanvasLayout modelToContainer(Frame frame, DashboardLayout model) {
         CanvasLayout canvasLayout = null;
 
@@ -45,7 +54,7 @@ public class DashboardModelConverter {
         } else if (model instanceof HorizontalLayout) {
             canvasLayout = factory.createCanvasHorizontalLayout();
         } else if (model instanceof WidgetLayout) {
-            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model).getWidget());
+            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model).getWidget(), dashboard);
         } else if (model instanceof GridLayout) {
             GridLayout gridModel = (GridLayout) model;
             Integer columns = gridModel.getColumns();

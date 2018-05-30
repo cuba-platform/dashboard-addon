@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasHorizontalLayout;
@@ -19,5 +20,5 @@ public interface VaadinComponentsFactory {
 
     CanvasGridLayout createCanvasGridLayout(int cols, int rows);
 
-    CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget);
+    CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget, Dashboard dashboard);
 }

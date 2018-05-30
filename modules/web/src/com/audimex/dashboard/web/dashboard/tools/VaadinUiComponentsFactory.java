@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasHorizontalLayout;
@@ -25,6 +26,7 @@ import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 import javax.inject.Inject;
 import java.util.Optional;
 
+import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.DASHBOARD;
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 import static fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.NONE;
 import static java.lang.String.format;
@@ -86,7 +88,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
     }
 
     @Override
-    public CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget) {
+    public CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget, Dashboard dashboard) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
@@ -97,7 +99,10 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
-        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(WIDGET, widget));
+        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(
+                WIDGET, widget,
+                DASHBOARD, dashboard
+        ));
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);
 

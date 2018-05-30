@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.VISUAL_MODEL;
+import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
 import static com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame.WIDGETS;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
@@ -91,7 +91,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected void initCanvasFrame() {
         canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
-                VISUAL_MODEL, getItem().getVisualModel()
+                DASHBOARD, getItem()
         ));
     }
 

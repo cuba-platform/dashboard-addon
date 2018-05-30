@@ -58,12 +58,12 @@ public class CanvasEditorFrame extends CanvasFrame {
         CanvasWidgetLayout source = event.getSource();
         Widget widget = source.getWidget();
 
-        WidgetEdit editor = (WidgetEdit) openEditor(SCREEN_NAME, widget, THIS_TAB);
+        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
         editor.addCloseWithCommitListener(() -> {
             AbstractLayout parent = (AbstractLayout) source.getParent();
             parent.removeComponent(source);
 
-            CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem());
+            CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem(), dashboard);
             tools.addDropHandler(newLayout);
             parent.addComponent(newLayout);
         });

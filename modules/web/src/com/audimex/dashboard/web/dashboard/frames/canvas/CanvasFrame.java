@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.frames.canvas;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 public class CanvasFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "canvasFrame";
-    public static final String VISUAL_MODEL = "VISUAL_MODEL";
+    public static final String DASHBOARD = "DASHBOARD";
 
     @Inject
     protected VBoxLayout canvas;
@@ -25,6 +26,7 @@ public class CanvasFrame extends AbstractFrame {
     protected DashboardModelConverter converter;
 
     protected CanvasVerticalLayout vLayout;
+    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -41,10 +43,14 @@ public class CanvasFrame extends AbstractFrame {
     }
 
     protected void initLayout(Map<String, Object> params) {
-        VerticalLayout model = (VerticalLayout) params.get(VISUAL_MODEL);
+        dashboard = (Dashboard) params.get(DASHBOARD);
 
-        if (model != null) {
-            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, model);
+        if (dashboard == null) {
+            throw new RuntimeException("DASHBOARD parameter can not be null");
+        }
+
+        if (dashboard.getVisualModel() != null) {
+            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard);
         } else {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }
