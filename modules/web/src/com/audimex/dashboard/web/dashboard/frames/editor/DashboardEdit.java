@@ -125,11 +125,13 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         if (persDashOpt.isPresent()) {
             DashboardPersist persDash = persDashOpt.get();
             persDash.setDashboardModel(jsonModel);
+            persDash.setReferenceName(dashboard.getReferenceName());
             persDashboardsDs.updateItem(persDash);
         } else {
             DashboardPersist persDash = metadata.create(DashboardPersist.class);
             persDash.setId(dashId);
             persDash.setDashboardModel(jsonModel);
+            persDash.setReferenceName(dashboard.getReferenceName());
             persDashboardsDs.addItem(persDash);
         }
 
