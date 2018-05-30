@@ -10,9 +10,9 @@ import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
@@ -46,12 +46,12 @@ public class AbstractWidgetBrowse extends AbstractFrame {
             unitedParams.addAll(widget.getParameters());
         }
 
-        return unitedParams.stream()
-                .collect(Collectors.toMap(
-                        Parameter::getName,
-                        parameter -> parameter.getParameterValue().getValue(),
-                        (p1, p2) -> p2
-                ));
+        Map<String, Object> map = new HashMap<>();
+        for (Parameter parameter : unitedParams) {
+            map.put(parameter.getName(),
+                    parameter.getParameterValue() == null ? null : parameter.getParameterValue().getValue());
+        }
+        return map;
     }
 
     public Widget getWidget() {

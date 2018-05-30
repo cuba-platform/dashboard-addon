@@ -31,16 +31,16 @@
         <fieldGroup id="fieldGroup"
                     datasource="dashboardDs">
             <column width="450px">
-                <field property="title" required="true"/>
-                <field property="referenceName" required="true"/>
+                <field property="title"
+                       required="true"/>
+                <field property="referenceName"
+                       required="true"/>
             </column>
         </fieldGroup>
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"
                   collapsable="true"
                   collapsed="true">
-            <frame id="paramsFrame"
-                   screen="amdx$Parameter.browse"/>
         </groupBox>
         <hbox id="dashboardLayoutBox"
               expand="canvasBox"
@@ -68,6 +68,15 @@
                     caption="msg://cancel"
                     icon="EDITOR_CANCEL"
                     invoke="cancel"/>
+            <button id="exportJsonBtn"
+                    caption="msg://exportJson"
+                    icon="DOWNLOAD"
+                    invoke="onExportJsonBtnClick"
+                    stylename="amdx-left-margin-button"/>
+            <upload id="importJsonField"
+                    fileStoragePutMode="MANUAL"
+                    uploadButtonIcon="UPLOAD"
+                    uploadButtonCaption="msg://importJson"/>
         </buttonsPanel>
     </layout>
 </window>

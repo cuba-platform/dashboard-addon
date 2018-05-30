@@ -7,6 +7,7 @@ package com.audimex.dashboard.web;
 public interface DashboardStyleConstants {
     String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
     String AMXD_SHADOW_BORDER = "amxd-shadow-border";
+    String AMXD_LEFT_MARGIN_BUTTON = "amdx-left-margin-button";
     String AMXD_WIDGET_CONTENT = "amxd-widget-content";
     String AMXD_DASHBOARD_DISABLED = "amxd-dashboard-disabled";
     String AMXD_CONTAINER_DISABLED = "amxd-container-disabled";

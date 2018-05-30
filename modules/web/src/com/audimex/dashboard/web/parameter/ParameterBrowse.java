@@ -16,6 +16,7 @@ import java.util.UUID;
 
 public class ParameterBrowse extends AbstractLookup {
     public static final String PARAMETERS = "PARAMETERS";
+    public static final String SCREEN_NAME = "amdx$Parameter.browse";
 
     @Inject
     protected GroupDatasource<Parameter, UUID> parametersDs;

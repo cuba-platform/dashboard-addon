@@ -8,13 +8,11 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.audimex.dashboard"/>
 
-    <bean id="uiModelConverter" class="com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter"
-          scope="prototype">
+    <bean id="uiModelConverter" class="com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter">
         <property name="factory" ref="amdx_VaadinUiComponentsFactory"/>
     </bean>
 
-    <bean id="dropModelConverter" class="com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter"
-          scope="prototype">
+    <bean id="dropModelConverter" class="com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter">
         <property name="factory" ref="amdx_VaadinDropComponentsFactory"/>
     </bean>
 </beans>
