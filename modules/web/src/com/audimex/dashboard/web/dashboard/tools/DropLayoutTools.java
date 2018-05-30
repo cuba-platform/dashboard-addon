@@ -19,7 +19,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HasComponents;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +26,13 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-@org.springframework.stereotype.Component
 public class DropLayoutTools {
-    @Named("dropModelConverter")
     protected DashboardModelConverter modelConverter;
-
     protected Frame targetFrame;
 
-    public void init(Frame targetFrame, CanvasLayout rootContainer) {
+    public void init(Frame targetFrame, DashboardModelConverter modelConverter, CanvasLayout rootContainer) {
         this.targetFrame = targetFrame;
+        this.modelConverter = modelConverter;
         initDropHandler(rootContainer);
     }
 

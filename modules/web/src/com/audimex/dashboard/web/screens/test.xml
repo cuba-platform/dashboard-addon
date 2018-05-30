@@ -8,8 +8,8 @@
                 width="800"/>
     <layout width="100%" height="100%">
         <cubadshb:dashboard id="dash1"
-                            jsonPath="com/audimex/dashboard/web/dash1.json">
-            <!--dashboardId="b90208ad-94ea-0848-5de9-bd5fad2c3935"-->
+            dashboardId="b90208ad-94ea-0848-5de9-bd5fad2c3935">
+            <!--jsonPath="com/audimex/dashboard/web/dash1.json">-->
             <cubadshb:parameter name="name1" value="value1"/>
         </cubadshb:dashboard>
     </layout>

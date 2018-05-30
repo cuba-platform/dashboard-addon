@@ -30,14 +30,14 @@ public class CanvasEditorFrame extends CanvasFrame {
     protected VBoxLayout canvas;
     @Named("dropModelConverter")
     protected DashboardModelConverter converter;
-    @Inject
-    protected DropLayoutTools tools;
+
+    protected DropLayoutTools tools = new DropLayoutTools();
 
     @Override
     public void init(Map<String, Object> params) {
         initLayout(params);
 
-        tools.init(this, vLayout);
+        tools.init(this, converter, vLayout);
         addLayoutClickListener();
     }
 
