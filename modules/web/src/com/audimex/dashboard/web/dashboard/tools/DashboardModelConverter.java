@@ -23,8 +23,6 @@ public class DashboardModelConverter {
 
     protected VaadinComponentsFactory factory;
 
-    protected Dashboard dashboard;
-
     public VaadinComponentsFactory getFactory() {
         return factory;
     }
@@ -40,13 +38,7 @@ public class DashboardModelConverter {
         return model;
     }
 
-    public CanvasLayout modelToContainer(Frame frame, Dashboard dashboard) {
-        VerticalLayout model = dashboard.getVisualModel();
-        this.dashboard = dashboard;
-        return modelToContainer(frame, model);
-    }
-
-    public CanvasLayout modelToContainer(Frame frame, DashboardLayout model) {
+    public CanvasLayout modelToContainer(Frame frame, DashboardLayout model, Dashboard dashboard) {
         CanvasLayout canvasLayout = null;
 
         if (model instanceof VerticalLayout) {
@@ -62,14 +54,14 @@ public class DashboardModelConverter {
             canvasLayout = factory.createCanvasGridLayout(columns, rows);
 
             for (GridArea area : gridModel.getAreas()) {
-                CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent());
+                CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent(), dashboard);
                 ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol1(), area.getRow1());
             }
         }
 
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
-                ((CssLayout) canvasLayout).addComponent(modelToContainer(frame, childModel));
+                ((CssLayout) canvasLayout).addComponent(modelToContainer(frame, childModel, dashboard));
             }
         }
 

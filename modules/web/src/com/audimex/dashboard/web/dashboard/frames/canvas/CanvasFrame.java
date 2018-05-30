@@ -38,6 +38,10 @@ public class CanvasFrame extends AbstractFrame {
         return getConverter().containerToModel(vLayout);
     }
 
+    public Dashboard getDashboard() {
+        return dashboard;
+    }
+
     protected DashboardModelConverter getConverter() {
         return converter;
     }
@@ -50,7 +54,7 @@ public class CanvasFrame extends AbstractFrame {
         }
 
         if (dashboard.getVisualModel() != null) {
-            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard);
+            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel(), dashboard);
         } else {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }

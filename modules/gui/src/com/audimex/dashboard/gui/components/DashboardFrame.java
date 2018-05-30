@@ -8,15 +8,14 @@ import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.cuba.gui.components.Frame;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface DashboardFrame extends Frame {
 
     String NAME = "amdxDashboardComponent";
 
-    UUID getDashboardId();
+    String getReferenceName();
 
-    void setDashboardId(UUID dashboardId);
+    void setReferenceName(String referenceName);
 
     String getJsonPath();
 

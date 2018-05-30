@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
@@ -49,7 +48,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected CanvasFrame canvasFrame;
 
-    protected UUID dashboardId;
+    protected String referenceName;
     protected String jsonPath;
     protected List<Pair<String, String>> xmlParameters = new ArrayList<>();
 
@@ -64,9 +63,9 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void refresh() {
         if (isNotBlank(jsonPath)) {
-            dashboard = loadDashboard(jsonPath);
-        } else if (dashboardId != null) {
-            dashboard = loadDashboard(dashboardId);
+            dashboard = loadDashboardByJson(jsonPath);
+        } else if (referenceName != null) {
+            dashboard = loadDashboardByReferenceName(referenceName);
         }
 
         if (dashboard != null) {
@@ -79,7 +78,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         refresh();
     }
 
-    protected Dashboard loadDashboard(String jsonPath) {
+    protected Dashboard loadDashboardByJson(String jsonPath) {
         Resource jsonRes = resourceLoader.getResource(format("classpath:%s", jsonPath));
         if (!jsonRes.exists()) {
             throw new RuntimeException(format("There isn't the json file by the path: %s", jsonPath));
@@ -93,9 +92,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    protected Dashboard loadDashboard(UUID dashboardId) {
+    protected Dashboard loadDashboardByReferenceName(String referenceName) {
         LoadContext<DashboardPersist> loadContext = LoadContext.create(DashboardPersist.class)
-                .setId(dashboardId)
+                .setQuery(LoadContext.createQuery("select d from amxd$DashboardPersist d where d.referenceName = :referenceName")
+                        .setParameter("referenceName", referenceName))
                 .setView("_local");
 
         DashboardPersist entity = dataManager.load(loadContext);
@@ -139,13 +139,13 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     @Override
-    public UUID getDashboardId() {
-        return dashboardId;
+    public String getReferenceName() {
+        return referenceName;
     }
 
     @Override
-    public void setDashboardId(UUID dashboardId) {
-        this.dashboardId = dashboardId;
+    public void setReferenceName(String referenceName) {
+        this.referenceName = referenceName;
     }
 
     @Override

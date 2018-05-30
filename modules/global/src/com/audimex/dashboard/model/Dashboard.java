@@ -6,20 +6,35 @@ package com.audimex.dashboard.model;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @NamePattern("%s|title")
 @MetaClass(name = "amxd$Dashboard")
 public class Dashboard extends BaseUuidEntity {
-    @MetaProperty
+    @NotNull
+    @MetaProperty(mandatory = true)
     protected String title;
+    @NotNull
+    @MetaProperty(mandatory = true)
+    protected String referenceName;
+
     @MetaProperty
     protected VerticalLayout visualModel;
     @MetaProperty
     protected List<Parameter> parameters;
+
+    public void setReferenceName(String referenceName) {
+        this.referenceName = referenceName;
+    }
+
+    public String getReferenceName() {
+        return referenceName;
+    }
+
 
     public VerticalLayout getVisualModel() {
         return visualModel;

@@ -18,7 +18,6 @@ import org.dom4j.tree.DefaultElement;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -76,7 +75,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
         loadCaption(resultComponent, element);
         loadDescription(resultComponent, element);
 
-        loadDashboardId(resultComponent, element);
+        loadReferenceName(resultComponent, element);
         loadJsonPath(resultComponent, element);
         loadParams(resultComponent, element);
 
@@ -92,10 +91,10 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
         context.setCurrentFrameId(currentFrameId);
     }
 
-    protected void loadDashboardId(DashboardFrame resultComponent, Element element) {
-        String dashboardId = element.attributeValue("dashboardId");
-        if (isNotBlank(dashboardId)) {
-            resultComponent.setDashboardId(UUID.fromString(dashboardId));
+    protected void loadReferenceName(DashboardFrame resultComponent, Element element) {
+        String referenceName = element.attributeValue("referenceName");
+        if (isNotBlank(referenceName)) {
+            resultComponent.setReferenceName(referenceName);
         }
     }
 

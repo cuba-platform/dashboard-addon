@@ -9,9 +9,12 @@ import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 public class AbstractWidgetBrowse extends AbstractFrame {
     public static final String WIDGET = "WIDGET";
@@ -35,7 +38,15 @@ public class AbstractWidgetBrowse extends AbstractFrame {
     }
 
     public Map<String, Object> getParamsForFrame() {
-        return Stream.concat(dashboard.getParameters().stream(), widget.getParameters().stream())
+        List<Parameter> unitedParams = new ArrayList<>();
+        if (isNotEmpty(dashboard.getParameters())) {
+            unitedParams.addAll(dashboard.getParameters());
+        }
+        if (isNotEmpty(widget.getParameters())) {
+            unitedParams.addAll(widget.getParameters());
+        }
+
+        return unitedParams.stream()
                 .collect(Collectors.toMap(
                         Parameter::getName,
                         parameter -> parameter.getParameterValue().getValue(),

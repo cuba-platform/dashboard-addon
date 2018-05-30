@@ -2,13 +2,12 @@
 <!--
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
-
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://dashboardsCaption"
         class="com.audimex.dashboard.web.dashboard.frames.browse.DashboardBrowse"
+        datasource="modelDashboardsDs"
         focusComponent="dashboardsTable"
-        lookupComponent="dashboardsTable"
-        datasource="modelDashboardsDs">
+        lookupComponent="dashboardsTable">
     <dsContext>
         <collectionDatasource id="persDashboardsDs"
                               class="com.audimex.dashboard.entity.DashboardPersist"
@@ -25,12 +24,19 @@
                height="100%"
                width="100%">
             <actions>
-                <action id="create" caption="msg://create" invoke="createDashboard"/>
-                <action id="edit" caption="msg://edit" invoke="editDashboard"/>
-                <action id="remove" caption="msg://remove" invoke="removeDashboard"/>
+                <action id="create"
+                        caption="msg://create"
+                        invoke="createDashboard"/>
+                <action id="edit"
+                        caption="msg://edit"
+                        invoke="editDashboard"/>
+                <action id="remove"
+                        caption="msg://remove"
+                        invoke="removeDashboard"/>
             </actions>
             <columns>
                 <column id="title"/>
+                <column id="referenceName"/>
             </columns>
             <rows datasource="modelDashboardsDs"/>
             <rowsCount/>

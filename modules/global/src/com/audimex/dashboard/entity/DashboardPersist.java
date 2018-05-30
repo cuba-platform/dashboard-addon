@@ -21,6 +21,19 @@ public class DashboardPersist extends StandardEntity {
     @Column(name = "DASHBOARD_MODEL", nullable = false)
     protected String dashboardModel;
 
+    @NotNull
+    @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
+    protected String referenceName;
+
+    public void setReferenceName(String referenceName) {
+        this.referenceName = referenceName;
+    }
+
+    public String getReferenceName() {
+        return referenceName;
+    }
+
+
     public void setDashboardModel(String dashboardModel) {
         this.dashboardModel = dashboardModel;
     }

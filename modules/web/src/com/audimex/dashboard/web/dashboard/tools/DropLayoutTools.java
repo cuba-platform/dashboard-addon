@@ -10,9 +10,9 @@ import com.audimex.dashboard.web.dashboard.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.drop_handlers.VerticalLayoutDropHandler;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
-import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
@@ -28,9 +28,9 @@ import static java.util.Collections.singletonList;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
-    protected Frame targetFrame;
+    protected CanvasFrame targetFrame;
 
-    public void init(Frame targetFrame, DashboardModelConverter modelConverter, CanvasLayout rootContainer) {
+    public void init(CanvasFrame targetFrame, DashboardModelConverter modelConverter, CanvasLayout rootContainer) {
         this.targetFrame = targetFrame;
         this.modelConverter = modelConverter;
         initDropHandler(rootContainer);
@@ -96,7 +96,7 @@ public class DropLayoutTools {
                 }
             });
         } else {
-            CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout);
+            CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout, targetFrame.getDashboard());
 
             if (canvasLayout != null) {
                 addDropHandler(canvasLayout);
