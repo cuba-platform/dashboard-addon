@@ -41,7 +41,4 @@ public class DashboardPersist extends StandardEntity {
     public String getDashboardModel() {
         return dashboardModel;
     }
-
-
-
 }

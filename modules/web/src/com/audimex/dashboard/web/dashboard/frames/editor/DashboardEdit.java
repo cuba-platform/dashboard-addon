@@ -5,7 +5,6 @@
 package com.audimex.dashboard.web.dashboard.frames.editor;
 
 import com.audimex.dashboard.converter.JsonConverter;
-import com.audimex.dashboard.entity.DashboardPersist;
 import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
@@ -14,6 +13,7 @@ import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,10 +38,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
+    public static final String SCREEN_NAME = "dashboardEdit";
+
     @Inject
     protected Datasource<Dashboard> dashboardDs;
     @Inject
-    protected CollectionDatasource<DashboardPersist, UUID> persDashboardsDs;
+    protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
     @Inject
     protected FieldGroup fieldGroup;
     @Inject
@@ -52,8 +53,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     protected GroupBoxLayout canvasBox;
     @Inject
-    protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
-    @Inject
     protected JsonConverter converter;
     @Inject
     protected Metadata metadata;
@@ -61,12 +60,13 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected ExportDisplay exportDisplay;
     @Inject
     protected FileUploadField importJsonField;
+    @Inject
+    protected UserSessionSource sessionSource;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
     protected Dashboard inputItem;
 
-    protected List<Widget> widgetTemplates;
     protected ParameterBrowse parametersFrame;
     protected AbstractFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
@@ -74,11 +74,20 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     public void postInit() {
         dashboardDs.setItem(inputItem);
-        widgetTemplates = getWidgetTemplates();
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
+    }
+
+    public Dashboard getDashboard() {
+        Dashboard dashboard = dashboardDs.getItem();
+        dashboard.setParameters(parametersFrame.getParameters());
+        dashboard.setVisualModel(canvasFrame.getDashboardModel());
+
+        String currentUserLogin = sessionSource.getUserSession().getUser().getLogin();
+        dashboard.setCreatedBy(currentUserLogin);
+        return dashboard;
     }
 
     protected List<Widget> getWidgetTemplates() {
@@ -96,7 +105,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected void initPaletteFrame() {
         paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                WIDGETS, widgetTemplates
+                WIDGETS, getWidgetTemplates()
         ));
     }
 
@@ -106,14 +115,8 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         ));
     }
 
-    public void applyAndClose() {
-        saveDashboard();
-        commitAndClose();
-    }
-
-    public void apply() {
-        saveDashboard();
-        commit();
+    public void cancel() {
+        close("close", true);
     }
 
     @Override
@@ -121,45 +124,8 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         return close(actionId, true);
     }
 
-    public void cancel() {
-        close("close", true);
-    }
-
-    protected void saveDashboard() {
-        Dashboard dashboard = dashboardDs.getItem();
-        String jsonModel = generateJsonModel(dashboard);
-        UUID dashId = dashboard.getId();
-
-        persDashboardsDs.refresh();
-        Optional<DashboardPersist> persDashOpt = persDashboardsDs.getItems().stream()
-                .filter(item -> dashId.equals(item.getId()))
-                .findFirst();
-
-        if (persDashOpt.isPresent()) {
-            DashboardPersist persDash = persDashOpt.get();
-            persDash.setDashboardModel(jsonModel);
-            persDash.setReferenceName(dashboard.getReferenceName());
-            persDashboardsDs.updateItem(persDash);
-        } else {
-            DashboardPersist persDash = metadata.create(DashboardPersist.class);
-            persDash.setId(dashId);
-            persDash.setDashboardModel(jsonModel);
-            persDash.setReferenceName(dashboard.getReferenceName());
-            persDashboardsDs.addItem(persDash);
-        }
-
-        persDashboardsDs.commit();
-        persDashboardsDs.refresh();
-    }
-
-    protected String generateJsonModel(Dashboard dashboard) {
-        dashboard.setParameters(parametersFrame.getParameters());
-        dashboard.setVisualModel(canvasFrame.getDashboardModel());
-        return converter.dashboardToJson(dashboard);
-    }
-
     public void onExportJsonBtnClick() {
-        String jsonModel = generateJsonModel(dashboardDs.getItem());
+        String jsonModel = converter.dashboardToJson(getDashboard());
 
         if (isNotBlank(jsonModel)) {
             byte[] bytes = jsonModel.getBytes(UTF_8);

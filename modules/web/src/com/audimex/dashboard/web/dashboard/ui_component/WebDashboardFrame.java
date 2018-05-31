@@ -16,6 +16,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -45,6 +46,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected ResourceLoader resourceLoader;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected UserSessionSource sessionSource;
 
     protected CanvasFrame canvasFrame;
 
@@ -68,7 +71,11 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             dashboard = loadDashboardByReferenceName(referenceName);
         }
 
-        if (dashboard != null) {
+        if (dashboard == null || !isAllowed(dashboard)) {
+            showNotification(getMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
+            canvasFrame = null;
+            canvasBox.removeAll();
+        } else {
             addXmlParameters(dashboard);
             updateCanvasFrame(dashboard);
         }
@@ -76,6 +83,11 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public void refresh(Timer source) {
         refresh();
+    }
+
+    protected boolean isAllowed(Dashboard dashboard) {
+        String currentUserLogin = sessionSource.getUserSession().getUser().getLogin();
+        return dashboard.getIsAvailableForAllUsers() || currentUserLogin.equals(dashboard.getCreatedBy());
     }
 
     protected Dashboard loadDashboardByJson(String jsonPath) {
@@ -133,9 +145,13 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     protected void updateCanvasFrame(Dashboard dashboard) {
-        canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, dashboard
-        ));
+        if (canvasFrame == null) {
+            canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
+                    DASHBOARD, dashboard
+            ));
+        } else {
+            canvasFrame.updateLayout(dashboard);
+        }
     }
 
     @Override

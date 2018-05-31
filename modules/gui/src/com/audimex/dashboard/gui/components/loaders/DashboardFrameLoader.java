@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-//partial copy-paste from com.haulmont.cuba.gui.xml.layout.loaders.FrameComponentLoader
+//partially copy-pasted from com.haulmont.cuba.gui.xml.layout.loaders.FrameComponentLoader
 public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
     protected String frameId;

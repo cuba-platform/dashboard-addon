@@ -10,13 +10,6 @@
     <dsContext>
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.model.Dashboard"/>
-        <collectionDatasource id="persDashboardsDs"
-                              class="com.audimex.dashboard.entity.DashboardPersist"
-                              view="_local">
-            <query>
-                <![CDATA[select e from amxd$DashboardPersist e]]>
-            </query>
-        </collectionDatasource>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.audimex.dashboard.entity.WidgetTemplate"
                               view="_local">
@@ -35,6 +28,7 @@
                        required="true"/>
                 <field property="referenceName"
                        required="true"/>
+                <field property="isAvailableForAllUsers"/>
             </column>
         </fieldGroup>
         <groupBox id="paramsBox"
@@ -60,10 +54,7 @@
             <button id="okBtn"
                     caption="msg://ok"
                     icon="EDITOR_OK"
-                    invoke="applyAndClose"/>
-            <button id="applyBtn"
-                    caption="msg://apply"
-                    invoke="apply"/>
+                    invoke="commitAndClose"/>
             <button id="cancelBtn"
                     caption="msg://cancel"
                     icon="EDITOR_CANCEL"
@@ -75,8 +66,8 @@
                     stylename="amdx-left-margin-button"/>
             <upload id="importJsonField"
                     fileStoragePutMode="MANUAL"
-                    uploadButtonIcon="UPLOAD"
-                    uploadButtonCaption="msg://importJson"/>
+                    uploadButtonCaption="msg://importJson"
+                    uploadButtonIcon="UPLOAD"/>
         </buttonsPanel>
     </layout>
 </window>
