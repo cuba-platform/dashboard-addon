@@ -21,6 +21,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 
 import javax.inject.Inject;
 import java.io.InputStream;
@@ -75,10 +76,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         dashboardDs.setItem(inputItem);
         widgetTemplates = getWidgetTemplates();
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        updateFrames();
-    }
-
-    protected void updateFrames() {
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
@@ -174,9 +171,13 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected void uploadJson() {
         try (InputStream fileContent = importJsonField.getFileContent()) {
             String json = IOUtils.toString(Objects.requireNonNull(fileContent), UTF_8);
-            Dashboard dashboard = converter.dashboardFromJson(json);
-            dashboardDs.setItem(dashboard);
-            updateFrames();
+            Dashboard newDashboard = metadata.create(Dashboard.class);
+            BeanUtils.copyProperties(converter.dashboardFromJson(json), newDashboard);
+
+            dashboardDs.setItem(newDashboard);
+            initParametersFrame();
+            initPaletteFrame();
+            canvasFrame.updateLayout(newDashboard);
             dashboardDs.refresh();
 
         } catch (Exception e) {

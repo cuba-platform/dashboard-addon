@@ -31,7 +31,8 @@ public class CanvasFrame extends AbstractFrame {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        initLayout(params);
+        dashboard = (Dashboard) params.get(DASHBOARD);
+        updateLayout(dashboard);
     }
 
     public VerticalLayout getDashboardModel() {
@@ -46,9 +47,7 @@ public class CanvasFrame extends AbstractFrame {
         return converter;
     }
 
-    protected void initLayout(Map<String, Object> params) {
-        dashboard = (Dashboard) params.get(DASHBOARD);
-
+    public void updateLayout(Dashboard dashboard) {
         if (dashboard == null) {
             throw new RuntimeException("DASHBOARD parameter can not be null");
         }
@@ -59,6 +58,7 @@ public class CanvasFrame extends AbstractFrame {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }
 
+        canvas.removeAll();
         canvas.unwrap(Layout.class).addComponent(vLayout);
     }
 }

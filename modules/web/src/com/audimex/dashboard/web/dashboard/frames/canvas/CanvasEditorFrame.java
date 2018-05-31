@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.frames.canvas;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
@@ -35,8 +36,12 @@ public class CanvasEditorFrame extends CanvasFrame {
 
     @Override
     public void init(Map<String, Object> params) {
-        initLayout(params);
+        super.init(params);
+    }
 
+    @Override
+    public void updateLayout(Dashboard dashboard) {
+        super.updateLayout(dashboard);
         tools.init(this, converter, vLayout);
         addLayoutClickListener();
     }
