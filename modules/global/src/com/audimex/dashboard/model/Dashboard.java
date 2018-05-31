@@ -9,7 +9,6 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
 
-    @Column(name = "CREATED_BY", length = 50)
+    @MetaProperty
     protected String createdBy;
 
     public String getCreatedBy() {

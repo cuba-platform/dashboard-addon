@@ -10,10 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Table(name = "AMXD_DASHBOARD_PERSIST")
-@Entity(name = "amxd$DashboardPersist")
-public class DashboardPersist extends StandardEntity {
+@Table(name = "AMXD_PERSISTENT_DASHBOARD")
+@Entity(name = "amxd$PersistentDashboard")
+public class PersistentDashboard extends StandardEntity {
     private static final long serialVersionUID = 3580405340289107373L;
 
     @NotNull
@@ -24,6 +27,19 @@ public class DashboardPersist extends StandardEntity {
     @NotNull
     @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
     protected String referenceName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DASHBOARD_GROUP_ID")
+    protected DashboardGroup dashboardGroup;
+
+    public void setDashboardGroup(DashboardGroup dashboardGroup) {
+        this.dashboardGroup = dashboardGroup;
+    }
+
+    public DashboardGroup getDashboardGroup() {
+        return dashboardGroup;
+    }
+
 
     public void setReferenceName(String referenceName) {
         this.referenceName = referenceName;

@@ -5,7 +5,7 @@
 package com.audimex.dashboard.web.dashboard.ui_component;
 
 import com.audimex.dashboard.converter.JsonConverter;
-import com.audimex.dashboard.entity.DashboardPersist;
+import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
@@ -13,10 +13,7 @@ import com.audimex.dashboard.model.param_value_types.StringParameterValue;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -48,6 +45,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected Metadata metadata;
     @Inject
     protected UserSessionSource sessionSource;
+    @Inject
+    protected Messages messages;
 
     protected CanvasFrame canvasFrame;
 
@@ -72,7 +71,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
 
         if (dashboard == null || !isAllowed(dashboard)) {
-            showNotification(getMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
+            showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
             canvasFrame = null;
             canvasBox.removeAll();
         } else {
@@ -105,12 +104,15 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     protected Dashboard loadDashboardByReferenceName(String referenceName) {
-        LoadContext<DashboardPersist> loadContext = LoadContext.create(DashboardPersist.class)
-                .setQuery(LoadContext.createQuery("select d from amxd$DashboardPersist d where d.referenceName = :referenceName")
+        LoadContext<PersistentDashboard> loadContext = LoadContext.create(PersistentDashboard.class)
+                .setQuery(LoadContext.createQuery("select d from amxd$PersistentDashboard d where d.referenceName = :referenceName")
                         .setParameter("referenceName", referenceName))
                 .setView("_local");
 
-        DashboardPersist entity = dataManager.load(loadContext);
+        PersistentDashboard entity = dataManager.load(loadContext);
+        if (entity == null || entity.getDashboardModel() == null) {
+            return null;
+        }
         return jsonConverter.dashboardFromJson(entity.getDashboardModel());
     }
 

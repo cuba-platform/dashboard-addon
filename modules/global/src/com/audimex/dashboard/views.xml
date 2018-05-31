@@ -1,3 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view class="com.audimex.dashboard.entity.DashboardGroup"
+          extends="_local"
+          name="dashboards">
+        <property name="dashboards"
+                  view="_minimal">
+            <property name="dashboardModel"/>
+            <property name="referenceName"/>
+        </property>
+    </view>
+    <view class="com.audimex.dashboard.entity.PersistentDashboard"
+          extends="_local"
+          name="dashboard-group-view">
+        <property name="dashboardGroup"
+                  view="_minimal"/>
+    </view>
 </views>

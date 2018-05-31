@@ -3,7 +3,7 @@
     <include file="com/audimex/dashboard/screens.xml"/>
     <!--dashboard-->
     <screen id="dashboardBrowse"
-            template="/com/audimex/dashboard/web/dashboard/frames/browse/dashboard-browse.xml"/>
+            template="/com/audimex/dashboard/web/dashboard/frames/browse/persistent-dashboard-browse.xml"/>
     <screen id="dashboardEdit"
             template="/com/audimex/dashboard/web/dashboard/frames/editor/dashboard-edit.xml"/>
     <screen id="dashboardComponent"
@@ -49,4 +49,8 @@
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-edit.xml"/>
     <screen id="test"
             template="com/audimex/dashboard/web/screens/test.xml"/>
+    <screen id="amxd$DashboardGroup.browse"
+            template="com/audimex/dashboard/web/dashboard_group/dashboard-group-browse.xml"/>
+    <screen id="amxd$DashboardGroup.edit"
+            template="com/audimex/dashboard/web/dashboard_group/dashboard-group-edit.xml"/>
 </screen-config>

@@ -4,16 +4,16 @@
   -->
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://dashboardsCaption"
-        class="com.audimex.dashboard.web.dashboard.frames.browse.DashboardBrowse"
-        datasource="modelDashboardsDs"
+        class="com.audimex.dashboard.web.dashboard.frames.browse.PersistentDashboardBrowse"
+        datasource="persDashboardsDs"
         focusComponent="dashboardsTable"
         lookupComponent="dashboardsTable">
     <dsContext>
         <collectionDatasource id="persDashboardsDs"
-                              class="com.audimex.dashboard.entity.DashboardPersist"
-                              view="_local">
+                              class="com.audimex.dashboard.entity.PersistentDashboard"
+                              view="dashboard-group-view">
             <query>
-                <![CDATA[select e from amxd$DashboardPersist e]]>
+                <![CDATA[select e from amxd$PersistentDashboard e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="modelDashboardsDs"

@@ -5,24 +5,30 @@
 package com.audimex.dashboard.web.dashboard.frames.browse;
 
 import com.audimex.dashboard.converter.JsonConverter;
-import com.audimex.dashboard.entity.DashboardPersist;
+import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.components.LookupComponent;
+import com.haulmont.cuba.gui.components.SelectAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
+import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
-public class DashboardBrowse extends AbstractLookup {
+public class PersistentDashboardBrowse extends AbstractLookup {
     @Inject
-    protected CollectionDatasource<DashboardPersist, UUID> persDashboardsDs;
+    protected CollectionDatasource<PersistentDashboard, UUID> persDashboardsDs;
     @Inject
     protected CollectionDatasource<Dashboard, UUID> modelDashboardsDs;
     @Inject
@@ -36,6 +42,7 @@ public class DashboardBrowse extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         initDs();
+        addSelectAction();
     }
 
     protected void initDs() {
@@ -45,7 +52,7 @@ public class DashboardBrowse extends AbstractLookup {
 
     protected void updateTable() {
         modelDashboardsDs.clear();
-        for (DashboardPersist persDash : persDashboardsDs.getItems()) {
+        for (PersistentDashboard persDash : persDashboardsDs.getItems()) {
             Dashboard model = converter.dashboardFromJson(persDash.getDashboardModel());
             modelDashboardsDs.includeItem(model);
         }
@@ -95,26 +102,41 @@ public class DashboardBrowse extends AbstractLookup {
             UUID dashId = result.getId();
 
             persDashboardsDs.refresh();
-            Optional<DashboardPersist> persDashOpt = persDashboardsDs.getItems().stream()
+            Optional<PersistentDashboard> persDashOpt = persDashboardsDs.getItems().stream()
                     .filter(item -> dashId.equals(item.getId()))
                     .findFirst();
 
             if (persDashOpt.isPresent()) {
-                DashboardPersist persDash = persDashOpt.get();
+                PersistentDashboard persDash = persDashOpt.get();
                 persDash.setDashboardModel(jsonModel);
                 persDash.setReferenceName(result.getReferenceName());
                 persDashboardsDs.updateItem(persDash);
             } else {
-                DashboardPersist persDash = metadata.create(DashboardPersist.class);
+                PersistentDashboard persDash = metadata.create(PersistentDashboard.class);
                 persDash.setId(dashId);
                 persDash.setDashboardModel(jsonModel);
                 persDash.setReferenceName(result.getReferenceName());
                 persDashboardsDs.addItem(persDash);
             }
 
-
             persDashboardsDs.commit();
             persDashboardsDs.refresh();
+        });
+    }
+
+    protected void addSelectAction() {
+        addAction(new SelectAction(this) {
+            @Override
+            protected Collection getSelectedItems(LookupComponent lookupComponent) {
+                Collection<Dashboard> selectedDashboards = super.getSelectedItems(lookupComponent);
+                if (isEmpty(selectedDashboards)) {
+                    return emptyCollection();
+                }
+                return persDashboardsDs.getItems().stream()
+                        .filter(dash -> selectedDashboards.stream().anyMatch(
+                                selectedDashboard -> dash.getId().equals(selectedDashboard.getId())))
+                        .collect(Collectors.toList());
+            }
         });
     }
 }
