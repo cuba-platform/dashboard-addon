@@ -34,8 +34,7 @@
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"
                   collapsable="true"
-                  collapsed="true">
-        </groupBox>
+                  collapsed="true"/>
         <hbox id="dashboardLayoutBox"
               expand="canvasBox"
               margin="true"
@@ -59,13 +58,17 @@
                     caption="msg://cancel"
                     icon="EDITOR_CANCEL"
                     invoke="cancel"/>
+            <button id="propogateBtn"
+                    caption="msg://propagate"
+                    icon="BULLHORN"
+                    invoke="onPropagateBtnClick"
+                    stylename="amdx-left-margin-button"/>
             <button id="exportJsonBtn"
                     caption="msg://exportJson"
                     icon="DOWNLOAD"
                     invoke="onExportJsonBtnClick"
                     stylename="amdx-left-margin-button"/>
             <upload id="importJsonField"
-                    fileStoragePutMode="MANUAL"
                     uploadButtonCaption="msg://importJson"
                     uploadButtonIcon="UPLOAD"/>
         </buttonsPanel>

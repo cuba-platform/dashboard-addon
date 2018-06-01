@@ -7,7 +7,9 @@ package com.audimex.dashboard.web.dashboard.frames.browse;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
+import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
+import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.AbstractLookup;
@@ -37,6 +39,8 @@ public class PersistentDashboardBrowse extends AbstractLookup {
     protected Metadata metadata;
     @Inject
     protected UserSessionSource sessionSource;
+    @Inject
+    protected Events events;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -121,6 +125,7 @@ public class PersistentDashboardBrowse extends AbstractLookup {
 
             persDashboardsDs.commit();
             persDashboardsDs.refresh();
+            events.publish(new DashboardUpdatedEvent(result));
         });
     }
 

@@ -8,10 +8,12 @@ import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowParam;
@@ -62,6 +64,8 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected FileUploadField importJsonField;
     @Inject
     protected UserSessionSource sessionSource;
+    @Inject
+    protected Events events;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
@@ -149,5 +153,10 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         } catch (Exception e) {
             throw new RuntimeException("Cannot import data from a file", e);
         }
+    }
+
+    public void onPropagateBtnClick() {
+        Dashboard dashboard = getDashboard();
+        events.publish(new DashboardUpdatedEvent(dashboard));
     }
 }

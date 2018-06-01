@@ -10,14 +10,15 @@ import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.param_value_types.StringParameterValue;
+import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import org.apache.commons.io.IOUtils;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -69,7 +70,19 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         } else if (referenceName != null) {
             dashboard = loadDashboardByReferenceName(referenceName);
         }
+        updateDashboard(dashboard);
+    }
 
+    @EventListener
+    public void onUpdateDashboard(DashboardUpdatedEvent event) {
+        Dashboard source = event.getSource();
+
+        if (source.getId().equals(dashboard.getId())) {
+            updateDashboard(source);
+        }
+    }
+
+    protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null || !isAllowed(dashboard)) {
             showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
             canvasFrame = null;
@@ -78,10 +91,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             addXmlParameters(dashboard);
             updateCanvasFrame(dashboard);
         }
-    }
-
-    public void refresh(Timer source) {
-        refresh();
     }
 
     protected boolean isAllowed(Dashboard dashboard) {
