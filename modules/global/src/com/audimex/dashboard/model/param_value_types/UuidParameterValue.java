@@ -9,6 +9,13 @@ import java.util.UUID;
 public class UuidParameterValue implements ParameterValue {
     protected UUID value;
 
+    public UuidParameterValue() {
+    }
+
+    public UuidParameterValue(UUID value) {
+        this.value = value;
+    }
+
     public UUID getValue() {
         return value;
     }

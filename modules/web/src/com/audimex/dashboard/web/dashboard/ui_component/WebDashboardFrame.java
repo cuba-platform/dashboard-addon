@@ -9,10 +9,8 @@ import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
-import com.audimex.dashboard.model.param_value_types.StringParameterValue;
 import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
-import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -53,7 +51,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected String referenceName;
     protected String jsonPath;
-    protected List<Pair<String, String>> xmlParameters = new ArrayList<>();
+    protected List<Parameter> xmlParameters = new ArrayList<>();
 
     protected Dashboard dashboard;
 
@@ -128,30 +126,13 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected void addXmlParameters(Dashboard dashboard) {
         List<Parameter> parameters = dashboard.getParameters();
         parameters.removeAll(getDuplicatesParams(dashboard));
-        parameters.addAll(createParametersFromXml());
+        parameters.addAll(xmlParameters);
     }
 
     protected List<Parameter> getDuplicatesParams(Dashboard dashboard) {
         return dashboard.getParameters().stream()
-                .filter(param -> {
-                    for (Pair<String, String> xmlParameter : xmlParameters) {
-                        if (param.getName().equals(xmlParameter.getFirst())) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
-    }
-
-    protected List<Parameter> createParametersFromXml() {
-        return xmlParameters.stream()
-                .map(pair -> {
-                    Parameter parameter = metadata.create(Parameter.class);
-                    parameter.setName(pair.getFirst());
-                    parameter.setParameterValue(new StringParameterValue(pair.getSecond()));
-                    return parameter;
-                })
+                .filter(param -> xmlParameters.stream()
+                        .anyMatch(xmlParameter -> param.getName().equals(xmlParameter.getName())))
                 .collect(Collectors.toList());
     }
 
@@ -166,18 +147,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     @Override
-    public String getReferenceName() {
-        return referenceName;
-    }
-
-    @Override
     public void setReferenceName(String referenceName) {
         this.referenceName = referenceName;
-    }
-
-    @Override
-    public String getJsonPath() {
-        return jsonPath;
     }
 
     @Override
@@ -186,12 +157,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     @Override
-    public List<Pair<String, String>> getParameters() {
-        return xmlParameters;
-    }
-
-    @Override
-    public void setParameters(List<Pair<String, String>> parameters) {
+    public void setXmlParameters(List<Parameter> parameters) {
         xmlParameters = parameters;
     }
 }

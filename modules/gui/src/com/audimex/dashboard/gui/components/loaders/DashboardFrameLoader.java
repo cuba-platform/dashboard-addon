@@ -5,8 +5,11 @@
 package com.audimex.dashboard.gui.components.loaders;
 
 import com.audimex.dashboard.gui.components.DashboardFrame;
+import com.audimex.dashboard.model.Parameter;
+import com.audimex.dashboard.model.param_value_types.*;
 import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ComponentsHelper;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
@@ -16,8 +19,11 @@ import com.haulmont.cuba.gui.xml.layout.loaders.FrameLoader;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -29,8 +35,11 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
     protected ComponentLoader frameLoader;
     protected String aClass;
 
+    Metadata metadata;
+
     @Override
     public void createComponent() {
+        metadata = AppBeans.get(Metadata.class);
         frameId = element.attributeValue("id");
         aClass = element.attributeValue("class");
 
@@ -106,17 +115,48 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
     }
 
     protected void loadParams(DashboardFrame resultComponent, Element element) {
-        List<Pair<String, String>> parameters = (List<Pair<String, String>>) element.content().stream()
+        List<Parameter> parameters = (List<Parameter>) element.content().stream()
                 .filter(child -> child instanceof DefaultElement &&
                         "parameter".equals(((DefaultElement) child).getName()))
-                .map(child -> {
-                    String name = ((DefaultElement) child).attributeValue("name");
-                    String value = ((DefaultElement) child).attributeValue("value");
-                    return new Pair<>(name, value);
-                })
+                .map(xmlParam -> createParameter((DefaultElement) xmlParam))
                 .collect(Collectors.toList());
 
-        resultComponent.setParameters(parameters);
+        resultComponent.setXmlParameters(parameters);
+    }
+
+    protected Parameter createParameter(DefaultElement xmlParam) {
+        String name = xmlParam.attributeValue("name");
+        String value = xmlParam.attributeValue("value");
+        String type = xmlParam.attributeValue("type");
+
+        Parameter parameter = metadata.create(Parameter.class);
+        parameter.setName(name);
+        parameter.setParameterValue(createParameterValue(type, value));
+        return parameter;
+    }
+
+    protected ParameterValue createParameterValue(String type, String value) {
+        switch (type) {
+            case "boolean":
+                return new BooleanParameterValue(Boolean.valueOf(value));
+            case "date":
+                return new DateParameterValue(Date.valueOf(value));
+            case "dateTime":
+                return new DateTimeParameterValue(Date.valueOf(value));
+            case "decimal":
+                return new DecimalParameterValue(new BigDecimal(value));
+            case "int":
+                return new IntegerParameterValue(new Integer(value));
+            case "long":
+                return new LongParameterValue(new Long(value));
+            case "time":
+                return new TimeParameterValue(Date.valueOf(value));
+            case "uuid":
+                return new UuidParameterValue(UUID.fromString(value));
+            case "string":
+            default:
+                return new StringParameterValue(value);
+        }
     }
 
     protected class DashboardLayoutLoader extends LayoutLoader {
@@ -130,7 +170,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
             Element element = screenXmlLoader.load(resourcePath, id, params);
 
             //added replace for class-control
-            //todo: check work
             if (isNotBlank(aClass) && isNotBlank(element.attributeValue("class"))) {
                 element.addAttribute("class", aClass);
             }
