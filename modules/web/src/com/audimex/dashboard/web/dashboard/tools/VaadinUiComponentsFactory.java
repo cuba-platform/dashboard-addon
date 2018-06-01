@@ -14,10 +14,7 @@ import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerti
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.Events;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.Frame;
-import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
@@ -35,12 +32,6 @@ import static java.lang.String.format;
 public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
-    @Inject
-    protected IconResolver iconResolver;
-    @Inject
-    protected Messages messages;
-    @Inject
-    protected Events events;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
@@ -51,7 +42,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         DDVerticalLayout verticalLayout = layout.getVerticalLayout();
         verticalLayout.setDragMode(NONE);
         verticalLayout.setSizeFull();
-        verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
 
         return layout;
@@ -66,7 +56,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         DDHorizontalLayout horizontalLayout = layout.getHorizontalLayout();
         horizontalLayout.setDragMode(NONE);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setSpacing(true);
         horizontalLayout.setMargin(true);
 
         return layout;
@@ -81,7 +70,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         DDGridLayout gridLayout = layout.getGridLayout();
         gridLayout.setDragMode(NONE);
         gridLayout.setSizeFull();
-        gridLayout.setSpacing(true);
         gridLayout.setMargin(true);
 
         return layout;
@@ -94,7 +82,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
                 .findFirst();
 
         if (!widgetTypeOpt.isPresent()) {
-            //todo add dashboard exception;
             throw new RuntimeException(format("There isn't found a screen for the widget class %s", widget.getClass()));
         }
 
@@ -116,7 +103,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         DDVerticalLayout verticalLayout = layout.getVerticalLayout();
         verticalLayout.setDragMode(NONE);
         verticalLayout.setSizeFull();
-        verticalLayout.setSpacing(true);
         verticalLayout.setMargin(true);
 
         return layout;
