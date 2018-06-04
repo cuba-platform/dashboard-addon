@@ -10,7 +10,7 @@ import com.vaadin.event.dd.DropTarget;
 import com.vaadin.ui.Component;
 import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
-public interface CanvasLayout extends Component, LayoutDragSource, DropTarget {
+public interface CanvasLayout extends Component, LayoutDragSource, DropTarget, HasWeight {
 
     void setDropHandler(DropHandler dropHandler);
 

@@ -39,7 +39,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         layout.setDragMode(NONE);
         layout.setSizeFull();
 
-        DDVerticalLayout verticalLayout = layout.getVerticalLayout();
+        DDVerticalLayout verticalLayout = layout.getDelegate();
         verticalLayout.setDragMode(NONE);
         verticalLayout.setSizeFull();
         verticalLayout.setMargin(true);
@@ -53,7 +53,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         layout.setDragMode(NONE);
         layout.setSizeFull();
 
-        DDHorizontalLayout horizontalLayout = layout.getHorizontalLayout();
+        DDHorizontalLayout horizontalLayout = layout.getDelegate();
         horizontalLayout.setDragMode(NONE);
         horizontalLayout.setSizeFull();
         horizontalLayout.setMargin(true);
@@ -67,7 +67,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         layout.setDragMode(NONE);
         layout.setSizeFull();
 
-        DDGridLayout gridLayout = layout.getGridLayout();
+        DDGridLayout gridLayout = layout.getDelegate();
         gridLayout.setDragMode(NONE);
         gridLayout.setSizeFull();
         gridLayout.setMargin(true);
@@ -96,16 +96,14 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
         layout.addComponent(widgetFrame.unwrap(Layout.class));
         layout.setWidget(widget);
-
         layout.setDragMode(NONE);
         layout.setSizeFull();
 
-        DDVerticalLayout verticalLayout = layout.getVerticalLayout();
+        DDVerticalLayout verticalLayout = layout.getDelegate();
         verticalLayout.setDragMode(NONE);
         verticalLayout.setSizeFull();
         verticalLayout.setMargin(true);
 
         return layout;
-
     }
 }

@@ -53,4 +53,6 @@
             template="com/audimex/dashboard/web/dashboard_group/dashboard-group-browse.xml"/>
     <screen id="amxd$DashboardGroup.edit"
             template="com/audimex/dashboard/web/dashboard_group/dashboard-group-edit.xml"/>
+    <screen id="weight-dialog"
+            template="com/audimex/dashboard/web/dashboard/frames/editor/weight_dialog/weight-dialog.xml"/>
 </screen-config>

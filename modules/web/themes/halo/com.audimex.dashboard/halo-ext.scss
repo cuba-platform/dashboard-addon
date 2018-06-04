@@ -113,6 +113,12 @@
         display: inline-block;
     }
 
+    .amxd-grid-cell-layout-selected {
+        border: 2px solid $v-selection-color;
+        border-radius: 3px;
+        display: inline-block;
+    }
+
     .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls .amxd-edit-button {
         display: none;
     }

@@ -61,7 +61,9 @@ public class DashboardModelConverter {
 
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
-                ((CssLayout) canvasLayout).addComponent(modelToContainer(frame, childModel, dashboard));
+                CanvasLayout childContainer = modelToContainer(frame, childModel, dashboard);
+                ((CssLayout) canvasLayout).addComponent(childContainer);
+                childContainer.setWeight(childModel.getWeight());
             }
         }
 
@@ -69,6 +71,10 @@ public class DashboardModelConverter {
     }
 
     protected void containerToModel(DashboardLayout model, Component container) {
+        if (container instanceof HasWeight) {
+            model.setWeight(((HasWeight) container).getWeight());
+        }
+
         for (Component childComponent : ((HasComponents) container)) {
             DashboardLayout childModel = createDashboardLayout(childComponent);
 
@@ -76,7 +82,7 @@ public class DashboardModelConverter {
                 containerToModel(model, childComponent);
             } else if (childModel instanceof GridLayout) {
                 GridLayout gridModel = (GridLayout) childModel;
-                DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getGridLayout();
+                DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
                 model.addChild(gridModel);
 
                 for (Component gridChild : gridComponent) {
@@ -112,7 +118,7 @@ public class DashboardModelConverter {
             return layout;
         } else if (component instanceof CanvasGridLayout) {
             GridLayout layout = metadata.create(GridLayout.class);
-            DDGridLayout gridLayout = ((CanvasGridLayout) component).getGridLayout();
+            DDGridLayout gridLayout = ((CanvasGridLayout) component).getDelegate();
             layout.setRows(gridLayout.getRows());
             layout.setColumns(gridLayout.getColumns());
             return layout;

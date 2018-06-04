@@ -8,12 +8,14 @@ import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
+import com.audimex.dashboard.web.dashboard.events.WeightChangedEvent;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasHorizontalLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasWidgetLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Frame;
+import com.haulmont.cuba.gui.icons.CubaIcon;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -43,15 +45,16 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         layout.addStyleName(AMXD_SHADOW_BORDER);
 
         Button removeButton = createRemoveButton();
-        removeButton.addClickListener(e -> {
-            events.publish(new LayoutRemoveEvent(layout));
-        });
+        removeButton.addClickListener(e -> events.publish(new LayoutRemoveEvent(layout)));
+        Button weightButton = createWeightButton();
+        weightButton.addClickListener(e -> events.publish(new WeightChangedEvent(layout)));
 
         HorizontalLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
+        buttonsPanel.addComponent(weightButton);
 
-        DDVerticalLayout verticalLayout = layout.getVerticalLayout();
+        DDVerticalLayout verticalLayout = layout.getDelegate();
         verticalLayout.setDragMode(CLONE);
         verticalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
 
@@ -73,7 +76,7 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
 
-        DDHorizontalLayout horizontalLayout = layout.getHorizontalLayout();
+        DDHorizontalLayout horizontalLayout = layout.getDelegate();
         horizontalLayout.setDragMode(CLONE);
         horizontalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
 
@@ -95,7 +98,7 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
 
-        DDGridLayout gridLayout = layout.getGridLayout();
+        DDGridLayout gridLayout = layout.getDelegate();
         gridLayout.setDragMode(CLONE);
         gridLayout.addStyleName(AMXD_LAYOUT_CONTENT);
 
@@ -122,7 +125,7 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         buttonsPanel.addComponent(removeButton);
         buttonsPanel.addComponent(editButton);
 
-        DDVerticalLayout verticalLayout = layout.getVerticalLayout();
+        DDVerticalLayout verticalLayout = layout.getDelegate();
         verticalLayout.setDragMode(CLONE);
         verticalLayout.addStyleName(AMXD_LAYOUT_CONTENT);
 
@@ -142,5 +145,12 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         removeButton.addStyleName(AMXD_EDIT_BUTTON);
         removeButton.setIcon(iconResolver.getIconResource(TRASH_ICON.source()));
         return removeButton;
+    }
+
+    protected Button createWeightButton() {
+        Button weightButton = new Button();
+        weightButton.addStyleName(AMXD_EDIT_BUTTON);
+        weightButton.setIcon(iconResolver.getIconResource(CubaIcon.ARROWS.source()));
+        return weightButton;
     }
 }

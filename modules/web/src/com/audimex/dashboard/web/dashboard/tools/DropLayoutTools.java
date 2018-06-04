@@ -78,7 +78,7 @@ public class DropLayoutTools {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) targetFrame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
-                if (GridCreationDialog.APPLY.equals(actionId)) {
+                if ("commit".equals(actionId)) {
                     int cols = dialog.getCols();
                     int rows = dialog.getRows();
 

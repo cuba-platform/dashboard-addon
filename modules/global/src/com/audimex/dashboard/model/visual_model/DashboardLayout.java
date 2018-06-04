@@ -15,6 +15,16 @@ import java.util.List;
 public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
     protected List<DashboardLayout> children = new ArrayList<>();
+    @MetaProperty
+    protected Integer weight = 1;
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
 
     public List<DashboardLayout> getChildren() {
         return children;

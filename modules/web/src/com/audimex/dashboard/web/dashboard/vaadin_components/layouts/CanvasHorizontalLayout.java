@@ -4,99 +4,18 @@
 
 package com.audimex.dashboard.web.dashboard.vaadin_components.layouts;
 
-import com.vaadin.event.LayoutEvents;
-import com.vaadin.event.Transferable;
-import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.TargetDetails;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
 
-import java.util.Map;
-
-public class CanvasHorizontalLayout extends CssLayout implements CanvasLayout {
-    protected DDHorizontalLayout horizontalLayout = new DDHorizontalLayout();
-    protected HorizontalLayout buttonsPanel = new HorizontalLayout();
+public class CanvasHorizontalLayout extends AbstractOrderedCanvasLayout {
+    protected DDHorizontalLayout horizontalLayout;
 
     public CanvasHorizontalLayout() {
-        super();
-        super.addComponent(buttonsPanel);
-        super.addComponent(horizontalLayout);
+        super(new DDHorizontalLayout());
+        horizontalLayout = (DDHorizontalLayout) delegate;
     }
 
-    public DDHorizontalLayout getHorizontalLayout() {
+    @Override
+    public DDHorizontalLayout getDelegate() {
         return horizontalLayout;
-    }
-
-    public HorizontalLayout getButtonsPanel() {
-        return buttonsPanel;
-    }
-
-    @Override
-    public void addComponent(Component c) {
-        horizontalLayout.addComponent(c);
-    }
-
-    @Override
-    public void addComponentAsFirst(Component c) {
-        horizontalLayout.addComponentAsFirst(c);
-    }
-
-    @Override
-    public void addComponent(Component c, int index) {
-        horizontalLayout.addComponent(c, index);
-    }
-
-    @Override
-    public void addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        horizontalLayout.addLayoutClickListener(listener);
-    }
-
-    @Override
-    public void removeLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        horizontalLayout.removeLayoutClickListener(listener);
-    }
-
-    @Override
-    public DropHandler getDropHandler() {
-        return horizontalLayout.getDropHandler();
-    }
-
-    @Override
-    public void setDropHandler(DropHandler dropHandler) {
-        horizontalLayout.setDropHandler(dropHandler);
-    }
-
-    @Override
-    public TargetDetails translateDropTargetDetails(Map<String, Object> map) {
-        return horizontalLayout.translateDropTargetDetails(map);
-    }
-
-    @Override
-    public LayoutDragMode getDragMode() {
-        return horizontalLayout.getDragMode();
-    }
-
-    @Override
-    public void setDragMode(LayoutDragMode layoutDragMode) {
-        horizontalLayout.setDragMode(layoutDragMode);
-    }
-
-    @Override
-    public DragFilter getDragFilter() {
-        return horizontalLayout.getDragFilter();
-    }
-
-    @Override
-    public void setDragFilter(DragFilter dragFilter) {
-        horizontalLayout.setDragFilter(dragFilter);
-    }
-
-    @Override
-    public Transferable getTransferable(Map<String, Object> map) {
-        return horizontalLayout.getTransferable(map);
     }
 }
