@@ -6,15 +6,13 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.GridLayout;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.layouts.*;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.VerticalLayoutDropHandler;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
-import com.audimex.dashboard.web.dashboard.frames.canvas.layouts.*;
-import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
-import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.*;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;

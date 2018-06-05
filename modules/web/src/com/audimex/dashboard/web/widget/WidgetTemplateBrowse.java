@@ -48,7 +48,6 @@ public class WidgetTemplateBrowse extends AbstractLookup {
 
     public void createWidget() {
         Widget widget = metadata.create(Widget.class);
-        widget.setIsTemplate(true);
         openWidgetEditor(widget);
     }
 

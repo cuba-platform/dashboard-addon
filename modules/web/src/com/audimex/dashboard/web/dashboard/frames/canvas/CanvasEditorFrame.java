@@ -61,7 +61,9 @@ public class CanvasEditorFrame extends CanvasFrame {
     public void onRemoveLayout(LayoutRemoveEvent event) {
         CanvasLayout source = event.getSource();
         AbstractLayout parent = (AbstractLayout) source.getParent();
-        parent.removeComponent(source);
+        if (parent != null) {
+            parent.removeComponent(source);
+        }
     }
 
     @EventListener
