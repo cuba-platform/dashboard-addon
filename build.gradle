@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.7.3'
+    ext.cubaVersion = '6.9.0'
     repositories {
         mavenLocal()
         maven {
@@ -25,7 +25,7 @@ def guiModule = project(':dashboard-gui')
 def webModule = project(':dashboard-web')
 def webThemesModule= project(':dashboard-web-themes')
 
-def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
+def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 
 apply(plugin: 'idea')
@@ -34,7 +34,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'com.audimex.dashboard'
-        version = '0.3.2'
+        version = "0.4.1"
         isSnapshot = true
     }
     tomcat {
@@ -232,7 +232,7 @@ task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deplo
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
+    gradleVersion = '4.3.1'
 }
 
 apply from: 'extra.gradle'
