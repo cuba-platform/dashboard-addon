@@ -14,16 +14,16 @@ import java.io.Serializable;
 public class WidgetTypeInfo implements Serializable {
 
     protected Class typeClass;
-    protected String caption;
+    protected String name;
     protected String browseFrameId;
     protected String editFrameId;
 
     public WidgetTypeInfo() {
     }
 
-    public WidgetTypeInfo(Class typeClass, String caption, String browseFrameId, String editFrameId) {
+    public WidgetTypeInfo(Class typeClass, String name, String browseFrameId, String editFrameId) {
         this.typeClass = typeClass;
-        this.caption = caption;
+        this.name = name;
         this.browseFrameId = browseFrameId;
         this.editFrameId = editFrameId;
     }
@@ -36,12 +36,12 @@ public class WidgetTypeInfo implements Serializable {
         this.typeClass = typeClass;
     }
 
-    public String getCaption() {
-        return caption;
+    public String getName() {
+        return name;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBrowseFrameId() {

@@ -32,7 +32,7 @@ public class WidgetTypeAnalyzerImpl implements WidgetTypeAnalyzer {
                     WidgetType ann = (WidgetType) metaClass.getJavaClass().getAnnotation(WidgetType.class);
                     return new WidgetTypeInfo(
                             metaClass.getJavaClass(),
-                            ann.caption(),
+                            ann.name(),
                             ann.browseFrameId(),
                             ann.editFrameId()
                     );

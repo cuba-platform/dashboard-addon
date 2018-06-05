@@ -60,20 +60,20 @@ public class PaletteFrame extends AbstractFrame {
         PaletteButton verticalLayoutBtn = new PaletteButton(
                 getMessage("verticalLayout"),
                 iconResolver.getIconResource(VERTICAL_LAYOUT_ICON.source()),
-                metadata.create(VerticalLayout.class)
-        );
+                metadata.create(VerticalLayout.class),
+                getMessage("verticalLayout"));
 
         PaletteButton horizontalLayoutBtn = new PaletteButton(
                 getMessage("horizontalLayout"),
                 iconResolver.getIconResource(HORIZONTAL_LAYOUT_ICON.source()),
-                metadata.create(HorizontalLayout.class)
-        );
+                metadata.create(HorizontalLayout.class),
+                getMessage("horizontalLayout"));
 
         PaletteButton gridLayoutBtn = new PaletteButton(
                 getMessage("gridLayout"),
                 iconResolver.getIconResource(GRID_LAYOUT_ICON.source()),
-                metadata.create(GridLayout.class)
-        );
+                metadata.create(GridLayout.class),
+                getMessage("gridLayout"));
 
         ddPalette.addComponent(verticalLayoutBtn);
         ddPalette.addComponent(horizontalLayoutBtn);
@@ -87,8 +87,8 @@ public class PaletteFrame extends AbstractFrame {
 
             PaletteButton widgetBtn = new PaletteButton(
                     messages.getMainMessage(widget.getCaption() != null ? widget.getCaption() : ""),
-                    iconResolver.getIconResource(widget.getIcon() != null ? widget.getIcon() : ""),
-                    widgetLayout
+                    widgetLayout,
+                    widget.getDescription()
             );
 
             ddPalette.addComponent(widgetBtn);

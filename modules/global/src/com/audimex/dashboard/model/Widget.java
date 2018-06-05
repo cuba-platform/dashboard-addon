@@ -16,8 +16,6 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String caption;
     @MetaProperty
-    protected String icon;
-    @MetaProperty
     protected String description;
     @MetaProperty
     protected List<Parameter> parameters;
@@ -36,14 +34,6 @@ public class Widget extends BaseUuidEntity {
 
     public String getCaption() {
         return caption;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getIcon() {
-        return icon;
     }
 
     public void setDescription(String description) {

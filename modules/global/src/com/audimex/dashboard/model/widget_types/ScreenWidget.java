@@ -15,7 +15,7 @@ import static com.audimex.dashboard.model.widget_types.ScreenWidget.CAPTION;
  * The ScreenWidget is type for any screen. Shows screen by {@link ScreenWidget#screenId}
  */
 @MetaClass(name = "amxd$ScreenWidget")
-@WidgetType(caption = CAPTION,
+@WidgetType(name = CAPTION,
         browseFrameId = "screenWidgetBrowse",
         editFrameId = "screenWidgetEdit")
 public class ScreenWidget extends Widget {

@@ -16,7 +16,7 @@ import static com.audimex.dashboard.model.widget_types.LookupWidget.CAPTION;
  * {@link com.haulmont.cuba.gui.components.AbstractLookup}. Shows screen by {@link ScreenWidget#lookupWindowId}
  */
 @MetaClass(name = "amxd$LookupWidget")
-@WidgetType(caption = CAPTION,
+@WidgetType(name = CAPTION,
         browseFrameId = "lookupWidgetBrowse",
         editFrameId = "lookupWidgetEdit")
 public class LookupWidget extends Widget {

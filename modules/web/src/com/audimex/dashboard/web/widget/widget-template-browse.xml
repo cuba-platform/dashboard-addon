@@ -28,7 +28,6 @@
             </actions>
             <columns>
                 <column id="caption"/>
-                <column id="icon"/>
                 <column id="description"/>
             </columns>
             <rows datasource="modelWidgetsDs"/>

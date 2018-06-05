@@ -16,7 +16,6 @@
                     datasource="widgetDs">
             <column width="450px">
                 <field property="caption"/>
-                <field property="icon"/>
                 <field property="description"/>
             </column>
         </fieldGroup>

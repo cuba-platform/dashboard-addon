@@ -58,13 +58,13 @@ public class WidgetEdit extends AbstractEditor<Widget> {
 
     protected List<String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {
         return typesInfo.stream()
-                .map(WidgetTypeInfo::getCaption)
+                .map(WidgetTypeInfo::getName)
                 .collect(Collectors.toList());
     }
 
     protected void typeSelected(String type) {
         String editFrameId = typesInfo.stream()
-                .filter(widgetType -> type.equals(widgetType.getCaption()))
+                .filter(widgetType -> type.equals(widgetType.getName()))
                 .findFirst()
                 .get()
                 .getEditFrameId();
@@ -80,7 +80,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
                 .findFirst();
 
         if (widgetTypeOpt.isPresent()) {
-            String itemCaption = widgetTypeOpt.get().getCaption();
+            String itemCaption = widgetTypeOpt.get().getName();
 
             if (isNotBlank(itemCaption)) {
                 typeLookup.setValue(itemCaption);

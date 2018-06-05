@@ -18,10 +18,10 @@ import java.lang.annotation.*;
 public @interface WidgetType {
 
     /**
-     * The caption for widget-edit screen, can be localized in main message.properties by pattern:
-     * widgetTypeCaption{caption} = {localization message}
+     * The name for widget-edit screen, can be localized in main message.properties by pattern:
+     * widgetTypeCaption{name} = {localization message}
      */
-    String caption();
+    String name();
 
     /**
      * Contains frame ID for showing a widget. Frame Controller must be inherited from the class
