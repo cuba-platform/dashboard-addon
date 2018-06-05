@@ -2,10 +2,10 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.drop_handlers;
+package com.audimex.dashboard.web.dashboard.tools.drop_handlers;
 
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.audimex.dashboard.web.dashboard.vaadin_components.Draggable;
+import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.Draggable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.shared.ui.dd.HorizontalDropLocation;
 import com.vaadin.ui.AbstractOrderedLayout;

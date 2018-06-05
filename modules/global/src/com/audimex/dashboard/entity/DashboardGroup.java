@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * The persistence dictionary of the {@link PersistentDashboard}
+ */
 @NamePattern("%s|name")
 @Table(name = "AMXD_DASHBOARD_GROUP")
 @Entity(name = "amxd$DashboardGroup")

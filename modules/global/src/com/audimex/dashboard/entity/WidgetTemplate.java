@@ -11,6 +11,10 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ *  Persistence Widget Template. The field {@link WidgetTemplate#widgetModel} stores not persistence model
+ *  {@link com.audimex.dashboard.model.Widget} as JSON
+ */
 @Table(name = "AMXD_WIDGET_TEMPLATE")
 @Entity(name = "amxd$WidgetTemplate")
 public class WidgetTemplate extends StandardEntity {

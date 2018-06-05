@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.model;
 
+import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
@@ -19,10 +20,17 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty(mandatory = true)
     protected String title;
 
+    /**
+     * The unique identifier for searching in a database. Duplicates with
+     * {@link PersistentDashboard#referenceName}
+     */
     @NotNull
     @MetaProperty(mandatory = true)
     protected String referenceName;
 
+    /**
+     * Stores a hierarchy of a visual model
+     */
     @MetaProperty
     protected VerticalLayout visualModel;
 
@@ -32,6 +40,9 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
 
+    /**
+     * Stores a login of the user, who created entity
+     */
     @MetaProperty
     protected String createdBy;
 

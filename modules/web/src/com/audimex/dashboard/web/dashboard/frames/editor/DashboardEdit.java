@@ -8,7 +8,7 @@ import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;

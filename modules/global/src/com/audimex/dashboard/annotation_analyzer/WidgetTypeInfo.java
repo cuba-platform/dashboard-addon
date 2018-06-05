@@ -4,8 +4,13 @@
 
 package com.audimex.dashboard.annotation_analyzer;
 
+import com.audimex.dashboard.annotation.WidgetType;
+
 import java.io.Serializable;
 
+/**
+ * Contains values of annotation {@link WidgetType}, which is indicated class {@link WidgetTypeInfo#typeClass}
+ */
 public class WidgetTypeInfo implements Serializable {
 
     protected Class typeClass;

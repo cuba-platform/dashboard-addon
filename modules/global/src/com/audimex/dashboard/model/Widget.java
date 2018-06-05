@@ -20,8 +20,6 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String description;
     @MetaProperty
-    protected Boolean isTemplate;
-    @MetaProperty
     protected List<Parameter> parameters;
 
     public List<Parameter> getParameters() {
@@ -55,14 +53,4 @@ public class Widget extends BaseUuidEntity {
     public String getDescription() {
         return description;
     }
-
-    public void setIsTemplate(Boolean isTemplate) {
-        this.isTemplate = isTemplate;
-    }
-
-    public Boolean getIsTemplate() {
-        return isTemplate;
-    }
-
-
 }

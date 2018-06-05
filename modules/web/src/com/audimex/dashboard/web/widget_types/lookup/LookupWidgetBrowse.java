@@ -11,13 +11,10 @@ import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
-import com.haulmont.cuba.gui.components.LookupComponent;
 import com.haulmont.cuba.gui.components.Window;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 
 public class LookupWidgetBrowse extends AbstractWidgetBrowse {
     @Inject

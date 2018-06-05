@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.vaadin_components.layouts;
+package com.audimex.dashboard.web.dashboard.layouts;
 
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;

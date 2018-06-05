@@ -7,7 +7,7 @@
     <screen id="dashboardEdit"
             template="/com/audimex/dashboard/web/dashboard/frames/editor/dashboard-edit.xml"/>
     <screen id="dashboardComponent"
-            template="/com/audimex/dashboard/web/dashboard/ui_component/web-dashboard-frame.xml"/>
+            template="/com/audimex/dashboard/web/dashboard/frames/ui_component/web-dashboard-frame.xml"/>
     <!--dashboard frames-->
     <screen id="paletteFrame"
             template="/com/audimex/dashboard/web/dashboard/frames/editor/palette/palette-frame.xml"/>
@@ -47,8 +47,6 @@
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-browse.xml"/>
     <screen id="lookupWidgetEdit"
             template="com/audimex/dashboard/web/widget_types/lookup/lookup-widget-edit.xml"/>
-    <screen id="test"
-            template="com/audimex/dashboard/web/screens/test.xml"/>
     <screen id="amxd$DashboardGroup.browse"
             template="com/audimex/dashboard/web/dashboard_group/dashboard-group-browse.xml"/>
     <screen id="amxd$DashboardGroup.edit"

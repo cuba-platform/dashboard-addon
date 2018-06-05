@@ -4,7 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.events;
 
-import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasLayout;
+import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 

@@ -7,7 +7,7 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.audimex.dashboard.web.dashboard.vaadin_components.layouts.CanvasVerticalLayout;
+import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.vaadin.ui.Layout;

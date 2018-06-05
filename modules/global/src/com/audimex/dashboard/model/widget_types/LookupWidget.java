@@ -11,6 +11,10 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 import static com.audimex.dashboard.model.widget_types.LookupWidget.CAPTION;
 
+/**
+ * The LookupWidget is type for screens with a controller inherited from the
+ * {@link com.haulmont.cuba.gui.components.AbstractLookup}. Shows screen by {@link ScreenWidget#lookupWindowId}
+ */
 @MetaClass(name = "amxd$LookupWidget")
 @WidgetType(caption = CAPTION,
         browseFrameId = "lookupWidgetBrowse",

@@ -39,7 +39,6 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
 
     @Override
     public ParameterValue getValue() {
-        //todo add validation and validate exception, UUID
         switch (type) {
             case DATETIME:
                 return new DateTimeParameterValue(dateField.getValue());

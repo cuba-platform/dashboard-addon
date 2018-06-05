@@ -7,7 +7,7 @@ package com.audimex.dashboard.web.dashboard.frames.browse;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
-import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;

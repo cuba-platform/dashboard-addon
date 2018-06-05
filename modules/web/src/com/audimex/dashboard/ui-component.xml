@@ -4,6 +4,6 @@
         <tag>dashboard</tag>
         <name>amdxDashboardComponent</name>
         <componentLoader>com.audimex.dashboard.gui.components.loaders.DashboardFrameLoader</componentLoader>
-        <class>com.audimex.dashboard.web.dashboard.ui_component.WebDashboardFrame</class>
+        <class>com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame</class>
     </component>
 </components>

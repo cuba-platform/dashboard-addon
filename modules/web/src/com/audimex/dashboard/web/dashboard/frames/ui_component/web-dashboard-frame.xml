@@ -2,7 +2,7 @@
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.dashboard.ui_component.WebDashboardFrame">
+        class="com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame">
     <layout spacing="true"
             width="100%"
             height="100%">

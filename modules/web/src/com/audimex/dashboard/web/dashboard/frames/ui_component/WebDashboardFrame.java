@@ -2,14 +2,14 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.ui_component;
+package com.audimex.dashboard.web.dashboard.frames.ui_component;
 
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
-import com.audimex.dashboard.web.dashboard.events.DashboardUpdatedEvent;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;

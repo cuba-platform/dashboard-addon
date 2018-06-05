@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 
 import static com.audimex.dashboard.converter.JsonConverter.NAME;
 
+/**
+ * Supports the conversion to json for non-persistent objects with types: {@link Dashboard},
+ * {@link Widget}, {@link Parameter}
+ */
 @Component(NAME)
 public class JsonConverter {
     public static final String NAME = "amxd_JsonConverter";
@@ -31,11 +35,13 @@ public class JsonConverter {
     }
 
     public String widgetToJson(Widget widget) {
-        return gson.toJson(widget, new TypeToken<Widget>(){}.getType());
+        return gson.toJson(widget, new TypeToken<Widget>() {
+        }.getType());
     }
 
     public String dashboardToJson(Dashboard dashboard) {
-        return gson.toJson(dashboard, new TypeToken<Dashboard>(){}.getType());
+        return gson.toJson(dashboard, new TypeToken<Dashboard>() {
+        }.getType());
     }
 
     public Dashboard dashboardFromJson(String json) {

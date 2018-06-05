@@ -15,6 +15,10 @@ import java.util.List;
 public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
     protected List<DashboardLayout> children = new ArrayList<>();
+
+    /**
+     * The expand ratio of given layout in a parent layout.
+     */
     @MetaProperty
     protected Integer weight = 1;
 

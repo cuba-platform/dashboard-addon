@@ -3,6 +3,7 @@
  */
 package com.audimex.dashboard.entity;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.Column;
@@ -19,11 +20,18 @@ import javax.persistence.ManyToOne;
 public class PersistentDashboard extends StandardEntity {
     private static final long serialVersionUID = 3580405340289107373L;
 
+    /**
+     * Stores not persistence model {@link Dashboard} as JSON
+     */
     @NotNull
     @Lob
     @Column(name = "DASHBOARD_MODEL", nullable = false)
     protected String dashboardModel;
 
+    /**
+     * The unique identifier for searching in a database. Duplicates with
+     * {@link Dashboard#referenceName}
+     */
     @NotNull
     @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
     protected String referenceName;

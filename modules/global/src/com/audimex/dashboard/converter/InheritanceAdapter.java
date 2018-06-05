@@ -8,6 +8,9 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * Supports json serialization/deserialization for inherited classes
+ */
 public class InheritanceAdapter implements JsonSerializer, JsonDeserializer {
 
     protected static final String CLASSNAME = "className";

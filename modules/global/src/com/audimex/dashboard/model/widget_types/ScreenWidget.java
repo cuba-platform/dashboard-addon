@@ -11,6 +11,9 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 import static com.audimex.dashboard.model.widget_types.ScreenWidget.CAPTION;
 
+/**
+ * The ScreenWidget is type for any screen. Shows screen by {@link ScreenWidget#screenId}
+ */
 @MetaClass(name = "amxd$ScreenWidget")
 @WidgetType(caption = CAPTION,
         browseFrameId = "screenWidgetBrowse",
