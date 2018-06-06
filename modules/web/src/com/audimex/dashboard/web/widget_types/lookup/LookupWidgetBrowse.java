@@ -25,7 +25,11 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        refresh();
+    }
 
+    @Override
+    public void refresh() {
         String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
         lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, getParamsForFrame());
         lookupFrame.close("");

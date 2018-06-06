@@ -7,7 +7,9 @@ package com.audimex.dashboard.web.widget_types;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import org.springframework.context.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import java.util.Map;
 
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-public class AbstractWidgetBrowse extends AbstractFrame {
+public abstract class AbstractWidgetBrowse extends AbstractFrame implements WidgetBrowse {
     public static final String WIDGET = "WIDGET";
     public static final String DASHBOARD = "DASHBOARD";
 
@@ -54,11 +56,26 @@ public class AbstractWidgetBrowse extends AbstractFrame {
         return map;
     }
 
+    @EventListener
+    public void onWidgetUpdated(WidgetUpdatedEvent event){
+        Widget source = event.getSource();
+
+        if(widget.getId().equals(source.getId())){
+            widget = source;
+            refresh();
+        }
+    }
+
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public Dashboard getDashboard() {
         return dashboard;
     }
+
+    @Override
+    public abstract void refresh();
 }
