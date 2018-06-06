@@ -53,7 +53,7 @@ public class CanvasFrame extends AbstractFrame {
         }
 
         if (dashboard.getVisualModel() != null) {
-            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel(), dashboard);
+            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
         } else {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }

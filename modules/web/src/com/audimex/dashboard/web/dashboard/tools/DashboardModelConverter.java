@@ -4,13 +4,12 @@
 
 package com.audimex.dashboard.web.dashboard.tools;
 
-import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.layouts.*;
 import com.audimex.dashboard.web.dashboard.tools.component_factories.VaadinComponentsFactory;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HasComponents;
@@ -39,7 +38,7 @@ public class DashboardModelConverter {
         return model;
     }
 
-    public CanvasLayout modelToContainer(Frame frame, DashboardLayout model, Dashboard dashboard) {
+    public CanvasLayout modelToContainer(CanvasFrame frame, DashboardLayout model) {
         CanvasLayout canvasLayout = null;
 
         if (model instanceof VerticalLayout) {
@@ -47,7 +46,7 @@ public class DashboardModelConverter {
         } else if (model instanceof HorizontalLayout) {
             canvasLayout = factory.createCanvasHorizontalLayout();
         } else if (model instanceof WidgetLayout) {
-            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model).getWidget(), dashboard);
+            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model).getWidget());
         } else if (model instanceof GridLayout) {
             GridLayout gridModel = (GridLayout) model;
             Integer columns = gridModel.getColumns();
@@ -55,14 +54,14 @@ public class DashboardModelConverter {
             canvasLayout = factory.createCanvasGridLayout(columns, rows);
 
             for (GridArea area : gridModel.getAreas()) {
-                CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent(), dashboard);
+                CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent());
                 ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol1(), area.getRow1());
             }
         }
 
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
-                CanvasLayout childContainer = modelToContainer(frame, childModel, dashboard);
+                CanvasLayout childContainer = modelToContainer(frame, childModel);
                 ((CssLayout) canvasLayout).addComponent(childContainer);
                 childContainer.setWeight(childModel.getWeight());
             }

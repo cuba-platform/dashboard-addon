@@ -76,7 +76,7 @@ public class CanvasEditorFrame extends CanvasFrame {
             AbstractLayout parent = (AbstractLayout) source.getParent();
             parent.removeComponent(source);
 
-            CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem(), dashboard);
+            CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem());
             tools.addDropHandler(newLayout);
             parent.addComponent(newLayout);
         });

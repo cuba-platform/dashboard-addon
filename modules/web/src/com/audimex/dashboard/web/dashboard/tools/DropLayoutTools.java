@@ -31,10 +31,10 @@ import static java.util.Collections.singletonList;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
-    protected CanvasFrame targetFrame;
+    protected CanvasFrame frame;
 
     public void init(CanvasFrame targetFrame, DashboardModelConverter modelConverter, CanvasLayout rootContainer) {
-        this.targetFrame = targetFrame;
+        this.frame = targetFrame;
         this.modelConverter = modelConverter;
         initDropHandler(rootContainer);
     }
@@ -79,7 +79,7 @@ public class DropLayoutTools {
 
     protected void addComponent(AbstractLayout target, DashboardLayout layout, List<Object> args) {
         if (layout instanceof GridLayout) {
-            GridCreationDialog dialog = (GridCreationDialog) targetFrame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
+            GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if ("commit".equals(actionId)) {
                     int cols = dialog.getCols();
@@ -100,7 +100,7 @@ public class DropLayoutTools {
             });
         } else if (layout instanceof WidgetLayout) {
             WidgetLayout widgetLayout = (WidgetLayout) layout;
-            WidgetEdit editor = (WidgetEdit) targetFrame.openEditor(WidgetEdit.SCREEN_NAME, widgetLayout.getWidget(), THIS_TAB);
+            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widgetLayout.getWidget(), THIS_TAB);
             editor.addCloseWithCommitListener(() -> {
                 widgetLayout.setWidget(editor.getItem());
                 addDashboardLayout(widgetLayout, target, args);
@@ -111,7 +111,7 @@ public class DropLayoutTools {
     }
 
     protected void addDashboardLayout(DashboardLayout layout, AbstractLayout target, List<Object> args) {
-        CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout, targetFrame.getDashboard());
+        CanvasLayout canvasLayout = modelConverter.modelToContainer(frame, layout);
 
         if (canvasLayout != null) {
             addDropHandler(canvasLayout);

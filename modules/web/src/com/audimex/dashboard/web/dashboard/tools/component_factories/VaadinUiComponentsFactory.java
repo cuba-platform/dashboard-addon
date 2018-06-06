@@ -6,15 +6,14 @@ package com.audimex.dashboard.web.dashboard.tools.component_factories;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
-import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.gui.components.Frame;
 import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
@@ -76,7 +75,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
     }
 
     @Override
-    public CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget, Dashboard dashboard) {
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
         Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
                 .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
                 .findFirst();
@@ -86,9 +85,9 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
-        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) targetFrame.openFrame(null, frameId, ParamsMap.of(
+        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) frame.openFrame(null, frameId, ParamsMap.of(
                 WIDGET, widget,
-                DASHBOARD, dashboard
+                DASHBOARD, frame.getDashboard()
         ));
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);

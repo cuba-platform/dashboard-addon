@@ -4,7 +4,6 @@
 
 package com.audimex.dashboard.web.dashboard.tools.component_factories;
 
-import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.GridLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
@@ -12,6 +11,7 @@ import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.audimex.dashboard.web.dashboard.events.WeightChangedEvent;
+import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
@@ -21,7 +21,6 @@ import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.icons.CubaIcon;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.vaadin.shared.ui.MarginInfo;
@@ -114,8 +113,8 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
     }
 
     @Override
-    public CanvasWidgetLayout createCanvasWidgetLayout(Frame targetFrame, Widget widget, Dashboard dashboard) {
-        CanvasWidgetLayout layout = super.createCanvasWidgetLayout(targetFrame, widget, dashboard);
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
+        CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widget);
         layout.setDragMode(CLONE);
         layout.addStyleName(AMXD_SHADOW_BORDER);
 
