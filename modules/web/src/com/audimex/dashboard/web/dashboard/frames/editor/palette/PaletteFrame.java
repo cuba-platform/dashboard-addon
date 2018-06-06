@@ -65,19 +65,6 @@ public class PaletteFrame extends AbstractFrame {
 
     protected void initWidgetBox() {
         ddWidgetBox = factory.createNotDroppedVerticalLayout();
-        ddWidgetBox.addLayoutClickListener(event -> {
-            ddWidgetBox.forEach(btn -> {
-                btn.addStyleName("amxd-dashboard-button");
-                btn.removeStyleName("amxd-dashboard-selected-button");
-            });
-
-            selectedWidgetBtn = (PaletteButton) event.getClickedComponent();
-            selectedWidgetBtn.removeStyleName("amxd-dashboard-button");
-            selectedWidgetBtn.addStyleName("amxd-dashboard-selected-button");
-            doTemplateBtn.setEnabled(true);
-            removeWidgetBtn.setEnabled(true);
-        });
-
         widgetBox.unwrap(Layout.class).addComponent(ddWidgetBox);
     }
 
@@ -112,6 +99,20 @@ public class PaletteFrame extends AbstractFrame {
         WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, metadata.create(Widget.class), THIS_TAB);
         editor.addCloseWithCommitListener(() -> {
             PaletteButton widgetBtn = factory.createPaletteWidgetButton(editor.getItem());
+            widgetBtn.addClickListener(event -> {
+                selectedWidgetBtn = (PaletteButton) event.getSource();
+
+                ddWidgetBox.forEach(btn -> {
+                    btn.addStyleName("amxd-dashboard-button");
+                    btn.removeStyleName("amxd-dashboard-selected-button");
+                });
+
+                selectedWidgetBtn.removeStyleName("amxd-dashboard-button");
+                selectedWidgetBtn.addStyleName("amxd-dashboard-selected-button");
+                doTemplateBtn.setEnabled(true);
+                removeWidgetBtn.setEnabled(true);
+            });
+
             ddWidgetBox.addComponent(widgetBtn);
         });
     }
