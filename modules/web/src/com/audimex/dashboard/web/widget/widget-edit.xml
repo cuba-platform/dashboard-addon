@@ -15,7 +15,8 @@
         <fieldGroup id="fieldGroup"
                     datasource="widgetDs">
             <column width="450px">
-                <field property="caption"/>
+                <field property="caption"
+                       required="true"/>
                 <field property="description"/>
             </column>
         </fieldGroup>
