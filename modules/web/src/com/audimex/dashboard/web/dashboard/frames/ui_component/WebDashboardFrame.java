@@ -9,12 +9,14 @@ import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
-import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
@@ -31,7 +33,7 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
+public class WebDashboardFrame extends AbstractWindow implements DashboardFrame {
     @Inject
     protected VBoxLayout canvasBox;
     @Inject
@@ -46,11 +48,15 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected UserSessionSource sessionSource;
     @Inject
     protected Messages messages;
+    @Inject
+    protected ComponentsFactory factory;
 
     protected CanvasFrame canvasFrame;
+    protected Timer timer;
 
     protected String referenceName;
     protected String jsonPath;
+    protected int timerDelay = -1;
     protected List<Parameter> xmlParameters = new ArrayList<>();
 
     protected Dashboard dashboard;
@@ -59,6 +65,16 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
         refresh();
+
+        if (timerDelay > 0) {
+            timer = factory.createTimer();
+            addTimer(timer);
+
+            timer.setDelay(timerDelay);
+            timer.setRepeating(true);
+            timer.addActionListener(t -> refresh());
+            timer.start();
+        }
     }
 
     @Override
@@ -159,5 +175,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void setXmlParameters(List<Parameter> parameters) {
         xmlParameters = parameters;
+    }
+
+    @Override
+    public void setTimerDelay(int delay) {
+        timerDelay = delay;
     }
 }

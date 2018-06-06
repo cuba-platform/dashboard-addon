@@ -25,6 +25,8 @@ public interface DashboardFrame extends Frame {
 
     void setXmlParameters(List<Parameter> parameters);
 
+    void setTimerDelay(int delay);
+
     void refresh();
 
 }
