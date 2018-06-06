@@ -15,7 +15,11 @@
     }
 
     .amdx-left-margin-button {
-        margin-left: 100px;
+        margin-left: 50px;
+    }
+
+    .amdx-full-margin-button {
+        margin: 10px;
     }
 
     .amxd-dashboard-button {
@@ -27,6 +31,17 @@
         font-size: 24px !important;
         box-shadow: none;
         margin-bottom: 5px;
+    }
+
+    .amxd-dashboard-selected-button {
+      background: none;
+      border: 2px solid $v-selection-color;
+      color: #4e4e4e;
+      border-radius: 4px;
+      text-align: left;
+      font-size: 24px !important;
+      box-shadow: none;
+      margin-bottom: 5px;
     }
 
     .amxd-dashboard-button .v-button-caption {

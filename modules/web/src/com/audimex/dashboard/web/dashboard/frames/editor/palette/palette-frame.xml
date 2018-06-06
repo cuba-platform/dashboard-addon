@@ -5,22 +5,58 @@
 
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         class="com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame">
+    <dsContext>
+        <collectionDatasource id="widgetTemplatesDs"
+                              class="com.audimex.dashboard.entity.WidgetTemplate"
+                              view="_local">
+            <query>
+                <![CDATA[select e from amxd$WidgetTemplate e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
     <layout spacing="true"
-            expand="scrollBox"
             width="100%"
             height="100%">
-        <label id="paletteLabel"
-               align="MIDDLE_CENTER"
-               value="msg://palette"/>
-        <scrollBox id="scrollBox"
-                   scrollBars="vertical"
-                   width="100%"
-                   spacing="true">
-            <vbox id="palette"
-                  spacing="true"
-                  height="100%"
-                  width="100%">
-            </vbox>
-        </scrollBox>
+        <accordion id="accordionPalette"
+                   height="100%"
+                   width="100%">
+            <tab id="widgetTab"
+                 caption="msg://widgets"
+                 expand="widgetBox">
+                <hbox id="widgetBtnBox"
+                      margin="true,true,false,true"
+                      spacing="true">
+                    <button id="createWidgetBtn"
+                            caption="msg://create"
+                            invoke="createWidget"/>
+                    <button id="removeWidgetBtn"
+                            caption="msg://remove"
+                            enable="false"
+                            invoke="removeWidget"/>
+                    <button id="doTemplateBtn"
+                            caption="msg://doTemplate"
+                            enable="false"
+                            invoke="doTemplate"/>
+                </hbox>
+                <scrollBox id="widgetBox"
+                           scrollBars="vertical"
+                           width="100%"
+                           height="100%"/>
+            </tab>
+            <tab id="layoutTab"
+                 caption="msg://layouts">
+                <scrollBox id="layoutBox"
+                           scrollBars="vertical"
+                           width="100%"
+                           height="100%"/>
+            </tab>
+            <tab id="widgetTemplateTab"
+                 caption="msg://widgetTemplates">
+                <scrollBox id="widgetTemplateBox"
+                           scrollBars="vertical"
+                           width="100%"
+                           height="100%"/>
+            </tab>
+        </accordion>
     </layout>
 </window>

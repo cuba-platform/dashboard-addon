@@ -5,12 +5,10 @@
 package com.audimex.dashboard.web.dashboard.frames.editor;
 
 import com.audimex.dashboard.converter.JsonConverter;
-import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Dashboard;
-import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
@@ -18,7 +16,6 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
@@ -27,13 +24,9 @@ import org.springframework.beans.BeanUtils;
 
 import javax.inject.Inject;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
-import static com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame.WIDGETS;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -45,15 +38,13 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     protected Datasource<Dashboard> dashboardDs;
     @Inject
-    protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
-    @Inject
     protected FieldGroup fieldGroup;
     @Inject
     protected GroupBoxLayout paramsBox;
     @Inject
-    protected GroupBoxLayout paletteBox;
+    protected VBoxLayout paletteBox;
     @Inject
-    protected GroupBoxLayout canvasBox;
+    protected VBoxLayout canvasBox;
     @Inject
     protected JsonConverter converter;
     @Inject
@@ -94,13 +85,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         return dashboard;
     }
 
-    protected List<Widget> getWidgetTemplates() {
-        widgetTemplatesDs.refresh();
-        return widgetTemplatesDs.getItems().stream()
-                .map(widgetTemplate -> converter.widgetFromJson(widgetTemplate.getWidgetModel()))
-                .collect(Collectors.toList());
-    }
-
     protected void initParametersFrame() {
         parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
                 PARAMETERS, dashboardDs.getItem().getParameters()
@@ -108,9 +92,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     protected void initPaletteFrame() {
-        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                WIDGETS, getWidgetTemplates()
-        ));
+        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME);
     }
 
     protected void initCanvasFrame() {

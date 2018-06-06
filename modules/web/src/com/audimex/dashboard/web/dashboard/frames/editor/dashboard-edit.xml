@@ -10,13 +10,6 @@
     <dsContext>
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.model.Dashboard"/>
-        <collectionDatasource id="widgetTemplatesDs"
-                              class="com.audimex.dashboard.entity.WidgetTemplate"
-                              view="_local">
-            <query>
-                <![CDATA[select e from amxd$WidgetTemplate e]]>
-            </query>
-        </collectionDatasource>
     </dsContext>
     <layout expand="dashboardLayoutBox"
             height="100%"
@@ -40,13 +33,13 @@
               margin="true"
               spacing="true"
               width="100%">
-            <groupBox id="paletteBox"
-                      height="100%"
-                      spacing="true"
-                      width="300px"/>
-            <groupBox id="canvasBox"
-                      height="100%"
-                      spacing="true"/>
+            <vbox id="paletteBox"
+                  height="100%"
+                  spacing="true"
+                  width="300px"/>
+            <vbox id="canvasBox"
+                  height="100%"
+                  spacing="true"/>
         </hbox>
         <buttonsPanel id="buttonsPanel"
                       alwaysVisible="true">

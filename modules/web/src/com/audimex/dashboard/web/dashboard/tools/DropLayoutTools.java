@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.GridLayout;
+import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.layouts.*;
@@ -13,6 +14,7 @@ import com.audimex.dashboard.web.dashboard.tools.drop_handlers.GridLayoutDropHan
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.VerticalLayoutDropHandler;
+import com.audimex.dashboard.web.widget.WidgetEdit;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -95,13 +98,24 @@ public class DropLayoutTools {
                     addCanvasLayout(canvasLayout, target, args);
                 }
             });
+        } else if (layout instanceof WidgetLayout) {
+            WidgetLayout widgetLayout = (WidgetLayout) layout;
+            WidgetEdit editor = (WidgetEdit) targetFrame.openEditor(WidgetEdit.SCREEN_NAME, widgetLayout.getWidget(), THIS_TAB);
+            editor.addCloseWithCommitListener(() -> {
+                widgetLayout.setWidget(editor.getItem());
+                addDashboardLayout(widgetLayout, target, args);
+            });
         } else {
-            CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout, targetFrame.getDashboard());
+            addDashboardLayout(layout, target, args);
+        }
+    }
 
-            if (canvasLayout != null) {
-                addDropHandler(canvasLayout);
-                addCanvasLayout(canvasLayout, target, args);
-            }
+    protected void addDashboardLayout(DashboardLayout layout, AbstractLayout target, List<Object> args) {
+        CanvasLayout canvasLayout = modelConverter.modelToContainer(targetFrame, layout, targetFrame.getDashboard());
+
+        if (canvasLayout != null) {
+            addDropHandler(canvasLayout);
+            addCanvasLayout(canvasLayout, target, args);
         }
     }
 

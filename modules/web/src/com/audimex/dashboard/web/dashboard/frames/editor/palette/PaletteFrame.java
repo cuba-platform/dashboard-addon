@@ -4,94 +4,140 @@
 
 package com.audimex.dashboard.web.dashboard.frames.editor.palette;
 
+import com.audimex.dashboard.converter.JsonConverter;
+import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Widget;
-import com.audimex.dashboard.model.visual_model.GridLayout;
-import com.audimex.dashboard.model.visual_model.HorizontalLayout;
-import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
-import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
-import com.haulmont.cuba.core.global.Messages;
+import com.audimex.dashboard.web.dashboard.tools.component_factories.VaadinDropComponentsFactory;
+import com.audimex.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.cuba.web.gui.icons.IconResolver;
+import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.ScrollBoxLayout;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.vaadin.ui.Layout;
 import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.DashboardIcon.*;
-import static java.util.Collections.emptyList;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
 public class PaletteFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "paletteFrame";
-    public static final String WIDGETS = "WIDGETS";
 
     @Inject
-    protected VBoxLayout palette;
+    protected ScrollBoxLayout widgetBox;
     @Inject
-    protected Messages messages;
+    protected ScrollBoxLayout layoutBox;
+    @Inject
+    protected ScrollBoxLayout widgetTemplateBox;
+    @Inject
+    protected Button doTemplateBtn;
+    @Inject
+    protected Button removeWidgetBtn;
+    @Inject
+    protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
     @Inject
     protected Metadata metadata;
     @Inject
-    protected IconResolver iconResolver;
+    protected VaadinDropComponentsFactory factory;
+    @Inject
+    protected JsonConverter converter;
 
-    protected List<Widget> widgets;
-    protected DDVerticalLayout ddPalette = new DDVerticalLayout();
+    protected DDVerticalLayout ddWidgetBox;
+    protected DDVerticalLayout ddWidgetTemplateBox;
+
+    protected PaletteButton selectedWidgetBtn = null;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        widgets = (List<Widget>) params.getOrDefault(WIDGETS, emptyList());
-
-        ddPalette.setDragMode(LayoutDragMode.CLONE);
-        ddPalette.setDropHandler(new NotDropHandler());
-        palette.unwrap(Layout.class).addComponent(ddPalette);
-        addLayoutButtons();
-        addWidgetButtons();
+        initWidgetBox();
+        initLayoutBox();
+        initWidgetTemplateBox();
     }
 
-    protected void addLayoutButtons() {
-        PaletteButton verticalLayoutBtn = new PaletteButton(
-                getMessage("verticalLayout"),
-                iconResolver.getIconResource(VERTICAL_LAYOUT_ICON.source()),
-                metadata.create(VerticalLayout.class),
-                getMessage("verticalLayout"));
+    protected void initWidgetBox() {
+        ddWidgetBox = factory.createNotDroppedVerticalLayout();
+        ddWidgetBox.addLayoutClickListener(event -> {
+            ddWidgetBox.forEach(btn -> {
+                btn.addStyleName("amxd-dashboard-button");
+                btn.removeStyleName("amxd-dashboard-selected-button");
+            });
 
-        PaletteButton horizontalLayoutBtn = new PaletteButton(
-                getMessage("horizontalLayout"),
-                iconResolver.getIconResource(HORIZONTAL_LAYOUT_ICON.source()),
-                metadata.create(HorizontalLayout.class),
-                getMessage("horizontalLayout"));
+            selectedWidgetBtn = (PaletteButton) event.getClickedComponent();
+            selectedWidgetBtn.removeStyleName("amxd-dashboard-button");
+            selectedWidgetBtn.addStyleName("amxd-dashboard-selected-button");
+            doTemplateBtn.setEnabled(true);
+            removeWidgetBtn.setEnabled(true);
+        });
 
-        PaletteButton gridLayoutBtn = new PaletteButton(
-                getMessage("gridLayout"),
-                iconResolver.getIconResource(GRID_LAYOUT_ICON.source()),
-                metadata.create(GridLayout.class),
-                getMessage("gridLayout"));
-
-        ddPalette.addComponent(verticalLayoutBtn);
-        ddPalette.addComponent(horizontalLayoutBtn);
-        ddPalette.addComponent(gridLayoutBtn);
+        widgetBox.unwrap(Layout.class).addComponent(ddWidgetBox);
     }
 
-    protected void addWidgetButtons() {
-        for (Widget widget : widgets) {
-            WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
-            widgetLayout.setWidget(widget);
+    protected void initLayoutBox() {
+        DDVerticalLayout ddLayoutBox = factory.createNotDroppedVerticalLayout();
 
-            PaletteButton widgetBtn = new PaletteButton(
-                    messages.getMainMessage(widget.getCaption() != null ? widget.getCaption() : ""),
-                    widgetLayout,
-                    widget.getDescription()
-            );
+        ddLayoutBox.addComponent(factory.createPaletteVerticalLayoutButton());
+        ddLayoutBox.addComponent(factory.createPaletteHorizontalLayoutButton());
+        ddLayoutBox.addComponent(factory.createPaletteGridLayoutButton());
+        layoutBox.unwrap(Layout.class).addComponent(ddLayoutBox);
+    }
 
-            ddPalette.addComponent(widgetBtn);
+    protected void initWidgetTemplateBox() {
+        ddWidgetTemplateBox = factory.createNotDroppedVerticalLayout();
+
+        for (Widget widget : getWidgetTemplates()) {
+            PaletteButton widgetBtn = factory.createPaletteWidgetButton(widget);
+            ddWidgetTemplateBox.addComponent(widgetBtn);
+        }
+
+        widgetTemplateBox.unwrap(Layout.class).addComponent(ddWidgetTemplateBox);
+    }
+
+    protected List<Widget> getWidgetTemplates() {
+        widgetTemplatesDs.refresh();
+        return widgetTemplatesDs.getItems().stream()
+                .map(widgetTemplate -> converter.widgetFromJson(widgetTemplate.getWidgetModel()))
+                .collect(Collectors.toList());
+    }
+
+    public void createWidget() {
+        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, metadata.create(Widget.class), THIS_TAB);
+        editor.addCloseWithCommitListener(() -> {
+            PaletteButton widgetBtn = factory.createPaletteWidgetButton(editor.getItem());
+            ddWidgetBox.addComponent(widgetBtn);
+        });
+    }
+
+    public void doTemplate() {
+        if (selectedWidgetBtn != null) {
+            Widget widget = ((WidgetLayout) selectedWidgetBtn.getLayout()).getWidget();
+
+            WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
+            widget.setId(widgetTemplate.getId());
+            widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
+
+            widgetTemplatesDs.addItem(widgetTemplate);
+            widgetTemplatesDs.commit();
+
+            PaletteButton widgetBtn = factory.createPaletteWidgetButton(widget);
+            ddWidgetTemplateBox.addComponent(widgetBtn);
+        }
+    }
+
+    public void removeWidget() {
+        if (selectedWidgetBtn != null) {
+            ddWidgetBox.removeComponent(selectedWidgetBtn);
+            selectedWidgetBtn = null;
+            doTemplateBtn.setEnabled(false);
+            removeWidgetBtn.setEnabled(false);
         }
     }
 }
