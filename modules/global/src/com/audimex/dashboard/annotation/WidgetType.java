@@ -19,7 +19,7 @@ public @interface WidgetType {
 
     /**
      * The name for widget-edit screen, can be localized in main message.properties by pattern:
-     * widgetTypeCaption{name} = {localization message}
+     * widgetType.{name} = {localization message}
      */
     String name();
 

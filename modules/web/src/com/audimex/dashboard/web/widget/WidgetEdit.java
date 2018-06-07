@@ -9,16 +9,19 @@ import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
+import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
@@ -37,6 +40,8 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected ParameterBrowse paramsFrame;
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
+    @Inject
+    protected Messages messages;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
@@ -50,16 +55,25 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         widgetDs.setItem(inputItem);
 
         typesInfo = typeAnalyzer.getWidgetTypesInfo();
-        typeLookup.setOptionsList(getWidgetCaptions(typesInfo));
+        typeLookup.setOptionsMap(getWidgetCaptions(typesInfo));
         typeLookup.addValueChangeListener(e -> typeSelected((String) e.getValue()));
         selectType();
         initParametersFrame();
     }
 
-    protected List<String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {
-        return typesInfo.stream()
-                .map(WidgetTypeInfo::getName)
-                .collect(Collectors.toList());
+    protected Map<String, String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {
+        Map<String, String> map = new HashMap<>();
+
+        for (WidgetTypeInfo typeInfo : typesInfo) {
+            String name = typeInfo.getName();
+            String property = format("widgetType.%s", name);
+            String mainMessage = messages.getMainMessage(property);
+            String caption = mainMessage.equals(property) ? name : mainMessage;
+
+            map.put(caption, name);
+        }
+
+        return map;
     }
 
     protected void typeSelected(String type) {
