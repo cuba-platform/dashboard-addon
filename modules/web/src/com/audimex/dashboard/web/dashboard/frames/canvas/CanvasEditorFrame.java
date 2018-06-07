@@ -14,6 +14,7 @@ import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
+import com.audimex.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
 import com.audimex.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -30,7 +31,7 @@ import static com.audimex.dashboard.web.DashboardStyleConstants.AMXD_LAYOUT_SELE
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
-public class CanvasEditorFrame extends CanvasFrame {
+public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper {
     public static final String SCREEN_NAME = "canvasEditorFrame";
 
     @Inject
@@ -117,19 +118,11 @@ public class CanvasEditorFrame extends CanvasFrame {
     }
 
     protected void selectLayout(com.vaadin.ui.Component component) {
-        CanvasLayout layout = (CanvasLayout) getCanvasLayoutParent(component);
+        CanvasLayout layout = getCanvasLayoutParent(component);
         if (layout.getParent() instanceof DDGridLayout) {
             layout.addStyleName(AMXD_GRID_CELL_LAYOUT_SELECTED);
         } else {
             layout.addStyleName(AMXD_LAYOUT_SELECTED);
-        }
-    }
-
-    protected com.vaadin.ui.Component getCanvasLayoutParent(com.vaadin.ui.Component layout) {
-        if (layout instanceof CanvasLayout) {
-            return layout;
-        } else {
-            return getCanvasLayoutParent(layout.getParent());
         }
     }
 }
