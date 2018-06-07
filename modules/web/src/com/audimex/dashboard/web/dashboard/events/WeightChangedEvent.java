@@ -5,10 +5,9 @@
 package com.audimex.dashboard.web.dashboard.events;
 
 import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.cuba.gui.events.UiEvent;
-import org.springframework.context.ApplicationEvent;
+import com.audimex.dashboard.web.events.DashboardEvent;
 
-public class WeightChangedEvent extends ApplicationEvent implements UiEvent {
+public class WeightChangedEvent extends DashboardEvent {
     public WeightChangedEvent(CanvasLayout source) {
         super(source);
     }

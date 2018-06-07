@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
+import com.audimex.dashboard.web.DashboardException;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragSource;
@@ -18,6 +19,8 @@ import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+
+import static java.lang.String.*;
 
 public abstract class AbstractCanvasLayout extends CssLayout implements CanvasLayout {
     protected AbstractLayout delegate;
@@ -48,7 +51,7 @@ public abstract class AbstractCanvasLayout extends CssLayout implements CanvasLa
             Method method = delegate.getClass().getMethod("setDropHandler", DropHandler.class);
             method.invoke(delegate, dropHandler);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(String.format("Can't execute method setDropHandler() for class %s", delegate.getClass().getName()), e);
+            throw new DashboardException(format("Can't execute method setDropHandler() for class %s", delegate.getClass().getName()), e);
         }
     }
 

@@ -6,8 +6,9 @@ package com.audimex.dashboard.web.dashboard.frames.canvas;
 
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
-import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
+import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.vaadin.ui.Layout;
@@ -49,7 +50,7 @@ public class CanvasFrame extends AbstractFrame {
 
     public void updateLayout(Dashboard dashboard) {
         if (dashboard == null) {
-            throw new RuntimeException("DASHBOARD parameter can not be null");
+            throw new DashboardException("DASHBOARD parameter can not be null");
         }
 
         if (dashboard.getVisualModel() != null) {

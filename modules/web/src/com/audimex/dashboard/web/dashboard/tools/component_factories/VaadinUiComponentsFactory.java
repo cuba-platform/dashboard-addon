@@ -7,6 +7,7 @@ package com.audimex.dashboard.web.dashboard.tools.component_factories;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
@@ -81,7 +82,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
                 .findFirst();
 
         if (!widgetTypeOpt.isPresent()) {
-            throw new RuntimeException(format("There isn't found a screen for the widget class %s", widget.getClass()));
+            throw new DashboardException(format("There isn't found a screen for the widget class %s", widget.getClass()));
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();

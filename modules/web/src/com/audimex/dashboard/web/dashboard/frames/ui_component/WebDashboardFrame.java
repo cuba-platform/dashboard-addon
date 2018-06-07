@@ -9,6 +9,7 @@ import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
+import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
@@ -115,14 +116,14 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     protected Dashboard loadDashboardByJson(String jsonPath) {
         Resource jsonRes = resourceLoader.getResource(format("classpath:%s", jsonPath));
         if (!jsonRes.exists()) {
-            throw new RuntimeException(format("There isn't the json file by the path: %s", jsonPath));
+            throw new DashboardException(format("There isn't the json file by the path: %s", jsonPath));
         }
 
         try {
             String json = IOUtils.toString(jsonRes.getInputStream(), UTF_8);
             return jsonConverter.dashboardFromJson(json);
         } catch (Exception e) {
-            throw new RuntimeException(format("Error reading the json by the path: %s", jsonPath), e);
+            throw new DashboardException(format("Error reading the json by the path: %s", jsonPath), e);
         }
     }
 

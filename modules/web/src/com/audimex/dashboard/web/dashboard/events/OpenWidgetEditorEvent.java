@@ -5,10 +5,9 @@
 package com.audimex.dashboard.web.dashboard.events;
 
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
-import com.haulmont.cuba.gui.events.UiEvent;
-import org.springframework.context.ApplicationEvent;
+import com.audimex.dashboard.web.events.DashboardEvent;
 
-public class OpenWidgetEditorEvent extends ApplicationEvent implements UiEvent {
+public class OpenWidgetEditorEvent extends DashboardEvent {
     public OpenWidgetEditorEvent(CanvasWidgetLayout source) {
         super(source);
     }

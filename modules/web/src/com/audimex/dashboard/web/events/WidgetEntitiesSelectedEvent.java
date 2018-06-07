@@ -5,12 +5,10 @@
 package com.audimex.dashboard.web.events;
 
 import com.audimex.dashboard.model.Widget;
-import com.haulmont.cuba.gui.events.UiEvent;
-import org.springframework.context.ApplicationEvent;
 
 import java.util.Collection;
 
-public class WidgetEntitiesSelectedEvent extends ApplicationEvent implements UiEvent {
+public class WidgetEntitiesSelectedEvent extends DashboardEvent {
     public WidgetEntitiesSelectedEvent(WidgetWithEntities source) {
         super(source);
     }
