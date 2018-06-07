@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.dashboard.frames.editor;
 
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.model.Dashboard;
+import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
@@ -133,7 +134,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
             dashboardDs.refresh();
 
         } catch (Exception e) {
-            throw new RuntimeException("Cannot import data from a file", e);
+            throw new DashboardException("Cannot import data from a file", e);
         }
     }
 

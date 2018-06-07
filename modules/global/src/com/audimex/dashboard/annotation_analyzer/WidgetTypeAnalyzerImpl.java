@@ -5,6 +5,7 @@
 package com.audimex.dashboard.annotation_analyzer;
 
 import com.audimex.dashboard.annotation.WidgetType;
+import com.audimex.dashboard.model.Widget;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.Metadata;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,10 @@ public class WidgetTypeAnalyzerImpl implements WidgetTypeAnalyzer {
     protected List<MetaClass> getWidgetClasses() {
         return metadata.getSession().getClasses()
                 .stream()
-                .filter(metaClass -> metaClass.getJavaClass().isAnnotationPresent(WidgetType.class))
+                .filter(metaClass -> {
+                    Class javaClass = metaClass.getJavaClass();
+                    return Widget.class.isAssignableFrom(javaClass) && javaClass.isAnnotationPresent(WidgetType.class);
+                })
                 .collect(Collectors.toList());
     }
 }

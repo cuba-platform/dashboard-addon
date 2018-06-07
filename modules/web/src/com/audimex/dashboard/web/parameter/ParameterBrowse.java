@@ -26,7 +26,6 @@ public class ParameterBrowse extends AbstractLookup {
         super.init(params);
         initDs(params);
         //todo add work with orderNum
-        //todo add filter
     }
 
     public List<Parameter> getParameters() {
