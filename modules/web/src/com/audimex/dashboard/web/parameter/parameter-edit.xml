@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        name="msg://editorCaption"
+        caption="msg://editorCaption"
         class="com.audimex.dashboard.web.parameter.ParameterEdit"
         datasource="parameterDs"
         focusComponent="fieldGroup"

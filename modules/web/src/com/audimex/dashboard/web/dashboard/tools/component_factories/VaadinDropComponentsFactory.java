@@ -80,10 +80,13 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
 
         Button removeButton = createRemoveButton();
         removeButton.addClickListener(e -> events.publish(new LayoutRemoveEvent(layout)));
+        Button weightButton = createWeightButton();
+        weightButton.addClickListener(e -> events.publish(new WeightChangedEvent(layout)));
 
         HorizontalLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
+        buttonsPanel.addComponent(weightButton);
 
         DDHorizontalLayout horizontalLayout = layout.getDelegate();
         horizontalLayout.setDragMode(CLONE);
@@ -100,10 +103,13 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
 
         Button removeButton = createRemoveButton();
         removeButton.addClickListener(e -> events.publish(new LayoutRemoveEvent(layout)));
+        Button weightButton = createWeightButton();
+        weightButton.addClickListener(e -> events.publish(new WeightChangedEvent(layout)));
 
         HorizontalLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
+        buttonsPanel.addComponent(weightButton);
 
         DDGridLayout gridLayout = layout.getDelegate();
         gridLayout.setDragMode(CLONE);
@@ -122,11 +128,14 @@ public class VaadinDropComponentsFactory extends VaadinUiComponentsFactory {
         removeButton.addClickListener(e -> events.publish(new LayoutRemoveEvent(layout)));
         Button editButton = createEditButton();
         editButton.addClickListener(e -> events.publish(new OpenWidgetEditorEvent(layout)));
+        Button weightButton = createWeightButton();
+        weightButton.addClickListener(e -> events.publish(new WeightChangedEvent(layout)));
 
         HorizontalLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.addComponent(removeButton);
         buttonsPanel.addComponent(editButton);
+        buttonsPanel.addComponent(weightButton);
 
         DDVerticalLayout verticalLayout = layout.getDelegate();
         verticalLayout.setDragMode(CLONE);
