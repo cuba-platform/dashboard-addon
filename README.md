@@ -2,6 +2,10 @@
 This component is designed to create and embed dashboards. Dashboard consists of widgets - individual elements based on a frame.
 Placement of widgets inside a dashboard takes place using vertical, horizontal and grid layouts.
 
+# 1.1 Dashboard structure
+
+![dashboard-structure](img/dashboard-structure.png)
+
 # 2. Installation 
 
 ## 2.1. Add the repository and the component in the CUBA Studio
