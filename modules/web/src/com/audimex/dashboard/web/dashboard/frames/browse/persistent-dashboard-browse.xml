@@ -26,12 +26,15 @@
             <actions>
                 <action id="create"
                         caption="msg://create"
+                        icon="CREATE_ACTION"
                         invoke="createDashboard"/>
                 <action id="edit"
                         caption="msg://edit"
+                        icon="EDIT_ACTION"
                         invoke="editDashboard"/>
                 <action id="remove"
                         caption="msg://remove"
+                        icon="REMOVE_ACTION"
                         invoke="removeDashboard"/>
             </actions>
             <columns>

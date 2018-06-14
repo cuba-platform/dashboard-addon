@@ -22,9 +22,18 @@
                height="100%"
                width="100%">
             <actions>
-                <action id="create" caption="msg://create" invoke="createWidget"/>
-                <action id="edit" caption="msg://edit" invoke="editWidget"/>
-                <action id="remove" caption="msg://remove" invoke="removeWidget"/>
+                <action id="create"
+                        caption="msg://create"
+                        icon="CREATE_ACTION"
+                        invoke="createWidget"/>
+                <action id="edit"
+                        caption="msg://edit"
+                        icon="EDIT_ACTION"
+                        invoke="editWidget"/>
+                <action id="remove"
+                        caption="msg://remove"
+                        icon="REMOVE_ACTION"
+                        invoke="removeWidget"/>
             </actions>
             <columns>
                 <column id="caption"/>
