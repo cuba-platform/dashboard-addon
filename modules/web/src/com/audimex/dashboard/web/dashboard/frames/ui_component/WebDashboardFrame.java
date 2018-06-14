@@ -11,10 +11,14 @@ import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
-import com.audimex.dashboard.web.widget_types.WidgetBrowse;
+import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -50,7 +54,7 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     @Inject
     protected Metadata metadata;
     @Inject
-    protected UserSessionSource sessionSource;
+    protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Messages messages;
     @Inject
@@ -102,6 +106,7 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
         }
     }
 
+    @Override
     public WidgetBrowse getWidgetBrowse(String widgetId) {
         return canvasFrame.getWidgetBrowse(widgetId);
     }
@@ -111,7 +116,7 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     }
 
     protected void updateDashboard(Dashboard dashboard) {
-        if (dashboard == null || !isAllowed(dashboard)) {
+        if (dashboard == null || !accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
             showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
             canvasFrame = null;
             canvasBox.removeAll();
@@ -120,11 +125,6 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
             addXmlParameters(dashboard);
             updateCanvasFrame(dashboard);
         }
-    }
-
-    protected boolean isAllowed(Dashboard dashboard) {
-        String currentUserLogin = sessionSource.getUserSession().getUser().getLogin();
-        return dashboard.getIsAvailableForAllUsers() || currentUserLogin.equals(dashboard.getCreatedBy());
     }
 
     protected Dashboard loadDashboardByJson(String jsonPath) {

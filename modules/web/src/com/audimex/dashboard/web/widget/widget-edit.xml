@@ -2,8 +2,8 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
         class="com.audimex.dashboard.web.widget.WidgetEdit"
-        focusComponent="fieldGroup"
         datasource="widgetDs"
+        focusComponent="fieldGroup"
         messagesPack="com.audimex.dashboard.web.widget">
     <dsContext>
         <datasource id="widgetDs"
@@ -20,13 +20,14 @@
                 <field property="caption"
                        required="true"/>
                 <field property="description"/>
+                <field property="isAvailableForAllUsers"/>
             </column>
         </fieldGroup>
         <hbox id="typeHbox"
               spacing="true">
             <label id="typeLabel"
-                   width="85px"
-                   value="msg://widgetType"/>
+                   value="msg://widgetType"
+                   width="85px"/>
             <lookupField id="typeLookup"
                          nullOptionVisible="false"
                          required="true"/>

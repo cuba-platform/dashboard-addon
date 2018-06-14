@@ -13,7 +13,7 @@ import com.audimex.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
-import com.audimex.dashboard.web.widget_types.WidgetBrowse;
+import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import org.springframework.stereotype.Component;
 

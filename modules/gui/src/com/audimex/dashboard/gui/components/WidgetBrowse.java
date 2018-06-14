@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.widget_types;
+package com.audimex.dashboard.gui.components;
 
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;

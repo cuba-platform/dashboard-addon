@@ -3,6 +3,7 @@ package com.audimex.dashboard.web.widget;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.AbstractLookup;
@@ -24,6 +25,8 @@ public class WidgetTemplateBrowse extends AbstractLookup {
     @Inject
     protected JsonConverter converter;
     @Inject
+    protected AccessConstraintsHelper accessHelper;
+    @Inject
     protected Metadata metadata;
 
     @Override
@@ -43,6 +46,10 @@ public class WidgetTemplateBrowse extends AbstractLookup {
         for (WidgetTemplate persWidget : widgetTemplatesDs.getItems()) {
             Widget model = converter.widgetFromJson(persWidget.getWidgetModel());
             modelWidgetsDs.includeItem(model);
+
+            if (accessHelper.isWidgetTemplateAllowedCurrentUser(model)) {
+                modelWidgetsDs.includeItem(model);
+            }
         }
     }
 

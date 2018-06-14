@@ -11,7 +11,7 @@ import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.audimex.dashboard.web.widget_types.WidgetBrowse;
+import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;

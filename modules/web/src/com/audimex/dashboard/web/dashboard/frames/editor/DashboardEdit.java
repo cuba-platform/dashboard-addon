@@ -9,12 +9,12 @@ import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -55,7 +55,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     protected FileUploadField importJsonField;
     @Inject
-    protected UserSessionSource sessionSource;
+    protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Events events;
 
@@ -76,13 +76,12 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         initCanvasFrame();
     }
 
-    public Dashboard getDashboard() {
+    @Override
+    public Dashboard getItem() {
         Dashboard dashboard = dashboardDs.getItem();
         dashboard.setParameters(parametersFrame.getParameters());
         dashboard.setVisualModel(canvasFrame.getDashboardModel());
-
-        String currentUserLogin = sessionSource.getUserSession().getUser().getLogin();
-        dashboard.setCreatedBy(currentUserLogin);
+        dashboard.setCreatedBy(accessHelper.getCurrentSessionLogin());
         return dashboard;
     }
 
@@ -107,7 +106,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     public void onExportJsonBtnClick() {
-        String jsonModel = converter.dashboardToJson(getDashboard());
+        String jsonModel = converter.dashboardToJson(getItem());
 
         if (isNotBlank(jsonModel)) {
             byte[] bytes = jsonModel.getBytes(UTF_8);
@@ -134,7 +133,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     public void onPropagateBtnClick() {
-        Dashboard dashboard = getDashboard();
+        Dashboard dashboard = getItem();
         events.publish(new DashboardUpdatedEvent(dashboard));
     }
 }

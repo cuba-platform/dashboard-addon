@@ -9,11 +9,11 @@ import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.LookupComponent;
 import com.haulmont.cuba.gui.components.SelectAction;
@@ -42,7 +42,7 @@ public class PersistentDashboardBrowse extends AbstractLookup {
     @Inject
     protected Metadata metadata;
     @Inject
-    protected UserSessionSource sessionSource;
+    protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Events events;
 
@@ -62,7 +62,10 @@ public class PersistentDashboardBrowse extends AbstractLookup {
         modelDashboardsDs.clear();
         for (PersistentDashboard persDash : persDashboardsDs.getItems()) {
             Dashboard model = converter.dashboardFromJson(persDash.getDashboardModel());
-            modelDashboardsDs.includeItem(model);
+
+            if (accessHelper.isDashboardAllowedCurrentUser(model)) {
+                modelDashboardsDs.includeItem(model);
+            }
         }
     }
 
@@ -99,20 +102,10 @@ public class PersistentDashboardBrowse extends AbstractLookup {
         }
     }
 
-    protected boolean isAllowedOpenEditor(Dashboard dashboard) {
-        String currentUserLogin = sessionSource.getUserSession().getUser().getLogin();
-        return dashboard.getIsAvailableForAllUsers() || currentUserLogin.equals(dashboard.getCreatedBy());
-    }
-
     protected void openDashboardEditor(Dashboard newItem) {
-        if (!isAllowedOpenEditor(newItem)) {
-            showNotification(getMessage("notOpenEditorDashboard"), NotificationType.WARNING);
-            return;
-        }
-
         DashboardEdit editor = (DashboardEdit) openEditor(DashboardEdit.SCREEN_NAME, newItem, THIS_TAB);
         editor.addCloseWithCommitListener(() -> {
-            Dashboard result = editor.getDashboard();
+            Dashboard result = editor.getItem();
             String jsonModel = converter.dashboardToJson(result);
             UUID dashId = result.getId();
 

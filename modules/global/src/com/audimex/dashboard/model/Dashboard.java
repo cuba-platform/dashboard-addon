@@ -33,10 +33,8 @@ public class Dashboard extends BaseUuidEntity {
      */
     @MetaProperty
     protected VerticalLayout visualModel;
-
     @MetaProperty
     protected List<Parameter> parameters;
-
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
 
@@ -46,6 +44,14 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected String createdBy;
 
+    public Boolean getIsAvailableForAllUsers() {
+        return isAvailableForAllUsers;
+    }
+
+    public void setIsAvailableForAllUsers(Boolean availableForAllUsers) {
+        isAvailableForAllUsers = availableForAllUsers;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
@@ -54,15 +60,6 @@ public class Dashboard extends BaseUuidEntity {
         this.createdBy = createdBy;
     }
 
-    public void setIsAvailableForAllUsers(Boolean isAvailableForAllUsers) {
-        this.isAvailableForAllUsers = isAvailableForAllUsers;
-    }
-
-    public Boolean getIsAvailableForAllUsers() {
-        return isAvailableForAllUsers;
-    }
-
-
     public void setReferenceName(String referenceName) {
         this.referenceName = referenceName;
     }
@@ -70,7 +67,6 @@ public class Dashboard extends BaseUuidEntity {
     public String getReferenceName() {
         return referenceName;
     }
-
 
     public VerticalLayout getVisualModel() {
         return visualModel;

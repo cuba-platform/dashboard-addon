@@ -7,6 +7,7 @@ import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Messages;
@@ -41,6 +42,8 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
     @Inject
+    protected AccessConstraintsHelper accessHelper;
+    @Inject
     protected Messages messages;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
@@ -59,6 +62,13 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         typeLookup.addValueChangeListener(e -> typeSelected((String) e.getValue()));
         selectType();
         initParametersFrame();
+    }
+
+    @Override
+    public Widget getItem() {
+        Widget item = super.getItem();
+        item.setCreatedBy(accessHelper.getCurrentSessionLogin());
+        return item;
     }
 
     protected Map<String, String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {

@@ -4,6 +4,7 @@
 
 package com.audimex.dashboard.web.widget_types;
 
+import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
