@@ -36,6 +36,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class WebDashboardFrame extends AbstractWindow implements DashboardFrame {
+    public static final String SCREEN_NAME = "dashboardComponent";
+    public static final String REFERENCE_NAME = "REFERENCE_NAME";
+
     @Inject
     protected VBoxLayout canvasBox;
     @Inject
@@ -66,6 +69,7 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        setParams(params);
         refresh();
 
         if (timerDelay > 0) {
@@ -83,7 +87,7 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     public void refresh() {
         if (isNotBlank(jsonPath)) {
             dashboard = loadDashboardByJson(jsonPath);
-        } else if (referenceName != null) {
+        } else if (isNotBlank(referenceName)) {
             dashboard = loadDashboardByReferenceName(referenceName);
         }
         updateDashboard(dashboard);
@@ -102,12 +106,17 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
         return canvasFrame.getWidgetBrowse(widgetId);
     }
 
+    protected void setParams(Map<String, Object> params) {
+        referenceName = (String) params.getOrDefault(REFERENCE_NAME, "");
+    }
+
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null || !isAllowed(dashboard)) {
             showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
             canvasFrame = null;
             canvasBox.removeAll();
         } else {
+            setCaption(dashboard.getTitle());
             addXmlParameters(dashboard);
             updateCanvasFrame(dashboard);
         }

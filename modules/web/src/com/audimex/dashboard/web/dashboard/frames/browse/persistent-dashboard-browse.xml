@@ -36,6 +36,10 @@
                         caption="msg://remove"
                         icon="REMOVE_ACTION"
                         invoke="removeDashboard"/>
+                <action id="view"
+                        caption="msg://view"
+                        icon="EYE"
+                        invoke="viewDashboard"/>
             </actions>
             <columns>
                 <column id="title"/>
@@ -51,6 +55,8 @@
                         action="dashboardsTable.edit"/>
                 <button id="removeBtn"
                         action="dashboardsTable.remove"/>
+                <button id="viewBtn"
+                        action="dashboardsTable.view"/>
             </buttonsPanel>
         </table>
     </layout>

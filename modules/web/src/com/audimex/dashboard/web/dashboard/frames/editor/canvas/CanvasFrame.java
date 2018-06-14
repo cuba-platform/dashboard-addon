@@ -63,7 +63,6 @@ public class CanvasFrame extends AbstractFrame {
         }
 
         vLayout.removeStyleName("amxd-shadow-border");
-        vLayout.addStyleName("amxd-main-shadow-border");
 
         canvas.removeAll();
         canvas.add(vLayout);

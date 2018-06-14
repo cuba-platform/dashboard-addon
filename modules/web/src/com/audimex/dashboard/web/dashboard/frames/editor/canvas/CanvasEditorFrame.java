@@ -45,6 +45,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     @Override
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
+        vLayout.addStyleName("amxd-main-shadow-border");
         tools.init(this, converter, vLayout);
     }
 

@@ -7,8 +7,10 @@ package com.audimex.dashboard.web.dashboard.frames.browse;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
-import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
+import com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -24,6 +26,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame.REFERENCE_NAME;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.NEW_WINDOW;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -85,6 +89,13 @@ public class PersistentDashboardBrowse extends AbstractLookup {
                         persDashboardsDs.commit();
                         persDashboardsDs.refresh();
                     });
+        }
+    }
+
+    public void viewDashboard() {
+        Dashboard item = modelDashboardsDs.getItem();
+        if (item != null) {
+            openWindow(WebDashboardFrame.SCREEN_NAME, NEW_WINDOW, ParamsMap.of(REFERENCE_NAME, item.getReferenceName()));
         }
     }
 
