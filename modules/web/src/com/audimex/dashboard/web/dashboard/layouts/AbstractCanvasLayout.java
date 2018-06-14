@@ -4,70 +4,97 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
-import com.audimex.dashboard.web.DashboardException;
-import com.vaadin.event.LayoutEvents;
-import com.vaadin.event.Transferable;
-import com.vaadin.event.dd.DragSource;
-import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.DropTarget;
-import com.vaadin.event.dd.TargetDetails;
-import com.vaadin.ui.*;
-import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
-import fi.jasoft.dragdroplayouts.interfaces.DragFilter;
-import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.haulmont.addon.dnd.components.DDLayout;
+import com.haulmont.addon.dnd.components.DropHandler;
+import com.haulmont.addon.dnd.components.dragevent.DropTarget;
+import com.haulmont.addon.dnd.components.dragevent.TargetDetails;
+import com.haulmont.addon.dnd.components.dragfilter.DragFilter;
+import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
+import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
+import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
+import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
+import com.haulmont.cuba.web.gui.components.WebCssLayout;
+import com.haulmont.cuba.web.gui.components.WebHBoxLayout;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.HasComponents;
+import com.vaadin.ui.Layout;
+
 import java.util.Map;
 
-import static java.lang.String.*;
+public abstract class AbstractCanvasLayout extends WebCssLayout implements CanvasLayout {
+    protected WebAbstractComponent delegate;
+    protected HBoxLayout buttonsPanel;
 
-public abstract class AbstractCanvasLayout extends CssLayout implements CanvasLayout {
-    protected AbstractLayout delegate;
-    protected HorizontalLayout buttonsPanel = new HorizontalLayout();
-
-    public AbstractCanvasLayout(AbstractLayout delegate) {
+    public AbstractCanvasLayout(WebAbstractComponent delegate) {
         this.delegate = delegate;
-        super.addComponent(buttonsPanel);
-        super.addComponent(delegate);
-    }
-
-    public AbstractLayout getDelegate() {
-        return delegate;
-    }
-
-    public HorizontalLayout getButtonsPanel() {
-        return buttonsPanel;
+        buttonsPanel = new WebHBoxLayout();
+        super.add(delegate);
+        super.add(buttonsPanel);
     }
 
     @Override
-    public void addComponent(Component c) {
-        delegate.addComponent(c);
+    public WebAbstractComponent getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(WebAbstractComponent delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
+    public HBoxLayout getButtonsPanel() {
+        return buttonsPanel;
+    }
+
+    public void setButtonsPanel(HBoxLayout buttonsPanel) {
+        this.buttonsPanel = buttonsPanel;
     }
 
     @Override
     public void setDropHandler(DropHandler dropHandler) {
-        try {
-            Method method = delegate.getClass().getMethod("setDropHandler", DropHandler.class);
-            method.invoke(delegate, dropHandler);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new DashboardException(format("Can't execute method setDropHandler() for class %s", delegate.getClass().getName()), e);
-        }
+        ((DDLayout) delegate).setDropHandler(dropHandler);
     }
 
     @Override
     public DropHandler getDropHandler() {
-        return ((DropTarget) delegate).getDropHandler();
+        return ((DDLayout) delegate).getDropHandler();
     }
 
     @Override
-    public void addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        ((LayoutEvents.LayoutClickNotifier) delegate).addLayoutClickListener(listener);
+    public LayoutDragMode getDragMode() {
+        return ((DDLayout) delegate).getDragMode();
     }
 
     @Override
-    public void removeLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
-        ((LayoutEvents.LayoutClickNotifier) delegate).removeLayoutClickListener(listener);
+    public void setDragMode(LayoutDragMode mode) {
+        ((DDLayout) delegate).setDragMode(mode);
+    }
+
+    @Override
+    public void addLayoutClickListener(LayoutClickListener listener) {
+        ((LayoutClickNotifier) delegate).addLayoutClickListener(listener);
+    }
+
+    @Override
+    public void removeLayoutClickListener(LayoutClickListener listener) {
+        ((LayoutClickNotifier) delegate).removeLayoutClickListener(listener);
+    }
+
+    @Override
+    public DragFilter getDragFilter() {
+        return ((DragFilterSupport) delegate).getDragFilter();
+    }
+
+    @Override
+    public void setDragFilter(DragFilter dragFilter) {
+        ((DragFilterSupport) delegate).setDragFilter(dragFilter);
+    }
+
+    @Override
+    public TargetDetails convertTargetDetails(com.vaadin.event.dd.TargetDetails details) {
+        return ((TargetConverter) delegate).convertTargetDetails(details);
     }
 
     @Override
@@ -76,40 +103,16 @@ public abstract class AbstractCanvasLayout extends CssLayout implements CanvasLa
     }
 
     @Override
-    public LayoutDragMode getDragMode() {
-        return ((LayoutDragSource) delegate).getDragMode();
-    }
-
-    @Override
-    public void setDragMode(LayoutDragMode mode) {
-        ((LayoutDragSource) delegate).setDragMode(mode);
-    }
-
-    @Override
-    public DragFilter getDragFilter() {
-        return ((LayoutDragSource) delegate).getDragFilter();
-    }
-
-    @Override
-    public void setDragFilter(DragFilter dragFilter) {
-        ((LayoutDragSource) delegate).setDragFilter(dragFilter);
-    }
-
-    @Override
-    public Transferable getTransferable(Map<String, Object> rawVariables) {
-        return ((DragSource) delegate).getTransferable(rawVariables);
-    }
-
-    @Override
     public void setWeight(int weight) {
-        if (getParent() instanceof AbstractOrderedLayout) {
-            AbstractOrderedLayout parent = (AbstractOrderedLayout) getParent();
+        Layout unwrapThis = this.unwrap(Layout.class);
+        HasComponents parent = unwrapThis.getParent();
 
-            for (Component component : parent) {
-                if (component.equals(this)) {
-                    parent.setExpandRatio(this, weight);
-                } else if (parent.getExpandRatio(component) == 0) {
-                    parent.setExpandRatio(component, 1);
+        if (parent instanceof AbstractOrderedLayout) {
+            for (com.vaadin.ui.Component child : parent) {
+                if (unwrapThis.equals(child)) {
+                    ((AbstractOrderedLayout) parent).setExpandRatio(unwrapThis, weight);
+                } else if (((AbstractOrderedLayout) parent).getExpandRatio(child) == 0) {
+                    ((AbstractOrderedLayout) parent).setExpandRatio(child, 1);
                 }
             }
         }
@@ -117,10 +120,20 @@ public abstract class AbstractCanvasLayout extends CssLayout implements CanvasLa
 
     @Override
     public int getWeight() {
-        if (getParent() instanceof AbstractOrderedLayout) {
-            int weight = (int) ((AbstractOrderedLayout) getParent()).getExpandRatio(this);
+        Layout unwrapThis = this.unwrap(Layout.class);
+        HasComponents parent = unwrapThis.getParent();
+
+        if (parent instanceof AbstractOrderedLayout) {
+            int weight = (int) ((AbstractOrderedLayout) parent).getExpandRatio(unwrapThis);
             return weight > 0 ? weight : 1;
+        } else {
+            return 1;
         }
-        return 1;
+    }
+
+    @Override
+    public void setSizeFull() {
+        super.setSizeFull();
+        delegate.setSizeFull();
     }
 }

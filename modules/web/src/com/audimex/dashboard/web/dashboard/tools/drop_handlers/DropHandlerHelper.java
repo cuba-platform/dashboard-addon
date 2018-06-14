@@ -7,25 +7,29 @@ package com.audimex.dashboard.web.dashboard.tools.drop_handlers;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.Draggable;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Component;
+import com.haulmont.cuba.gui.components.BoxLayout;
+import com.haulmont.cuba.gui.components.Component;
+
+import static com.haulmont.cuba.gui.components.Component.*;
 
 public interface DropHandlerHelper {
 
-    default void addComponent(DropLayoutTools tools, AbstractOrderedLayout layout, Component comp, int idx) {
+    default void addComponent(DropLayoutTools tools, BoxLayout target, Component comp, int idx) {
         if (comp instanceof Draggable) {
             if (idx >= 0) {
-                tools.addComponent(layout, ((Draggable) comp).getLayout(), idx);
+                tools.addComponent(target, ((Draggable) comp).getLayout(), idx);
             } else {
-                tools.addComponent(layout, ((Draggable) comp).getLayout());
+                tools.addComponent(target, ((Draggable) comp).getLayout());
             }
         } else {
-            CanvasLayout parent = getCanvasLayoutParent(comp);
+            OrderedContainer parent = (OrderedContainer) comp.getParent();
             if (parent != null) {
+                parent.remove(comp);
+
                 if (idx >= 0) {
-                    layout.addComponent(parent, idx);
+                    target.add(comp, idx);
                 } else {
-                    layout.addComponent(parent);
+                    target.add(comp);
                 }
             }
         }

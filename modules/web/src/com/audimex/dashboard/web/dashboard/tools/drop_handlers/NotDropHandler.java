@@ -5,19 +5,21 @@
 package com.audimex.dashboard.web.dashboard.tools.drop_handlers;
 
 
-import com.vaadin.event.dd.DragAndDropEvent;
-import com.vaadin.event.dd.DropHandler;
+import com.haulmont.addon.dnd.components.DropHandler;
+import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
+import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
+import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
-import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 
 public class NotDropHandler implements DropHandler {
+
     @Override
     public void drop(DragAndDropEvent event) {
         //do nothing
     }
 
     @Override
-    public AcceptCriterion getAcceptCriterion() {
-        return AcceptAll.get();
+    public AcceptCriterion getCriterion() {
+        return (AcceptCriterionWrapper) AcceptAll::get;
     }
 }

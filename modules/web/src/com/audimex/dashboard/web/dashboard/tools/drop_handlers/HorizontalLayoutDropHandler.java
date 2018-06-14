@@ -5,77 +5,71 @@
 package com.audimex.dashboard.web.dashboard.tools.drop_handlers;
 
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.vaadin.event.dd.DragAndDropEvent;
-import com.vaadin.shared.ui.dd.HorizontalDropLocation;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Component;
-import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
-import fi.jasoft.dragdroplayouts.drophandlers.DefaultHorizontalLayoutDropHandler;
-import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
+import com.haulmont.addon.dnd.components.DDHorizontalLayout;
+import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
+import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
+import com.haulmont.addon.dnd.components.defaulthandlers.DefaultHorizontalDropHandler;
+import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
+import com.haulmont.addon.dnd.components.enums.HorizontalDropLocation;
+import com.haulmont.cuba.gui.components.Component;
 
-import static com.vaadin.shared.ui.dd.HorizontalDropLocation.CENTER;
-import static com.vaadin.shared.ui.dd.HorizontalDropLocation.RIGHT;
+import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.CENTER;
+import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.RIGHT;
 
-public class HorizontalLayoutDropHandler extends DefaultHorizontalLayoutDropHandler implements DropHandlerHelper {
+public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler implements DropHandlerHelper {
     protected DropLayoutTools tools;
 
     public HorizontalLayoutDropHandler(DropLayoutTools tools) {
         this.tools = tools;
     }
 
+    //todo: refactoring, check
     @Override
-    protected void handleComponentReordering(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDHorizontalLayout.HorizontalLayoutTargetDetails details = (DDHorizontalLayout.HorizontalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
-        Component comp = transferable.getComponent();
-        int idx = details.getOverIndex();
-        int oldIndex = layout.getComponentIndex(comp);
+    public void drop(DragAndDropEvent event) {
+        DDHorizontalLayoutTargetDetails details = (DDHorizontalLayoutTargetDetails) event.getTargetDetails();
+        LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
 
-        if (idx == oldIndex) {
+        DDHorizontalLayout targetLayout = (DDHorizontalLayout) details.getTarget();
+        Component component = t.getTransferableComponent();
+        Component sourceLayout = t.getSourceComponent();
+
+        int indexTo = details.getOverIndex();
+        int indexFrom = targetLayout.indexOf(component);
+
+        if (component == null) {
             return;
         }
 
-        layout.removeComponent(comp);
+        if (sourceLayout == targetLayout) {
+            if (indexFrom == indexTo) {
+                return;
+            }
 
-        if (idx > oldIndex) {
-            idx--;
-        }
+            targetLayout.remove(component);
 
-        HorizontalDropLocation loc = details.getDropLocation();
-        if (loc == CENTER || loc == RIGHT) {
-            idx++;
-        }
+            if (indexTo > indexFrom) {
+                indexTo--;
+            }
 
-        if (idx >= 0) {
-            layout.addComponent(comp, idx);
+            HorizontalDropLocation loc = details.getDropLocation();
+            if (loc == CENTER || loc == RIGHT) {
+                indexTo++;
+            }
+
+            if (indexTo >= 0) {
+                targetLayout.add(component, indexTo);
+            } else {
+                targetLayout.add(component);
+            }
         } else {
-            layout.addComponent(comp, 0);
+            HorizontalDropLocation loc = details.getDropLocation();
+            if (loc == CENTER || loc == RIGHT) {
+                indexTo++;
+            }
+
+            addComponent(tools, targetLayout, component, indexTo);
         }
     }
-
-    @Override
-    protected void handleDropFromLayout(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDHorizontalLayout.HorizontalLayoutTargetDetails details = (DDHorizontalLayout.HorizontalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
-        int idx = (details).getOverIndex();
-        Component comp = transferable.getComponent();
-
-        HorizontalDropLocation loc = (details).getDropLocation();
-        if (loc == CENTER || loc == RIGHT) {
-            idx++;
-        }
-
-        addComponent(tools, layout, comp, idx);
-    }
-
 
 }
 

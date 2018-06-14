@@ -4,26 +4,26 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
-import com.vaadin.ui.Component;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
+import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
+import com.haulmont.cuba.gui.components.Component;
 
 public class CanvasGridLayout extends AbstractCanvasLayout {
-    protected DDGridLayout gridLayout;
+    protected WebDDGridLayout gridLayout;
 
     public CanvasGridLayout(int cols, int rows) {
-        super(new DDGridLayout());
-        gridLayout = (DDGridLayout) delegate;
+        super(new WebDDGridLayout());
+        gridLayout = (WebDDGridLayout) delegate;
 
         gridLayout.setColumns(cols);
         gridLayout.setRows(rows);
     }
 
     @Override
-    public DDGridLayout getDelegate() {
+    public WebDDGridLayout getDelegate() {
         return gridLayout;
     }
 
     public void addComponent(Component component, int column, int row) {
-        gridLayout.addComponent(component, column, row);
+        gridLayout.add(component, column, row);
     }
 }

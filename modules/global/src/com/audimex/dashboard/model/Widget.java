@@ -14,11 +14,21 @@ import java.util.List;
 @MetaClass(name = "amxd$Widget")
 public class Widget extends BaseUuidEntity {
     @MetaProperty
+    protected String widgetId;
+    @MetaProperty
     protected String caption;
     @MetaProperty
     protected String description;
     @MetaProperty
     protected List<Parameter> parameters;
+
+    public String getWidgetId() {
+        return widgetId;
+    }
+
+    public void setWidgetId(String widgetId) {
+        this.widgetId = widgetId;
+    }
 
     public List<Parameter> getParameters() {
         return parameters;

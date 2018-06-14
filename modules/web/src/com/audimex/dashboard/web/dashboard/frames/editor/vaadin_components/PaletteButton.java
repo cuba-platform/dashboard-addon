@@ -5,9 +5,10 @@
 package com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components;
 
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
-import com.vaadin.ui.Button;
+import com.haulmont.cuba.web.gui.components.WebButton;
 
-public class PaletteButton extends Button implements Draggable {
+//todo add to ui-components
+public class PaletteButton extends WebButton implements Draggable {
     protected DashboardLayout layout;
 
     public DashboardLayout getLayout() {

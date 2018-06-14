@@ -7,7 +7,7 @@ package com.audimex.dashboard.web.dashboard.frames.editor;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.web.DashboardException;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasEditorFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import java.io.InputStream;
 import java.util.Objects;
 
-import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
+import static com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -104,11 +104,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     public void cancel() {
         close("close", true);
-    }
-
-    @Override
-    protected boolean preClose(String actionId) {
-        return close(actionId, true);
     }
 
     public void onExportJsonBtnClick() {

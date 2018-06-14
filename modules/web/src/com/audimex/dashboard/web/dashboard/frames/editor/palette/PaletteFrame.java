@@ -9,15 +9,16 @@ import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
-import com.audimex.dashboard.web.dashboard.tools.component_factories.VaadinDropComponentsFactory;
+import com.audimex.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
+import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.widget.WidgetEdit;
+import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.ScrollBoxLayout;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.vaadin.ui.Layout;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,11 +32,11 @@ public class PaletteFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "paletteFrame";
 
     @Inject
-    protected ScrollBoxLayout widgetBox;
+    protected DDVerticalLayout ddWidgetBox;
     @Inject
-    protected ScrollBoxLayout layoutBox;
+    protected DDVerticalLayout ddLayoutBox;
     @Inject
-    protected ScrollBoxLayout widgetTemplateBox;
+    protected DDVerticalLayout ddWidgetTemplateBox;
     @Inject
     protected Button doTemplateBtn;
     @Inject
@@ -45,12 +46,9 @@ public class PaletteFrame extends AbstractFrame {
     @Inject
     protected Metadata metadata;
     @Inject
-    protected VaadinDropComponentsFactory factory;
+    protected PaletteComponentsFactory factory;
     @Inject
     protected JsonConverter converter;
-
-    protected DDVerticalLayout ddWidgetBox;
-    protected DDVerticalLayout ddWidgetTemplateBox;
 
     protected PaletteButton selectedWidgetBtn = null;
 
@@ -64,28 +62,24 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     protected void initWidgetBox() {
-        ddWidgetBox = factory.createNotDroppedVerticalLayout();
-        widgetBox.unwrap(Layout.class).addComponent(ddWidgetBox);
+        ddWidgetBox.setDropHandler(new NotDropHandler());
     }
 
     protected void initLayoutBox() {
-        DDVerticalLayout ddLayoutBox = factory.createNotDroppedVerticalLayout();
+        ddLayoutBox.setDropHandler(new NotDropHandler());
 
-        ddLayoutBox.addComponent(factory.createPaletteVerticalLayoutButton());
-        ddLayoutBox.addComponent(factory.createPaletteHorizontalLayoutButton());
-        ddLayoutBox.addComponent(factory.createPaletteGridLayoutButton());
-        layoutBox.unwrap(Layout.class).addComponent(ddLayoutBox);
+        ddLayoutBox.add(factory.createVerticalLayoutButton());
+        ddLayoutBox.add(factory.createHorizontalLayoutButton());
+        ddLayoutBox.add(factory.createGridLayoutButton());
     }
 
     protected void initWidgetTemplateBox() {
-        ddWidgetTemplateBox = factory.createNotDroppedVerticalLayout();
+        ddWidgetTemplateBox.setDropHandler(new NotDropHandler());
 
         for (Widget widget : getWidgetTemplates()) {
-            PaletteButton widgetBtn = factory.createPaletteWidgetButton(widget);
-            ddWidgetTemplateBox.addComponent(widgetBtn);
+            PaletteButton widgetBtn = factory.createWidgetButton(widget);
+            ddWidgetTemplateBox.add(widgetBtn);
         }
-
-        widgetTemplateBox.unwrap(Layout.class).addComponent(ddWidgetTemplateBox);
     }
 
     protected List<Widget> getWidgetTemplates() {
@@ -98,22 +92,22 @@ public class PaletteFrame extends AbstractFrame {
     public void createWidget() {
         WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, metadata.create(Widget.class), THIS_TAB);
         editor.addCloseWithCommitListener(() -> {
-            PaletteButton widgetBtn = factory.createPaletteWidgetButton(editor.getItem());
-            widgetBtn.addClickListener(event -> {
-                selectedWidgetBtn = (PaletteButton) event.getSource();
+            PaletteButton widgetBtn = factory.createWidgetButton(editor.getItem());
+            widgetBtn.setAction(new BaseAction("createWidget").withHandler(event -> {
+                selectedWidgetBtn = (PaletteButton) event.getComponent();
 
-                ddWidgetBox.forEach(btn -> {
+                for (Component btn : ddWidgetBox.getOwnComponents()) {
                     btn.addStyleName("amxd-dashboard-button");
                     btn.removeStyleName("amxd-dashboard-selected-button");
-                });
+                }
 
                 selectedWidgetBtn.removeStyleName("amxd-dashboard-button");
                 selectedWidgetBtn.addStyleName("amxd-dashboard-selected-button");
                 doTemplateBtn.setEnabled(true);
                 removeWidgetBtn.setEnabled(true);
-            });
+            }));
 
-            ddWidgetBox.addComponent(widgetBtn);
+            ddWidgetBox.add(widgetBtn);
         });
     }
 
@@ -128,14 +122,14 @@ public class PaletteFrame extends AbstractFrame {
             widgetTemplatesDs.addItem(widgetTemplate);
             widgetTemplatesDs.commit();
 
-            PaletteButton widgetBtn = factory.createPaletteWidgetButton(widget);
-            ddWidgetTemplateBox.addComponent(widgetBtn);
+            PaletteButton widgetBtn = factory.createWidgetButton(widget);
+            ddWidgetTemplateBox.add(widgetBtn);
         }
     }
 
     public void removeWidget() {
         if (selectedWidgetBtn != null) {
-            ddWidgetBox.removeComponent(selectedWidgetBtn);
+            ddWidgetBox.remove(selectedWidgetBtn);
             selectedWidgetBtn = null;
             doTemplateBtn.setEnabled(false);
             removeWidgetBtn.setEnabled(false);

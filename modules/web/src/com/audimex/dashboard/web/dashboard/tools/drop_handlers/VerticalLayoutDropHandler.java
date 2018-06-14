@@ -5,18 +5,18 @@
 package com.audimex.dashboard.web.dashboard.tools.drop_handlers;
 
 import com.audimex.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.vaadin.event.dd.DragAndDropEvent;
-import com.vaadin.shared.ui.dd.VerticalDropLocation;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Component;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout;
-import fi.jasoft.dragdroplayouts.drophandlers.DefaultVerticalLayoutDropHandler;
-import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
+import com.haulmont.addon.dnd.components.DDVerticalLayout;
+import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
+import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
+import com.haulmont.addon.dnd.components.defaulthandlers.DefaultVerticalDropHandler;
+import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
+import com.haulmont.addon.dnd.components.enums.VerticalDropLocation;
+import com.haulmont.cuba.gui.components.Component;
 
-import static com.vaadin.shared.ui.dd.VerticalDropLocation.BOTTOM;
-import static com.vaadin.shared.ui.dd.VerticalDropLocation.MIDDLE;
+import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.BOTTOM;
+import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.MIDDLE;
 
-public class VerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandler implements DropHandlerHelper {
+public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implements DropHandlerHelper {
 
     protected DropLayoutTools tools;
 
@@ -25,55 +25,52 @@ public class VerticalLayoutDropHandler extends DefaultVerticalLayoutDropHandler 
     }
 
     @Override
-    protected void handleComponentReordering(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
-        Component comp = transferable.getComponent();
-        int idx = details.getOverIndex();
-        int oldIndex = layout.getComponentIndex(comp);
+    public void drop(DragAndDropEvent event) {
+        DDVerticalLayoutTargetDetails details = (DDVerticalLayoutTargetDetails) event.getTargetDetails();
+        LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
 
-        if (idx == oldIndex) {
+        Component component = t.getTransferableComponent();
+        DDVerticalLayout targetLayout = (DDVerticalLayout) details.getTarget();
+        Component sourceLayout = t.getSourceComponent();
+
+        int indexTo = details.getOverIndex();
+        int indexFrom = targetLayout.indexOf(component);
+
+        if (component == null) {
             return;
         }
 
-        layout.removeComponent(comp);
+        if (sourceLayout == targetLayout) {
+            if (indexFrom == indexTo) {
+                return;
+            }
 
-        if (idx > oldIndex) {
-            idx--;
-        }
+            targetLayout.remove(component);
 
-        VerticalDropLocation loc = details.getDropLocation();
-        if (loc == MIDDLE || loc == BOTTOM) {
-            idx++;
-        }
+            if (indexTo > indexFrom) {
+                indexTo--;
+            }
 
-        if (idx >= 0) {
-            layout.addComponent(comp, idx);
+            VerticalDropLocation loc = details.getDropLocation();
+            if (loc == MIDDLE || loc == BOTTOM) {
+                indexTo++;
+            }
+
+            if (indexTo >= 0) {
+                targetLayout.add(component, indexTo);
+            } else {
+                targetLayout.add(component);
+            }
+
         } else {
-            layout.addComponent(comp);
-        }
-    }
+            VerticalDropLocation loc = details.getDropLocation();
+            if (loc == MIDDLE || loc == BOTTOM) {
+                indexTo++;
+            }
 
-    @Override
-    protected void handleDropFromLayout(DragAndDropEvent event) {
-        LayoutBoundTransferable transferable = (LayoutBoundTransferable) event
-                .getTransferable();
-        DDVerticalLayout.VerticalLayoutTargetDetails details = (DDVerticalLayout.VerticalLayoutTargetDetails) event
-                .getTargetDetails();
-        AbstractOrderedLayout layout = (AbstractOrderedLayout) details
-                .getTarget();
-        int idx = (details).getOverIndex();
-        Component comp = transferable.getComponent();
-
-        VerticalDropLocation loc = (details).getDropLocation();
-        if (loc == MIDDLE || loc == BOTTOM) {
-            idx++;
+            addComponent(tools, targetLayout, component, indexTo);
         }
 
-        addComponent(tools, layout, comp, idx);
     }
+
 }

@@ -2,16 +2,19 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.audimex.dashboard.web.dashboard.frames.canvas;
+package com.audimex.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.web.DashboardException;
+import com.audimex.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
+import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.audimex.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.audimex.dashboard.web.widget_types.WidgetBrowse;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.vaadin.ui.Layout;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,7 +62,31 @@ public class CanvasFrame extends AbstractFrame {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }
 
+        vLayout.removeStyleName("amxd-shadow-border");
+        vLayout.addStyleName("amxd-main-shadow-border");
+
         canvas.removeAll();
-        canvas.unwrap(Layout.class).addComponent(vLayout);
+        canvas.add(vLayout);
+    }
+
+    public WidgetBrowse getWidgetBrowse(String widgetId) {
+        return searchWidgetBrowse(vLayout, widgetId);
+    }
+
+    protected WidgetBrowse searchWidgetBrowse(CanvasLayout layout, String widgetId) {
+        if (layout instanceof CanvasWidgetLayout) {
+            if (widgetId.equals(((CanvasWidgetLayout) layout).getWidget().getWidgetId())) {
+                return (WidgetBrowse) ((Container) layout.getDelegate()).getOwnComponents().iterator().next();
+            }
+            return null;
+        }
+
+        for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+            WidgetBrowse result = searchWidgetBrowse((CanvasLayout) child, widgetId);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 }

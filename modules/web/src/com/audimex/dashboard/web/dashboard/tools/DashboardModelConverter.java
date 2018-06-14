@@ -6,14 +6,14 @@ package com.audimex.dashboard.web.dashboard.tools;
 
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.*;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.layouts.*;
-import com.audimex.dashboard.web.dashboard.tools.component_factories.VaadinComponentsFactory;
+import com.audimex.dashboard.web.dashboard.tools.component_factories.CanvasComponentsFactory;
+import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.cuba.core.global.Metadata;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HasComponents;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Component.Container;
+import com.haulmont.cuba.gui.components.GridLayout.Area;
 
 import javax.inject.Inject;
 
@@ -21,14 +21,14 @@ public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
 
-    protected VaadinComponentsFactory factory;
+    protected CanvasComponentsFactory factory;
 
-    public VaadinComponentsFactory getFactory() {
+    public CanvasComponentsFactory getFactory() {
         return factory;
     }
 
     @Inject
-    public void setFactory(VaadinComponentsFactory factory) {
+    public void setFactory(CanvasComponentsFactory factory) {
         this.factory = factory;
     }
 
@@ -62,7 +62,7 @@ public class DashboardModelConverter {
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
                 CanvasLayout childContainer = modelToContainer(frame, childModel);
-                ((CssLayout) canvasLayout).addComponent(childContainer);
+                ((Container) canvasLayout.getDelegate()).add(childContainer);
                 childContainer.setWeight(childModel.getWeight());
             }
         }
@@ -75,19 +75,19 @@ public class DashboardModelConverter {
             model.setWeight(((HasWeight) container).getWeight());
         }
 
-        for (Component childComponent : ((HasComponents) container)) {
+        for (Component childComponent : ((Container) container).getOwnComponents()) {
             DashboardLayout childModel = createDashboardLayout(childComponent);
 
-            if (childModel == null && childComponent instanceof HasComponents) {
+            if (childModel == null && childComponent instanceof Container) {
                 containerToModel(model, childComponent);
             } else if (childModel instanceof GridLayout) {
                 GridLayout gridModel = (GridLayout) childModel;
                 DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
                 model.addChild(gridModel);
 
-                for (Component gridChild : gridComponent) {
+                for (Component gridChild : gridComponent.getOwnComponents()) {
                     GridArea modelArea = metadata.create(GridArea.class);
-                    com.vaadin.ui.GridLayout.Area area = gridComponent.getComponentArea(gridChild);
+                    Area area = gridComponent.getComponentArea(gridChild);
 
                     DashboardLayout modelChildGridArea = createDashboardLayout(gridChild);
                     containerToModel(modelChildGridArea, gridChild);

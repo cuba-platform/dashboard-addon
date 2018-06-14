@@ -10,8 +10,9 @@ import com.audimex.dashboard.gui.components.DashboardFrame;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.web.DashboardException;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
+import com.audimex.dashboard.web.widget_types.WidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.components.AbstractWindow;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame.DASHBOARD;
+import static com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -95,6 +96,10 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
         if (source.getId().equals(dashboard.getId())) {
             updateDashboard(source);
         }
+    }
+
+    public WidgetBrowse getWidgetBrowse(String widgetId) {
+        return canvasFrame.getWidgetBrowse(widgetId);
     }
 
     protected void updateDashboard(Dashboard dashboard) {

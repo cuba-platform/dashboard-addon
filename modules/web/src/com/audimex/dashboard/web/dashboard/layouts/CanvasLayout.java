@@ -4,17 +4,22 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
-import com.vaadin.event.LayoutEvents;
-import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.DropTarget;
-import com.vaadin.ui.Component;
-import fi.jasoft.dragdroplayouts.interfaces.LayoutDragSource;
+import com.haulmont.addon.dnd.components.DDLayout;
+import com.haulmont.addon.dnd.components.dragevent.DropTarget;
+import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
+import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
 
-public interface CanvasLayout extends Component, LayoutDragSource, DropTarget, HasWeight {
+public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport, DropTarget, TargetConverter, Component.LayoutClickNotifier, HasWeight {
 
-    void setDropHandler(DropHandler dropHandler);
+    WebAbstractComponent getDelegate();
 
-    void addLayoutClickListener(LayoutEvents.LayoutClickListener listener);
+    HBoxLayout getButtonsPanel();
 
-    void removeLayoutClickListener(LayoutEvents.LayoutClickListener listener);
+    void setDelegate(WebAbstractComponent delegate);
+
+    void setButtonsPanel(HBoxLayout buttonsPanel);
+
 }

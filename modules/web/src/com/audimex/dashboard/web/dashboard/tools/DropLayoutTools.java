@@ -7,19 +7,16 @@ package com.audimex.dashboard.web.dashboard.tools;
 import com.audimex.dashboard.model.visual_model.DashboardLayout;
 import com.audimex.dashboard.model.visual_model.GridLayout;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.audimex.dashboard.web.dashboard.layouts.*;
-import com.audimex.dashboard.web.dashboard.tools.drop_handlers.GridLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.HorizontalLayoutDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.VerticalLayoutDropHandler;
 import com.audimex.dashboard.web.widget.WidgetEdit;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HasComponents;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
+import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
+import com.haulmont.cuba.gui.components.BoxLayout;
+import com.haulmont.cuba.gui.components.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +42,21 @@ public class DropLayoutTools {
         } else if (layout instanceof CanvasHorizontalLayout) {
             layout.setDropHandler(new HorizontalLayoutDropHandler(this));
         } else if (layout instanceof CanvasGridLayout) {
-            layout.setDropHandler(new GridLayoutDropHandler(this));
+            layout.setDropHandler(new NotDropHandler());
         } else if (layout instanceof CanvasWidgetLayout) {
             layout.setDropHandler(new NotDropHandler());
         }
     }
 
-    public void addComponent(AbstractLayout target, DashboardLayout layout) {
+    public void addComponent(BoxLayout target, DashboardLayout layout) {
         addComponent(target, layout, emptyList());
     }
 
-    public void addComponent(AbstractLayout target, DashboardLayout layout, Integer indexTo) {
+    public void addComponent(BoxLayout target, DashboardLayout layout, Integer indexTo) {
         addComponent(target, layout, singletonList(indexTo));
     }
 
-    public void addComponent(AbstractLayout target, DashboardLayout layout, Integer column, Integer row) {
+    public void addComponent(WebDDGridLayout target, DashboardLayout layout, Integer column, Integer row) {
         addComponent(target, layout, new ArrayList<Object>() {{
             add(column);
             add(row);
@@ -70,14 +67,14 @@ public class DropLayoutTools {
         if (component instanceof CanvasLayout) {
             addDropHandler((CanvasLayout) component);
         }
-        if (component instanceof HasComponents) {
-            for (Component child : ((HasComponents) component)) {
+        if (component instanceof Component.Container) {
+            for (Component child : ((Component.Container) component).getOwnComponents()) {
                 initDropHandler(child);
             }
         }
     }
 
-    protected void addComponent(AbstractLayout target, DashboardLayout layout, List<Object> args) {
+    protected void addComponent(Component target, DashboardLayout layout, List<Object> args) {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
@@ -110,7 +107,7 @@ public class DropLayoutTools {
         }
     }
 
-    protected void addDashboardLayout(DashboardLayout layout, AbstractLayout target, List<Object> args) {
+    protected void addDashboardLayout(DashboardLayout layout, Component target, List<Object> args) {
         CanvasLayout canvasLayout = modelConverter.modelToContainer(frame, layout);
 
         if (canvasLayout != null) {
@@ -119,13 +116,16 @@ public class DropLayoutTools {
         }
     }
 
-    protected void addCanvasLayout(CanvasLayout canvasLayout, AbstractLayout target, List<Object> args) {
+    //todo: refactoring
+    protected void addCanvasLayout(CanvasLayout canvasLayout, Component target, List<Object> args) {
         if (args.size() == 0) {
-            target.addComponent(canvasLayout);
+            ((BoxLayout) target).add(canvasLayout);
         } else if (args.size() == 1) {
-            ((AbstractOrderedLayout) target).addComponent(canvasLayout, (int) args.get(0));
+            ((BoxLayout) target).add(canvasLayout, (int) args.get(0));
         } else if (args.size() == 2) {
-            ((DDGridLayout) target).addComponent(canvasLayout, (int) args.get(0), (int) args.get(1));
+            ((WebDDGridLayout) target).add(canvasLayout, (int) args.get(0), (int) args.get(1));
         }
+
+        canvasLayout.setWeight(1);
     }
 }

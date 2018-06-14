@@ -8,28 +8,25 @@ import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.DashboardException;
-import com.audimex.dashboard.web.dashboard.frames.canvas.CanvasFrame;
+import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.audimex.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
-import com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse;
+import com.audimex.dashboard.web.widget_types.WidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
-import com.vaadin.ui.Layout;
-import fi.jasoft.dragdroplayouts.DDGridLayout;
-import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.DASHBOARD;
 import static com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
-import static fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode.NONE;
+import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.NONE;
 import static java.lang.String.format;
 
-@org.springframework.stereotype.Component("amdx_VaadinUiComponentsFactory")
-public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
+@Component("amdx_VaadinUiComponentsFactory")
+public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
 
@@ -38,12 +35,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         CanvasVerticalLayout layout = new CanvasVerticalLayout();
         layout.setDragMode(NONE);
         layout.setSizeFull();
-
-        DDVerticalLayout verticalLayout = layout.getDelegate();
-        verticalLayout.setDragMode(NONE);
-        verticalLayout.setSizeFull();
-        verticalLayout.setMargin(true);
-
         return layout;
     }
 
@@ -52,12 +43,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         CanvasHorizontalLayout layout = new CanvasHorizontalLayout();
         layout.setDragMode(NONE);
         layout.setSizeFull();
-
-        DDHorizontalLayout horizontalLayout = layout.getDelegate();
-        horizontalLayout.setDragMode(NONE);
-        horizontalLayout.setSizeFull();
-        horizontalLayout.setMargin(true);
-
         return layout;
     }
 
@@ -66,12 +51,6 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         CanvasGridLayout layout = new CanvasGridLayout(cols, rows);
         layout.setDragMode(NONE);
         layout.setSizeFull();
-
-        DDGridLayout gridLayout = layout.getDelegate();
-        gridLayout.setDragMode(NONE);
-        gridLayout.setSizeFull();
-        gridLayout.setMargin(true);
-
         return layout;
     }
 
@@ -86,7 +65,7 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
-        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) frame.openFrame(null, frameId, ParamsMap.of(
+        WidgetBrowse widgetFrame = (WidgetBrowse) frame.openFrame(null, frameId, ParamsMap.of(
                 WIDGET, widget,
                 DASHBOARD, frame.getDashboard()
         ));
@@ -94,16 +73,10 @@ public class VaadinUiComponentsFactory implements VaadinComponentsFactory {
         widgetFrame.setMargin(true);
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
-        layout.addComponent(widgetFrame.unwrap(Layout.class));
+        layout.getDelegate().add(widgetFrame);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
         layout.setSizeFull();
-
-        DDVerticalLayout verticalLayout = layout.getDelegate();
-        verticalLayout.setDragMode(NONE);
-        verticalLayout.setSizeFull();
-        verticalLayout.setMargin(true);
-
         return layout;
     }
 }

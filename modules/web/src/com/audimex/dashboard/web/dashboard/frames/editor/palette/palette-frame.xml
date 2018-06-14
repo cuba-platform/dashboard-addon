@@ -4,6 +4,7 @@
   -->
 
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
         class="com.audimex.dashboard.web.dashboard.frames.editor.palette.PaletteFrame">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
@@ -41,21 +42,39 @@
                 <scrollBox id="widgetBox"
                            scrollBars="vertical"
                            width="100%"
-                           height="100%"/>
+                           height="100%">
+                    <dnd:dndVBoxLayout id="ddWidgetBox"
+                                       dragMode="CLONE"
+                                       margin="true"
+                                       width="100%"
+                                       height="100%"/>
+                </scrollBox>
             </tab>
             <tab id="layoutTab"
                  caption="msg://layouts">
                 <scrollBox id="layoutBox"
                            scrollBars="vertical"
                            width="100%"
-                           height="100%"/>
+                           height="100%">
+                    <dnd:dndVBoxLayout id="ddLayoutBox"
+                                       dragMode="CLONE"
+                                       margin="true"
+                                       width="100%"
+                                       height="100%"/>
+                </scrollBox>
             </tab>
             <tab id="widgetTemplateTab"
                  caption="msg://widgetTemplates">
                 <scrollBox id="widgetTemplateBox"
                            scrollBars="vertical"
                            width="100%"
-                           height="100%"/>
+                           height="100%">
+                    <dnd:dndVBoxLayout id="ddWidgetTemplateBox"
+                                       dragMode="CLONE"
+                                       margin="true"
+                                       width="100%"
+                                       height="100%"/>
+                </scrollBox>
             </tab>
         </accordion>
     </layout>

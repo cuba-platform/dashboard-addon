@@ -4,18 +4,18 @@
 
 package com.audimex.dashboard.web.dashboard.layouts;
 
-import fi.jasoft.dragdroplayouts.DDHorizontalLayout;
+import com.haulmont.addon.dnd.web.gui.components.WebDDHorizontalLayout;
 
-public class CanvasHorizontalLayout extends AbstractOrderedCanvasLayout {
-    protected DDHorizontalLayout horizontalLayout;
+public class CanvasHorizontalLayout extends AbstractCanvasLayout {
+    protected WebDDHorizontalLayout horizontalLayout;
 
     public CanvasHorizontalLayout() {
-        super(new DDHorizontalLayout());
-        horizontalLayout = (DDHorizontalLayout) delegate;
+        super(new WebDDHorizontalLayout());
+        horizontalLayout = (WebDDHorizontalLayout) delegate;
     }
 
     @Override
-    public DDHorizontalLayout getDelegate() {
+    public WebDDHorizontalLayout getDelegate() {
         return horizontalLayout;
     }
 }
