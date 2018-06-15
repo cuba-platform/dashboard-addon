@@ -25,4 +25,9 @@ public class ListEntitiesParameterValue implements ParameterValue {
     public void setValue(List<EntityParameterValue> entityValues) {
         this.entityValues = entityValues;
     }
+
+    @Override
+    public String toString() {
+        return "type: list entities";
+    }
 }

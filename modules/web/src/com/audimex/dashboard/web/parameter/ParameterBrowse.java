@@ -5,7 +5,10 @@
 package com.audimex.dashboard.web.parameter;
 
 import com.audimex.dashboard.model.Parameter;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 
 import javax.inject.Inject;
@@ -20,6 +23,8 @@ public class ParameterBrowse extends AbstractLookup {
 
     @Inject
     protected GroupDatasource<Parameter, UUID> parametersDs;
+    @Inject
+    protected Table<Parameter> parametersTable;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -42,5 +47,10 @@ public class ParameterBrowse extends AbstractLookup {
         for (Parameter param : parameters) {
             parametersDs.addItem(param);
         }
+    }
+
+    public Component generateValueCell(Entity entity) {
+        String valueText = ((Parameter) entity).getParameterValue().toString();
+        return new Table.PlainTextCell(valueText);
     }
 }

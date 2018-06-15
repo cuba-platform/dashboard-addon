@@ -23,4 +23,9 @@ public class TimeParameterValue implements ParameterValue {
     public void setValue(Date value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: time; value=%s", value);
+    }
 }

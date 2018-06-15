@@ -54,4 +54,9 @@ public class EntityParameterValue implements ParameterValue {
     public void setViewName(String viewName) {
         this.viewName = viewName;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: entity; metaClassName=%s, entityId=%s, viewName=%s", metaClassName, entityId, viewName);
+    }
 }

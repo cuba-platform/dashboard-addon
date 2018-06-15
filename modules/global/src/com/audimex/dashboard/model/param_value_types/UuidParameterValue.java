@@ -23,4 +23,9 @@ public class UuidParameterValue implements ParameterValue {
     public void setValue(UUID value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: uuid; value=%s", value);
+    }
 }

@@ -9,12 +9,16 @@
                    value="msg://value"
                    align="MIDDLE_LEFT"/>
             <textField id="textField"
+                       width="300px"
                        visible="false"/>
             <checkBox id="checkBox"
+                      width="300px"
                       visible="false"/>
             <dateField id="dateField"
+                       width="300px"
                        visible="false"/>
             <timeField id="timeField"
+                       width="300px"
                        visible="false"/>
             <vbox/>
         </hbox>

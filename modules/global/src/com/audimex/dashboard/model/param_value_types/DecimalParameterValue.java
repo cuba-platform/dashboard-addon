@@ -23,4 +23,9 @@ public class DecimalParameterValue implements ParameterValue {
     public void setValue(BigDecimal value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: decimal; value=%s", value);
+    }
 }

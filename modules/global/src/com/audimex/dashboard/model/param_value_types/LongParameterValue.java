@@ -21,4 +21,9 @@ public class LongParameterValue implements ParameterValue {
     public void setValue(Long value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: long; value=%s", value);
+    }
 }

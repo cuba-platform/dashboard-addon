@@ -21,4 +21,9 @@ public class IntegerParameterValue implements ParameterValue {
     public void setValue(Integer value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: integer; value=%s", value);
+    }
 }

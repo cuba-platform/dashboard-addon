@@ -4,11 +4,12 @@
     <layout spacing="true">
         <hbox id="screenIdBox"
               spacing="true">
-            <label width="85px"
+            <label width="145px"
                    value="msg://screenId"/>
             <lookupField id="screenIdLookup"
                          nullOptionVisible="false"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
     </layout>
 </window>

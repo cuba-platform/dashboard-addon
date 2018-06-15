@@ -9,7 +9,8 @@
                    value="msg://metaClass"
                    align="MIDDLE_LEFT"/>
             <lookupField id="metaClassLookup"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
         <hbox id="hBoxEntity"
               spacing="true">
@@ -18,7 +19,8 @@
                    value="msg://entity"
                    align="MIDDLE_LEFT"/>
             <lookupField id="entitiesLookup"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
         <hbox id="hBoxView"
               spacing="true">
@@ -27,7 +29,8 @@
                    value="msg://view"
                    align="MIDDLE_LEFT"/>
             <lookupField id="viewLookup"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
     </layout>
 </window>

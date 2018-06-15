@@ -21,4 +21,9 @@ public class BooleanParameterValue implements ParameterValue {
     public void setValue(Boolean value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: boolean; value=%s", value);
+    }
 }

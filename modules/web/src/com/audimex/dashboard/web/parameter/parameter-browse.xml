@@ -21,6 +21,9 @@
                 <column id="name"/>
                 <column id="alias"/>
                 <column id="mappedAlias"/>
+                <column id="value"
+                        caption="msg://value"
+                        generator="generateValueCell"/>
             </columns>
             <rows datasource="parametersDs"/>
             <rowsCount/>

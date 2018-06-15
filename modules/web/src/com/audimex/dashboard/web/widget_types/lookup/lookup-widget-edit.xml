@@ -4,11 +4,12 @@
     <layout spacing="true">
         <hbox id="lookupIdBox"
               spacing="true">
-            <label width="85px"
+            <label width="145px"
                    value="msg://lookupId"/>
             <lookupField id="lookupIdLookup"
                          nullOptionVisible="false"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
     </layout>
 </window>

@@ -21,4 +21,9 @@ public class StringParameterValue implements ParameterValue {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: string; value=%s", value);
+    }
 }

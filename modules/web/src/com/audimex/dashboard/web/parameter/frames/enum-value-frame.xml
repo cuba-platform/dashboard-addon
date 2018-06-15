@@ -8,7 +8,8 @@
                    width="85px"
                    value="msg://enumClass"
                    align="MIDDLE_LEFT"/>
-            <lookupField id="enumClassLookup"/>
+            <lookupField id="enumClassLookup"
+                         width="300px"/>
         </hbox>
     </layout>
 </window>

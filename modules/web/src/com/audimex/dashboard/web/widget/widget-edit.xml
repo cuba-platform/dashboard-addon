@@ -7,14 +7,13 @@
         messagesPack="com.audimex.dashboard.web.widget">
     <dsContext>
         <datasource id="widgetDs"
-                    class="com.audimex.dashboard.model.Widget">
-        </datasource>
+                    class="com.audimex.dashboard.model.Widget"/>
     </dsContext>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="widgetDs">
-            <column width="450px">
+            <column width="300px">
                 <field property="widgetId"
                        required="true"/>
                 <field property="caption"
@@ -27,16 +26,16 @@
               spacing="true">
             <label id="typeLabel"
                    value="msg://widgetType"
-                   width="85px"/>
+                   width="145px"/>
             <lookupField id="typeLookup"
                          nullOptionVisible="false"
-                         required="true"/>
+                         required="true"
+                         width="300px"/>
         </hbox>
         <vbox id="widgetEditBox"/>
         <groupBox id="paramsBox"
                   caption="msg://widgetParameters"
-                  collapsable="true"
-                  width="100%">
+                  collapsable="true">
             <frame id="paramsFrame"
                    screen="amdx$Parameter.browse"/>
         </groupBox>

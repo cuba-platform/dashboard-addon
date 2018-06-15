@@ -16,7 +16,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="dashboardDs">
-            <column width="450px">
+            <column width="300px">
                 <field property="title"
                        required="true"/>
                 <field property="referenceName"

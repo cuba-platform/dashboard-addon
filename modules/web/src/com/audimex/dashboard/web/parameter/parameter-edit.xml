@@ -14,7 +14,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="parameterDs">
-            <column width="450px">
+            <column width="300px">
                 <field property="name"
                        required="true"/>
                 <field property="alias"/>
@@ -30,7 +30,8 @@
                        width="85px"/>
                 <lookupField id="typeLookup"
                              optionsEnum="com.audimex.dashboard.model.ParameterType"
-                             nullOptionVisible="false"/>
+                             nullOptionVisible="false"
+                             width="300px"/>
             </hbox>
             <vbox id="valueBox"
                   spacing="true"

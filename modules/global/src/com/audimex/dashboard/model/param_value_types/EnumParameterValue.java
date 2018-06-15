@@ -21,4 +21,9 @@ public class EnumParameterValue implements ParameterValue {
     public void setValue(String enumClassName) {
         this.enumClassName = enumClassName;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type: enum; enumClassName=%s", enumClassName);
+    }
 }
