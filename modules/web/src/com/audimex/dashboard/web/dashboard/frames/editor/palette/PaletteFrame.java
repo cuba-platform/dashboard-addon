@@ -9,6 +9,7 @@ import com.audimex.dashboard.entity.WidgetTemplate;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
+import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
 import com.audimex.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.audimex.dashboard.web.widget.WidgetEdit;
@@ -49,6 +50,8 @@ public class PaletteFrame extends AbstractFrame {
     protected PaletteComponentsFactory factory;
     @Inject
     protected JsonConverter converter;
+    @Inject
+    protected AccessConstraintsHelper accessHelper;
 
     protected PaletteButton selectedWidgetBtn = null;
 
@@ -86,6 +89,7 @@ public class PaletteFrame extends AbstractFrame {
         widgetTemplatesDs.refresh();
         return widgetTemplatesDs.getItems().stream()
                 .map(widgetTemplate -> converter.widgetFromJson(widgetTemplate.getWidgetModel()))
+                .filter(accessHelper::isWidgetTemplateAllowedCurrentUser)
                 .collect(Collectors.toList());
     }
 

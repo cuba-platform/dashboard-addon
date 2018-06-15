@@ -45,7 +45,6 @@ public class WidgetTemplateBrowse extends AbstractLookup {
         modelWidgetsDs.clear();
         for (WidgetTemplate persWidget : widgetTemplatesDs.getItems()) {
             Widget model = converter.widgetFromJson(persWidget.getWidgetModel());
-            modelWidgetsDs.includeItem(model);
 
             if (accessHelper.isWidgetTemplateAllowedCurrentUser(model)) {
                 modelWidgetsDs.includeItem(model);
