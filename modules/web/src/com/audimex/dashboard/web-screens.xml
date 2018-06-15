@@ -54,4 +54,9 @@
             template="com/audimex/dashboard/web/dashboard_group/dashboard-group-browse.xml"/>
     <screen id="amxd$DashboardGroup.edit"
             template="com/audimex/dashboard/web/dashboard_group/dashboard-group-edit.xml"/>
+    <!--widget template groups-->
+    <screen id="amxd$WidgetTemplateGroup.browse"
+            template="com/audimex/dashboard/web/widget_template_group/widget-template-group-browse.xml"/>
+    <screen id="amxd$WidgetTemplateGroup.edit"
+            template="com/audimex/dashboard/web/widget_template_group/widget-template-group-edit.xml"/>
 </screen-config>

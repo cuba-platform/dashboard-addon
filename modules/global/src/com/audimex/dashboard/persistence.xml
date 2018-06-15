@@ -6,5 +6,6 @@
         <class>com.audimex.dashboard.entity.PersistentDashboard</class>
         <class>com.audimex.dashboard.entity.WidgetTemplate</class>
         <class>com.audimex.dashboard.entity.DashboardGroup</class>
+        <class>com.audimex.dashboard.entity.WidgetTemplateGroup</class>
     </persistence-unit>
 </persistence>

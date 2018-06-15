@@ -9,7 +9,7 @@
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.audimex.dashboard.entity.WidgetTemplate"
-                              view="_local">
+                              view="widget-group-view">
             <query>
                 <![CDATA[select e from amxd$WidgetTemplate e]]>
             </query>

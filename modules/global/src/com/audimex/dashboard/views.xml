@@ -15,4 +15,18 @@
         <property name="dashboardGroup"
                   view="_minimal"/>
     </view>
+    <view class="com.audimex.dashboard.entity.WidgetTemplate"
+          extends="_local"
+          name="widget-group-view">
+        <property name="widgetTemplateGroup"
+                  view="_minimal"/>
+    </view>
+    <view class="com.audimex.dashboard.entity.WidgetTemplateGroup"
+          extends="_local"
+          name="widget-templates">
+        <property name="widgetTemplates"
+                  view="_minimal">
+            <property name="widgetModel"/>
+        </property>
+    </view>
 </views>

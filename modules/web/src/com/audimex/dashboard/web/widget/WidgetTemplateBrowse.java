@@ -7,15 +7,21 @@ import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.components.LookupComponent;
+import com.haulmont.cuba.gui.components.SelectAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.audimex.dashboard.web.widget.WidgetEdit.SCREEN_NAME;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
+import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public class WidgetTemplateBrowse extends AbstractLookup {
     @Inject
@@ -33,6 +39,7 @@ public class WidgetTemplateBrowse extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         initDs();
+        addSelectAction();
     }
 
 
@@ -104,5 +111,23 @@ public class WidgetTemplateBrowse extends AbstractLookup {
 
         widgetTemplatesDs.commit();
         widgetTemplatesDs.refresh();
+    }
+
+    protected void addSelectAction() {
+        addAction(new SelectAction(this) {
+            @Override
+            protected Collection getSelectedItems(LookupComponent lookupComponent) {
+                Collection<Widget> selectedWidgets = super.getSelectedItems(lookupComponent);
+                if (isEmpty(selectedWidgets)) {
+                    return emptyCollection();
+                }
+                return widgetTemplatesDs.getItems().stream()
+                        .filter(widgetTemplate -> selectedWidgets.stream().anyMatch(
+                                selectedWidget -> widgetTemplate.getId().equals(selectedWidget.getId()) &&
+                                        accessHelper.isWidgetTemplateAllowedCurrentUser(selectedWidget)))
+
+                        .collect(Collectors.toList());
+            }
+        });
     }
 }

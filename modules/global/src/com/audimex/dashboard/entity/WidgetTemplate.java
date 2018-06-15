@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *  Persistence Widget Template. The field {@link WidgetTemplate#widgetModel} stores not persistence model
@@ -24,6 +27,18 @@ public class WidgetTemplate extends StandardEntity {
     @Lob
     @Column(name = "WIDGET_MODEL", nullable = false)
     protected String widgetModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "WIDGET_TEMPLATE_GROUP_ID")
+    protected WidgetTemplateGroup widgetTemplateGroup;
+
+    public void setWidgetTemplateGroup(WidgetTemplateGroup widgetTemplateGroup) {
+        this.widgetTemplateGroup = widgetTemplateGroup;
+    }
+
+    public WidgetTemplateGroup getWidgetTemplateGroup() {
+        return widgetTemplateGroup;
+    }
 
     public void setWidgetModel(String widgetModel) {
         this.widgetModel = widgetModel;

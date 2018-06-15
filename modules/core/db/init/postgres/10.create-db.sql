@@ -44,7 +44,24 @@ create table AMXD_WIDGET_TEMPLATE (
     DELETED_BY varchar(50),
     --
     WIDGET_MODEL text not null,
+    WIDGET_TEMPLATE_GROUP_ID uuid,
     --
     primary key (ID)
 )^
 -- end AMXD_WIDGET_TEMPLATE
+-- begin AMXD_WIDGET_TEMPLATE_GROUP
+create table AMXD_WIDGET_TEMPLATE_GROUP (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255) not null,
+    --
+    primary key (ID)
+)^
+-- end AMXD_WIDGET_TEMPLATE_GROUP
