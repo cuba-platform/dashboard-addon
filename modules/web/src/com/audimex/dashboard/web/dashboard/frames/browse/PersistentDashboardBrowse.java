@@ -143,7 +143,9 @@ public class PersistentDashboardBrowse extends AbstractLookup {
                 }
                 return persDashboardsDs.getItems().stream()
                         .filter(dash -> selectedDashboards.stream().anyMatch(
-                                selectedDashboard -> dash.getId().equals(selectedDashboard.getId())))
+                                selectedDashboard -> dash.getId().equals(selectedDashboard.getId()) &&
+                                        accessHelper.isDashboardAllowedCurrentUser(selectedDashboard)))
+
                         .collect(Collectors.toList());
             }
         });
