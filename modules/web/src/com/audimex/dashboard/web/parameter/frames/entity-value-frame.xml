@@ -26,7 +26,8 @@
                    width="85px"
                    value="msg://view"
                    align="MIDDLE_LEFT"/>
-            <lookupField id="viewLookup"/>
+            <lookupField id="viewLookup"
+                         required="true"/>
         </hbox>
     </layout>
 </window>

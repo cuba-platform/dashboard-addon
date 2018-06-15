@@ -36,6 +36,14 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
         this.add(lookupFrame.getFrame());
     }
 
+    @Override
+    public void refresh(Map<String, Object> params) {
+        String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
+        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG,  getParamsForFrame(params));
+        lookupFrame.close("");
+        this.add(lookupFrame.getFrame());
+    }
+
     protected Window.Lookup.Handler lookupHandler() {
         return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetWithEntities(widget, items)));
     }

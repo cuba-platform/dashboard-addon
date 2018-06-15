@@ -8,10 +8,14 @@ import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.Frame;
 
+import java.util.Map;
+
 public interface WidgetBrowse extends Frame {
     Widget getWidget();
 
     Dashboard getDashboard();
 
     void refresh();
+
+    void refresh(Map<String, Object> params);
 }

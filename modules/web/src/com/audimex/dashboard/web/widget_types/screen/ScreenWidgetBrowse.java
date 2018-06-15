@@ -24,4 +24,11 @@ public class ScreenWidgetBrowse extends AbstractWidgetBrowse {
         AbstractFrame screenFrame = openFrame(this, screenId, getParamsForFrame());
         screenFrame.setSizeFull();
     }
+
+    @Override
+    public void refresh(Map<String, Object> params) {
+        String screenId = ((ScreenWidget) widget).getScreenId();
+        AbstractFrame screenFrame = openFrame(this, screenId, getParamsForFrame(params));
+        screenFrame.setSizeFull();
+    }
 }
