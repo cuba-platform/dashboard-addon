@@ -16,20 +16,8 @@ public class Parameter extends BaseUuidEntity {
     protected String name;
     @MetaProperty
     protected String alias;
-    @MetaProperty
-    protected String mappedAlias;
-    @MetaProperty
-    protected Integer orderNum;
 
     protected ParameterValue parameterValue;
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
 
     public void setParameterValue(ParameterValue parameterValue) {
         this.parameterValue = parameterValue;
@@ -53,13 +41,5 @@ public class Parameter extends BaseUuidEntity {
 
     public String getAlias() {
         return alias;
-    }
-
-    public void setMappedAlias(String mappedAlias) {
-        this.mappedAlias = mappedAlias;
-    }
-
-    public String getMappedAlias() {
-        return mappedAlias;
     }
 }

@@ -30,7 +30,6 @@ public class ParameterBrowse extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         initDs(params);
-        //todo add work with orderNum
     }
 
     public List<Parameter> getParameters() {

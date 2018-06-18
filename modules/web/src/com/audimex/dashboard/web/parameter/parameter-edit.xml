@@ -18,7 +18,6 @@
                 <field property="name"
                        required="true"/>
                 <field property="alias"/>
-                <field property="mappedAlias"/>
             </column>
         </fieldGroup>
         <vbox width="100%"
