@@ -94,12 +94,12 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
 
     protected void setDateTime(DateTimeParameterValue value) {
         dateField.setValue(value == null ? null : value.getValue());
-        initDateField("DD/MM/yyyy hh:mm");
+        initDateField("dd/MM/yyyy HH:mm");
     }
 
     protected void setDate(DateParameterValue value) {
         dateField.setValue(value == null ? null : value.getValue());
-        initDateField("DD/MM/yyyy");
+        initDateField("dd/MM/yyyy");
     }
 
     protected void initDateField(String format) {
