@@ -24,21 +24,6 @@
             <tab id="widgetTab"
                  caption="msg://widgets"
                  expand="widgetBox">
-                <hbox id="widgetBtnBox"
-                      margin="true,true,false,true"
-                      spacing="true">
-                    <button id="createWidgetBtn"
-                            caption="msg://create"
-                            invoke="createWidget"/>
-                    <button id="removeWidgetBtn"
-                            caption="msg://remove"
-                            enable="false"
-                            invoke="removeWidget"/>
-                    <button id="doTemplateBtn"
-                            caption="msg://doTemplate"
-                            enable="false"
-                            invoke="doTemplate"/>
-                </hbox>
                 <scrollBox id="widgetBox"
                            scrollBars="vertical"
                            width="100%"

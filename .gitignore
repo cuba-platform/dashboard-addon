@@ -10,3 +10,4 @@ test-run
 .ideaDataSources
 dataSources
 studio-settings.xml
+deploy/*

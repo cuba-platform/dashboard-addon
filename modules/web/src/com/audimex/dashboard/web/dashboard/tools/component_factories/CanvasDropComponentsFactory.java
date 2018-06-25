@@ -5,6 +5,7 @@
 package com.audimex.dashboard.web.dashboard.tools.component_factories;
 
 import com.audimex.dashboard.model.Widget;
+import com.audimex.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
 import com.audimex.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.audimex.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.audimex.dashboard.web.dashboard.events.WeightChangedEvent;
@@ -27,6 +28,7 @@ import static com.audimex.dashboard.web.DashboardIcon.TRASH_ICON;
 import static com.audimex.dashboard.web.DashboardStyleConstants.*;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 import static com.haulmont.cuba.gui.icons.CubaIcon.ARROWS;
+import static com.haulmont.cuba.gui.icons.CubaIcon.DATABASE;
 
 @Component("amdx_VaadinDropComponentsFactory")
 public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
@@ -106,12 +108,14 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         Button removeButton = createRemoveButton(layout);
         Button editButton = createEditButton(layout);
         Button weightButton = createWeightButton(layout);
+        Button doTemplateButton = createDoTemplateButton(widget);
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(editButton);
         buttonsPanel.add(weightButton);
+        buttonsPanel.add(doTemplateButton);
 
         return layout;
 
@@ -145,5 +149,15 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         weightButton.setIconFromSet(ARROWS);
         weightButton.setCaption("");
         return weightButton;
+    }
+
+    protected Button createDoTemplateButton(Widget widget) {
+        Button templateBtn = factory.createComponent(Button.class);
+        templateBtn.setAction(new BaseAction("doTemplateClicked")
+                .withHandler(e -> events.publish(new DoWidgetTemplateEvent(widget))));
+        templateBtn.addStyleName(AMXD_EDIT_BUTTON);
+        templateBtn.setIconFromSet(DATABASE);
+        templateBtn.setCaption("");
+        return templateBtn;
     }
 }

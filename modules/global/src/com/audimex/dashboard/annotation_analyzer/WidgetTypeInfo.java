@@ -5,15 +5,16 @@
 package com.audimex.dashboard.annotation_analyzer;
 
 import com.audimex.dashboard.annotation.WidgetType;
+import com.audimex.dashboard.model.Widget;
 
 import java.io.Serializable;
 
 /**
  * Contains values of annotation {@link WidgetType}, which is indicated class {@link WidgetTypeInfo#typeClass}
  */
-public class WidgetTypeInfo implements Serializable {
+public class WidgetTypeInfo<T extends Widget> implements Serializable {
 
-    protected Class typeClass;
+    protected Class<T> typeClass;
     protected String name;
     protected String browseFrameId;
     protected String editFrameId;
@@ -21,18 +22,18 @@ public class WidgetTypeInfo implements Serializable {
     public WidgetTypeInfo() {
     }
 
-    public WidgetTypeInfo(Class typeClass, String name, String browseFrameId, String editFrameId) {
+    public WidgetTypeInfo(Class<T> typeClass, String name, String browseFrameId, String editFrameId) {
         this.typeClass = typeClass;
         this.name = name;
         this.browseFrameId = browseFrameId;
         this.editFrameId = editFrameId;
     }
 
-    public Class getTypeClass() {
+    public Class<T> getTypeClass() {
         return typeClass;
     }
 
-    public void setTypeClass(Class typeClass) {
+    public void setTypeClass(Class<T> typeClass) {
         this.typeClass = typeClass;
     }
 
