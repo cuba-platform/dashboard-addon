@@ -178,8 +178,7 @@ in the xml file of the screen. Then add namespace like 'dash' for the schema. Th
         xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
         <dash:dashboard id="dashboardId"
-                        referenceName="usersDashboard"
-                        timerDelay="60">
+                        referenceName="usersDashboard">
              <dash:parameter name="role" value="Admin" type="string"/>           
         </dash:dashboard> 
     ...
@@ -190,7 +189,6 @@ in the xml file of the screen. Then add namespace like 'dash' for the schema. Th
 - referenceName - the attribute, which will be searched for a dashboard in a database.
 - jsonPath - the classPath to the dashboard json file.
 - class - the controller class of the dashboard-ui, one have to  inherited from he com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
-- timerDelay - the time period in seconds for refresh a dashboard-ui.
 
 ***Note:*** when embedding a dashboard, you must specify the referenceName or jsonPath attribute. When specifying at the same time, the attribute referenceName takes precedence over jsonPath.
 #### Parameter tag attributes

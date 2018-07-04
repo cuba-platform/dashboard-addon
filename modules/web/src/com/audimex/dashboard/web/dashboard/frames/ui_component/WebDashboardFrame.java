@@ -60,21 +60,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected String referenceName;
     protected String jsonPath;
-    protected int timerDelay = -1;
     protected List<Parameter> xmlParameters = new ArrayList<>();
 
     @Override
     public void init(Map<String, Object> params) {
-        super.init(params);
-        refresh();
-
-        if (timerDelay > 0) {
-            //todo add timer
-        }
-    }
-
-    @Override
-    public void refresh() {
         if (isNotBlank(jsonPath)) {
             updateDashboard(loadDashboardByJson(jsonPath));
         } else if (isNotBlank(referenceName)) {
@@ -175,10 +164,5 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void setXmlParameters(List<Parameter> parameters) {
         xmlParameters = parameters;
-    }
-
-    @Override
-    public void setTimerDelay(int delay) {
-        timerDelay = delay;
     }
 }

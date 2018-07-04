@@ -178,8 +178,7 @@ xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd".В данном
         xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
         <dash:dashboard id="dashboardId"
-                        referenceName="usersDashboard"
-                        timerDelay="60">
+                        referenceName="usersDashboard">
              <dash:parameter name="role" value="Admin" type="string"/>           
         </dash:dashboard> 
     ...
@@ -190,7 +189,6 @@ xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd".В данном
 - referenceName - аттрибут, по которому будет вестисть поиск дашборда в базе данных.
 - jsonPath - classPath до json дашборда.
 - class - класс контроллера дашборда, должен быть наследован от com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
-- timerDelay - переод времени в секундах, при котором дашборд будет обновляться.
 
 ***Замечание:*** при встаивании дашборда обязательно необходимо указать аттрибут referenceName или jsonPath. При задании 
 одновременно двух referenceName имеет приоритет выше, чем jsonPath.
