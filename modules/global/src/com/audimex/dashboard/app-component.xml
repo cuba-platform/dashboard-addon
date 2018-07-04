@@ -57,6 +57,8 @@
                   value="+com.audimex.dashboard.gui com.audimex.dashboard.web"/>
         <property name="cuba.iconsConfig"
                   value="+com.audimex.dashboard.web.DashboardIcon"/>
+        <property name="cuba.web.componentsConfig"
+                  value="+com/audimex/dashboard/ui-component.xml"/>
     </module>
     <module name="web-themes">
         <artifact name="dashboard-web-themes"/>

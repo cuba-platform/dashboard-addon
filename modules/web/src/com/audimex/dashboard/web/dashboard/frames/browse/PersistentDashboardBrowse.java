@@ -8,7 +8,6 @@ import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit;
-import com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame;
 import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
@@ -26,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame.REFERENCE_NAME;
+import static com.audimex.dashboard.web.dashboard.frames.browse.DashboardView.REFERENCE_NAME;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.NEW_WINDOW;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
@@ -98,7 +97,7 @@ public class PersistentDashboardBrowse extends AbstractLookup {
     public void viewDashboard() {
         Dashboard item = modelDashboardsDs.getItem();
         if (item != null) {
-            openWindow(WebDashboardFrame.SCREEN_NAME, NEW_WINDOW, ParamsMap.of(REFERENCE_NAME, item.getReferenceName()));
+            openWindow(DashboardView.SCREEN_NAME, NEW_WINDOW, ParamsMap.of(REFERENCE_NAME, item.getReferenceName()));
         }
     }
 

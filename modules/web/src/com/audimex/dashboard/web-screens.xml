@@ -4,6 +4,8 @@
     <!--dashboard-->
     <screen id="dashboardBrowse"
             template="/com/audimex/dashboard/web/dashboard/frames/browse/persistent-dashboard-browse.xml"/>
+    <screen id="dashboard-view"
+            template="com/audimex/dashboard/web/dashboard/frames/browse/dashboard-view.xml"/>
     <screen id="dashboardEdit"
             template="/com/audimex/dashboard/web/dashboard/frames/editor/dashboard-edit.xml"/>
     <screen id="dashboardComponent"

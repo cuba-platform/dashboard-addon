@@ -7,22 +7,20 @@ package com.audimex.dashboard.web.dashboard.frames.ui_component;
 import com.audimex.dashboard.converter.JsonConverter;
 import com.audimex.dashboard.entity.PersistentDashboard;
 import com.audimex.dashboard.gui.components.DashboardFrame;
+import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.web.DashboardException;
 import com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
-import com.audimex.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.Timer;
+import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
@@ -39,9 +37,9 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class WebDashboardFrame extends AbstractWindow implements DashboardFrame {
+public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
+
     public static final String SCREEN_NAME = "dashboardComponent";
-    public static final String REFERENCE_NAME = "REFERENCE_NAME";
 
     @Inject
     protected VBoxLayout canvasBox;
@@ -57,51 +55,38 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
     protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Messages messages;
-    @Inject
-    protected ComponentsFactory factory;
 
     protected CanvasFrame canvasFrame;
-    protected Timer timer;
 
     protected String referenceName;
     protected String jsonPath;
     protected int timerDelay = -1;
     protected List<Parameter> xmlParameters = new ArrayList<>();
 
-    protected Dashboard dashboard;
-
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        setParams(params);
         refresh();
 
         if (timerDelay > 0) {
-            timer = factory.createTimer();
-            addTimer(timer);
-
-            timer.setDelay(timerDelay);
-            timer.setRepeating(true);
-            timer.addActionListener(t -> refresh());
-            timer.start();
+            //todo add timer
         }
     }
 
     @Override
     public void refresh() {
         if (isNotBlank(jsonPath)) {
-            dashboard = loadDashboardByJson(jsonPath);
+            updateDashboard(loadDashboardByJson(jsonPath));
         } else if (isNotBlank(referenceName)) {
-            dashboard = loadDashboardByReferenceName(referenceName);
+            updateDashboard(loadDashboardByReferenceName(referenceName));
         }
-        updateDashboard(dashboard);
     }
 
     @EventListener
     public void onUpdateDashboard(DashboardUpdatedEvent event) {
         Dashboard source = event.getSource();
 
-        if (source.getId().equals(dashboard.getId())) {
+        if (source.getId().equals(canvasFrame.getDashboard().getId())) {
             updateDashboard(source);
         }
     }
@@ -111,20 +96,20 @@ public class WebDashboardFrame extends AbstractWindow implements DashboardFrame 
         return canvasFrame.getWidgetBrowse(widgetId);
     }
 
-    protected void setParams(Map<String, Object> params) {
-        referenceName = (String) params.getOrDefault(REFERENCE_NAME, "");
-    }
-
     protected void updateDashboard(Dashboard dashboard) {
-        if (dashboard == null || !accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
-            showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
-            canvasFrame = null;
-            canvasBox.removeAll();
-        } else {
-            setCaption(dashboard.getTitle());
-            addXmlParameters(dashboard);
-            updateCanvasFrame(dashboard);
+        if (dashboard == null) {
+            showNotification(messages.getMainMessage("notLoadedDashboard"), NotificationType.ERROR);
+            return;
         }
+
+        if (!accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
+            showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
+            return;
+        }
+
+        setCaption(dashboard.getTitle());
+        addXmlParameters(dashboard);
+        updateCanvasFrame(dashboard);
     }
 
     protected Dashboard loadDashboardByJson(String jsonPath) {
