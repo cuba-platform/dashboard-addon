@@ -6,6 +6,7 @@ package com.audimex.dashboard.web.dashboard.tools.component_factories;
 
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.visual_model.GridLayout;
+import com.audimex.dashboard.model.visual_model.HorizontalLayout;
 import com.audimex.dashboard.model.visual_model.VerticalLayout;
 import com.audimex.dashboard.model.visual_model.WidgetLayout;
 import com.audimex.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
@@ -33,21 +34,21 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     @Inject
     protected Messages messages;
 
-    public PaletteButton createVerticalLayoutButton() {
-        PaletteButton button = createCommonButton();
-        button.setCaption(messages.getMainMessage("verticalLayout"));
-        button.setIconFromSet(VERTICAL_LAYOUT_ICON);
-        button.setLayout(metadata.create(VerticalLayout.class));
-        button.setDescription(messages.getMainMessage("verticalLayout"));
-        return button;
-    }
-
     public PaletteButton createHorizontalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("horizontalLayout"));
         button.setIconFromSet(HORIZONTAL_LAYOUT_ICON);
-        button.setLayout(metadata.create(com.audimex.dashboard.model.visual_model.HorizontalLayout.class));
+        button.setLayout(metadata.create(VerticalLayout.class));
         button.setDescription(messages.getMainMessage("horizontalLayout"));
+        return button;
+    }
+
+    public PaletteButton createVerticalLayoutButton() {
+        PaletteButton button = createCommonButton();
+        button.setCaption(messages.getMainMessage("verticalLayout"));
+        button.setIconFromSet(VERTICAL_LAYOUT_ICON);
+        button.setLayout(metadata.create(HorizontalLayout.class));
+        button.setDescription(messages.getMainMessage("verticalLayout"));
         return button;
     }
 

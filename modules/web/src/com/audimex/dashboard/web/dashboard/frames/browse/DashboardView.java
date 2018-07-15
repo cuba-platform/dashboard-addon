@@ -18,6 +18,6 @@ public class DashboardView extends AbstractWindow {
         WebDashboardFrame frame = (WebDashboardFrame) openFrame(null, WebDashboardFrame.SCREEN_NAME);
         frame.setReferenceName((String) params.getOrDefault(REFERENCE_NAME, ""));
         this.add(frame);
-        frame.refresh();
+        //frame.refresh();
     }
 }
