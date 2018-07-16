@@ -26,7 +26,7 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-public class DropLayoutTools {
+public class DropLayoutTools {//TODO добавление лайаутов
     protected DashboardModelConverter modelConverter;
     protected CanvasFrame frame;
 
@@ -74,7 +74,7 @@ public class DropLayoutTools {
         }
     }
 
-    protected void addComponent(Component target, DashboardLayout layout, List<Object> args) {
+    protected void addComponent(Component target, DashboardLayout layout, List<Object> args) {//TODO
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {

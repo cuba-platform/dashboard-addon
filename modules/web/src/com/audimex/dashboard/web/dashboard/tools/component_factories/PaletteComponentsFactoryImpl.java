@@ -34,21 +34,21 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     @Inject
     protected Messages messages;
 
-    public PaletteButton createHorizontalLayoutButton() {
-        PaletteButton button = createCommonButton();
-        button.setCaption(messages.getMainMessage("horizontalLayout"));
-        button.setIconFromSet(HORIZONTAL_LAYOUT_ICON);
-        button.setLayout(metadata.create(VerticalLayout.class));
-        button.setDescription(messages.getMainMessage("horizontalLayout"));
-        return button;
-    }
-
     public PaletteButton createVerticalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("verticalLayout"));
         button.setIconFromSet(VERTICAL_LAYOUT_ICON);
-        button.setLayout(metadata.create(HorizontalLayout.class));
+        button.setLayout(metadata.create(VerticalLayout.class));
         button.setDescription(messages.getMainMessage("verticalLayout"));
+        return button;
+    }
+
+    public PaletteButton createHorizontalLayoutButton() {
+        PaletteButton button = createCommonButton();
+        button.setCaption(messages.getMainMessage("horizontalLayout"));
+        button.setIconFromSet(HORIZONTAL_LAYOUT_ICON);
+        button.setLayout(metadata.create(com.audimex.dashboard.model.visual_model.HorizontalLayout.class));
+        button.setDescription(messages.getMainMessage("horizontalLayout"));
         return button;
     }
 

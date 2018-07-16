@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 //partially copy-pasted from com.haulmont.cuba.gui.xml.layout.loaders.FrameComponentLoader
-public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
+public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TODO: парсит xml и создает фрейм https://youtrack.haulmont.com/issue/DASH-92
 
     protected String frameId;
     protected ComponentLoader frameLoader;

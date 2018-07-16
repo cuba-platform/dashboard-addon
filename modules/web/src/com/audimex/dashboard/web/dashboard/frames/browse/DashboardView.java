@@ -8,7 +8,7 @@ import com.haulmont.cuba.gui.components.AbstractWindow;
 
 import java.util.Map;
 
-public class DashboardView extends AbstractWindow {
+public class DashboardView extends AbstractWindow {//TODO
 
     public static final String SCREEN_NAME = "dashboard-view";
     public static final String REFERENCE_NAME = "REFERENCE_NAME";
@@ -18,6 +18,6 @@ public class DashboardView extends AbstractWindow {
         WebDashboardFrame frame = (WebDashboardFrame) openFrame(null, WebDashboardFrame.SCREEN_NAME);
         frame.setReferenceName((String) params.getOrDefault(REFERENCE_NAME, ""));
         this.add(frame);
-        //frame.refresh();
+        //frame.refresh();  //TODO: return refresh method
     }
 }

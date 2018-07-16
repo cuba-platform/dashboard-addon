@@ -20,7 +20,7 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implem
 
     protected DropLayoutTools tools;
 
-    public VerticalLayoutDropHandler(DropLayoutTools tools) {
+    public VerticalLayoutDropHandler(DropLayoutTools tools) {//TODO добавление конкретного типа разметки
         this.tools = tools;
     }
 

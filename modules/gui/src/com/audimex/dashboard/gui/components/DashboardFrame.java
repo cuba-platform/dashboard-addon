@@ -26,4 +26,6 @@ public interface DashboardFrame extends Frame {
     void setJsonPath(String jsonPath);
 
     void setXmlParameters(List<Parameter> parameters);
+
+    //TODO: return refresh method
 }
