@@ -87,6 +87,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
         loadReferenceName(resultComponent, element);
         loadJsonPath(resultComponent, element);
         loadParams(resultComponent, element);
+        loadTimerDelay(resultComponent, element);
 
         if (context.getFrame() != null) {
             resultComponent.setFrame(context.getFrame());
@@ -111,6 +112,13 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
         String jsonPath = element.attributeValue("jsonPath");
         if (isNotBlank(jsonPath)) {
             resultComponent.setJsonPath(jsonPath);
+        }
+    }
+
+    protected void loadTimerDelay(DashboardFrame resultComponent, Element element) {
+        String timerDelayValue = element.attributeValue("timerDelay");
+        if (isNotBlank(timerDelayValue)) {
+            resultComponent.setTimerDelay(Integer.parseInt(timerDelayValue) * 1000);
         }
     }
 

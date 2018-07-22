@@ -17,10 +17,9 @@
         <fieldGroup id="fieldGroup"
                     datasource="dashboardDs">
             <column width="300px">
-                <field property="title"
-                       required="true"/>
-                <field property="referenceName"
-                       required="true"/>
+                <field property="title"/>
+                <field property="referenceName"/>
+                <field property="timerDelay"/>
                 <field property="isAvailableForAllUsers"/>
             </column>
         </fieldGroup>

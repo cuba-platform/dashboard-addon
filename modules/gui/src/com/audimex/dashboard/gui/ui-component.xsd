@@ -20,6 +20,7 @@
                     <xs:attribute name="referenceName" type="xs:string"/>
                     <xs:attribute name="jsonPath" type="xs:string"/>
                     <xs:attribute name="class" type="xs:string"/>
+                    <xs:attribute name="timerDelay" type="delay"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -30,6 +31,13 @@
         <xs:attribute name="value" type="xs:string" use="required"/>
         <xs:attribute name="type" type="paramTypeEnum"/>
     </xs:complexType>
+    
+    <xs:simpleType name="delay">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="100000"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="paramTypeEnum">
         <xs:union>

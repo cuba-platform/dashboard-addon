@@ -60,10 +60,18 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected String referenceName;
     protected String jsonPath;
+    protected Integer timerDelay = 0;
     protected List<Parameter> xmlParameters = new ArrayList<>();
+    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
+        super.init(params);
+        refresh();
+    }
+
+    @Override
+    public void refresh() {
         if (isNotBlank(jsonPath)) {
             updateDashboard(loadDashboardByJson(jsonPath));
         } else if (isNotBlank(referenceName)) {
@@ -71,7 +79,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    @EventListener
+    //@EventListener TODO: listen to this event or implement it???
     public void onUpdateDashboard(DashboardUpdatedEvent event) {
         Dashboard source = event.getSource();
 
@@ -99,6 +107,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         setCaption(dashboard.getTitle());
         addXmlParameters(dashboard);
         updateCanvasFrame(dashboard);
+        this.dashboard = dashboard;
     }
 
     protected Dashboard loadDashboardByJson(String jsonPath) {
@@ -164,5 +173,20 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void setXmlParameters(List<Parameter> parameters) {
         xmlParameters = parameters;
+    }
+
+    @Override
+    public void setTimerDelay(int delay) {
+        timerDelay = delay;
+    }
+
+    @Override
+    public int getTimerDelay() {
+        return timerDelay;
+    }
+
+    @Override
+    public Dashboard getDashboard() {
+        return dashboard;
     }
 }

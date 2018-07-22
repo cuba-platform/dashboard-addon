@@ -44,6 +44,12 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected String createdBy;
 
+    /**
+     * Stores delay for publishing DashboardUpdatedEvent in view mode
+     */
+    @MetaProperty
+    protected Integer timerDelay = 0;
+
     public Boolean getIsAvailableForAllUsers() {
         return isAvailableForAllUsers;
     }
@@ -92,4 +98,11 @@ public class Dashboard extends BaseUuidEntity {
         return title;
     }
 
+    public Integer getTimerDelay() {
+        return timerDelay;
+    }
+
+    public void setTimerDelay(Integer timerDelay) {
+        this.timerDelay = timerDelay;
+    }
 }

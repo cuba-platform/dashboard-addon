@@ -11,6 +11,7 @@ import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.model.param_value_types.ParameterValue;
 import com.audimex.dashboard.parameter_transformer.ParameterTransformer;
 import com.audimex.dashboard.web.DashboardException;
+import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -91,6 +92,12 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
             widget = source;
             refresh();
         }
+    }
+
+    @EventListener
+    public void onUpdateDashboard(DashboardUpdatedEvent event) {
+        Dashboard source = event.getSource();
+
     }
 
     @Override
