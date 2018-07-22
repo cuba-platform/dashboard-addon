@@ -16,6 +16,7 @@ import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
@@ -49,14 +50,17 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(AMXD_SHADOW_BORDER);
+        layout.setDescription(messages.getMainMessage("verticalLayout"));
 
         Button removeButton = createRemoveButton(layout);
         Button weightButton = createWeightButton(layout);
+        Button captionButton = createCaptionButton(layout, "verticalLayout");
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
+        buttonsPanel.add(captionButton);
 
         return layout;
     }
@@ -67,14 +71,17 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(AMXD_SHADOW_BORDER);
+        layout.setDescription(messages.getMainMessage("horizontalLayout"));
 
         Button removeButton = createRemoveButton(layout);
         Button weightButton = createWeightButton(layout);
+        Button captionButton = createCaptionButton(layout, "horizontalLayout");
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
+        buttonsPanel.add(captionButton);
 
         return layout;
     }
@@ -86,14 +93,17 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
         layout.setDragMode(CLONE);
         layout.addStyleName(AMXD_SHADOW_BORDER);
+        layout.setDescription(messages.getMainMessage("gridLayout"));
 
         Button removeButton = createRemoveButton(layout);
         Button weightButton = createWeightButton(layout);
+        Button captionButton = createCaptionButton(layout, "gridLayout");
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
+        buttonsPanel.add(captionButton);
 
         return layout;
     }
@@ -104,11 +114,13 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(AMXD_SHADOW_BORDER);
+        layout.setDescription(messages.getMainMessage("widgetLayout"));
 
         Button removeButton = createRemoveButton(layout);
         Button editButton = createEditButton(layout);
         Button weightButton = createWeightButton(layout);
         Button doTemplateButton = createDoTemplateButton(widget);
+        Button captionButton = createCaptionButton(layout, "widgetLayout");
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(AMXD_LAYOUT_CONTROLS);
@@ -116,6 +128,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(editButton);
         buttonsPanel.add(weightButton);
         buttonsPanel.add(doTemplateButton);
+        buttonsPanel.add(captionButton);
 
         return layout;
 
@@ -159,5 +172,13 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         templateBtn.setIconFromSet(DATABASE);
         templateBtn.setCaption("");
         return templateBtn;
+    }
+
+
+    protected Button createCaptionButton(CanvasLayout layout, String messageKey) {
+        Button captionButton = factory.createComponent(Button.class);
+        captionButton.addStyleName(AMXD_EDIT_BUTTON);
+        captionButton.setCaption(messages.getMainMessage(messageKey));
+        return captionButton;
     }
 }
