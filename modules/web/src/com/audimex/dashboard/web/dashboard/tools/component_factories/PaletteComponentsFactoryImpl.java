@@ -47,7 +47,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("horizontalLayout"));
         button.setIconFromSet(HORIZONTAL_LAYOUT_ICON);
-        button.setLayout(metadata.create(com.audimex.dashboard.model.visual_model.HorizontalLayout.class));
+        button.setLayout(metadata.create(HorizontalLayout.class));
         button.setDescription(messages.getMainMessage("horizontalLayout"));
         return button;
     }
