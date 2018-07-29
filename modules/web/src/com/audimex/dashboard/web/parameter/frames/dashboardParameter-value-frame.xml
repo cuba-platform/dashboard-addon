@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.audimex.dashboard.web.parameter.frames.DashboardParameterValueFrame"
+        messagesPack="com.audimex.dashboard.web.parameter.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <hbox spacing="true">
+            <label value="dashboard par"/>
+            <lookupField id="dashboardParameterLookup"
+                         required="true"/>
+        </hbox>
+        <vbox id="valueBox"
+              spacing="true"/>
+    </layout>
+</window>

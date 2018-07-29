@@ -61,4 +61,6 @@
             template="com/audimex/dashboard/web/widget_template_group/widget-template-group-browse.xml"/>
     <screen id="amxd$WidgetTemplateGroup.edit"
             template="com/audimex/dashboard/web/widget_template_group/widget-template-group-edit.xml"/>
+    <screen id="dashboardParameterValueFrame"
+            template="com/audimex/dashboard/web/parameter/frames/dashboardParameter-value-frame.xml"/>
 </screen-config>

@@ -39,6 +39,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 public class DashboardEdit extends AbstractEditor<Dashboard> {
     public static final String SCREEN_NAME = "dashboardEdit";
     public static final String DASHBOARD_EDIT_FIELDGROUP = "amxd$dashboardEditFieldGroup";
+    public static final String FROM_DASHBOARD_EDIT = "fromDashboardEdit";
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
@@ -91,7 +92,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected void initParametersFrame() {
         parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
-                PARAMETERS, dashboardDs.getItem().getParameters()
+                PARAMETERS, dashboardDs.getItem().getParameters(), DASHBOARD, dashboardDs.getItem(), FROM_DASHBOARD_EDIT, true
         ));
     }
 

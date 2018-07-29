@@ -37,9 +37,12 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
 
     protected DropLayoutTools tools = new DropLayoutTools();
 
+    protected Dashboard dashboard;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        dashboard = (Dashboard) params.get(DASHBOARD);
     }
 
     @Override
@@ -68,7 +71,8 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         CanvasWidgetLayout source = event.getSource();
         Widget widget = source.getWidget();
 
-        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
+        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB, ParamsMap.of(
+                DASHBOARD, dashboard));
         editor.addCloseWithCommitListener(() -> {
             Container parent = (Container) source.getParent();
             parent.remove(source);

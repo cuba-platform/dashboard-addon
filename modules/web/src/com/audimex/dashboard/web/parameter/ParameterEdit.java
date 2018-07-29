@@ -3,11 +3,13 @@
  */
 package com.audimex.dashboard.web.parameter;
 
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.ParameterType;
 import com.audimex.dashboard.model.param_value_types.*;
 import com.audimex.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -15,9 +17,14 @@ import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static com.audimex.dashboard.model.ParameterType.*;
+import static com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit.FROM_DASHBOARD_EDIT;
+import static com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.audimex.dashboard.web.parameter.frames.ValueFrame.VALUE;
 import static com.audimex.dashboard.web.parameter.frames.ValueFrame.VALUE_TYPE;
 
@@ -29,16 +36,33 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
     protected VBoxLayout valueBox;
 
+    //The AbstractEditor replaces an item to another object, if one has status '[new]'
+    @WindowParam(name = "ITEM", required = true)
+    protected Parameter inputItem;
+
     protected ValueFrame valueFrame;
+
+    protected Dashboard dashboard;
+
+    protected Boolean fromDashboardEdit;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        dashboard = (Dashboard) params.get(DASHBOARD);
+        fromDashboardEdit = (Boolean) params.get(FROM_DASHBOARD_EDIT);
+        typeLookup.setOptionsList(Arrays.asList(ParameterType.values()));
+        if (fromDashboardEdit != null && fromDashboardEdit) {//open parameter frame from edit dashboard window
+            List tmpLst = new ArrayList(typeLookup.getOptionsList());
+            tmpLst.remove(DASHBOARD_PARAMETER);
+            typeLookup.setOptionsList(tmpLst);
+        }
     }
 
     @Override
     protected void postInit() {
         super.postInit();
+        parameterDs.setItem(inputItem);
         initParameter();
         typeLookup.addValueChangeListener(e -> parameterTypeChanged((ParameterType) e.getValue()));
     }
@@ -50,9 +74,17 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return super.preCommit();
     }
 
+    @Override
+    protected boolean postCommit(boolean committed, boolean close) {
+        if (fromDashboardEdit != null && fromDashboardEdit) {//open parameter frame from edit dashboard window
+            dashboard.getParameters().remove(parameterDs.getItem());
+            dashboard.getParameters().add(parameterDs.getItem());
+        }
+        return super.postCommit(committed, close);
+    }
+
     protected void initParameter() {
         ParameterValue parameterValue = parameterDs.getItem().getParameterValue();
-
         if (parameterValue instanceof EntityParameterValue) {
             typeLookup.setValue(ENTITY);
             valueFrame = openEntityValueFrame((EntityParameterValue) parameterValue);
@@ -86,6 +118,9 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         } else if (parameterValue instanceof BooleanParameterValue) {
             typeLookup.setValue(BOOLEAN);
             valueFrame = openSimpleValueFrame(BOOLEAN, parameterValue);
+        } else if (parameterValue instanceof DashboardParameterParameterValue) {
+            typeLookup.setValue(DASHBOARD_PARAMETER);
+            valueFrame = openDashboardParameterFrame((DashboardParameterParameterValue) parameterValue);
         } else { //if UNDEFINED
             typeLookup.setValue(UNDEFINED);
         }
@@ -113,6 +148,9 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             case UUID:
                 valueFrame = openSimpleValueFrame(type, null);
                 break;
+            case DASHBOARD_PARAMETER:
+                valueFrame = openDashboardParameterFrame(null);
+                break;
             case UNDEFINED:
             default:
                 valueFrame = null;
@@ -125,7 +163,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return (SimpleValueFrame) openFrame(
                 valueBox,
                 "simpleValueFrame",
-                ParamsMap.of(VALUE_TYPE, type, VALUE, parameterValue)
+                ParamsMap.of(VALUE_TYPE, type, VALUE, parameterValue, DASHBOARD, dashboard)
         );
     }
 
@@ -133,7 +171,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return (EnumValueFrame) openFrame(
                 valueBox,
                 "enumValueFrame",
-                ParamsMap.of(VALUE, value)
+                ParamsMap.of(VALUE, value, DASHBOARD, dashboard)
         );
     }
 
@@ -141,7 +179,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return (EntityValueFrame) openFrame(
                 valueBox,
                 "entityValueFrame",
-                ParamsMap.of(VALUE, value)
+                ParamsMap.of(VALUE, value, DASHBOARD, dashboard)
         );
     }
 
@@ -149,7 +187,15 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         return (EntitiesListValueFrame) openFrame(
                 valueBox,
                 "entitiesListValueFrame",
-                ParamsMap.of(VALUE, value)
+                ParamsMap.of(VALUE, value, DASHBOARD, dashboard)
+        );
+    }
+
+    protected DashboardParameterValueFrame openDashboardParameterFrame(DashboardParameterParameterValue value) {
+        return (DashboardParameterValueFrame) openFrame(
+                valueBox,
+                "dashboardParameterValueFrame",
+                ParamsMap.of(VALUE, value, DASHBOARD, dashboard)
         );
     }
 }

@@ -20,21 +20,18 @@
                 <field property="alias"/>
             </column>
         </fieldGroup>
-        <vbox width="100%"
-              spacing="true">
+        <vbox spacing="true">
             <hbox id="valueTypeBox"
                   spacing="true">
-                <label value="msg://valueType"
-                       align="MIDDLE_LEFT"
+                <label align="MIDDLE_LEFT"
+                       value="msg://valueType"
                        width="85px"/>
                 <lookupField id="typeLookup"
-                             optionsEnum="com.audimex.dashboard.model.ParameterType"
                              nullOptionVisible="false"
                              width="300px"/>
             </hbox>
             <vbox id="valueBox"
-                  spacing="true"
-                  width="100%"/>
+                  spacing="true"/>
         </vbox>
         <frame id="windowActions"
                screen="editWindowActions"/>

@@ -5,6 +5,7 @@ package com.audimex.dashboard.web.widget;
 
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.audimex.dashboard.annotation_analyzer.WidgetTypeInfo;
+import com.audimex.dashboard.model.Dashboard;
 import com.audimex.dashboard.model.Parameter;
 import com.audimex.dashboard.model.Widget;
 import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.audimex.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -52,6 +54,14 @@ public class WidgetEdit extends AbstractEditor<Widget> {
 
     protected List<WidgetTypeInfo> typesInfo;
     protected AbstractFrame widgetEditFrame;
+    protected Dashboard dashboard;
+
+
+    @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        dashboard = (Dashboard) params.get(DASHBOARD);
+    }
 
     @Override
     public void postInit() {
@@ -115,7 +125,9 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected void initParametersFrame() {
         paramsFrame.init(ParamsMap.of(
                 PARAMETERS,
-                getItem().getParameters()
+                getItem().getParameters(),
+                DASHBOARD,
+                dashboard
         ));
     }
 

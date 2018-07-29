@@ -21,6 +21,7 @@ public enum ParameterType implements EnumClass<String> {
     DECIMAL("DECIMAL"),
     BOOLEAN("BOOLEAN"),
     LONG("LONG"),
+    DASHBOARD_PARAMETER("DASHBOARD_PARAMETER"),
     UNDEFINED("UNDEFINED");
 
     private String id;
