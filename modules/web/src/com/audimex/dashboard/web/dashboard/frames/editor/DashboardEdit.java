@@ -13,11 +13,13 @@ import com.audimex.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.audimex.dashboard.web.events.DashboardUpdatedEvent;
 import com.audimex.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.DsContext;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import org.apache.commons.io.IOUtils;
@@ -25,6 +27,7 @@ import org.springframework.beans.BeanUtils;
 
 import javax.inject.Inject;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Objects;
 
 import static com.audimex.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
@@ -35,6 +38,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
     public static final String SCREEN_NAME = "dashboardEdit";
+    public static final String DASHBOARD_EDIT_FIELDGROUP = "amxd$dashboardEditFieldGroup";
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
@@ -135,5 +139,23 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     public void onPropagateBtnClick() {
         Dashboard dashboard = getItem();
         events.publish(new DashboardUpdatedEvent(dashboard));
+    }
+
+
+    @Override
+    protected void postValidate(ValidationErrors errors) {
+        //remove validation errors from widget frames
+        errors.getAll().removeIf(error -> !DASHBOARD_EDIT_FIELDGROUP.equals(error.component.getParent().getId()));
+    }
+
+    @Override
+    protected boolean preCommit() {
+        //remove ds contexts from widget frames
+        dashboardDs.getDsContext().getChildren().removeIf(dsContext ->
+                !((dsContext.get("parametersDs") != null && dsContext.get("parametersDs").getMetaClass() != null &&
+                        "amxd$Parameter".equals(dsContext.get("parametersDs").getMetaClass().getName())) ||
+                        (dsContext.get("widgetTemplatesDs") != null && dsContext.get("widgetTemplatesDs").getMetaClass() != null) &&
+                                "amxd$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
+        return true;
     }
 }

@@ -6,7 +6,7 @@
         caption="msg://dashboardEdit"
         class="com.audimex.dashboard.web.dashboard.frames.editor.DashboardEdit"
         datasource="dashboardDs"
-        focusComponent="fieldGroup">
+        focusComponent="amxd$dashboardEditFieldGroup">
     <dsContext>
         <datasource id="dashboardDs"
                     class="com.audimex.dashboard.model.Dashboard"/>
@@ -14,7 +14,7 @@
     <layout expand="dashboardLayoutBox"
             height="100%"
             spacing="true">
-        <fieldGroup id="fieldGroup"
+        <fieldGroup id="amxd$dashboardEditFieldGroup"
                     datasource="dashboardDs">
             <column width="300px">
                 <field property="title"/>
