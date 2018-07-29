@@ -29,7 +29,7 @@ apply(plugin: 'cuba')
 
 cuba {
     artifact {
-        group = 'com.audimex.dashboard'
+        group = 'com.haulmont.addon.dashboard'
         version = '2.0'
         isSnapshot = true
     }
@@ -147,7 +147,7 @@ configure(guiModule) {
 
     task deployConf(type: Copy) {
         from file('src')
-        include "com/audimex/dashboard/**"
+        include "com/haulmont/addon/dashboard/**"
         into "$cuba.tomcat.dir/conf/dashboard"
     }
 }
@@ -175,7 +175,7 @@ configure(webModule) {
 
     task deployConf(type: Copy) {
         from file('src')
-        include "com/audimex/dashboard/**"
+        include "com/haulmont/addon/dashboard/**"
         into "$cuba.tomcat.dir/conf/dashboard"
     }
 

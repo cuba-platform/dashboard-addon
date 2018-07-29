@@ -190,7 +190,7 @@ xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd".В данном
 
 - referenceName - аттрибут, по которому будет вестисть поиск дашборда в базе данных.
 - jsonPath - classPath до json дашборда.
-- class - класс контроллера дашборда, должен быть наследован от com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
+- class - класс контроллера дашборда, должен быть наследован от com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
 - timerDelay - переод времени в секундах, при котором дашборд будет обновляться.
 
 ***Замечание:*** при встаивании дашборда обязательно необходимо указать аттрибут referenceName или jsonPath. При задании 
@@ -209,7 +209,7 @@ xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd".В данном
 Для добавления собственного типа виджета необходимо сделать следующие шаги:
 
 - Добавить неперсистетную сущносить, расширяющию класс Widget, добавить к ней аннотацию 
-com.audimex.dashboard.annotation.WidgetType. В аннотации заполнить поля name, browseFrameId, editFrameId (см. JavaDoc). 
+com.haulmont.addon.dashboard.annotation.WidgetType. В аннотации заполнить поля name, browseFrameId, editFrameId (см. JavaDoc).
 Пример:
 
 ```java
@@ -239,7 +239,7 @@ public class LookupWidget extends Widget {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.widget_types.lookup.LookupWidgetEdit">
+        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetEdit">
     <layout spacing="true">
         <hbox id="lookupIdBox"
               spacing="true">
@@ -292,12 +292,12 @@ public class LookupWidgetEdit extends AbstractFrame {
 
 
 - Добавить фрейм для просмотра дашборда, зарегистрировать его в web-screens.xml  Контроллер должен наследоваться от 
-com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse. Пример: 
+com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse. Пример:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
     <layout spacing="true"
             width="100%"
             height="100%">

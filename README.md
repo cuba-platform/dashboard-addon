@@ -150,7 +150,7 @@ Click on a layout or a widget to select it. Selected element can contains button
 
 - OK - save a dashboard and close the editor;
 - Cancel - close the editor without saving a dashboard;
-- Propagate - public event  com.audimex.dashboard.web.events.DashboardUpdatedEvent;
+- Propagate - public event  com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 - Export Json - export a dashboard to a json file;
 - Import Json - import a dashboard from a json file and refresh the editor. 
 
@@ -189,7 +189,7 @@ in the xml file of the screen. Then add namespace like 'dash' for the schema. Th
 
 - referenceName - the attribute, which will be searched for a dashboard in a database.
 - jsonPath - the classPath to the dashboard json file.
-- class - the controller class of the dashboard-ui, one have to  inherited from he com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
+- class - the controller class of the dashboard-ui, one have to  inherited from he com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
 - timerDelay - the time period in seconds for refresh a dashboard-ui.
 
 ***Note:*** when embedding a dashboard, you must specify the referenceName or jsonPath attribute. When specifying at the same time, the attribute referenceName takes precedence over jsonPath.
@@ -204,8 +204,8 @@ in the xml file of the screen. Then add namespace like 'dash' for the schema. Th
 
 To add the additional widget type, you need to do the following:
 
-- add the not persistence entity class, which extends the class com.audimex.dashboard.model.Widget, then add the annotation
-com.audimex.dashboard.annotation.WidgetType. Fill the fields name, browseFrameId, editFrameId in the annotation (see JavaDoc). 
+- add the not persistence entity class, which extends the class com.haulmont.addon.dashboard.model.Widget, then add the annotation
+com.haulmont.addon.dashboard.annotation.WidgetType. Fill the fields name, browseFrameId, editFrameId in the annotation (see JavaDoc).
 Example:
 
 ```java
@@ -235,7 +235,7 @@ public class LookupWidget extends Widget {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.widget_types.lookup.LookupWidgetEdit">
+        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetEdit">
     <layout spacing="true">
         <hbox id="lookupIdBox"
               spacing="true">
@@ -288,12 +288,12 @@ public class LookupWidgetEdit extends AbstractFrame {
 
 
 - add the frame for showing in the web module, add one in the web-screens.xml The class controller must be inherited from the class 
-com.audimex.dashboard.web.widget_types.AbstractWidgetBrowse. Example: 
+com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse. Example:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.audimex.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
     <layout spacing="true"
             width="100%"
             height="100%">

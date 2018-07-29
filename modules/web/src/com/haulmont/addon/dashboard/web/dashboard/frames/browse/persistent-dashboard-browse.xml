@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
+  -->
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://dashboardsCaption"
+        class="com.haulmont.addon.dashboard.web.dashboard.frames.browse.PersistentDashboardBrowse"
+        datasource="persDashboardsDs"
+        focusComponent="dashboardsTable"
+        lookupComponent="dashboardsTable">
+    <dsContext>
+        <collectionDatasource id="persDashboardsDs"
+                              class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
+                              view="dashboard-group-view">
+            <query>
+                <![CDATA[select e from amxd$PersistentDashboard e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="modelDashboardsDs"
+                              class="com.haulmont.addon.dashboard.model.Dashboard"/>
+    </dsContext>
+    <layout spacing="true">
+        <table id="dashboardsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="msg://create"
+                        icon="CREATE_ACTION"
+                        invoke="createDashboard"/>
+                <action id="edit"
+                        caption="msg://edit"
+                        icon="EDIT_ACTION"
+                        invoke="editDashboard"/>
+                <action id="remove"
+                        caption="msg://remove"
+                        icon="REMOVE_ACTION"
+                        invoke="removeDashboard"/>
+                <action id="view"
+                        caption="msg://view"
+                        icon="EYE"
+                        invoke="viewDashboard"/>
+            </actions>
+            <columns>
+                <column id="title"/>
+                <column id="referenceName"/>
+            </columns>
+            <rows datasource="modelDashboardsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dashboardsTable.create"/>
+                <button id="editBtn"
+                        action="dashboardsTable.edit"/>
+                <button id="removeBtn"
+                        action="dashboardsTable.remove"/>
+                <button id="viewBtn"
+                        action="dashboardsTable.view"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
-    <component>
-        <tag>dashboard</tag>
-        <name>amdxDashboardComponent</name>
-        <componentLoader>com.audimex.dashboard.gui.components.loaders.DashboardFrameLoader</componentLoader>
-        <class>com.audimex.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame</class>
-    </component>
-</components>

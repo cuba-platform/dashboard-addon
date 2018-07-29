@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.haulmont.addon.dashboard.web.parameter.frames.SimpleValueFrame">
+    <layout spacing="true">
+        <hbox id="hBox"
+              spacing="true">
+            <label id="valueLabel"
+                   width="85px"
+                   value="msg://value"
+                   align="MIDDLE_LEFT"/>
+            <textField id="textField"
+                       width="300px"
+                       visible="false"/>
+            <checkBox id="checkBox"
+                      width="300px"
+                      visible="false"/>
+            <dateField id="dateField"
+                       width="300px"
+                       visible="false"/>
+            <timeField id="timeField"
+                       width="300px"
+                       visible="false"/>
+            <vbox/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.haulmont.addon.dashboard.web.parameter.ParameterBrowse"
+        focusComponent="parametersTable"
+        lookupComponent="parametersTable">
+    <dsContext>
+        <groupDatasource id="parametersDs"
+                         class="com.haulmont.addon.dashboard.model.Parameter"/>
+    </dsContext>
+    <layout spacing="true">
+        <table id="parametersTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="id"/>
+                <column id="name"/>
+                <column id="alias"/>
+                <column id="value"
+                        caption="msg://value"
+                        generator="generateValueCell"/>
+            </columns>
+            <rows datasource="parametersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="parametersTable.create"/>
+                <button id="editBtn"
+                        action="parametersTable.edit"/>
+                <button id="removeBtn"
+                        action="parametersTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

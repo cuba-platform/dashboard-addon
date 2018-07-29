@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.haulmont.addon.dashboard.web.parameter.frames.EnumValueFrame">
+    <layout spacing="true">
+        <hbox id="hBox"
+              spacing="true">
+            <label id="enumClassLabel"
+                   width="85px"
+                   value="msg://enumClass"
+                   align="MIDDLE_LEFT"/>
+            <lookupField id="enumClassLookup"
+                         width="300px"/>
+        </hbox>
+    </layout>
+</window>
