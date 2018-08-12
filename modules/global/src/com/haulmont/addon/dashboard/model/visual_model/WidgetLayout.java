@@ -10,6 +10,11 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 @MetaClass(name = "amxd$WidgetLayout")
 public class WidgetLayout extends DashboardLayout {
+
+    public WidgetLayout() {
+        caption = "Widget layout";
+    }
+
     @MetaProperty
     protected Widget widget;
 

@@ -8,4 +8,8 @@ import com.haulmont.chile.core.annotations.MetaClass;
 
 @MetaClass(name = "amxd$HorizontalLayout")
 public class HorizontalLayout extends DashboardLayout {
+
+    public HorizontalLayout() {
+        caption = "Horizontal layout";
+    }
 }

@@ -7,8 +7,11 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
 import com.haulmont.addon.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
+import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
@@ -17,10 +20,6 @@ import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
-import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -51,12 +50,17 @@ public class PaletteFrame extends AbstractFrame {
     protected AccessConstraintsHelper accessHelper;
     @Inject
     protected WidgetTypeAnalyzer typeAnalyzer;
+    @Inject
+    protected DashboardLayoutTreeReadOnlyDs dashboardLayoutTreeReadOnlyDs;
 
     @Override
     public void init(Map<String, Object> params) {
+        Dashboard dashboard = (Dashboard) params.get(CanvasFrame.DASHBOARD);
+        dashboardLayoutTreeReadOnlyDs.setVisualModel(dashboard.getVisualModel());
         initWidgetBox();
         initLayoutBox();
         initWidgetTemplateBox();
+        initWidgetTreeBox();
     }
 
     @EventListener
@@ -86,6 +90,10 @@ public class PaletteFrame extends AbstractFrame {
         ddLayoutBox.add(factory.createVerticalLayoutButton());
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
+    }
+
+    protected void initWidgetTreeBox() {
+        dashboardLayoutTreeReadOnlyDs.refresh();
     }
 
     protected void initWidgetTemplateBox() {

@@ -2,10 +2,9 @@
 <!--
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
-
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd"
-        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame">
+        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame"
+        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
@@ -14,51 +13,60 @@
                 <![CDATA[select e from amxd$WidgetTemplate e]]>
             </query>
         </collectionDatasource>
+        <hierarchicalDatasource id="dashboardLayoutTreeReadOnlyDs"
+                                allowCommit="false"
+                                class="com.haulmont.addon.dashboard.model.visual_model.DashboardLayout"
+                                datasourceClass="com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs"
+                                hierarchyProperty="children"/>
     </dsContext>
-    <layout spacing="true"
-            width="100%"
-            height="100%">
+    <layout height="100%"
+            spacing="true"
+            width="100%">
         <accordion id="accordionPalette"
-                   height="100%"
-                   width="100%">
+                   height="100%">
             <tab id="widgetTab"
-                 caption="msg://widgets"
-                 expand="widgetBox">
+                 caption="msg://widgets">
                 <scrollBox id="widgetBox"
-                           scrollBars="vertical"
-                           width="100%"
                            height="100%">
                     <dnd:dndVBoxLayout id="ddWidgetBox"
                                        dragMode="CLONE"
+                                       height="100%"
                                        margin="true"
-                                       width="100%"
-                                       height="100%"/>
+                                       width="100%"/>
                 </scrollBox>
             </tab>
             <tab id="layoutTab"
                  caption="msg://layouts">
                 <scrollBox id="layoutBox"
-                           scrollBars="vertical"
-                           width="100%"
                            height="100%">
                     <dnd:dndVBoxLayout id="ddLayoutBox"
                                        dragMode="CLONE"
+                                       height="100%"
                                        margin="true"
-                                       width="100%"
-                                       height="100%"/>
+                                       width="100%"/>
+                </scrollBox>
+            </tab>
+            <tab id="widgetTreeTab"
+                 caption="msg://widgetTree">
+                <scrollBox id="widgetTreeBox"
+                           height="100%">
+                    <tree id="widgetTree"
+                          height="100%"
+                          width="100%">
+                        <treechildren captionProperty="caption"
+                                      datasource="dashboardLayoutTreeReadOnlyDs"/>
+                    </tree>
                 </scrollBox>
             </tab>
             <tab id="widgetTemplateTab"
                  caption="msg://widgetTemplates">
                 <scrollBox id="widgetTemplateBox"
-                           scrollBars="vertical"
-                           width="100%"
                            height="100%">
                     <dnd:dndVBoxLayout id="ddWidgetTemplateBox"
                                        dragMode="CLONE"
+                                       height="100%"
                                        margin="true"
-                                       width="100%"
-                                       height="100%"/>
+                                       width="100%"/>
                 </scrollBox>
             </tab>
         </accordion>

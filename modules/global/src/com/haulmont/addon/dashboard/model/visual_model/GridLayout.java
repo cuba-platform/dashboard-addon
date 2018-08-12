@@ -13,6 +13,11 @@ import java.util.Set;
 
 @MetaClass(name = "amxd$GridLayout")
 public class GridLayout extends DashboardLayout {
+
+    public GridLayout() {
+        caption = "Grid layout";
+    }
+
     @MetaProperty
     protected Integer rows = 0;
     @MetaProperty

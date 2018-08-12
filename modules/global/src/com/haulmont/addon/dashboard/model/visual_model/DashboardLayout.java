@@ -22,6 +22,9 @@ public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
     protected Integer weight = 1;
 
+    @MetaProperty
+    protected String caption;
+
     public Integer getWeight() {
         return weight;
     }
@@ -40,5 +43,13 @@ public abstract class DashboardLayout extends BaseUuidEntity {
 
     public void addChild(DashboardLayout child) {
         children.add(child);
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 }

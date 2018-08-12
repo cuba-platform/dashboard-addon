@@ -97,7 +97,9 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     protected void initPaletteFrame() {
-        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME);
+        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
+                CanvasFrame.DASHBOARD, dashboardDs.getItem()
+        ));
     }
 
     protected void initCanvasFrame() {
