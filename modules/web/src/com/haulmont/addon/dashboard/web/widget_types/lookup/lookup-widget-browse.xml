@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
-    <layout spacing="true"
-            width="100%"
-            height="100%">
+    <layout height="100%"
+            spacing="true"
+            width="100%">
+        <button id="fireEvent"
+                caption="fire event"
+                invoke="onFireEventClick"/>
     </layout>
 </window>

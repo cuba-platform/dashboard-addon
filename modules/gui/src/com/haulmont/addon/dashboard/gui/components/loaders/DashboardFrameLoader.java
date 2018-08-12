@@ -33,7 +33,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
 
     protected String frameId;
     protected ComponentLoader frameLoader;
-    protected String aClass;
 
     Metadata metadata;
 
@@ -41,7 +40,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
     public void createComponent() {
         metadata = AppBeans.get(Metadata.class);
         frameId = element.attributeValue("id");
-        aClass = element.attributeValue("class");
 
         WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
         WindowInfo windowInfo = windowConfig.getWindowInfo("dashboardComponent");
@@ -176,11 +174,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
         public Pair<ComponentLoader, Element> createFrameComponent(String resourcePath, String id, Map<String, Object> params) {
             ScreenXmlLoader screenXmlLoader = AppBeans.get(ScreenXmlLoader.class);
             Element element = screenXmlLoader.load(resourcePath, id, params);
-
-            //added replace for class-control
-            if (isNotBlank(aClass) && isNotBlank(element.attributeValue("class"))) {
-                element.addAttribute("class", aClass);
-            }
 
             ComponentLoader loader = getLoader(element);
             FrameLoader frameLoader = (FrameLoader) loader;

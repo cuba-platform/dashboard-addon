@@ -4,15 +4,15 @@
 
 package com.haulmont.addon.dashboard.web.widget_types.lookup;
 
+import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.widget_types.LookupWidget;
 import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent.WidgetWithEntities;
+import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Window;
-import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -47,5 +47,9 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
 
     protected Window.Lookup.Handler lookupHandler() {
         return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetEntitiesSelectedEvent.WidgetWithEntities(widget, items)));
+    }
+
+    public void onFireEventClick() {
+        events.publish(new WidgetUpdatedEvent(new Widget()));
     }
 }

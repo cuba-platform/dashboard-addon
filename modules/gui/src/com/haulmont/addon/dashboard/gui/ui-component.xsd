@@ -19,7 +19,6 @@
                     </xs:sequence>
                     <xs:attribute name="referenceName" type="xs:string"/>
                     <xs:attribute name="jsonPath" type="xs:string"/>
-                    <xs:attribute name="class" type="xs:string"/>
                     <xs:attribute name="timerDelay" type="delay"/>
                 </xs:extension>
             </xs:complexContent>
