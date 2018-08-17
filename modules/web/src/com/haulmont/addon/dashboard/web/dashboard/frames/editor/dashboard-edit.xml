@@ -50,7 +50,7 @@
                     caption="msg://cancel"
                     icon="EDITOR_CANCEL"
                     invoke="cancel"/>
-            <button id="propogateBtn"
+            <button id="propagateBtn"
                     caption="msg://propagate"
                     icon="BULLHORN"
                     invoke="onPropagateBtnClick"

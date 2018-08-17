@@ -1,22 +1,22 @@
 # 1. Introduction 
 This component is designed to create and embed dashboards. Dashboard consists of widgets - individual elements based on a frame.
-Placement of widgets inside a dashboard takes place using vertical, horizontal and grid layouts.
+The widgets can be positioned inside a dashboard using vertical, horizontal and grid layouts.
 
-# 1.1 Dashboard structure
+# 1.1 Dashboard Structure
 
 ![dashboard-structure](img/dashboard-structure.png)
 
 # 2. Installation 
 
-## 2.1. Add the repository and the component in the CUBA Studio
+## 2.1. Add the Repository and the Component in CUBA Studio
 
-## 2.2. Add the repository and the component in the build.gradle
+## 2.2. Add the Repository and the Component in build.gradle
 
 # 3. Screens
 
 ## 3.1. Widget Template Browser
 
-This screen allows to create, edit and remove widget templates. Widget templates stores in a database.
+This screen allows creating, editing and removing widget templates. Widget templates are stored in a database. This screen is available from the application menu.
 
 ![menu-widget-templates](img/menu-widget-templates.png)
 
@@ -24,25 +24,22 @@ This screen allows to create, edit and remove widget templates. Widget templates
 
 ## 3.2. Widget Editor
 
-This screen allows to edit a widget and consist of next elements:
+This screen allows editing a widget and consists of the following elements:
 
-- the field Caption;
-- the field Description;
-- the lookup field Widget Type. Exists next widget types by default: 
-  - Screen, for any frame;
-  - Lookup, for frames inherited from the com.haulmont.cuba.gui.components.AbstractLookup. Widgets with this type fire WidgetEntitiesSelectedEvent,
-  which contains selected entities.
-  
-- An Area (a frame) specific to this widget type. More about this 
+- the **Caption** field;
+- the **Description** field;
+- the **Widget Type** lookup field. The following widget types are available by default: 
+  - **Screen**, for any frame;
+  - **Lookup**, for the frames inherited from the `com.haulmont.cuba.gui.components.AbstractLookup`. Widgets of this type fire `WidgetEntitiesSelectedEvent` which contains the selected entities;  
+- an Area (a frame) specific to this widget type. For more information, see 
 [5. Adding additional widget types](#5-Adding additional widget types);
-- the frame with widget parameters, which allows to add, edit and remove widget parameters. These parameters are passed 
-as input parameters for frame, based on which the widget was taken. About adding and editing parameters see [3.3. Parameter Editor](#33-Parameter Editor).
+- the frame with widget parameters which allows adding, editing and removing widget parameters. These parameters are passed as input parameters for the frame, based on which the widget was taken. For more information on adding and editing parameters, see [3.3. Parameter Editor](#33-Parameter Editor).
 
 ![widget-editor](img/widget-editor.png)
 
 ## 3.3. Parameter Editor
 
-This screen allows to edit a parameter. A parameter is a key-value pair, where the name field is the key and the value field is a value.
+This screen allows editing a parameter. A parameter is a key-value pair, where the name field is the key and the value field is a value.
 A value can have the following types:
 ```
     ENTITY("ENTITY"), contains fields metaClass, entityId, view
@@ -62,49 +59,44 @@ A value can have the following types:
 
 ![parameter-editor](img/parameter-editor.png)
 
-## 3.4. Persistence dashboards
+## 3.4. Persistent Dashboards
 
-This screen allows to create, edit and remove dashboards in a database.
+This screen allows creating, editing and removing dashboards in a database.
 
-![menu-dashboard](img/menu-dashboards.png)
+![menu-dashboards](img/menu-dashboards.png)
 
 ![persistent-dashboard](img/persistent-dashboards.png)
 
 ## 3.5. Dashboard Editor
 
-This screen allows to edit a dashboard.
+This screen allows editing a dashboard.
 
 ![dashboard-editor-common](img/dashboard-editor-common.png)
 
-Dashboard Editor contains from 5th areas:
-- dashboard fields;
-- dashboard parameters;
+Dashboard Editor contains 5 areas:
+- the dashboard fields;
+- the dashboard parameters;
 - the palette with widgets and layouts;
-- the canvas,  where the placement of dashboard elements (widgets and layouts) is specified;
+- the canvas  where the position of dashboard elements (widgets and layouts) is specified;
 - the buttons panel.
 
-### 3.5.1. Dashboard fields
+### 3.5.1. Dashboard Fields
 
-- Title - a name of the dashboard;
-- Reference name - a unique identifier for a more convenient search in a database
-- Is available for all users - a flag, if set to false, then only the user can view and edit, who created the dashboard.
-Otherwise, all users can view and edit the dashboard.
+- **Title** - a name of the dashboard;
+- **Reference name** - a unique identifier for a more convenient search in a database;
+- **Is available for all users** - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
-### 3.5.2. Dashboard parameters
+### 3.5.2. Dashboard Parameters
 
-The frame with dashboard parameters, which allows to add, edit and remove dashboard parameters.  These parameters are passed 
-as input parameters widgets this dashboard. About adding and editing parameters see [3.3. Parameter Editor](#33-Parameter Editor).
-смотрите [3.3. Parameter Editor](#33-Parameter Editor).
+The frame with dashboard parameters which allows adding, editing and removing dashboard parameters. These parameters are passed as input parameters for the widgets in this dashboard. For more information on adding and editing parameters, see [3.3. Parameter Editor](#33-Parameter Editor).
 
 ### 3.5.3. Palette
 
-This is a container with 3 collapsible tabs. Each tab contains a container with components. When the component the is dragged to the canvas
-the corresponding element is added to the canvas.
+It is a container with 3 collapsible tabs. Each tab contains a container with components. When a component is dragged to the canvas, the corresponding element is added to the canvas.
 
 #### 3.5.3.1 Widgets
 
-Contains a container in which you can add or exclude any widget. It is possible to make the widget a template (in this 
-case, it is added to the tab Widget Templates). 
+Contains a container in which you can add or exclude any widget. It is possible to make the widget a template (in this case, it is added to the tab **Widget Templates**). 
 
 ![palette-widgets](img/palette-widgets.png)
 
@@ -122,54 +114,51 @@ Contains widget templates from a database.
 
 ### 3.5.4. Canvas
 
-It is the container in which you can placement widgets and layouts. Drag and drop an element from the palette for addition 
-one on the canvas.
+It is a container in which you can place the widgets and layouts. Drag and drop an element from the palette for adding it on the canvas.
 
 ![canvas-drag-grid-layout](img/canvas-drag-grid-layout.png)
 
-When dragging a grid layout to the canvas, a dialog opens in which you can set number of rows and columns.
-When dragging a widget, a Widget Editor dialog opens.
+When dragging a grid layout to the canvas, a dialog opens where you can set the number of rows and columns. When dragging a widget, a **Widget Editor** dialog opens.
 
 ![grid-dialog](img/grid-dialog.png)
 
-Example the dashboard with widgets:
+Example of the dashboard with widgets:
 
 ![canvas-with-widgets](img/canvas-with-widgets.png)
 
-Click on a layout or a widget to select it. Selected element can contains buttons panel with following buttons:
+Click on a layout or a widget to select it. The selected element can contain buttons panel with the following buttons:
 
 ![layout-buttons](img/layout-buttons.png)
 
-![trash](img/trash.png) - delete an container from the canvas;
+![trash](img/trash.png) - delete a container from the canvas;
 
-![gear](img/gear.png) - open Widget Editor; 
+![gear](img/gear.png) - open the **Widget Editor**; 
 
-![arrows](img/arrows.png) - change weight (expand ratio) of a container in a parents container.
+![arrows](img/arrows.png) - change the weight (expand ratio) of a container in a parent container.
 
-### 3.5.5. Buttons panel
+### 3.5.5. Buttons Panel
 
-- OK - save a dashboard and close the editor;
-- Cancel - close the editor without saving a dashboard;
-- Propagate - public event  com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
-- Export Json - export a dashboard to a json file;
-- Import Json - import a dashboard from a json file and refresh the editor. 
+- **OK** - save a dashboard and close the editor;
+- **Cancel** - close the editor without saving a dashboard;
+- **Propagate** - publish event `com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent`;
+- **Export Json** - export a dashboard to a JSON file;
+- **Import Json** - import a dashboard from a JSON file and refresh the editor. 
 
 ## 3.6 Dashboard Groups и Dashboard Group Editor
 
-The screen Dashboard Groups allows to create, edit and remove dashboard groups. The screen Dashboard Group Editor 
-allows to add or exclude dashboards in a dashboard group from a database.
+The screen **Dashboard Groups** allows creating, editing, and removing dashboard groups. The screen **Dashboard Group Editor** allows adding or excluding dashboards in a dashboard group from a database.
+ 
+ ![menu-dashboard-groups](img/menu-dashboard-groups.png) 
  
  ![dashboard-group-browser](img/dashboard-group-browser.png) 
  
  ![dashboard-group-editor](img/dashboard-group-editor.png) 
 
-# 4. Integration the component Dashboard-UI
+# 4. Integration of the Component Dashboard-UI
 
-To use the Dashboard-UI component in your screen, you need to add the special scheme "http://schemas.haulmont.com/cubadshb/ui-component.xsd" 
-in the xml file of the screen. Then add namespace like 'dash' for the schema. The schema contains information about the tag 
-'dashboard', which can contains elements 'parameter'.
+To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen. Then add namespace like `dash` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
 
-### Example of use
+### Usage Example
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -185,28 +174,29 @@ in the xml file of the screen. Then add namespace like 'dash' for the schema. Th
     ...
 ```
 
-#### Dashboard tag attributes
+#### Dashboard Tag Attributes
 
-- referenceName - the attribute, which will be searched for a dashboard in a database.
-- jsonPath - the classPath to the dashboard json file.
-- class - the controller class of the dashboard-ui, one have to  inherited from he com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame
-- timerDelay - the time period in seconds for refresh a dashboard-ui.
+- `referenceName` - the attribute which will serve for a dashboard search in a database;
+- `jsonPath` - the `classPath` to the dashboard JSON file;
+- `class` - the controller class of the `dashboard-ui` component which has to be inherited from `com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame`;
+- `timerDelay` - the time period in seconds for refresh a dashboard-ui.
 
-***Note:*** when embedding a dashboard, you must specify the referenceName or jsonPath attribute. When specifying at the same time, the attribute referenceName takes precedence over jsonPath.
-#### Parameter tag attributes
-- name - the name of parameter, required
-- value - the value of parameter, required
-- type - the type of the value, can take one of the following values: boolean, date, dateTime, decimal, int, long, string, time, uuid
+***Note:*** when embedding a dashboard, you must specify the `referenceName` or `jsonPath` attribute. When specifying at the same time, the attribute `referenceName` takes precedence over `jsonPath`.
 
-***Note:*** by default the type of parameter sets as the string.
+#### Parameter Tag Attributes
 
-# 5. Adding additional widget types
+- `name` - the name of the parameter, required;
+- `value` - the value of the parameter, required;
+- `type` - the type of the value, can take one of the following values: boolean, date, dateTime, decimal, int, long, string, time, uuid.
 
-To add the additional widget type, you need to do the following:
+***Note:*** by default, the parameter type is set to string.
 
-- add the not persistence entity class, which extends the class com.haulmont.addon.dashboard.model.Widget, then add the annotation
-com.haulmont.addon.dashboard.annotation.WidgetType. Fill the fields name, browseFrameId, editFrameId in the annotation (see JavaDoc).
-Example:
+# 5. Adding Additional Widget Types
+
+To add an additional widget type, you need to do the following:
+
+- Create a not persistent entity class which extends the class `com.haulmont.addon.dashboard.model.Widget`, then add the annotation `com.haulmont.addon.dashboard.annotation.WidgetType`. Fill the fields: `name`, `browseFrameId`, `editFrameId` in the annotation (see JavaDoc).
+For example:
 
 ```java
 @MetaClass(name = "amxd$LookupWidget")
@@ -229,8 +219,8 @@ public class LookupWidget extends Widget {
 }
 ```
 
-- add the not persistence entity class in the metadata.xml
-- add the frame for editing in the web module, add one in the web-screens.xml. Example:
+- Add the not persistent entity class in `metadata.xml`;
+- Add the frame for entity editing in the web module and register it in `web-screens.xml`. For example:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -287,8 +277,8 @@ public class LookupWidgetEdit extends AbstractFrame {
 ```
 
 
-- add the frame for showing in the web module, add one in the web-screens.xml The class controller must be inherited from the class 
-com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse. Example:
+- Add the frame for displaying the dashboard in the web module and add it in `web-screens.xml`. The controller class must be inherited from 
+`com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse`. For example:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
