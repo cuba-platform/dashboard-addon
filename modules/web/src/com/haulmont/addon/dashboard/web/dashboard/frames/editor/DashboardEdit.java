@@ -9,10 +9,12 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
@@ -20,18 +22,19 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
-import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
-import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -43,7 +46,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
-    @Inject
+    @Named("amxd$dashboardEditFieldGroup")
     protected FieldGroup fieldGroup;
     @Inject
     protected GroupBoxLayout paramsBox;
@@ -63,6 +66,8 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Events events;
+    @Inject
+    protected ComponentsFactory componentsFactory;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
@@ -159,6 +164,24 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
                         "amxd$Parameter".equals(dsContext.get("parametersDs").getMetaClass().getName())) ||
                         (dsContext.get("widgetTemplatesDs") != null && dsContext.get("widgetTemplatesDs").getMetaClass() != null) &&
                                 "amxd$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
+
+        FieldGroup.FieldConfig assistantBeanName = fieldGroup.getField("assistantBeanName");
+        LookupField lookupField = (LookupField) assistantBeanName.getComponent();
+        String val = lookupField.getValue();
+        dashboardDs.getItem().setAssistantBeanName(val);
+
         return true;
     }
+
+    public Component generateAssistanceBeanNameField(Datasource<Dashboard> datasource, String fieldId) {
+        Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
+        String assistantBeanName = inputItem.getAssistantBeanName();
+        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        lookupField.setOptionsList(new ArrayList<>(assistantBeanMap.keySet()));
+        if (StringUtils.isNotEmpty(assistantBeanName)) {
+            lookupField.setValue(assistantBeanName);
+        }
+        return lookupField;
+    }
+
 }

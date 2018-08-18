@@ -35,4 +35,8 @@ public interface DashboardFrame extends Frame {
 
     void refresh();
 
+    String getAssistantBeanName();
+
+    void setAssistantBeanName(String assistantBeanName);
+
 }

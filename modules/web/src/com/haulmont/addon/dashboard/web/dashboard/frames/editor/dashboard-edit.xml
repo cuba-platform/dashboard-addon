@@ -21,6 +21,9 @@
                 <field property="referenceName"/>
                 <field property="timerDelay"/>
                 <field property="isAvailableForAllUsers"/>
+                <field custom="true"
+                       generator="generateAssistanceBeanNameField"
+                       property="assistantBeanName"/>
             </column>
         </fieldGroup>
         <groupBox id="paramsBox"

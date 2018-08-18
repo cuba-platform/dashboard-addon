@@ -65,6 +65,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected String jsonPath;
     protected Integer timerDelay = 0;
     protected List<Parameter> xmlParameters = new ArrayList<>();
+    protected String assistantBeanName;
     protected Dashboard dashboard;
 
     @Override
@@ -180,7 +181,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     @Override
     public void setTimerDelay(int delay) {
-        timerDelay = delay;
+        this.timerDelay = delay;
     }
 
     @Override
@@ -191,5 +192,15 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public Dashboard getDashboard() {
         return dashboard;
+    }
+
+    @Override
+    public String getAssistantBeanName() {
+        return assistantBeanName;
+    }
+
+    @Override
+    public void setAssistantBeanName(String assistantBeanName) {
+        this.assistantBeanName = assistantBeanName;
     }
 }

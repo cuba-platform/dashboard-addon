@@ -50,6 +50,12 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected Integer timerDelay = 0;
 
+    /**
+     * Stores assistance bean name for dashboard
+     */
+    @MetaProperty
+    protected String assistantBeanName;
+
     public Boolean getIsAvailableForAllUsers() {
         return isAvailableForAllUsers;
     }
@@ -104,5 +110,13 @@ public class Dashboard extends BaseUuidEntity {
 
     public void setTimerDelay(Integer timerDelay) {
         this.timerDelay = timerDelay;
+    }
+
+    public String getAssistantBeanName() {
+        return assistantBeanName;
+    }
+
+    public void setAssistantBeanName(String assistantBeanName) {
+        this.assistantBeanName = assistantBeanName;
     }
 }

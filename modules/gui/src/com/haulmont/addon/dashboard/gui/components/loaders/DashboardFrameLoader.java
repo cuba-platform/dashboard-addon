@@ -34,7 +34,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
     protected String frameId;
     protected ComponentLoader frameLoader;
 
-    Metadata metadata;
+    protected Metadata metadata;
 
     @Override
     public void createComponent() {
@@ -86,6 +86,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
         loadJsonPath(resultComponent, element);
         loadParams(resultComponent, element);
         loadTimerDelay(resultComponent, element);
+        loadAssistanceBeanName(resultComponent, element);
 
         if (context.getFrame() != null) {
             resultComponent.setFrame(context.getFrame());
@@ -162,6 +163,13 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
             case "string":
             default:
                 return new StringParameterValue(value);
+        }
+    }
+
+    protected void loadAssistanceBeanName(DashboardFrame resultComponent, Element element) {
+        String assistantBeanName = element.attributeValue("assistantBeanName");
+        if (isNotBlank(assistantBeanName)) {
+            resultComponent.setAssistantBeanName(assistantBeanName);
         }
     }
 

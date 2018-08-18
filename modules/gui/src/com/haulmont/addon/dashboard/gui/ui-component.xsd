@@ -20,6 +20,7 @@
                     <xs:attribute name="referenceName" type="xs:string"/>
                     <xs:attribute name="jsonPath" type="xs:string"/>
                     <xs:attribute name="timerDelay" type="delay"/>
+                    <xs:attribute name="assistantBeanName" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

@@ -5,13 +5,15 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame;
-import com.haulmont.addon.dashboard.web.dashboard.helper.AbstractDashboardViewExtension;
+import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.util.ReflectionUtils;
 
@@ -35,8 +37,7 @@ public class DashboardView extends AbstractWindow {
     @Inject
     protected Events events;
 
-    @Inject
-    protected AbstractDashboardViewExtension dashboardViewExtension;
+    protected DashboardViewAssistant dashboardViewAssistant;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -45,8 +46,18 @@ public class DashboardView extends AbstractWindow {
         this.add(frame);
         frame.refresh();
         initTimer(frame);
-        if (dashboardViewExtension != null) {
-            dashboardViewExtension.setWebDashboardFrame(frame);
+        initAssistant(frame);
+    }
+
+    private void initAssistant(WebDashboardFrame frame) {
+        Dashboard dashboard = frame.getDashboard();
+        String assistantBeanName = StringUtils.isEmpty(frame.getAssistantBeanName()) ? dashboard.getAssistantBeanName() : frame.getAssistantBeanName();
+        if (StringUtils.isNotEmpty(assistantBeanName)) {
+            DashboardViewAssistant assistantBean = AppBeans.get(assistantBeanName, DashboardViewAssistant.class);
+            if (assistantBean != null) {
+                assistantBean.init(frame);
+                dashboardViewAssistant = assistantBean;
+            }
         }
     }
 
@@ -66,11 +77,11 @@ public class DashboardView extends AbstractWindow {
     @SuppressWarnings("unchecked")
     @EventListener
     public void dashboardEventListener(DashboardEvent dashboardEvent) throws InvocationTargetException, IllegalAccessException {
-        if (dashboardViewExtension == null) {
+        if (dashboardViewAssistant == null) {
             return;
         }
         Class eventClass = dashboardEvent.getClass();
-        Method[] methods = ReflectionUtils.getUniqueDeclaredMethods(dashboardViewExtension.getClass());
+        Method[] methods = ReflectionUtils.getUniqueDeclaredMethods(dashboardViewAssistant.getClass());
         List<Method> eventListenerMethods = Arrays.stream(methods)
                 .filter(m -> m.getAnnotation(EventListener.class) != null)
                 .filter(m -> m.getParameterCount() == 1)
@@ -81,7 +92,7 @@ public class DashboardView extends AbstractWindow {
             Parameter parameter = parameters[0];
             Class methodEventTypeArg = parameter.getType();
             if (methodEventTypeArg.isAssignableFrom(eventClass)) {
-                method.invoke(dashboardViewExtension, dashboardEvent);
+                method.invoke(dashboardViewAssistant, dashboardEvent);
 
             }
         }
