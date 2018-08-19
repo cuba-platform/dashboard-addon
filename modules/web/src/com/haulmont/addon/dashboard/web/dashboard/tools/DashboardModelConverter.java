@@ -17,6 +17,7 @@ import com.haulmont.cuba.gui.components.GridLayout.Area;
 import com.haulmont.addon.dashboard.model.visual_model.*;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 public class DashboardModelConverter {
     @Inject
@@ -68,10 +69,16 @@ public class DashboardModelConverter {
             }
         }
 
+        if (canvasLayout != null) {
+            canvasLayout.setUuid(model.getUuid());
+        }
         return canvasLayout;
     }
 
     protected void containerToModel(DashboardLayout model, Component container) {
+        if (container instanceof AbstractCanvasLayout) {
+            model.setUuid(((AbstractCanvasLayout) container).getUuid() == null ? UUID.randomUUID() : ((AbstractCanvasLayout) container).getUuid());
+        }
         if (container instanceof HasWeight) {
             model.setWeight(((HasWeight) container).getWeight());
         }
@@ -85,6 +92,7 @@ public class DashboardModelConverter {
                 GridLayout gridModel = (GridLayout) childModel;
                 DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
                 model.addChild(gridModel);
+                childModel.setUuid((((CanvasGridLayout) childComponent).getUuid() == null ? UUID.randomUUID() : ((CanvasGridLayout) childComponent).getUuid()));
 
                 for (Component gridChild : gridComponent.getOwnComponents()) {
                     GridArea modelArea = metadata.create(GridArea.class);
@@ -116,6 +124,7 @@ public class DashboardModelConverter {
             WidgetLayout layout = metadata.create(WidgetLayout.class);
             Widget widget = ((CanvasWidgetLayout) component).getWidget();
             layout.setWidget(widget);
+            layout.setUuid(((CanvasWidgetLayout) component).getUuid() == null ? UUID.randomUUID() : ((CanvasWidgetLayout) component).getUuid());
             return layout;
         } else if (component instanceof CanvasGridLayout) {
             GridLayout layout = metadata.create(GridLayout.class);

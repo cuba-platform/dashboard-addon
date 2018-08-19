@@ -6,6 +6,8 @@ package com.haulmont.addon.dashboard.model.visual_model;
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,10 +15,6 @@ import java.util.Set;
 
 @MetaClass(name = "amxd$GridLayout")
 public class GridLayout extends DashboardLayout {
-
-    public GridLayout() {
-        caption = "Grid layout";
-    }
 
     @MetaProperty
     protected Integer rows = 0;
@@ -66,5 +64,11 @@ public class GridLayout extends DashboardLayout {
     @Override
     public void addChild(DashboardLayout child) {
         throw new UnsupportedOperationException("Use addArea() method");
+    }
+
+    @Override
+    public String getCaption() {
+        Messages messages = AppBeans.get(Messages.class);
+        return messages.getMainMessage("Layout.grid");
     }
 }

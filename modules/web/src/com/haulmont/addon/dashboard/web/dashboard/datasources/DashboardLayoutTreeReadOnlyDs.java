@@ -8,9 +8,12 @@ import com.haulmont.cuba.gui.data.impl.CustomHierarchicalDatasource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
+
 public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<DashboardLayout, UUID> {
 
-    private VerticalLayout visualModel;
+    private DashboardLayout visualModel;
 
     private Metadata metadata = AppBeans.get(Metadata.class);
 
@@ -41,7 +44,8 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         if (root.getId().equals(item.getId())) {
             return null;
         } else {
-            return findParentLayout(root, item);
+            DashboardLayout parent = findParentLayout(root, item);
+            return parent == null ? null : parent.getUuid();
         }
     }
 
@@ -72,61 +76,6 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         }
     }
 
-    private UUID findParentLayout(DashboardLayout root, DashboardLayout child) {
-        if (root instanceof GridLayout) {
-            GridLayout gridLayout = (GridLayout) root;
-            for (GridArea gridArea : gridLayout.getAreas()) {
-                if (gridArea.getComponent().getId().equals(child.getId())) {
-                    return root.getId();
-                } else {
-                    return findParentLayout(gridArea.getComponent(), child);
-                }
-            }
-        } else {
-            for (DashboardLayout dashboardLayout : root.getChildren()) {
-                if (dashboardLayout.getId().equals(child.getId())) {
-                    return root.getId();
-                } else {
-                    return findParentLayout(dashboardLayout, child);
-                }
-            }
-        }
-        return null;
-    }
-
-    private DashboardLayout findLayout(DashboardLayout root, UUID uuid) {
-        if (root.getId().equals(uuid)) {
-            return root;
-        }
-        if (root instanceof GridLayout) {
-            GridLayout gridLayout = (GridLayout) root;
-            for (GridArea gridArea : gridLayout.getAreas()) {
-                if (gridArea.getComponent().getId().equals(uuid)) {
-                    return gridArea.getComponent();
-                } else {
-                    DashboardLayout tmp = findLayout(gridArea.getComponent(), uuid);
-                    if (tmp == null) {
-                        continue;
-                    }
-                    return findLayout(gridArea.getComponent(), uuid);
-                }
-            }
-        } else {
-            for (DashboardLayout dashboardLayout : root.getChildren()) {
-                if (dashboardLayout.getId().equals(uuid)) {
-                    return dashboardLayout;
-                } else {
-                    DashboardLayout tmp = findLayout(dashboardLayout, uuid);
-                    if (tmp == null) {
-                        continue;
-                    }
-                    return findLayout(dashboardLayout, uuid);
-                }
-            }
-        }
-        return null;
-    }
-
     private DashboardLayout getRootLayout() {
         return getItems().stream().findFirst().orElse(null);
     }
@@ -141,7 +90,22 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         return findLayout(getRootLayout(), id);
     }
 
-    public void setVisualModel(VerticalLayout visualModel) {
+    public void setVisualModel(DashboardLayout visualModel) {
         this.visualModel = visualModel;
+    }
+
+    public DashboardLayout getVisualModel() {
+        return visualModel;
+    }
+
+    @Override
+    public boolean containsItem(UUID itemId) {
+        DashboardLayout dashboardLayout = findLayout(visualModel, itemId);
+        return dashboardLayout != null;
+    }
+
+    @Override
+    protected void loadData(Map<String, Object> params) {
+        super.loadData(params);
     }
 }

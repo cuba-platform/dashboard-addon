@@ -12,6 +12,8 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
 
+import java.util.UUID;
+
 public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport, DropTarget, TargetConverter, Component.LayoutClickNotifier, HasWeight {
 
     WebAbstractComponent getDelegate();
@@ -21,5 +23,9 @@ public interface CanvasLayout extends Component, Component.Container, DDLayout, 
     void setDelegate(WebAbstractComponent delegate);
 
     void setButtonsPanel(HBoxLayout buttonsPanel);
+
+    UUID getUuid();
+
+    void setUuid(UUID uuid);
 
 }

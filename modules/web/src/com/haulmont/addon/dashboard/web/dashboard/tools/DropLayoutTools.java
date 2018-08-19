@@ -4,9 +4,11 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
+import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visual_model.GridLayout;
 import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
+import com.haulmont.addon.dashboard.web.dashboard.events.LayoutChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
@@ -15,6 +17,8 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHan
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.VerticalLayoutDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
@@ -128,5 +132,8 @@ public class DropLayoutTools {//TODO добавление лайаутов
         }
 
         canvasLayout.setWeight(1);
+
+        Events events = AppBeans.get(Events.class);
+        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(frame.getDashboardModel(), null)));
     }
 }

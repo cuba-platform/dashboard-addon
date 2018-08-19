@@ -5,11 +5,15 @@
 package com.haulmont.addon.dashboard.model.visual_model;
 
 import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 
 @MetaClass(name = "amxdVerticalLayout")
 public class VerticalLayout extends DashboardLayout {
 
-    public VerticalLayout() {
-        caption = "Vertical layout";
+    @Override
+    public String getCaption() {
+        Messages messages = AppBeans.get(Messages.class);
+        return messages.getMainMessage("Layout.vertical");
     }
 }

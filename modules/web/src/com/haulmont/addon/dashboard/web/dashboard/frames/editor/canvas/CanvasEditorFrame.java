@@ -6,17 +6,20 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
+import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
+import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
+import com.haulmont.addon.dashboard.web.dashboard.events.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight_dialog.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
+import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.Events;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
@@ -30,6 +33,7 @@ import org.springframework.context.event.EventListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
@@ -41,8 +45,9 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     protected VBoxLayout canvas;
     @Named("dropModelConverter")
     protected DashboardModelConverter converter;
-
     protected DropLayoutTools tools = new DropLayoutTools();
+    @Inject
+    protected Events events;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -68,6 +73,8 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         if (parent != null) {
             parent.remove(source);
         }
+        VerticalLayout vl = getDashboardModel();
+        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(vl, source.getUuid())));
     }
 
     @EventListener
@@ -98,5 +105,25 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
                 source.setWeight(weight);
             }
         });
+    }
+
+    protected void selectLayout(CanvasLayout layout, UUID layoutUuid) {
+        if (layout.getUuid().equals(layoutUuid)) {
+            layout.requestFocus();
+            layout.getDelegate().requestFocus();
+        }
+
+        for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+            if (!(child instanceof CanvasLayout)) {
+                continue;
+            }
+            selectLayout((CanvasLayout) child, layoutUuid);
+        }
+    }
+
+    @EventListener
+    public void widgetTreeElementClickedEventListener(WidgetTreeElementClickedEvent event) {
+        UUID layoutUuid = event.getSource();
+        selectLayout(vLayout, layoutUuid);
     }
 }

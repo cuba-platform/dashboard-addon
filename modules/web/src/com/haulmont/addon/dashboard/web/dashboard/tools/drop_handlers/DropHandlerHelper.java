@@ -23,14 +23,16 @@ public interface DropHandlerHelper {
                 tools.addComponent(target, ((Draggable) comp).getLayout());
             }
         } else {
-            OrderedContainer parent = (OrderedContainer) comp.getParent();
-            if (parent != null) {
-                parent.remove(comp);
+            if (comp.getParent() instanceof OrderedContainer) {//TODO: fix
+                OrderedContainer parent = (OrderedContainer) comp.getParent();
+                if (parent != null) {
+                    parent.remove(comp);
 
-                if (idx >= 0) {
-                    target.add(comp, idx);
-                } else {
-                    target.add(comp);
+                    if (idx >= 0) {
+                        target.add(comp, idx);
+                    } else {
+                        target.add(comp);
+                    }
                 }
             }
         }

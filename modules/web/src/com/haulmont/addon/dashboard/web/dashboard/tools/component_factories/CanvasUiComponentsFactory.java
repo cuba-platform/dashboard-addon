@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
@@ -34,6 +35,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
         CanvasVerticalLayout layout = new CanvasVerticalLayout();
+        layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
@@ -42,6 +44,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout() {
         CanvasHorizontalLayout layout = new CanvasHorizontalLayout();
+        layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
@@ -50,6 +53,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Override
     public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
         CanvasGridLayout layout = new CanvasGridLayout(cols, rows);
+        layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
@@ -74,6 +78,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         widgetFrame.setMargin(true);
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
+        layout.setUuid(UUID.randomUUID());
         layout.getDelegate().add(widgetFrame);
         layout.setWidget(widget);
         layout.setDragMode(NONE);

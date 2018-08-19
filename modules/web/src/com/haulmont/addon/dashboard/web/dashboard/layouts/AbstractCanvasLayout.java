@@ -22,10 +22,12 @@ import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class AbstractCanvasLayout extends WebCssLayout implements CanvasLayout {
     protected WebAbstractComponent delegate;
     protected HBoxLayout buttonsPanel;
+    protected UUID uuid;
 
     public AbstractCanvasLayout(WebAbstractComponent delegate) {
         this.delegate = delegate;
@@ -135,5 +137,15 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     public void setSizeFull() {
         super.setSizeFull();
         delegate.setSizeFull();
+    }
+
+    @Override
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }

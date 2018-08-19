@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
+import java.util.UUID;
+
 import static com.haulmont.addon.dashboard.web.DashboardIcon.GEAR_ICON;
 import static com.haulmont.addon.dashboard.web.DashboardIcon.TRASH_ICON;
 import static com.haulmont.addon.dashboard.web.DashboardStyleConstants.*;
@@ -52,6 +54,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
+        layout.setUuid(UUID.randomUUID());
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.AMXD_SHADOW_BORDER);
@@ -73,6 +76,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout() {
         CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout();
+        layout.setUuid(UUID.randomUUID());
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.AMXD_SHADOW_BORDER);
@@ -94,6 +98,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
         CanvasGridLayout layout = super.createCanvasGridLayout(cols, rows);
+        layout.setUuid(UUID.randomUUID());
         layout.getDelegate().setMargin(true);
 
         layout.setDragMode(CLONE);
@@ -116,6 +121,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widget);
+        layout.setUuid(UUID.randomUUID());
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.AMXD_SHADOW_BORDER);
