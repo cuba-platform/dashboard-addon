@@ -40,7 +40,7 @@
     <suppress checks="." files=".*\.tokens"/>
     <suppress checks="." files=".*JPALexer\.java"/>
     <suppress checks="." files=".*JPAParser\.java"/>
-    <suppress checks="." files=".*SchoolCalendarState\.java"/>
+
     <!--<suppress checks="." files=".*[\\/]grammars[\\/]Generated[a-zA-Z]*\.java"/>-->
     <!--<suppress checks="." files=".*[\\/]checkstyle[\\/]gui[\\/]"/>-->
 </suppressions>
