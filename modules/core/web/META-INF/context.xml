@@ -5,10 +5,10 @@
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password="cuba"
+              password="root"
               type="javax.sql.DataSource"
-              url="jdbc:postgresql://localhost/audimex"
-              username="cuba"/>
+              url="jdbc:postgresql://localhost/amxd"
+              username="root"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
     <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
