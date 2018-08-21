@@ -4,12 +4,26 @@ buildscript {
     repositories {
         mavenLocal()
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : System.getenv('HAULMONT_REPOSITORY_USER'))
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : System.getenv('HAULMONT_REPOSITORY_PASSWORD'))
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
+        maven {
+            url 'https://repo.cuba-platform.com/content/groups/premium'
+            credentials {
+                username(rootProject.hasProperty('premiumRepoUser') ? rootProject['premiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
+                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
+            }
+        }
+        /*maven {
+            url 'https://repo.cuba-platform.com/content/repositories/premium-snapshots'
+            credentials {
+                username(rootProject.hasProperty('premiumRepoUser') ? rootProject['premiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
+                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
+            }
+        }*/
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -41,7 +55,7 @@ cuba {
         dir = "$project.rootDir/build/tomcat"
     }
     ide {
-        copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.''' // Copyright Notice for IDEA project  
+        copyright = '''Copyright (c) 2016-$today.year Haulmont. All rights reserved.''' // Copyright Notice for IDEA project
         vcs = 'Git'
     }
 }
@@ -78,8 +92,8 @@ configure(globalModule) {
             attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
         }
     }
-    
-    
+
+
 }
 
 configure(coreModule) {
@@ -151,7 +165,7 @@ configure(webModule) {
         compile(guiModule)
 
     }
-    
+
     task webArchive(type: Zip) {
         from file("$buildDir/web")
         from file('web')
