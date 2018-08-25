@@ -17,6 +17,8 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.core.sys.CubaClassPathXmlApplicationContext;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -27,13 +29,17 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.AbstractRefreshableApplicationContext;
+import org.springframework.context.support.AbstractRefreshableConfigApplicationContext;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
@@ -175,13 +181,16 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     public Component generateAssistanceBeanNameField(Datasource<Dashboard> datasource, String fieldId) {
         Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
+        BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
+        List<String> prototypeBeanNames = assistantBeanMap.keySet().stream().filter(bn -> bf.isPrototype(bn)).collect(Collectors.toList());
         String assistantBeanName = inputItem.getAssistantBeanName();
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-        lookupField.setOptionsList(new ArrayList<>(assistantBeanMap.keySet()));
+        lookupField.setOptionsList(prototypeBeanNames);
         if (StringUtils.isNotEmpty(assistantBeanName)) {
             lookupField.setValue(assistantBeanName);
         }
         return lookupField;
+
     }
 
 }

@@ -10,11 +10,14 @@ import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
+import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.event.EventListener;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
 import javax.inject.Inject;
@@ -54,7 +57,8 @@ public class DashboardView extends AbstractWindow {
         String assistantBeanName = StringUtils.isEmpty(frame.getAssistantBeanName()) ? dashboard.getAssistantBeanName() : frame.getAssistantBeanName();
         if (StringUtils.isNotEmpty(assistantBeanName)) {
             DashboardViewAssistant assistantBean = AppBeans.get(assistantBeanName, DashboardViewAssistant.class);
-            if (assistantBean != null) {
+            BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
+            if (assistantBean != null && bf.isPrototype(assistantBeanName)) {
                 assistantBean.init(frame);
                 dashboardViewAssistant = assistantBean;
             }
