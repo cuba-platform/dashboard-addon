@@ -11,31 +11,36 @@ import com.haulmont.addon.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.web.DashboardException;
+import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
+import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.addon.dashboard.web.DashboardException;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
-import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.components.*;
+
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.event.EventListener;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.ReflectionUtils;
 
 import javax.inject.Inject;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
+import static com.haulmont.addon.dashboard.web.dashboard.frames.browse.DashboardView.REFERENCE_NAME;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -58,6 +63,12 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected AccessConstraintsHelper accessHelper;
     @Inject
     protected Messages messages;
+    @Inject
+    protected ComponentsFactory componentsFactory;
+    @Inject
+    protected Events events;
+
+    protected DashboardViewAssistant dashboardViewAssistant;
 
     protected CanvasFrame canvasFrame;
 
@@ -71,7 +82,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+        setReferenceName(StringUtils.isEmpty(referenceName) ? (String) params.getOrDefault(REFERENCE_NAME, "") : referenceName);
         refresh();
+        initAssistant(this);
+        initTimer(this.getParent());
     }
 
     @Override
@@ -83,13 +97,55 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    //@EventListener TODO: listen to this event or implement it???
-    public void onUpdateDashboard(DashboardUpdatedEvent event) {
-        Dashboard source = event.getSource();
-
-        if (source.getId().equals(canvasFrame.getDashboard().getId())) {
-            updateDashboard(source);
+    private void initAssistant(WebDashboardFrame frame) {
+        String assistantBeanName = StringUtils.isEmpty(getAssistantBeanName()) ? dashboard.getAssistantBeanName() : getAssistantBeanName();
+        if (StringUtils.isNotEmpty(assistantBeanName)) {
+            DashboardViewAssistant assistantBean = AppBeans.get(assistantBeanName, DashboardViewAssistant.class);
+            BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
+            if (assistantBean != null && bf.isPrototype(assistantBeanName)) {
+                assistantBean.init(frame);
+                dashboardViewAssistant = assistantBean;
+            }
         }
+    }
+
+    private void initTimer(Component frame) {
+        Window parentWindow = (Window) frame;
+        int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
+        if (timerDelay > 0) {
+            Timer dashboardUpdatedTimer = componentsFactory.createTimer();
+            parentWindow.addTimer(dashboardUpdatedTimer);
+            dashboardUpdatedTimer.setDelay(timerDelay * 1000);
+            dashboardUpdatedTimer.setRepeating(true);
+            dashboardUpdatedTimer.addActionListener(timer -> events.publish(new DashboardUpdatedEvent(dashboard)));
+            dashboardUpdatedTimer.start();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @EventListener
+    public void dashboardEventListener(DashboardEvent dashboardEvent) throws InvocationTargetException, IllegalAccessException {
+        if (dashboardViewAssistant == null) {
+            return;
+        }
+        Class eventClass = dashboardEvent.getClass();
+        Method[] methods = ReflectionUtils.getUniqueDeclaredMethods(dashboardViewAssistant.getClass());
+        List<Method> eventListenerMethods = Arrays.stream(methods)
+                .filter(m -> m.getAnnotation(EventListener.class) != null)
+                .filter(m -> m.getParameterCount() == 1)
+                .collect(Collectors.toList());
+
+        for (Method method : eventListenerMethods) {
+            java.lang.reflect.Parameter[] parameters = method.getParameters();
+            java.lang.reflect.Parameter parameter = parameters[0];
+            Class methodEventTypeArg = parameter.getType();
+            if (methodEventTypeArg.isAssignableFrom(eventClass)) {
+                method.invoke(dashboardViewAssistant, dashboardEvent);
+
+            }
+        }
+
+
     }
 
     @Override

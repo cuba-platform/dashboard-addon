@@ -117,7 +117,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
     protected void loadTimerDelay(DashboardFrame resultComponent, Element element) {
         String timerDelayValue = element.attributeValue("timerDelay");
         if (isNotBlank(timerDelayValue)) {
-            resultComponent.setTimerDelay(Integer.parseInt(timerDelayValue) * 1000);
+            resultComponent.setTimerDelay(Integer.parseInt(timerDelayValue));
         }
     }
 
