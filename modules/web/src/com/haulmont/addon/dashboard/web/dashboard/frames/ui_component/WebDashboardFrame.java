@@ -16,6 +16,7 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFra
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
@@ -125,6 +126,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @SuppressWarnings("unchecked")
     @EventListener
     public void dashboardEventListener(DashboardEvent dashboardEvent) throws InvocationTargetException, IllegalAccessException {
+        refreshWidgets(dashboardEvent);
+
         if (dashboardViewAssistant == null) {
             return;
         }
@@ -217,6 +220,14 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             ));
         } else {
             canvasFrame.updateLayout(dashboard);
+        }
+    }
+
+    protected void refreshWidgets(DashboardEvent dashboardEvent) {
+        List<WidgetBrowse> wbs = canvasFrame.getRefreshableWidgets();
+        for (WidgetBrowse wb : wbs) {
+            RefreshableWidget rw = (RefreshableWidget) wb;
+            rw.refresh(dashboardEvent);
         }
     }
 

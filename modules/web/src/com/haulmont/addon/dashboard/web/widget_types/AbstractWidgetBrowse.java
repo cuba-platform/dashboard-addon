@@ -97,12 +97,6 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
         }
     }
 
-    @EventListener
-    public void onUpdateDashboard(DashboardUpdatedEvent event) {
-        Dashboard source = event.getSource();
-
-    }
-
     @Override
     public Widget getWidget() {
         return widget;

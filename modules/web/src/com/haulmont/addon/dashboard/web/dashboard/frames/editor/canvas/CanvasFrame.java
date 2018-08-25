@@ -5,6 +5,7 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.AbstractCanvasLayout;
@@ -14,6 +15,7 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
+import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
@@ -21,6 +23,8 @@ import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -91,5 +95,24 @@ public class CanvasFrame extends AbstractFrame {
             }
         }
         return null;
+    }
+
+    public List<WidgetBrowse> getRefreshableWidgets() {
+        List<WidgetBrowse> result = new ArrayList<>();
+        searchRefreshableWidgets(vLayout, result);
+        return result;
+    }
+
+    protected void searchRefreshableWidgets(CanvasLayout layout, List<WidgetBrowse> wbList) {
+        if (layout instanceof CanvasWidgetLayout) {
+            WidgetBrowse wb = (WidgetBrowse) ((Container) layout.getDelegate()).getOwnComponents().iterator().next();
+            if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
+                wbList.add(wb);
+            }
+        } else {
+            for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+                searchRefreshableWidgets((CanvasLayout) child, wbList);
+            }
+        }
     }
 }
