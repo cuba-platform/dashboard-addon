@@ -10,6 +10,7 @@ import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ParameterBrowse extends AbstractLookup {
     }
 
     public Component generateValueCell(Entity entity) {
-        String valueText = ((Parameter) entity).getParameterValue().toString();
+        String valueText = ((Parameter) entity).getParameterValue() == null ? StringUtils.EMPTY : ((Parameter) entity).getParameterValue().toString();
         return new Table.PlainTextCell(valueText);
     }
 }
