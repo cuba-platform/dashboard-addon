@@ -9,4 +9,5 @@ public interface DashboardStyleConstants {
     String AMXD_SHADOW_BORDER = "amxd-shadow-border";
     String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
     String AMXD_EDIT_BUTTON = "amxd-edit-button";
+    String AMXD_TREE_SELECTED = "amxd-tree-selected";
 }

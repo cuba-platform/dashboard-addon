@@ -22,6 +22,7 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
+import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
@@ -49,6 +50,8 @@ import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLa
 
 public class PaletteFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "paletteFrame";
+
+    private Component.MouseEventDetails mouseEventDetails;
 
     @Inject
     protected DDVerticalLayout ddWidgetBox;
@@ -116,16 +119,17 @@ public class PaletteFrame extends AbstractFrame {
 
     protected void initWidgetTreeBox() {
         dashboardLayoutTreeReadOnlyDs.refresh();
-        widgetTree.setItemClickAction(new BaseAction("widgetTreeClickAction") {
-            @Override
-            public void actionPerform(Component component) {
-                DashboardLayout dashboardLayout = widgetTree.getSingleSelected();
-                if (dashboardLayout != null) {
-                    events.publish(new WidgetTreeElementClickedEvent(dashboardLayout.getId()));
-                }
+        dashboardLayoutTreeReadOnlyDs.addItemChangeListener(e -> {
+            DashboardLayout dashboardLayout = widgetTree.getSingleSelected();
+            if (dashboardLayout != null) {
+                events.publish(new WidgetTreeElementClickedEvent(dashboardLayout.getId()));
             }
         });
+        widgetTree.expandTree();
 
+        /*CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
+        cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
+        cubaTree.setDropHandler();*/
     }
 
     protected void initWidgetTemplateBox() {
@@ -180,5 +184,23 @@ public class PaletteFrame extends AbstractFrame {
         }
         widgetTree.repaint();
 
+    }
+
+    @EventListener
+    public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
+        UUID layoutUuid = event.getSource();
+        Component.MouseEventDetails md = event.getMouseEventDetails();//TODO: refactor, problem with addLayoutClickListener in every layout prod a lot of events, in root can't get clicked comp
+        if (mouseEventDetails == null) {
+            mouseEventDetails = md;
+        } else {
+            if (mouseEventDetails.getClientX() == md.getClientX() && mouseEventDetails.getClientY() == md.getClientY()) {
+                return;
+            } else {
+                mouseEventDetails = md;
+            }
+        }
+
+        widgetTree.setSelected(dashboardLayoutTreeReadOnlyDs.getItem(layoutUuid));
+        widgetTree.expand(layoutUuid);
     }
 }

@@ -145,4 +145,23 @@
     .v-tree-node-caption.v-drag-element>div:before {
         content: none;
     }
+
+    .amxd-tree-selected {
+       border: 2px solid $v-selection-color;
+       border-radius: 3px;
+    }
+
+    .amxd-dashboard-disabled .amxd-tree-selected {
+       border: none;
+       border-radius: 0;
+       box-shadow: none;
+    }
+
+    .amxd-tree-selected > .amxd-layout-controls {
+            display: inline-block;
+        }
+
+        .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls {
+            display: none;
+        }
 }

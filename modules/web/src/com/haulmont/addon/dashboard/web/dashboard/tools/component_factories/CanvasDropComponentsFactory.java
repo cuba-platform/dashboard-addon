@@ -11,6 +11,9 @@ import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
+import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
+import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
+import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -21,19 +24,14 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.haulmont.addon.dashboard.web.DashboardIcon;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
-import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
 import org.springframework.stereotype.Component;
+
 
 import javax.inject.Inject;
 
 import java.util.UUID;
 
-import static com.haulmont.addon.dashboard.web.DashboardIcon.GEAR_ICON;
-import static com.haulmont.addon.dashboard.web.DashboardIcon.TRASH_ICON;
-import static com.haulmont.addon.dashboard.web.DashboardStyleConstants.*;
+
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 import static com.haulmont.cuba.gui.icons.CubaIcon.ARROWS;
 import static com.haulmont.cuba.gui.icons.CubaIcon.DATABASE;
@@ -69,7 +67,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
         buttonsPanel.add(captionButton);
-
+        addLayoutClickListener(layout);
         return layout;
     }
 
@@ -91,7 +89,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
         buttonsPanel.add(captionButton);
-
+        addLayoutClickListener(layout);
         return layout;
     }
 
@@ -114,7 +112,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(removeButton);
         buttonsPanel.add(weightButton);
         buttonsPanel.add(captionButton);
-
+        addLayoutClickListener(layout);
         return layout;
     }
 
@@ -140,7 +138,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(weightButton);
         buttonsPanel.add(doTemplateButton);
         buttonsPanel.add(captionButton);
-
+        addLayoutClickListener(layout);
         return layout;
 
     }
@@ -191,5 +189,12 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         captionButton.addStyleName(DashboardStyleConstants.AMXD_EDIT_BUTTON);
         captionButton.setCaption(messages.getMainMessage(messageKey));
         return captionButton;
+    }
+
+    protected void addLayoutClickListener(CanvasLayout layout) {
+        layout.addLayoutClickListener(e -> {
+            CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+            events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+        });
     }
 }

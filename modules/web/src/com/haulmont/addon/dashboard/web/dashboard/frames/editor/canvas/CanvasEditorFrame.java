@@ -8,6 +8,7 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight_dialog.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
@@ -15,6 +16,7 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
+import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
@@ -24,10 +26,6 @@ import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -107,23 +105,30 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         });
     }
 
-    protected void selectLayout(CanvasLayout layout, UUID layoutUuid) {
-        if (layout.getUuid().equals(layoutUuid)) {
-            layout.requestFocus();
-            layout.getDelegate().requestFocus();
+    protected void selectLayout(CanvasLayout layout, UUID layoutUuid, boolean needSelect) {
+        if (layout.getUuid().equals(layoutUuid) && needSelect) {
+            layout.addStyleName(DashboardStyleConstants.AMXD_TREE_SELECTED);
+        } else {
+            layout.removeStyleName(DashboardStyleConstants.AMXD_TREE_SELECTED);
         }
 
         for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
             if (!(child instanceof CanvasLayout)) {
                 continue;
             }
-            selectLayout((CanvasLayout) child, layoutUuid);
+            selectLayout((CanvasLayout) child, layoutUuid, needSelect);
         }
     }
 
     @EventListener
     public void widgetTreeElementClickedEventListener(WidgetTreeElementClickedEvent event) {
         UUID layoutUuid = event.getSource();
-        selectLayout(vLayout, layoutUuid);
+        selectLayout(vLayout, layoutUuid, true);
+    }
+
+    @EventListener
+    public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
+        UUID layoutUuid = event.getSource();
+        selectLayout(vLayout, layoutUuid, false);
     }
 }
