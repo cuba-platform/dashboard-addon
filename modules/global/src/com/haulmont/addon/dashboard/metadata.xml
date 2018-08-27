@@ -13,8 +13,5 @@
         <class>com.haulmont.addon.dashboard.model.visual_model.WidgetLayout</class>
         <class>com.haulmont.addon.dashboard.model.visual_model.GridLayout</class>
         <class>com.haulmont.addon.dashboard.model.visual_model.GridArea</class>
-        <!--widget types-->
-        <class>com.haulmont.addon.dashboard.model.widget_types.ScreenWidget</class>
-        <class>com.haulmont.addon.dashboard.model.widget_types.LookupWidget</class>
     </metadata-model>
 </metadata>
