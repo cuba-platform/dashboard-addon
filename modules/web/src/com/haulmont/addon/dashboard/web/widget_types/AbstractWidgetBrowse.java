@@ -9,15 +9,12 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
-import com.haulmont.addon.dashboard.parameter_transformer.ParameterTransformer;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.parameter_transformer.ParameterTransformer;
 import com.haulmont.addon.dashboard.web.DashboardException;
-import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.addon.dashboard.web.DashboardException;
-import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -35,6 +32,9 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
     @Inject
     protected ParameterTransformer transformer;
 
+    @Inject
+    protected WidgetRepository widgetRepository;
+
     protected Widget widget;
     protected Dashboard dashboard;
 
@@ -43,6 +43,8 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
         super.init(params);
         widget = (Widget) params.get(WIDGET);
         dashboard = (Dashboard) params.get(DASHBOARD);
+
+        widgetRepository.initializeWidgetFields(this, widget);
 
         if (widget == null) {
             throw new DashboardException("Can't get a Widget object in input parameters");

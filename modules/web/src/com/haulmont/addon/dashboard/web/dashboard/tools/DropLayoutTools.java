@@ -8,6 +8,7 @@ import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visual_model.GridLayout;
 import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.events.LayoutChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;

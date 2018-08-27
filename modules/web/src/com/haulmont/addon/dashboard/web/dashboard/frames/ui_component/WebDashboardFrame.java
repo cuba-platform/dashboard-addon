@@ -4,12 +4,12 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.ui_component;
 
-import com.haulmont.addon.dashboard.converter.JsonConverter;
+import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;

@@ -4,26 +4,22 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 
-import com.haulmont.addon.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
-import com.haulmont.addon.dashboard.converter.JsonConverter;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.LayoutChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
 import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
@@ -31,11 +27,8 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Tree;
-import com.haulmont.cuba.gui.components.actions.BaseAction;
-import com.haulmont.cuba.gui.components.actions.EditAction;
+import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.web.gui.components.WebTree;
-import com.haulmont.cuba.web.toolkit.ui.CubaTree;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -70,13 +63,15 @@ public class PaletteFrame extends AbstractFrame {
     @Inject
     protected AccessConstraintsHelper accessHelper;
     @Inject
-    protected WidgetTypeAnalyzer typeAnalyzer;
+    protected WidgetRepository widgetRepository;
     @Inject
     protected DashboardLayoutTreeReadOnlyDs dashboardLayoutTreeReadOnlyDs;
     @Inject
     protected Tree<DashboardLayout> widgetTree;
     @Inject
     protected Events events;
+    @Inject
+    protected WindowConfig windowConfig;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -155,12 +150,12 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     protected List<? extends Widget> getSketchWidgets() {
-        return typeAnalyzer.getWidgetTypesInfo()
+        return widgetRepository.getWidgetTypesInfo()
                 .stream()
                 .map(type -> {
-                    Class<? extends Widget> typeClass = type.getTypeClass();
-                    Widget widget = metadata.create(typeClass);
+                    Widget widget = metadata.create(Widget.class);
                     widget.setCaption(type.getName());
+                    widget.setBrowseFrameId(type.getBrowseFrameId());
                     return widget;
                 })
                 .collect(Collectors.toList());

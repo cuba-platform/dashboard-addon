@@ -1,6 +1,6 @@
 package com.haulmont.addon.dashboard.web.widget;
 
-import com.haulmont.addon.dashboard.converter.JsonConverter;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.widget.WidgetEdit.SCREEN_NAME;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;

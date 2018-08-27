@@ -4,7 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
 
-import com.haulmont.addon.dashboard.converter.JsonConverter;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
@@ -17,8 +17,6 @@ import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.LookupComponent;
 import com.haulmont.cuba.gui.components.SelectAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
-import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -27,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.frames.browse.DashboardView.REFERENCE_NAME;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.NEW_WINDOW;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
@@ -131,6 +128,11 @@ public class PersistentDashboardBrowse extends AbstractLookup {
             persDashboardsDs.commit();
             persDashboardsDs.refresh();
             events.publish(new DashboardUpdatedEvent(result));
+        });
+        editor.addCloseListener((actionId)->{
+            if (!"commit".equals(actionId)){
+                updateTable();
+            }
         });
     }
 

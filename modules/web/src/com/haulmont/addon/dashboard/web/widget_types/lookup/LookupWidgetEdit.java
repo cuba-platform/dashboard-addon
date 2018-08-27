@@ -4,8 +4,10 @@
 
 package com.haulmont.addon.dashboard.web.widget_types.lookup;
 
+import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.widget_types.LookupWidget;
+import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
+import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -28,7 +30,7 @@ import java.util.Map;
 import static com.haulmont.addon.dashboard.web.widget.WidgetEdit.ITEM_DS;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class LookupWidgetEdit extends AbstractFrame {
+public class LookupWidgetEdit extends AbstractWidgetEdit {
     @Inject
     protected LookupField lookupIdLookup;
     @Inject
@@ -39,6 +41,9 @@ public class LookupWidgetEdit extends AbstractFrame {
     protected ScreenXmlLoader screenXmlLoader;
 
     protected Datasource<Widget> widgetDs;
+
+    @WidgetParam(type = ParameterType.STRING)
+    protected String lookupWindowId;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -53,24 +58,23 @@ public class LookupWidgetEdit extends AbstractFrame {
 
     protected void initWidgetDs(Map<String, Object> params) {
         widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS);
-        Widget widget = widgetDs.getItem();
+        /*Widget widget = widgetDs.getItem();
 
         if (!(widget instanceof LookupWidget)) {
             LookupWidget lookupWidget = metadata.create(LookupWidget.class);
             BeanUtils.copyProperties(widget, lookupWidget);
             widgetDs.setItem(lookupWidget);
-        }
+        }*/
     }
 
     protected void selectLookupId() {
-        LookupWidget item = (LookupWidget) widgetDs.getItem();
-        if (isNotBlank(item.getLookupWindowId())) {
-            lookupIdLookup.setValue(item.getLookupWindowId());
+        if (isNotBlank(lookupWindowId)) {
+            lookupIdLookup.setValue(lookupWindowId);
         }
     }
 
     protected void lookupIdSelected(String lookupWindowId) {
-        ((LookupWidget) widgetDs.getItem()).setLookupWindowId(lookupWindowId);
+        this.lookupWindowId = lookupWindowId;
     }
 
     protected List<String> getAllLookupIds() {

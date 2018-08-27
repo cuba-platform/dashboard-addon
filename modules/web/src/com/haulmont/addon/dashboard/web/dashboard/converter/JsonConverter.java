@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.haulmont.addon.dashboard.converter;
+package com.haulmont.addon.dashboard.web.dashboard.converter;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
@@ -14,7 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 
-import static com.haulmont.addon.dashboard.converter.JsonConverter.NAME;
+import static com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter.NAME;
 
 /**
  * Supports the conversion to json for non-persistent objects with types: {@link Dashboard},
@@ -29,7 +29,6 @@ public class JsonConverter {
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
-        builder.registerTypeAdapter(Widget.class, new InheritanceAdapter());
         builder.registerTypeAdapter(DashboardLayout.class, new InheritanceAdapter());
         gson = builder.create();
     }

@@ -2,9 +2,8 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.haulmont.addon.dashboard.annotation_analyzer;
+package com.haulmont.addon.dashboard.web.annotation_analyzer;
 
-import com.haulmont.addon.dashboard.annotation.WidgetType;
 import com.haulmont.addon.dashboard.model.Widget;
 
 import java.io.Serializable;
@@ -12,9 +11,8 @@ import java.io.Serializable;
 /**
  * Contains values of annotation {@link WidgetType}, which is indicated class {@link WidgetTypeInfo#typeClass}
  */
-public class WidgetTypeInfo<T extends Widget> implements Serializable {
+public class WidgetTypeInfo implements Serializable {
 
-    protected Class<T> typeClass;
     protected String name;
     protected String browseFrameId;
     protected String editFrameId;
@@ -22,19 +20,10 @@ public class WidgetTypeInfo<T extends Widget> implements Serializable {
     public WidgetTypeInfo() {
     }
 
-    public WidgetTypeInfo(Class<T> typeClass, String name, String browseFrameId, String editFrameId) {
-        this.typeClass = typeClass;
+    public WidgetTypeInfo(String name, String browseFrameId, String editFrameId) {
         this.name = name;
         this.browseFrameId = browseFrameId;
         this.editFrameId = editFrameId;
-    }
-
-    public Class<T> getTypeClass() {
-        return typeClass;
-    }
-
-    public void setTypeClass(Class<T> typeClass) {
-        this.typeClass = typeClass;
     }
 
     public String getName() {

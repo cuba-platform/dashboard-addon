@@ -8,6 +8,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NamePattern("%s|caption")
@@ -23,6 +24,10 @@ public class Widget extends BaseUuidEntity {
     protected List<Parameter> parameters;
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
+    @MetaProperty
+    protected List<Parameter> widgetFields = new ArrayList<>();
+    @MetaProperty
+    protected String browseFrameId;
 
     /**
      * Stores a login of the user, who created entity
@@ -76,5 +81,21 @@ public class Widget extends BaseUuidEntity {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public List<Parameter> getWidgetFields() {
+        return widgetFields;
+    }
+
+    public void setWidgetFields(List<Parameter> widgetFields) {
+        this.widgetFields = widgetFields;
+    }
+
+    public String getBrowseFrameId() {
+        return browseFrameId;
+    }
+
+    public void setBrowseFrameId(String browseFrameId) {
+        this.browseFrameId = browseFrameId;
     }
 }

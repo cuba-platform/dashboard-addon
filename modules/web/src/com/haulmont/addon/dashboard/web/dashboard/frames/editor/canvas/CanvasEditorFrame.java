@@ -9,6 +9,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.events.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight_dialog.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
@@ -46,6 +47,8 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     protected DropLayoutTools tools = new DropLayoutTools();
     @Inject
     protected Events events;
+    @Inject
+    protected WidgetRepository widgetRepository;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -86,6 +89,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
             parent.remove(source);
 
             CanvasWidgetLayout newLayout = converter.getFactory().createCanvasWidgetLayout(this, editor.getItem());
+            newLayout.setUuid(source.getUuid());
             tools.addDropHandler(newLayout);
             parent.add(newLayout);
         });

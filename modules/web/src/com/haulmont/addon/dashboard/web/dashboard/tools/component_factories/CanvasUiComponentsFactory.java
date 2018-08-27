@@ -4,8 +4,8 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.component_factories;
 
-import com.haulmont.addon.dashboard.annotation_analyzer.WidgetTypeAnalyzer;
-import com.haulmont.addon.dashboard.annotation_analyzer.WidgetTypeInfo;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
@@ -15,7 +15,6 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.addon.dashboard.web.DashboardException;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -30,7 +29,7 @@ import static java.lang.String.format;
 @Component("amdx_VaadinUiComponentsFactory")
 public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Inject
-    protected WidgetTypeAnalyzer typeAnalyzer;
+    protected WidgetRepository widgetRepository;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
@@ -61,12 +60,12 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
-        Optional<WidgetTypeInfo> widgetTypeOpt = typeAnalyzer.getWidgetTypesInfo().stream()
-                .filter(widgetType -> widget.getClass().equals(widgetType.getTypeClass()))
+        Optional<WidgetTypeInfo> widgetTypeOpt = widgetRepository.getWidgetTypesInfo().stream()
+                .filter(widgetType -> widget.getBrowseFrameId().equals(widgetType.getBrowseFrameId()))
                 .findFirst();
 
         if (!widgetTypeOpt.isPresent()) {
-            throw new DashboardException(format("There isn't found a screen for the widget class %s", widget.getClass()));
+            throw new DashboardException(format("There isn't found a screen for the widget %s", widget.getBrowseFrameId()));
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
@@ -74,6 +73,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
                 WIDGET, widget,
                 DASHBOARD, frame.getDashboard()
         ));
+
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);
 

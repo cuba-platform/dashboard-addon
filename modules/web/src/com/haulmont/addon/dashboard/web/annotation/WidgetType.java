@@ -2,7 +2,7 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.haulmont.addon.dashboard.annotation;
+package com.haulmont.addon.dashboard.web.annotation;
 
 import com.haulmont.addon.dashboard.model.Widget;
 
@@ -22,12 +22,6 @@ public @interface WidgetType {
      * widgetType.{name} = {localization message}
      */
     String name();
-
-    /**
-     * Contains frame ID for showing a widget. Frame Controller must be inherited from the class
-     * {@link com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse}
-     */
-    String browseFrameId();
 
     /**
      *  Contains frame ID for editing a widget. This frame is embedded in the "widget-edit" screen

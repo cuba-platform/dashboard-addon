@@ -22,8 +22,6 @@ import javax.inject.Inject;
 import java.util.Map;
 
 import static com.haulmont.addon.dashboard.model.ParameterType.*;
-import static com.haulmont.addon.dashboard.web.parameter.frames.ValueFrame.VALUE;
-import static com.haulmont.addon.dashboard.web.parameter.frames.ValueFrame.VALUE_TYPE;
 
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject

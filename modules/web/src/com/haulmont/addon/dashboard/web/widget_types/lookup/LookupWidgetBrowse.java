@@ -4,11 +4,13 @@
 
 package com.haulmont.addon.dashboard.web.widget_types.lookup;
 
+import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.widget_types.LookupWidget;
+import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
@@ -18,10 +20,16 @@ import javax.inject.Inject;
 import java.util.Map;
 
 public class LookupWidgetBrowse extends AbstractWidgetBrowse {
+
+    public static final String CAPTION = "Lookup";
+
     @Inject
     protected Events events;
 
     protected AbstractLookup lookupFrame;
+
+    @WidgetParam(type = ParameterType.STRING)
+    protected String lookupWindowId;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -31,7 +39,6 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
 
     @Override
     public void refresh() {
-        String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
         lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, getParamsForFrame());
         lookupFrame.close("");
         this.add(lookupFrame.getFrame());
@@ -39,7 +46,6 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
 
     @Override
     public void refresh(Map<String, Object> params) {
-        String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
         lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG,  getParamsForFrame(params));
         lookupFrame.close("");
         this.add(lookupFrame.getFrame());
