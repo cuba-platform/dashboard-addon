@@ -8,7 +8,9 @@ package com.haulmont.addon.dashboard.web.widget_types.screen;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
+import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
+import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.Map;
@@ -16,12 +18,14 @@ import java.util.Map;
 import static com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidgetBrowse.CAPTION;
 
 @WidgetType(name = CAPTION, editFrameId = "screenWidgetEdit")
-public class ScreenWidgetBrowse extends AbstractWidgetBrowse {
+public class ScreenWidgetBrowse extends AbstractWidgetBrowse implements RefreshableWidget {
 
     public static final String CAPTION = "Screen";
 
     @WidgetParam(type = ParameterType.STRING)
     protected String screenId;
+
+    protected AbstractFrame screenFrame;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -31,13 +35,18 @@ public class ScreenWidgetBrowse extends AbstractWidgetBrowse {
 
     @Override
     public void refresh() {
-        AbstractFrame screenFrame = openFrame(this, screenId, getParamsForFrame());
+        screenFrame = openFrame(this, screenId, getParamsForFrame());
         screenFrame.setSizeFull();
     }
 
     @Override
     public void refresh(Map<String, Object> params) {
-        AbstractFrame screenFrame = openFrame(this, screenId, getParamsForFrame(params));
+        screenFrame = openFrame(this, screenId, getParamsForFrame(params));
         screenFrame.setSizeFull();
+    }
+
+    @Override
+    public void refresh(DashboardEvent dashboardEvent) {
+        screenFrame.getDsContext().refresh();
     }
 }

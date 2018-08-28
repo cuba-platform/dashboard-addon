@@ -61,4 +61,9 @@
             template="com/haulmont/addon/dashboard/web/widget_template_group/widget-template-group-browse.xml"/>
     <screen id="amxd$WidgetTemplateGroup.edit"
             template="com/haulmont/addon/dashboard/web/widget_template_group/widget-template-group-edit.xml"/>
+
+    <screen id="userdispWidgetBrowse"
+            template="com/haulmont/addon/dashboard/web/widget_types/displayer/userdisp-widget-browse.xml"/>
+    <screen id="userdispWidgetEdit"
+            template="com/haulmont/addon/dashboard/web/widget_types/displayer/userdisp-widget-edit.xml"/>
 </screen-config>
