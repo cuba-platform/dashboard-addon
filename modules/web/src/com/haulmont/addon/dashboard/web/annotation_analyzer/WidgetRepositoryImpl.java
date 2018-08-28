@@ -13,14 +13,23 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetType;
 import com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse;
 import com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidgetBrowse;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.config.WindowConfig;
+import com.haulmont.cuba.gui.config.WindowInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,21 +48,33 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     @Inject
     private Metadata metadata;
 
+    @Inject
+    private Resources resources;
+
+
     @Override
-    public List<WidgetTypeInfo> getWidgetTypesInfo() {//TODO: how get window class
-
-        List<WidgetTypeInfo> rl = new ArrayList<>();
-        WidgetTypeInfo screen = new  WidgetTypeInfo("Screen", "screenWidgetBrowse", "screenWidgetEdit");
-        WidgetTypeInfo lookUp = new  WidgetTypeInfo("Lookup", "lookupWidgetBrowse", "lookupWidgetEdit");
-        rl.add(screen);
-        rl.add(lookUp);
-        return rl;
-
-        /*return windowConfig.getWindows().stream().filter(wi -> wi.getScreenClass().getAnnotation(WidgetType.class) != null)
-                .map(wi -> {
-                    WidgetType ann = (WidgetType) wi.getScreenClass().getAnnotation(WidgetType.class);
-                    return new WidgetTypeInfo(ann.name(), wi.getId(), ann.editFrameId());
-                }).collect(Collectors.toList());*/
+    public List<WidgetTypeInfo> getWidgetTypesInfo() {
+        List<WidgetTypeInfo> result = new ArrayList<>();
+        try {
+            for (WindowInfo windowInfo : windowConfig.getWindows()) {
+                DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                if (StringUtils.isNoneEmpty(windowInfo.getTemplate())) {
+                    Document document = documentBuilder.parse(resources.getResourceAsStream(windowInfo.getTemplate()));
+                    Element window = document.getDocumentElement();
+                    String className = window.getAttribute("class");
+                    if (StringUtils.isNoneEmpty(className)) {
+                        Class clazz = Class.forName(className);
+                        WidgetType ann = (WidgetType) clazz.getAnnotation(WidgetType.class);
+                        if (ann != null) {
+                            result.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     @Override
@@ -94,4 +115,5 @@ public class WidgetRepositoryImpl implements WidgetRepository {
 
         }
     }
+
 }
