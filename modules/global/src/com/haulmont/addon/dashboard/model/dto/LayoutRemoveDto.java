@@ -7,10 +7,12 @@ import java.util.UUID;
 public class LayoutRemoveDto {
     private final DashboardLayout dashboardLayout;
     private final UUID removedUuid;
+    private final UUID selectUuid;
 
-    public LayoutRemoveDto(DashboardLayout dashboardLayout, UUID removedUuid) {
+    public LayoutRemoveDto(DashboardLayout dashboardLayout, UUID removedUuid, UUID selectUuid) {
         this.dashboardLayout = dashboardLayout;
         this.removedUuid = removedUuid;
+        this.selectUuid = selectUuid;
     }
 
     public DashboardLayout getDashboardLayout() {
@@ -19,5 +21,9 @@ public class LayoutRemoveDto {
 
     public UUID getRemovedUuid() {
         return removedUuid;
+    }
+
+    public UUID getSelectUuid() {
+        return selectUuid;
     }
 }

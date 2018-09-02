@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
-public class WidgetTreeElementClickedEvent extends ApplicationEvent implements UiEvent {
+public class WidgetTreeElementClickedEvent extends DashboardEvent {
 
     private UUID layoutUuid;
 

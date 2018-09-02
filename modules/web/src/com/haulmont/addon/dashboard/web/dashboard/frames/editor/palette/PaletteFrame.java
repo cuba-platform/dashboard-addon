@@ -19,6 +19,7 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.vaadin_component
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.TreeDropHandler;
 import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
@@ -29,6 +30,9 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
+import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import com.vaadin.ui.Layout;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -110,6 +114,7 @@ public class PaletteFrame extends AbstractFrame {
         ddLayoutBox.add(factory.createVerticalLayoutButton());
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
+
     }
 
     protected void initWidgetTreeBox() {
@@ -122,9 +127,9 @@ public class PaletteFrame extends AbstractFrame {
         });
         widgetTree.expandTree();
 
-        /*CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
+        CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
         cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
-        cubaTree.setDropHandler();*/
+        cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
     }
 
     protected void initWidgetTemplateBox() {
@@ -176,6 +181,9 @@ public class PaletteFrame extends AbstractFrame {
         if (selected != null) {
             widgetTree.setSelected(selected);
             widgetTree.expand(selected.getUuid());
+        }
+        if (source.getSelectUuid() != null) {
+            widgetTree.setSelected(dashboardLayoutTreeReadOnlyDs.getItem(source.getSelectUuid()));
         }
         widgetTree.repaint();
 

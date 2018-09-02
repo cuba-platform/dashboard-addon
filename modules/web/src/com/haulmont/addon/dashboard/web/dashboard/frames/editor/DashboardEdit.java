@@ -44,12 +44,13 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
     public static final String SCREEN_NAME = "dashboardEdit";
-    public static final String DASHBOARD_EDIT_FIELDGROUP = "amxd$dashboardEditFieldGroup";
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
-    @Named("amxd$dashboardEditFieldGroup")
-    protected FieldGroup fieldGroup;
+    @Named("amxd$dashboardEditFieldGroup1")
+    protected FieldGroup fieldGroup1;
+    @Named("amxd$dashboardEditFieldGroup2")
+    protected FieldGroup fieldGroup2;
     @Inject
     protected GroupBoxLayout paramsBox;
     @Inject
@@ -155,7 +156,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     protected void postValidate(ValidationErrors errors) {
         //remove validation errors from widget frames
-        errors.getAll().removeIf(error -> !DASHBOARD_EDIT_FIELDGROUP.equals(error.component.getParent().getId()));
+        errors.getAll().removeIf(error -> !"amxd$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
     }
 
     @Override
@@ -167,7 +168,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
                         (dsContext.get("widgetTemplatesDs") != null && dsContext.get("widgetTemplatesDs").getMetaClass() != null) &&
                                 "amxd$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
 
-        FieldGroup.FieldConfig assistantBeanName = fieldGroup.getField("assistantBeanName");
+        FieldGroup.FieldConfig assistantBeanName = fieldGroup2.getField("assistantBeanName");
         LookupField lookupField = (LookupField) assistantBeanName.getComponent();
         String val = lookupField.getValue();
         dashboardDs.getItem().setAssistantBeanName(val);

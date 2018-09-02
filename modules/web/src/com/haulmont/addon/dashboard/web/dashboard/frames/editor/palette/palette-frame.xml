@@ -25,38 +25,47 @@
         <accordion id="accordionPalette"
                    height="100%">
             <tab id="widgetTab"
-                 caption="msg://widgets">
-                <scrollBox id="widgetBox"
-                           height="100%">
-                    <dnd:dndVBoxLayout id="ddWidgetBox"
-                                       dragMode="CLONE"
-                                       height="100%"
-                                       margin="true"
-                                       width="100%"/>
-                </scrollBox>
-            </tab>
-            <tab id="layoutTab"
-                 caption="msg://layouts">
-                <scrollBox id="layoutBox"
-                           height="100%">
-                    <dnd:dndVBoxLayout id="ddLayoutBox"
-                                       dragMode="CLONE"
-                                       height="100%"
-                                       margin="true"
-                                       width="100%"/>
-                </scrollBox>
-            </tab>
-            <tab id="widgetTreeTab"
-                 caption="msg://widgetTree">
-                <scrollBox id="widgetTreeBox"
-                           height="100%">
-                    <tree id="widgetTree"
-                          height="100%"
-                          width="100%">
-                        <treechildren captionProperty="caption"
-                                      datasource="dashboardLayoutTreeReadOnlyDs"/>
-                    </tree>
-                </scrollBox>
+                 caption="msg://palette">
+                <split height="100%"
+                       orientation="vertical"
+                       pos="70"
+                       width="100%">
+                    <scrollBox height="100%">
+                        <groupBox id="widgetGroupBox"
+                                  caption="msg://widgets"
+                                  spacing="true">
+                            <scrollBox id="widgetBox"
+                                       height="100%">
+                                <dnd:dndVBoxLayout id="ddWidgetBox"
+                                                   dragMode="CLONE"
+                                                   height="100%"
+                                                   margin="true"
+                                                   width="100%"/>
+                            </scrollBox>
+                        </groupBox>
+                        <groupBox id="layoutGroupBox"
+                                  caption="msg://layouts"
+                                  spacing="true">
+                            <scrollBox id="layoutBox"
+                                       height="100%">
+                                <dnd:dndVBoxLayout id="ddLayoutBox"
+                                                   dragMode="CLONE"
+                                                   height="100%"
+                                                   margin="true"
+                                                   width="100%"/>
+                            </scrollBox>
+                        </groupBox>
+                    </scrollBox>
+                    <scrollBox id="widgetTreeBox"
+                               height="100%">
+                        <tree id="widgetTree"
+                              height="100%"
+                              width="100%">
+                            <treechildren captionProperty="caption"
+                                          datasource="dashboardLayoutTreeReadOnlyDs"/>
+                        </tree>
+                    </scrollBox>
+                </split>
             </tab>
             <tab id="widgetTemplateTab"
                  caption="msg://widgetTemplates">

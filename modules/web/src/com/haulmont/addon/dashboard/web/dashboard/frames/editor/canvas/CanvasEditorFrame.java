@@ -7,6 +7,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
+import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
@@ -18,8 +19,10 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
 import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
+import com.haulmont.addon.dashboard.web.events.LayoutAddedToTreeEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
+import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
@@ -74,8 +77,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         if (parent != null) {
             parent.remove(source);
         }
-        VerticalLayout vl = getDashboardModel();
-        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(vl, source.getUuid())));
+        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(getDashboardModel(), source.getUuid(), null)));
     }
 
     @EventListener
@@ -124,6 +126,24 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         }
     }
 
+    protected CanvasLayout findCanvasLayout(CanvasLayout layout, UUID layoutUuid) {
+        if (layout.getUuid().equals(layoutUuid)) {
+            return layout;
+        } else {
+            for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+                if (!(child instanceof CanvasLayout)) {
+                    continue;
+                }
+                CanvasLayout tmp = findCanvasLayout((CanvasLayout) child, layoutUuid);
+                if (tmp == null) {
+                    continue;
+                }
+                return findCanvasLayout((CanvasLayout) child, layoutUuid);
+            }
+        }
+        return null;
+    }
+
     @EventListener
     public void widgetTreeElementClickedEventListener(WidgetTreeElementClickedEvent event) {
         UUID layoutUuid = event.getSource();
@@ -134,5 +154,11 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
         UUID layoutUuid = event.getSource();
         selectLayout(vLayout, layoutUuid, false);
+    }
+
+    @EventListener
+    public void layoutAddedToTreeEventListener(LayoutAddedToTreeEvent event) {
+        LayoutAddedToTreeEvent.LayoutAddedToTree layoutAddedToTree = event.getSource();
+        tools.addComponent((DDVerticalLayout) findCanvasLayout(vLayout, layoutAddedToTree.getParentLayoutUuid()).getDelegate(), layoutAddedToTree.getLayoutType());
     }
 }

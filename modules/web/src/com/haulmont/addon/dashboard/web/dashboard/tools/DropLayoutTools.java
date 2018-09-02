@@ -135,6 +135,6 @@ public class DropLayoutTools {//TODO добавление лайаутов
         canvasLayout.setWeight(1);
 
         Events events = AppBeans.get(Events.class);
-        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(frame.getDashboardModel(), null)));
+        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(frame.getDashboardModel(), null, canvasLayout.getUuid())));
     }
 }
