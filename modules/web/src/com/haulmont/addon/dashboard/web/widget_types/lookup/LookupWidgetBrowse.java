@@ -4,17 +4,19 @@
 
 package com.haulmont.addon.dashboard.web.widget_types.lookup;
 
+import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
-import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
-import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
+import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Window;
 
@@ -25,12 +27,21 @@ import static com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetB
 
 
 @WidgetType(name = CAPTION, editFrameId = "lookupWidgetEdit")
-public class LookupWidgetBrowse extends AbstractWidgetBrowse {
+public class LookupWidgetBrowse extends AbstractFrame implements RefreshableWidget {
 
     public static final String CAPTION = "Lookup";
 
     @Inject
     protected Events events;
+
+    @Inject
+    protected WidgetRepository widgetRepository;
+
+    @WindowParam
+    protected Widget widget;
+
+    @WindowParam
+    protected Dashboard dashboard;
 
     protected AbstractLookup lookupFrame;
 
@@ -40,13 +51,7 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
 
     @Override
     public void init(Map<String, Object> params) {
-        super.init(params);
-        refresh(params);
-    }
-
-    @Override
-    public void refresh(Map<String, Object> params) {
-        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG,  getParamsForFrame(params));
+        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
         lookupFrame.close("");
         this.add(lookupFrame.getFrame());
     }
@@ -55,7 +60,9 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
         return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetEntitiesSelectedEvent.WidgetWithEntities(widget, items)));
     }
 
-    /*public void onFireEventClick() {
-        events.publish(new WidgetUpdatedEvent(new Widget()));
-    }*/
+    @Override
+    public void refresh(DashboardEvent dashboardEvent) {
+        lookupFrame.getDsContext().refresh();
+    }
+
 }

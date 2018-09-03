@@ -4,31 +4,34 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.component_factories;
 
-import com.haulmont.addon.dashboard.model.Parameter;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardException;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasGridLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
-import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
-import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.DASHBOARD;
-import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.NONE;
 import static java.lang.String.format;
 
 @Component("amdx_VaadinUiComponentsFactory")
 public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
+
+    public static final String WIDGET = "widget";
+    public static final String DASHBOARD = "dashboard";
+
     @Inject
     protected WidgetRepository widgetRepository;
 
@@ -68,6 +71,8 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         if (!widgetTypeOpt.isPresent()) {
             throw new DashboardException(format("There isn't found a screen for the widget %s", widget.getBrowseFrameId()));
         }
+
+        widget.setDashboard(frame.getDashboard());
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
         Map<String, Object> params = new HashMap<>(ParamsMap.of(

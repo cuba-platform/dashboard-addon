@@ -4,14 +4,13 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.ui_component;
 
-import com.haulmont.addon.dashboard.model.Parameter;
-import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
-import com.haulmont.addon.dashboard.gui.components.WidgetBrowse;
 import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
@@ -21,7 +20,6 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.gui.components.*;
-
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -151,11 +149,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     }
 
-    @Override
-    public WidgetBrowse getWidgetBrowse(String widgetId) {
-        return canvasFrame.getWidgetBrowse(widgetId);
-    }
-
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null) {
             showNotification(messages.getMainMessage("notLoadedDashboard"), NotificationType.ERROR);
@@ -223,9 +216,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     protected void refreshWidgets(DashboardEvent dashboardEvent) {
-        List<WidgetBrowse> wbs = canvasFrame.getRefreshableWidgets();
-        for (WidgetBrowse wb : wbs) {
-            RefreshableWidget rw = (RefreshableWidget) wb;
+        List<RefreshableWidget> rws = canvasFrame.getRefreshableWidgets();
+        for (RefreshableWidget rw : rws) {
             rw.refresh(dashboardEvent);
         }
     }

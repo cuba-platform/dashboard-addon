@@ -28,6 +28,8 @@ public class Widget extends BaseUuidEntity {
     protected List<Parameter> widgetFields = new ArrayList<>();
     @MetaProperty
     protected String browseFrameId;
+    @MetaProperty
+    protected Dashboard dashboard;
 
     /**
      * Stores a login of the user, who created entity
@@ -97,5 +99,13 @@ public class Widget extends BaseUuidEntity {
 
     public void setBrowseFrameId(String browseFrameId) {
         this.browseFrameId = browseFrameId;
+    }
+
+    public Dashboard getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(Dashboard dashboard) {
+        this.dashboard = dashboard;
     }
 }

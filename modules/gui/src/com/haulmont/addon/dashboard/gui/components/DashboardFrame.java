@@ -19,8 +19,6 @@ public interface DashboardFrame extends Frame {
 
     String NAME = "amdxDashboardComponent";
 
-    WidgetBrowse getWidgetBrowse(String widgetId);
-
     void setReferenceName(String referenceName);
 
     void setJsonPath(String jsonPath);

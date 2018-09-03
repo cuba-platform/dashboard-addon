@@ -25,6 +25,7 @@ import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Tree;
@@ -76,10 +77,11 @@ public class PaletteFrame extends AbstractFrame {
     protected Events events;
     @Inject
     protected WindowConfig windowConfig;
+    @WindowParam
+    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
-        Dashboard dashboard = (Dashboard) params.get(CanvasFrame.DASHBOARD);
         dashboardLayoutTreeReadOnlyDs.setVisualModel(dashboard.getVisualModel());
         initWidgetBox();
         initLayoutBox();
@@ -161,6 +163,7 @@ public class PaletteFrame extends AbstractFrame {
                     Widget widget = metadata.create(Widget.class);
                     widget.setCaption(type.getName());
                     widget.setBrowseFrameId(type.getBrowseFrameId());
+                    widget.setDashboard(dashboard);
                     return widget;
                 })
                 .collect(Collectors.toList());

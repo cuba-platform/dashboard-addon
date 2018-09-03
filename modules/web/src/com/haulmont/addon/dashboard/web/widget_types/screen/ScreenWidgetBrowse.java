@@ -5,21 +5,22 @@
 package com.haulmont.addon.dashboard.web.widget_types.screen;
 
 
+import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.ParameterType;
+import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
-import com.haulmont.addon.dashboard.web.events.DashboardEvent;
-import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
-import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
+import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 import static com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidgetBrowse.CAPTION;
 
 @WidgetType(name = CAPTION, editFrameId = "screenWidgetEdit")
-public class ScreenWidgetBrowse extends AbstractWidgetBrowse implements RefreshableWidget {
+public class ScreenWidgetBrowse extends AbstractFrame {
 
     public static final String CAPTION = "Screen";
 
@@ -27,22 +28,20 @@ public class ScreenWidgetBrowse extends AbstractWidgetBrowse implements Refresha
     @WindowParam
     protected String screenId;
 
+    @Inject
+    protected WidgetRepository widgetRepository;
+
+    @WindowParam
+    protected Widget widget;
+
+    @WindowParam
+    protected Dashboard dashboard;
+
     protected AbstractFrame screenFrame;
 
     @Override
     public void init(Map<String, Object> params) {
-        super.init(params);
-        refresh(params);
-    }
-
-    @Override
-    public void refresh(Map<String, Object> params) {
-        screenFrame = openFrame(this, screenId, getParamsForFrame(params));
+        screenFrame = openFrame(this, screenId, widgetRepository.getWidgetParams(widget));
         screenFrame.setSizeFull();
-    }
-
-    @Override
-    public void refresh(DashboardEvent dashboardEvent) {
-        screenFrame.getDsContext().refresh();
     }
 }
