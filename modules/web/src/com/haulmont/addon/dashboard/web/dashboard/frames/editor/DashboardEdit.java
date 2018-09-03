@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -92,7 +93,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     public Dashboard getItem() {
         Dashboard dashboard = dashboardDs.getItem();
-        dashboard.setParameters(parametersFrame.getParameters());
+        //dashboard.setParameters(parametersFrame.getParameters());
         dashboard.setVisualModel(canvasFrame.getDashboardModel());
         dashboard.setCreatedBy(accessHelper.getCurrentSessionLogin());
         return dashboard;
@@ -100,19 +101,19 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     protected void initParametersFrame() {
         parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
-                PARAMETERS, dashboardDs.getItem().getParameters()
+                PARAMETERS, dashboardDs.getItem().getParameters(), DASHBOARD, dashboardDs.getItem()
         ));
     }
 
     protected void initPaletteFrame() {
         paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                CanvasFrame.DASHBOARD, dashboardDs.getItem()
+                DASHBOARD, dashboardDs.getItem()
         ));
     }
 
     protected void initCanvasFrame() {
         canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
-                CanvasFrame.DASHBOARD, dashboardDs.getItem()
+                DASHBOARD, dashboardDs.getItem()
         ));
     }
 

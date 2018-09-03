@@ -3,6 +3,8 @@
  */
 package com.haulmont.addon.dashboard.model;
 
+import com.google.gson.annotations.Expose;
+import com.haulmont.addon.dashboard.model.json.Exclude;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
@@ -29,6 +31,7 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String browseFrameId;
     @MetaProperty
+    @Exclude
     protected Dashboard dashboard;
 
     /**

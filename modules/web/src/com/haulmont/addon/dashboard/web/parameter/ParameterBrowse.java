@@ -4,8 +4,10 @@
 
 package com.haulmont.addon.dashboard.web.parameter;
 
+import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
+
 public class ParameterBrowse extends AbstractLookup {
     public static final String PARAMETERS = "PARAMETERS";
     public static final String SCREEN_NAME = "amdx$Parameter.browse";
@@ -26,6 +30,8 @@ public class ParameterBrowse extends AbstractLookup {
     protected GroupDatasource<Parameter, UUID> parametersDs;
     @Inject
     protected Table<Parameter> parametersTable;
+    @WindowParam(name = DASHBOARD)
+    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -47,6 +53,12 @@ public class ParameterBrowse extends AbstractLookup {
         for (Parameter param : parameters) {
             parametersDs.addItem(param);
         }
+
+        parametersDs.addCollectionChangeListener(event -> {
+            if (dashboard != null) {//if edit dashboard params
+                dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
+            }
+        });
     }
 
     public Component generateValueCell(Entity entity) {
