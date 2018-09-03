@@ -7,11 +7,9 @@ package com.haulmont.addon.dashboard.web.annotation_analyzer;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
-import com.haulmont.addon.dashboard.web.parameter_transformer.ParameterTransformer;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
-import com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse;
-import com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidgetBrowse;
+import com.haulmont.addon.dashboard.web.parameter_transformer.ParameterTransformer;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -23,13 +21,13 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository.NAME;
 
@@ -48,10 +46,40 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     @Inject
     private Resources resources;
 
+    protected volatile boolean initialized;
+    protected ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    private List<WidgetTypeInfo> widgetTypeInfos;
 
     @Override
     public List<WidgetTypeInfo> getWidgetTypesInfo() {
-        List<WidgetTypeInfo> result = new ArrayList<>();
+        lock.readLock().lock();
+        try {
+            checkInitialized();
+            return Collections.unmodifiableList(widgetTypeInfos);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    private void checkInitialized() {
+        if (!initialized) {
+            lock.readLock().unlock();
+            lock.writeLock().lock();
+            try {
+                if (!initialized) {
+                    init();
+                    initialized = true;
+                }
+            } finally {
+                lock.readLock().lock();
+                lock.writeLock().unlock();
+            }
+        }
+    }
+
+    protected void init() {
+        widgetTypeInfos = new ArrayList<>();
         try {
             for (WindowInfo windowInfo : windowConfig.getWindows()) {
                 DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -63,15 +91,14 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                         Class clazz = Class.forName(className);
                         WidgetType ann = (WidgetType) clazz.getAnnotation(WidgetType.class);
                         if (ann != null) {
-                            result.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
+                            widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Unable to initialize widget types", e);
         }
-        return result;
     }
 
     @Override
@@ -99,8 +126,13 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     @Override
     public Map<String, Object> getWidgetParams(Widget widget) {
         Map<String, Object> widgetParams = new HashMap<>();
-        List<Parameter> widgetFieldValues = widget.getWidgetFields();
-        for (Parameter p : widgetFieldValues) {
+        if (widget.getDashboard() != null) {
+            for (Parameter p : widget.getDashboard().getParameters()) {
+                Object rawValue = parameterTransformer.transform(p.getParameterValue());
+                widgetParams.put(p.getName(), rawValue);
+            }
+        }
+        for (Parameter p : widget.getWidgetFields()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
             widgetParams.put(p.getName(), rawValue);
         }
