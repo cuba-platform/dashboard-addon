@@ -25,6 +25,7 @@ import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
+import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
@@ -159,6 +160,6 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     @EventListener
     public void layoutAddedToTreeEventListener(LayoutAddedToTreeEvent event) {
         LayoutAddedToTreeEvent.LayoutAddedToTree layoutAddedToTree = event.getSource();
-        tools.addComponent((DDVerticalLayout) findCanvasLayout(vLayout, layoutAddedToTree.getParentLayoutUuid()).getDelegate(), layoutAddedToTree.getLayoutType());
+        tools.addComponent((BoxLayout) findCanvasLayout(vLayout, layoutAddedToTree.getParentLayoutUuid()).getDelegate(), layoutAddedToTree.getLayoutType());
     }
 }

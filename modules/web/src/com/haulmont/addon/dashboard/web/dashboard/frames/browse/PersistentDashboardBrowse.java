@@ -96,7 +96,10 @@ public class PersistentDashboardBrowse extends AbstractLookup {
     public void viewDashboard() {
         Dashboard item = modelDashboardsDs.getItem();
         if (item != null) {
-            openWindow(DashboardView.SCREEN_NAME, NEW_WINDOW, ParamsMap.of(DashboardView.REFERENCE_NAME, item.getReferenceName()));
+            openWindow(DashboardView.SCREEN_NAME, NEW_WINDOW, ParamsMap.of(
+                    DashboardView.REFERENCE_NAME, item.getReferenceName(),
+                    DashboardView.DISPLAY_NAME, item.getTitle()
+            ));
         }
     }
 

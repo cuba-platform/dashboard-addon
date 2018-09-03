@@ -14,6 +14,7 @@ import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Window;
 
@@ -34,19 +35,13 @@ public class LookupWidgetBrowse extends AbstractWidgetBrowse {
     protected AbstractLookup lookupFrame;
 
     @WidgetParam(type = ParameterType.STRING)
+    @WindowParam
     protected String lookupWindowId;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        refresh();
-    }
-
-    @Override
-    public void refresh() {
-        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, getParamsForFrame());
-        lookupFrame.close("");
-        this.add(lookupFrame.getFrame());
+        refresh(params);
     }
 
     @Override

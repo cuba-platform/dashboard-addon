@@ -14,6 +14,7 @@ import com.haulmont.addon.dashboard.web.parameter_transformer.ParameterTransform
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.events.WidgetUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import org.springframework.context.event.EventListener;
 
@@ -26,8 +27,8 @@ import java.util.stream.Collectors;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 public abstract class AbstractWidgetBrowse extends AbstractFrame implements WidgetBrowse {
-    public static final String WIDGET = "WIDGET";
-    public static final String DASHBOARD = "DASHBOARD";
+    public static final String WIDGET = "widget";
+    public static final String DASHBOARD = "dashboard";
 
     @Inject
     protected ParameterTransformer transformer;
@@ -35,16 +36,15 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
     @Inject
     protected WidgetRepository widgetRepository;
 
+    @WindowParam
     protected Widget widget;
+
+    @WindowParam
     protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        widget = (Widget) params.get(WIDGET);
-        dashboard = (Dashboard) params.get(DASHBOARD);
-
-        widgetRepository.initializeWidgetFields(this, widget);
 
         if (widget == null) {
             throw new DashboardException("Can't get a Widget object in input parameters");
@@ -95,7 +95,7 @@ public abstract class AbstractWidgetBrowse extends AbstractFrame implements Widg
 
         if (widget.getId().equals(source.getId())) {
             widget = source;
-            refresh();
+            refresh(getParamsForFrame());
         }
     }
 

@@ -167,7 +167,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             return;
         }
 
-        setCaption(dashboard.getTitle());
         addXmlParameters(dashboard);
         updateCanvasFrame(dashboard);
         this.dashboard = dashboard;

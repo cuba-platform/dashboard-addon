@@ -28,10 +28,7 @@ import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository.NAME;
@@ -97,6 +94,18 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             }
 
         }
+    }
+
+    @Override
+    public Map<String, Object> getWidgetParams(Widget widget) {
+        Map<String, Object> widgetParams = new HashMap<>();
+        List<Parameter> widgetFieldValues = widget.getWidgetFields();
+        for (Parameter p : widgetFieldValues) {
+            Object rawValue = parameterTransformer.transform(p.getParameterValue());
+            widgetParams.put(p.getName(), rawValue);
+        }
+        return widgetParams;
+
     }
 
     @Override

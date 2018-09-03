@@ -39,12 +39,7 @@ public class UserDisplayerBrowse extends AbstractWidgetBrowse {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        refresh();
-    }
-
-    @Override
-    public void refresh() {
-
+        refresh(params);
     }
 
     @Override

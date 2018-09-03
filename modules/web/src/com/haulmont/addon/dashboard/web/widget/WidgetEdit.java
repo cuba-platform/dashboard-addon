@@ -94,7 +94,10 @@ public class WidgetEdit extends AbstractEditor<Widget> {
                 .get()
                 .getEditFrameId();
 
-        widgetEditFrame = openFrame(widgetEditBox, editFrameId, ParamsMap.of(ITEM_DS, widgetDs));
+        Map<String, Object> params = new HashMap<>(ParamsMap.of(ITEM_DS, widgetDs));
+        params.putAll(widgetRepository.getWidgetParams(widgetDs.getItem()));
+        widgetEditFrame = openFrame(widgetEditBox, editFrameId, params);
+//        widgetRepository.initializeWidgetFields(widgetEditFrame, widgetDs.getItem());
     }
 
     protected void selectType() {

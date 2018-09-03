@@ -14,10 +14,10 @@ public abstract class AbstractWidgetEdit extends AbstractFrame {
     @Inject
     protected WidgetRepository widgetRepository;
 
-    @Override
-    public void init(Map<String, Object> params) {
-        super.init(params);
-        Datasource<Widget> widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS);
-        widgetRepository.initializeWidgetFields(this, widgetDs.getItem());
-    }
+//    @Override
+//    public void init(Map<String, Object> params) {
+//        super.init(params);
+//        Datasource<Widget> widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS);
+//        widgetRepository.initializeWidgetFields(this, widgetDs.getItem());
+//    }
 }

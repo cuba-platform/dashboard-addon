@@ -9,6 +9,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetEdit;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.config.WindowConfig;
@@ -34,6 +35,7 @@ public class ScreenWidgetEdit extends AbstractWidgetEdit {
     protected Datasource<Widget> widgetDs;
 
     @WidgetParam(type = ParameterType.STRING)
+    @WindowParam
     protected String screenId;
 
     @Override

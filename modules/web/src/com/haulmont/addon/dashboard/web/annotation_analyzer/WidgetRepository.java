@@ -9,6 +9,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Scanning the project for use classes with the annotation {@link WidgetType} and
@@ -22,4 +23,6 @@ public interface WidgetRepository {
     void initializeWidgetFields(AbstractFrame widgetFrame, Widget widget);
 
     void serializeWidgetFields(AbstractFrame widgetFrame, Widget widget);
+
+    Map<String, Object> getWidgetParams(Widget widget);
 }

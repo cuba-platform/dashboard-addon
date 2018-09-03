@@ -15,7 +15,5 @@ public interface WidgetBrowse extends Frame {
 
     Dashboard getDashboard();
 
-    void refresh();
-
     void refresh(Map<String, Object> params);
 }

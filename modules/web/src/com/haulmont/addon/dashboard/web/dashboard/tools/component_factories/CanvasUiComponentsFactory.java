@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.component_factories;
 
+import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
@@ -15,11 +16,11 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.components.AbstractFrame;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse.WIDGET;
@@ -69,10 +70,14 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         }
 
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
-        AbstractWidgetBrowse widgetFrame = (AbstractWidgetBrowse) frame.openFrame(null, frameId, ParamsMap.of(
+        Map<String, Object> params = new HashMap<>(ParamsMap.of(
                 WIDGET, widget,
                 DASHBOARD, frame.getDashboard()
         ));
+        params.putAll(widgetRepository.getWidgetParams(widget));
+
+        AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
+//        widgetRepository.initializeWidgetFields(widgetFrame, widget);
 
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);

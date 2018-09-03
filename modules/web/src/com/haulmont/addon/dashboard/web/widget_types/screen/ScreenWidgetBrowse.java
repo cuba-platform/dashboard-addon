@@ -11,6 +11,7 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetType;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse;
 import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 
 import java.util.Map;
@@ -23,6 +24,7 @@ public class ScreenWidgetBrowse extends AbstractWidgetBrowse implements Refresha
     public static final String CAPTION = "Screen";
 
     @WidgetParam(type = ParameterType.STRING)
+    @WindowParam
     protected String screenId;
 
     protected AbstractFrame screenFrame;
@@ -30,13 +32,7 @@ public class ScreenWidgetBrowse extends AbstractWidgetBrowse implements Refresha
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        refresh();
-    }
-
-    @Override
-    public void refresh() {
-        screenFrame = openFrame(this, screenId, getParamsForFrame());
-        screenFrame.setSizeFull();
+        refresh(params);
     }
 
     @Override

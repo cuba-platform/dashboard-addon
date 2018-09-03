@@ -10,6 +10,7 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.LookupField;
@@ -43,6 +44,7 @@ public class LookupWidgetEdit extends AbstractWidgetEdit {
     protected Datasource<Widget> widgetDs;
 
     @WidgetParam(type = ParameterType.STRING)
+    @WindowParam
     protected String lookupWindowId;
 
     @Override
