@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 
+import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
@@ -82,6 +83,9 @@ public class PaletteFrame extends AbstractFrame {
 
     @Override
     public void init(Map<String, Object> params) {
+        if (dashboard.getVisualModel() == null){
+            dashboard.setVisualModel(metadata.create(VerticalLayout.class));
+        }
         dashboardLayoutTreeReadOnlyDs.setVisualModel(dashboard.getVisualModel());
         initWidgetBox();
         initLayoutBox();
