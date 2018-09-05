@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
+import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
@@ -12,6 +13,7 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -25,19 +27,23 @@ import java.util.Map;
 public class CanvasFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "canvasFrame";
     public static final String DASHBOARD = "dashboard";
+    public static final String DASHBOARD_FRAME = "dashboardFrame";
 
     @Inject
     protected VBoxLayout canvas;
     @Named("uiModelConverter")
     protected DashboardModelConverter converter;
+    @WindowParam
+    protected DashboardFrame dashboardFrame;
+    @WindowParam
+    protected Dashboard dashboard;
 
     protected CanvasVerticalLayout vLayout;
-    protected Dashboard dashboard;
+
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        dashboard = (Dashboard) params.get(DASHBOARD);
         updateLayout(dashboard);
     }
 
@@ -47,6 +53,10 @@ public class CanvasFrame extends AbstractFrame {
 
     public Dashboard getDashboard() {
         return dashboard;
+    }
+
+    public DashboardFrame getDashboardFrame() {
+        return dashboardFrame;
     }
 
     protected DashboardModelConverter getConverter() {
@@ -87,5 +97,9 @@ public class CanvasFrame extends AbstractFrame {
                 searchRefreshableWidgets((CanvasLayout) child, wbList);
             }
         }
+    }
+
+    public CanvasVerticalLayout getvLayout() {
+        return vLayout;
     }
 }

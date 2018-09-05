@@ -126,18 +126,24 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     @Override
     public Map<String, Object> getWidgetParams(Widget widget) {
         Map<String, Object> widgetParams = new HashMap<>();
+
+        for (Parameter p : widget.getWidgetFields()) {
+            Object rawValue = parameterTransformer.transform(p.getParameterValue());
+            widgetParams.put(p.getName(), rawValue);
+        }
+
         if (widget.getDashboard() != null) {
             for (Parameter p : widget.getDashboard().getParameters()) {
                 Object rawValue = parameterTransformer.transform(p.getParameterValue());
                 widgetParams.put(p.getName(), rawValue);
             }
         }
-        for (Parameter p : widget.getWidgetFields()) {
+
+        for (Parameter p : widget.getParameters()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
             widgetParams.put(p.getName(), rawValue);
         }
         return widgetParams;
-
     }
 
     @Override

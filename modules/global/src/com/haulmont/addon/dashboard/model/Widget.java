@@ -23,7 +23,7 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String description;
     @MetaProperty
-    protected List<Parameter> parameters;
+    protected List<Parameter> parameters = new ArrayList<>();
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
     @MetaProperty

@@ -31,6 +31,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     public static final String WIDGET = "widget";
     public static final String DASHBOARD = "dashboard";
+    public static final String DASHBOARD_FRAME = "dashboardFrame";
 
     @Inject
     protected WidgetRepository widgetRepository;
@@ -77,7 +78,8 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         String frameId = widgetTypeOpt.get().getBrowseFrameId();
         Map<String, Object> params = new HashMap<>(ParamsMap.of(
                 WIDGET, widget,
-                DASHBOARD, frame.getDashboard()
+                DASHBOARD, frame.getDashboard(),
+                DASHBOARD_FRAME, frame.getDashboardFrame()
         ));
         params.putAll(widgetRepository.getWidgetParams(widget));
 

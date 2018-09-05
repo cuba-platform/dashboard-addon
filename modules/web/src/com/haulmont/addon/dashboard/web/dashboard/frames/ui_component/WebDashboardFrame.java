@@ -12,6 +12,8 @@ import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
@@ -40,6 +42,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.browse.DashboardView.REFERENCE_NAME;
+import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD_FRAME;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -208,7 +211,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected void updateCanvasFrame(Dashboard dashboard) {
         if (canvasFrame == null) {
             canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
-                    CanvasFrame.DASHBOARD, dashboard
+                    CanvasFrame.DASHBOARD, dashboard, DASHBOARD_FRAME, this
             ));
         } else {
             canvasFrame.updateLayout(dashboard);
@@ -220,6 +223,27 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         for (RefreshableWidget rw : rws) {
             rw.refresh(dashboardEvent);
         }
+    }
+
+    public AbstractFrame getWidgetBrowse(String widgetId) {
+        return searchWidgetBrowse(canvasFrame.getvLayout(), widgetId);
+    }
+
+    protected AbstractFrame searchWidgetBrowse(CanvasLayout layout, String widgetId) {
+        if (CanvasWidgetLayout.class.isAssignableFrom(layout.getClass())) {
+            if (widgetId.equals(((CanvasWidgetLayout) layout).getWidget().getWidgetId())) {
+                return (AbstractFrame) ((Container) layout.getDelegate()).getOwnComponents().iterator().next();
+            }
+            return null;
+        }
+
+        for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+            AbstractFrame result = searchWidgetBrowse((CanvasLayout) child, widgetId);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 
     @Override

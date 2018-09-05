@@ -6,6 +6,7 @@ package com.haulmont.addon.dashboard.gui.components;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Frame;
 
 import java.util.List;
@@ -36,5 +37,7 @@ public interface DashboardFrame extends Frame {
     String getAssistantBeanName();
 
     void setAssistantBeanName(String assistantBeanName);
+
+    AbstractFrame getWidgetBrowse(String widgetId);
 
 }
