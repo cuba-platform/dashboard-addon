@@ -7,7 +7,7 @@ package com.haulmont.addon.dashboard.web.widget_types.screen;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
-import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetEdit;
+import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -15,7 +15,6 @@ import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class ScreenWidgetEdit extends AbstractWidgetEdit {
+public class ScreenWidgetEdit extends AbstractFrame {
     @Inject
     protected LookupField screenIdLookup;
     @Inject

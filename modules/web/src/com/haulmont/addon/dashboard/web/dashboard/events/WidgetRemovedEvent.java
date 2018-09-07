@@ -9,9 +9,9 @@ import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 
-public class LayoutChangedEvent extends DashboardEvent {
+public class WidgetRemovedEvent extends DashboardEditEvent {
 
-    public LayoutChangedEvent(LayoutRemoveDto source) {
+    public WidgetRemovedEvent(LayoutRemoveDto source) {
         super(source);
     }
 

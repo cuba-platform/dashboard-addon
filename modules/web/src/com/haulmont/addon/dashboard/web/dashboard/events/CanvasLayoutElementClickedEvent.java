@@ -1,4 +1,8 @@
-package com.haulmont.addon.dashboard.web.events;
+/*
+ * Copyright (c) 2016-2018 Haulmont. All rights reserved.
+ */
+
+package com.haulmont.addon.dashboard.web.dashboard.events;
 
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.events.UiEvent;

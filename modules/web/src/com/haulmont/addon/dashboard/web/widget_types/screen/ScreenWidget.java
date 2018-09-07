@@ -5,6 +5,7 @@
 package com.haulmont.addon.dashboard.web.widget_types.screen;
 
 
+import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
@@ -17,10 +18,10 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import javax.inject.Inject;
 import java.util.Map;
 
-import static com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidgetBrowse.CAPTION;
+import static com.haulmont.addon.dashboard.web.widget_types.screen.ScreenWidget.CAPTION;
 
 @WidgetType(name = CAPTION, editFrameId = "screenWidgetEdit")
-public class ScreenWidgetBrowse extends AbstractFrame {
+public class ScreenWidget extends AbstractFrame {
 
     public static final String CAPTION = "Screen";
 
@@ -36,6 +37,9 @@ public class ScreenWidgetBrowse extends AbstractFrame {
 
     @WindowParam
     protected Dashboard dashboard;
+
+    @WindowParam
+    protected DashboardFrame dashboardFrame;
 
     protected AbstractFrame screenFrame;
 

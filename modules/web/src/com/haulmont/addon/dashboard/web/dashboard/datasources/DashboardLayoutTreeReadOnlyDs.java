@@ -20,7 +20,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
     @Override
     protected Collection<DashboardLayout> getEntities(Map<String, Object> params) {
         ArrayList<DashboardLayout> al = new ArrayList<>();
-        al.add(visualModel == null ? metadata.create(VerticalLayout.class) : visualModel);
+        al.add(visualModel == null ? metadata.create(RootLayout.class) : visualModel);
         return al;
     }
 
@@ -39,9 +39,12 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
 
     @Override
     public UUID getParent(UUID itemId) {
+        if (itemId == null) {
+            return null;
+        }
         DashboardLayout item = findLayout(getRootLayout(), itemId);
         DashboardLayout root = getItems().stream().findFirst().orElse(null);
-        if (root.getId().equals(item.getId())) {
+        if (item == null || root == null || Objects.equals(root.getId(), item.getId())) {
             return null;
         } else {
             DashboardLayout parent = findParentLayout(root, item);

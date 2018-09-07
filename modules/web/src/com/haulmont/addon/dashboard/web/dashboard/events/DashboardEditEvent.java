@@ -4,18 +4,18 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
-import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 
-public class DoWidgetTemplateEvent extends ApplicationEvent implements UiEvent {
+public class DashboardEditEvent extends ApplicationEvent implements UiEvent {
 
-    public DoWidgetTemplateEvent(Widget source) {
+    public DashboardEditEvent(Object source) {
         super(source);
     }
 
     @Override
-    public Widget getSource() {
-        return (Widget) super.getSource();
+    public Object getSource() {
+        return super.getSource();
     }
+
 }

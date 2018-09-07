@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.widget_types.lookup;
 
+import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
@@ -11,7 +12,7 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
+import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
 import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
@@ -23,11 +24,11 @@ import com.haulmont.cuba.gui.components.Window;
 import javax.inject.Inject;
 import java.util.Map;
 
-import static com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse.CAPTION;
+import static com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidget.CAPTION;
 
 
 @WidgetType(name = CAPTION, editFrameId = "lookupWidgetEdit")
-public class LookupWidgetBrowse extends AbstractFrame implements RefreshableWidget {
+public class LookupWidget extends AbstractFrame implements RefreshableWidget {
 
     public static final String CAPTION = "Lookup";
 
@@ -43,6 +44,9 @@ public class LookupWidgetBrowse extends AbstractFrame implements RefreshableWidg
     @WindowParam
     protected Dashboard dashboard;
 
+    @WindowParam
+    protected DashboardFrame dashboardFrame;
+
     protected AbstractLookup lookupFrame;
 
     @WidgetParam(type = ParameterType.STRING)
@@ -57,7 +61,7 @@ public class LookupWidgetBrowse extends AbstractFrame implements RefreshableWidg
     }
 
     protected Window.Lookup.Handler lookupHandler() {
-        return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetEntitiesSelectedEvent.WidgetWithEntities(widget, items)));
+        return items -> events.publish(new ItemsSelectedEvent(widget, items));
     }
 
     @Override

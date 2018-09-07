@@ -44,4 +44,8 @@ public abstract class DashboardLayout extends BaseUuidEntity {
 
     @MetaProperty
     public abstract String getCaption();
+
+    public boolean isRoot() {
+        return false;
+    }
 }

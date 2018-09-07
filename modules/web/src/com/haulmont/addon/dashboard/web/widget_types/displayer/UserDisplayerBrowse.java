@@ -5,7 +5,7 @@
 package com.haulmont.addon.dashboard.web.widget_types.displayer;
 
 import com.haulmont.addon.dashboard.web.annotation.WidgetType;
-import com.haulmont.addon.dashboard.web.events.WidgetEntitiesSelectedEvent;
+import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.security.entity.User;
@@ -33,9 +33,8 @@ public class UserDisplayerBrowse extends AbstractFrame {
     }
 
     @EventListener
-    public void showUserName(WidgetEntitiesSelectedEvent event) {
-        WidgetEntitiesSelectedEvent.WidgetWithEntities source = event.getSource();
-        Collection col = source.getEntities();
+    public void showUserName(ItemsSelectedEvent event) {
+        Collection col = event.getSelected();
         Iterator iterator = col.iterator();
         Object userobj = iterator.next();
 

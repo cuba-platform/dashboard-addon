@@ -6,9 +6,10 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
+import com.haulmont.addon.dashboard.model.visual_model.ContainerLayout;
 import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
+import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.events.*;
@@ -18,26 +19,30 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
-import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dashboard.web.events.LayoutAddedToTreeEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClickedEvent;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
-import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetRemovedFromCanvasEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
+import com.haulmont.cuba.gui.components.Window;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
@@ -72,13 +77,13 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     }
 
     @EventListener
-    public void onRemoveLayout(LayoutRemoveEvent event) {
+    public void onRemoveLayout(WidgetRemovedFromCanvasEvent event) {
         CanvasLayout source = event.getSource();
         Container parent = (Container) source.getParent();
         if (parent != null) {
             parent.remove(source);
         }
-        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(getDashboardModel(), source.getUuid(), null)));
+        events.publish(new DashboardRefreshEvent(getDashboardModel()));
     }
 
     @EventListener
@@ -105,7 +110,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
         WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
                 WeightDialog.WEIGHT, source.getWeight()));
         weightDialog.addCloseListener(actionId -> {
-            if ("commit".equals(actionId)) {
+            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
                 int weight = weightDialog.getWeight();
                 source.setWeight(weight);
             }
@@ -158,8 +163,65 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     }
 
     @EventListener
-    public void layoutAddedToTreeEventListener(LayoutAddedToTreeEvent event) {
-        LayoutAddedToTreeEvent.LayoutAddedToTree layoutAddedToTree = event.getSource();
-        tools.addComponent((BoxLayout) findCanvasLayout(vLayout, layoutAddedToTree.getParentLayoutUuid()).getDelegate(), layoutAddedToTree.getLayoutType());
+    public void widgetAddedToTreeEventListener(WidgetAddedEvent event) {
+        tools.addComponent((BoxLayout) findCanvasLayout(vLayout, event.getParentLayoutUuid()).getDelegate(), event.getSource());
+    }
+
+    @EventListener
+    public void widgetMovedToTreeEventListener(WidgetMovedEvent event) {
+        VerticalLayout dashboardModel = getDashboardModel();
+        DashboardLayout target = findLayout(dashboardModel, event.getParentLayoutUuid());
+        DashboardLayout layout = findLayout(dashboardModel, event.getSource().getId());
+        DashboardLayout parent = findParentLayout(dashboardModel, layout);
+
+        parent.getChildren().remove(layout);
+        if (target instanceof ContainerLayout) {
+            switch (event.getLocation()) {
+                case MIDDLE:
+                    target.addChild(layout);
+                    break;
+                case BOTTOM:
+                    List<DashboardLayout> newChildren = new ArrayList<>();
+                    newChildren.add(layout);
+                    newChildren.addAll(parent.getChildren());
+                    parent.setChildren(newChildren);
+                    break;
+                case TOP:
+                    newChildren = new ArrayList<>(parent.getChildren());
+                    newChildren.add(layout);
+                    parent.setChildren(newChildren);
+                    break;
+            }
+        }
+        if (target instanceof WidgetLayout) {
+            List<DashboardLayout> newChildren = new ArrayList<>();
+            for (DashboardLayout childLayout : parent.getChildren()) {
+                if (childLayout.getId().equals(target.getId())) {
+                    switch (event.getLocation()) {
+                        case TOP:
+                            newChildren.add(layout);
+                            newChildren.add(childLayout);
+                            break;
+                        case MIDDLE:
+                        case BOTTOM:
+                            newChildren.add(childLayout);
+                            newChildren.add(layout);
+                            break;
+                    }
+                } else {
+                    newChildren.add(childLayout);
+                }
+            }
+            parent.setChildren(newChildren);
+        }
+
+        events.publish(new DashboardRefreshEvent(dashboardModel, event.getSource().getId()));
+    }
+
+    @EventListener
+    public void onLayoutRefreshedEvent(DashboardRefreshEvent event) {
+        VerticalLayout dashboardModel = (VerticalLayout) event.getSource();
+        dashboard.setVisualModel(dashboardModel);
+        updateLayout(dashboard);
     }
 }

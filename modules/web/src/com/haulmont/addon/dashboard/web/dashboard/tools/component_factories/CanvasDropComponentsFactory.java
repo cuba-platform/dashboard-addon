@@ -6,14 +6,12 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.component_factories;
 
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutRemoveEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetRemovedFromCanvasEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dashboard.web.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dashboard.web.events.WidgetTreeElementClickedEvent;
-import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
+import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -156,7 +154,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected Button createRemoveButton(CanvasLayout layout) {
         Button removeButton = factory.createComponent(Button.class);
         removeButton.setAction(new BaseAction("removeClicked")
-                .withHandler(e -> events.publish(new LayoutRemoveEvent(layout))));
+                .withHandler(e -> events.publish(new WidgetRemovedFromCanvasEvent(layout))));
         removeButton.addStyleName(DashboardStyleConstants.AMXD_EDIT_BUTTON);
         removeButton.setIconFromSet(DashboardIcon.TRASH_ICON);
         removeButton.setCaption("");

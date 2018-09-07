@@ -44,7 +44,6 @@
                   collapsed="true"/>
         <hbox id="dashboardLayoutBox"
               expand="canvasBox"
-              margin="true"
               spacing="true"
               width="100%">
             <vbox id="paletteBox"

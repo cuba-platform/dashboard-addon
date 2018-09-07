@@ -5,12 +5,12 @@
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dashboard.web.events.DashboardEvent;
-import com.haulmont.addon.dashboard.web.events.DashboardEvent;
+import com.haulmont.cuba.gui.events.UiEvent;
+import org.springframework.context.ApplicationEvent;
 
-public class LayoutRemoveEvent extends DashboardEvent {
+public class WidgetCanvasEvent extends ApplicationEvent implements UiEvent {
 
-    public LayoutRemoveEvent(CanvasLayout source) {
+    public WidgetCanvasEvent(CanvasLayout source) {
         super(source);
     }
 

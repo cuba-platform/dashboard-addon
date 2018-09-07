@@ -9,11 +9,11 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Messages;
 
 @MetaClass(name = "amxd$HorizontalLayout")
-public class HorizontalLayout extends DashboardLayout {
+public class HorizontalLayout extends DashboardLayout implements ContainerLayout{
 
     @Override
     public String getCaption() {
         Messages messages = AppBeans.get(Messages.class);
-        return messages.getMainMessage("Layout.horizontal");
+        return messages.getMessage(getClass(),"Layout.horizontal");
     }
 }

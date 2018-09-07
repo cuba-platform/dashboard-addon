@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @MetaClass(name = "amxd$GridLayout")
-public class GridLayout extends DashboardLayout {
+public class GridLayout extends DashboardLayout implements ContainerLayout{
 
     @MetaProperty
     protected Integer rows = 0;
@@ -69,6 +69,6 @@ public class GridLayout extends DashboardLayout {
     @Override
     public String getCaption() {
         Messages messages = AppBeans.get(Messages.class);
-        return messages.getMainMessage("Layout.grid");
+        return messages.getMessage(getClass(),"Layout.grid");
     }
 }

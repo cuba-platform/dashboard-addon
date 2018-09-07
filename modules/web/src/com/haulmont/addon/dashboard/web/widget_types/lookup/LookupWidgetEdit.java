@@ -7,7 +7,7 @@ package com.haulmont.addon.dashboard.web.widget_types.lookup;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
-import com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetEdit;
+import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
@@ -18,9 +18,7 @@ import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ScreenXmlLoader;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import org.dom4j.Element;
-import org.springframework.beans.BeanUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -28,10 +26,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.haulmont.addon.dashboard.web.widget.WidgetEdit.ITEM_DS;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class LookupWidgetEdit extends AbstractWidgetEdit {
+public class LookupWidgetEdit extends AbstractFrame {
     @Inject
     protected LookupField lookupIdLookup;
     @Inject

@@ -30,18 +30,15 @@
                        height="100%">
                 <tab id="widgetTab"
                      caption="msg://palette">
-                    <groupBox id="widgetGroupBox"
-                              caption="msg://widgets"
-                              spacing="true">
-                        <scrollBox id="widgetBox"
-                                   height="100%">
-                            <dnd:dndVBoxLayout id="ddWidgetBox"
-                                               dragMode="CLONE"
-                                               height="100%"
-                                               margin="true"
-                                               width="100%"/>
-                        </scrollBox>
-                    </groupBox>
+
+                    <scrollBox id="widgetBox"
+                               height="100%">
+                        <dnd:dndVBoxLayout id="ddWidgetBox"
+                                           dragMode="CLONE"
+                                           height="100%"
+                                           margin="true"
+                                           width="100%"/>
+                    </scrollBox>
                 </tab>
                 <tab id="widgetLayoutsTab"
                      caption="msg://layouts">

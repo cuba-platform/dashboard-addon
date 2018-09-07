@@ -38,6 +38,6 @@ public interface DashboardFrame extends Frame {
 
     void setAssistantBeanName(String assistantBeanName);
 
-    AbstractFrame getWidgetBrowse(String widgetId);
+    AbstractFrame getWidget(String widgetId);
 
 }

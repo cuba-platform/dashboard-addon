@@ -14,7 +14,6 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
-import com.haulmont.addon.dashboard.model.visual_model.*;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -35,7 +34,7 @@ public class DashboardModelConverter {
     }
 
     public VerticalLayout containerToModel(CanvasVerticalLayout container) {
-        VerticalLayout model = metadata.create(VerticalLayout.class);
+        VerticalLayout model = metadata.create(RootLayout.class);
         containerToModel(model, container);
         return model;
     }
@@ -116,7 +115,9 @@ public class DashboardModelConverter {
     }
 
     protected DashboardLayout createDashboardLayout(Component component) {
-        if (component instanceof CanvasVerticalLayout) {
+        if (component.getParent() == null) {
+            return metadata.create(RootLayout.class);
+        } else if (component instanceof CanvasVerticalLayout) {
             return metadata.create(VerticalLayout.class);
         } else if (component instanceof CanvasHorizontalLayout) {
             return metadata.create(HorizontalLayout.class);

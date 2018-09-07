@@ -4,12 +4,10 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
-import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
 import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visual_model.GridLayout;
 import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
-import com.haulmont.addon.dashboard.web.dashboard.events.LayoutChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
@@ -22,7 +20,6 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +119,6 @@ public class DropLayoutTools {//TODO добавление лайаутов
         }
     }
 
-    //todo: refactoring
     protected void addCanvasLayout(CanvasLayout canvasLayout, Component target, List<Object> args) {
         if (args.size() == 0) {
             ((BoxLayout) target).add(canvasLayout);
@@ -135,6 +131,6 @@ public class DropLayoutTools {//TODO добавление лайаутов
         canvasLayout.setWeight(1);
 
         Events events = AppBeans.get(Events.class);
-        events.publish(new LayoutChangedEvent(new LayoutRemoveDto(frame.getDashboardModel(), null, canvasLayout.getUuid())));
+        events.publish(new DashboardRefreshEvent(frame.getDashboardModel(), canvasLayout.getUuid()));
     }
 }

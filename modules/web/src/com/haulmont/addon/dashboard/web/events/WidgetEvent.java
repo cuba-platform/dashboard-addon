@@ -6,9 +6,8 @@ package com.haulmont.addon.dashboard.web.events;
 
 import com.haulmont.addon.dashboard.model.Widget;
 
-public class WidgetUpdatedEvent extends WidgetEvent {
-
-    public WidgetUpdatedEvent(Widget source) {
+public class WidgetEvent extends DashboardEvent {
+    public WidgetEvent(Widget source) {
         super(source);
     }
 }

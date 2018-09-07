@@ -225,7 +225,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    public AbstractFrame getWidgetBrowse(String widgetId) {
+    public AbstractFrame getWidget(String widgetId) {
         return searchWidgetBrowse(canvasFrame.getvLayout(), widgetId);
     }
 

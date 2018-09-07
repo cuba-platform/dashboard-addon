@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidget">
     <layout height="100%"
             spacing="true"
             width="100%">
