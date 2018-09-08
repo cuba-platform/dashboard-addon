@@ -4,8 +4,8 @@
 
 package com.haulmont.addon.dashboard.web.parameter.frames;
 
-import com.haulmont.addon.dashboard.model.param_value_types.EnumParameterValue;
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.EnumParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;

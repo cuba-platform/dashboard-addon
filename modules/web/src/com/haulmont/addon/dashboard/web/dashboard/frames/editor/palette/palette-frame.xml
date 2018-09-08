@@ -10,12 +10,12 @@
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
                               view="_local">
             <query>
-                <![CDATA[select e from amxd$WidgetTemplate e]]>
+                <![CDATA[select e from dashboard$WidgetTemplate e]]>
             </query>
         </collectionDatasource>
         <hierarchicalDatasource id="dashboardLayoutTreeReadOnlyDs"
                                 allowCommit="false"
-                                class="com.haulmont.addon.dashboard.model.visual_model.DashboardLayout"
+                                class="com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout"
                                 datasourceClass="com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs"
                                 hierarchyProperty="children"/>
     </dsContext>
@@ -29,8 +29,7 @@
             <accordion id="accordionPalette"
                        height="100%">
                 <tab id="widgetTab"
-                     caption="msg://palette">
-
+                     caption="msg://widgets">
                     <scrollBox id="widgetBox"
                                height="100%">
                         <dnd:dndVBoxLayout id="ddWidgetBox"

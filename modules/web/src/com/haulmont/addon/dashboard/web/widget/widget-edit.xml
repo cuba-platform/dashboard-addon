@@ -37,7 +37,7 @@
                   caption="msg://widgetParameters"
                   collapsable="true">
             <frame id="paramsFrame"
-                   screen="amdx$Parameter.browse"/>
+                   screen="dashboard$ParameterBrowse"/>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>

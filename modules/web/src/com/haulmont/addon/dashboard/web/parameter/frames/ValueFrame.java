@@ -4,7 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.parameter.frames;
 
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 
 public interface ValueFrame {
     String VALUE_TYPE = "VALUE_TYPE";

@@ -3,14 +3,14 @@
  */
 package com.haulmont.addon.dashboard.model;
 
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s|name")
-@MetaClass(name = "amxd$Parameter")
+@MetaClass(name = "dashboard$Parameter")
 public class Parameter extends BaseUuidEntity {
     @MetaProperty
     protected String name;

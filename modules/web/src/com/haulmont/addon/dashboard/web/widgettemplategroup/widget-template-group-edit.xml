@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.haulmont.addon.dashboard.web.widgettemplategroup.WidgetTemplateGroupEdit"
+        datasource="widgetTemplateGroupDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.haulmont.addon.dashboard.web.widgettemplategroup">
+    <dsContext>
+        <datasource id="widgetTemplateGroupDs"
+                    class="com.haulmont.addon.dashboard.entity.WidgetTemplateGroup"
+                    view="widget-templates">
+            <collectionDatasource id="widgetTemplatesDs" property="widgetTemplates"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="widgetTemplatesTable"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="widgetTemplateGroupDs">
+            <column width="250px">
+                <field property="name"/>
+            </column>
+        </fieldGroup>
+
+        <label id="tableLabel"
+               value="msg://tableWidgetTemplatesGroup"/>
+        <buttonsPanel id="buttonsPanel"
+                      alwaysVisible="true">
+            <button id="addBtn"
+                    action="widgetTemplatesTable.add"
+                    caption="msg://add"
+                    icon="PLUS_CIRCLE"/>
+            <button id="excludeBtn"
+                    action="widgetTemplatesTable.exclude"
+                    caption="msg://exclude"
+                    icon="MINUS_CIRCLE"/>
+        </buttonsPanel>
+        <table id="widgetTemplatesTable"
+               width="100%">
+            <actions>
+                <action id="add"/>
+                <action id="exclude"/>
+            </actions>
+            <columns>
+                <column id="widgetModel"/>
+            </columns>
+            <rows datasource="widgetTemplatesDs"/>
+        </table>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

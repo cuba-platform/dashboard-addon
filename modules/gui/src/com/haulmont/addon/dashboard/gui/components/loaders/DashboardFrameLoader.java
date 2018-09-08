@@ -15,7 +15,7 @@ import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.xml.layout.*;
 import com.haulmont.cuba.gui.xml.layout.loaders.ContainerLoader;
 import com.haulmont.cuba.gui.xml.layout.loaders.FrameLoader;
-import com.haulmont.addon.dashboard.model.param_value_types.*;
+import com.haulmont.addon.dashboard.model.paramtypes.*;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -42,7 +42,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TOD
         frameId = element.attributeValue("id");
 
         WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
-        WindowInfo windowInfo = windowConfig.getWindowInfo("dashboardComponent");
+        WindowInfo windowInfo = windowConfig.getWindowInfo("dashboard$DashboardComponent");
         String template = windowInfo.getTemplate();
 
 

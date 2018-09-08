@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NamePattern("%s|caption")
-@MetaClass(name = "amxd$Widget")
+@MetaClass(name = "dashboard$Widget")
 public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String widgetId;

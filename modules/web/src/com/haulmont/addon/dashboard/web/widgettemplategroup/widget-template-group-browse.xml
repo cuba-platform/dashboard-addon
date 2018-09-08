@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.haulmont.addon.dashboard.web.widgettemplategroup.WidgetTemplateGroupBrowse"
+        focusComponent="widgetTemplateGroupsTable"
+        lookupComponent="widgetTemplateGroupsTable"
+        messagesPack="com.haulmont.addon.dashboard.web.widgettemplategroup">
+    <dsContext>
+        <groupDatasource id="widgetTemplateGroupsDs"
+                         class="com.haulmont.addon.dashboard.entity.WidgetTemplateGroup"
+                         view="widget-templates">
+            <query>
+                <![CDATA[select e from dashboard$WidgetTemplateGroup e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="widgetTemplateGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="widgetTemplateGroupsTable"
+                datasource="widgetTemplateGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="widgetTemplateGroupsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+            </columns>
+            <rows datasource="widgetTemplateGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="widgetTemplateGroupsTable.create"/>
+                <button id="editBtn"
+                        action="widgetTemplateGroupsTable.edit"/>
+                <button id="removeBtn"
+                        action="widgetTemplateGroupsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

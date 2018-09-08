@@ -4,30 +4,30 @@
             min-height:100%;
     }
 
-    .amxd-shadow-border {
+    .dashboard-shadow-border {
         box-shadow: inset 0 0 10px #e0e0e0;
         border: 2px solid transparent;
     }
 
-    .amxd-main-shadow-border {
+    .dashboard-main-shadow-border {
         box-shadow: inset 0 0 10px #e0e0e0;
         border: 2px solid transparent;
     }
 
-    .amxd-grid-cell-shadow-border {
+    .dashboard-grid-cell-shadow-border {
         box-shadow: inset 0 0 5px #e0e0e0;
         border: 2px solid transparent;
     }
 
-    .amdx-left-margin-button {
+    .dashboard-left-margin-button {
         margin-left: 50px;
     }
 
-    .amdx-full-margin-button {
+    .dashboard-full-margin-button {
         margin: 10px;
     }
 
-    .amxd-dashboard-button {
+    .dashboard-dashboard-button {
         background: none;
         border: 2px dashed #b5b5b5 !important;
         color: #4e4e4e;
@@ -38,7 +38,7 @@
         margin-bottom: 5px;
     }
 
-    .amxd-dashboard-selected-button {
+    .dashboard-dashboard-selected-button {
       background: none;
       border: 2px solid $v-selection-color;
       color: #4e4e4e;
@@ -49,30 +49,30 @@
       margin-bottom: 5px;
     }
 
-    .amxd-dashboard-button .v-button-caption {
+    .dashboard-dashboard-button .v-button-caption {
         font-weight: 300;
     }
 
-    .amxd-settings-window-label {
+    .dashboard-settings-window-label {
         background: #ccc;
         padding: 2px 4px 3px 4px;
         border-radius: 3px;
     }
 
-    .amxd-dashboard-button:after {
+    .dashboard-dashboard-button:after {
         border: none;
     }
 
-    .amxd-dashboard-button .v-icon {
+    .dashboard-dashboard-button .v-icon {
         width: 30px;
     }
 
-    .amxd-dashboard-button:focus:after {
+    .dashboard-dashboard-button:focus:after {
         border: none;
         box-shadow: none;
     }
 
-    .amxd-layout-controls {
+    .dashboard-layout-controls {
         position: absolute;
         right: 0;
         background: black;
@@ -82,36 +82,36 @@
         display: inline-block;
     }
 
-    .amxd-layout-controls .amxd-edit-button {
+    .dashboard-layout-controls .dashboard-edit-button {
         display: none;
     }
 
-    .v-csslayout.amxd-shadow-border {
+    .v-csslayout.dashboard-shadow-border {
         position: relative;
     }
 
-    .v-csslayout.amxd-shadow-border:focus {
+    .v-csslayout.dashboard-shadow-border:focus {
         border: 2px solid $v-selection-color;
         border-radius: 3px;
         display: inline-block;
     }
 
-    .v-csslayout.amxd-shadow-border:focus > .amxd-layout-controls .amxd-edit-button {
+    .v-csslayout.dashboard-shadow-border:focus > .dashboard-layout-controls .dashboard-edit-button {
         display: inline-block;
     }
 
-    .amxd-layout-controls .v-button {
+    .dashboard-layout-controls .v-button {
         color: white;
         border: none;
         box-shadow: none;
         background: none;
     }
 
-    .amxd-layout-controls .amxd-view-button {
+    .dashboard-layout-controls .dashboard-view-button {
         display: none;
     }
 
-    .amxd-main-layout-controls {
+    .dashboard-main-layout-controls {
         position: absolute;
         left: 0;
         background: black;
@@ -121,18 +121,18 @@
         display: none;
     }
 
-    .amxd-main-layout-controls-show .amxd-main-layout-controls {
+    .dashboard-main-layout-controls-show .dashboard-main-layout-controls {
         display: inline-block;
     }
 
-    .amxd-main-layout-controls .v-button {
+    .dashboard-main-layout-controls .v-button {
         color: white;
         border: none;
         box-shadow: none;
         background: none;
     }
 
-    .amxd-layout-content .v-gridlayout-spacing-on {
+    .dashboard-layout-content .v-gridlayout-spacing-on {
         padding-left: 5px;
         padding-top: 5px;
     }
@@ -146,22 +146,22 @@
         content: none;
     }
 
-    .amxd-tree-selected {
+    .dashboard-tree-selected {
        border: 2px solid $v-selection-color;
        border-radius: 3px;
     }
 
-    .amxd-dashboard-disabled .amxd-tree-selected {
+    .dashboard-dashboard-disabled .dashboard-tree-selected {
        border: none;
        border-radius: 0;
        box-shadow: none;
     }
 
-    .amxd-tree-selected > .amxd-layout-controls {
+    .dashboard-tree-selected > .dashboard-layout-controls {
             display: inline-block;
         }
 
-        .amxd-dashboard-disabled .amxd-tree-selected > .amxd-layout-controls {
+        .dashboard-dashboard-disabled .dashboard-tree-selected > .dashboard-layout-controls {
             display: none;
         }
 }

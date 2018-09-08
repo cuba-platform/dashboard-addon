@@ -6,7 +6,7 @@
         caption="msg://dashboardEdit"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit"
         datasource="dashboardDs"
-        focusComponent="amxd$dashboardEditFieldGroup1">
+        focusComponent="dashboard$dashboardEditFieldGroup1">
     <dsContext>
         <datasource id="dashboardDs"
                     class="com.haulmont.addon.dashboard.model.Dashboard"/>
@@ -15,14 +15,14 @@
             height="100%"
             spacing="true">
         <hbox spacing="true">
-            <fieldGroup id="amxd$dashboardEditFieldGroup1"
+            <fieldGroup id="dashboard$dashboardEditFieldGroup1"
                         datasource="dashboardDs">
                 <column width="300px">
                     <field property="title"/>
                     <field property="referenceName"/>
                 </column>
             </fieldGroup>
-            <fieldGroup id="amxd$dashboardEditFieldGroup2"
+            <fieldGroup id="dashboard$dashboardEditFieldGroup2"
                         datasource="dashboardDs">
                 <column width="250px">
                     <field property="timerDelay"/>
@@ -31,7 +31,7 @@
                            property="assistantBeanName"/>
                 </column>
             </fieldGroup>
-            <fieldGroup id="amxd$dashboardEditFieldGroup3"
+            <fieldGroup id="dashboard$dashboardEditFieldGroup3"
                         datasource="dashboardDs">
                 <column width="250px">
                     <field property="isAvailableForAllUsers"/>

@@ -19,8 +19,8 @@ import javax.persistence.ManyToOne;
  *  Persistence Widget Template. The field {@link WidgetTemplate#widgetModel} stores not persistence model
  *  {@link Widget} as JSON
  */
-@Table(name = "AMXD_WIDGET_TEMPLATE")
-@Entity(name = "amxd$WidgetTemplate")
+@Table(name = "DASHBOARD_WIDGET_TEMPLATE")
+@Entity(name = "dashboard$WidgetTemplate")
 public class WidgetTemplate extends StandardEntity {
     private static final long serialVersionUID = -2121278399449430493L;
 

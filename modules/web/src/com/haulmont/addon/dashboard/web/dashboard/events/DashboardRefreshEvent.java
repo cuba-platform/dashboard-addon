@@ -4,7 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 
 import java.util.UUID;
 

@@ -4,8 +4,8 @@
 package com.haulmont.addon.dashboard.web.widget;
 
 import com.haulmont.addon.dashboard.model.Parameter;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetTypeInfo;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
+import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
@@ -26,7 +26,7 @@ import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
-    public static final String SCREEN_NAME = "widgetEdit";
+    public static final String SCREEN_NAME = "dashboard$WidgetEdit";
     public static final String ITEM_DS = "ITEM_DS";
 
     @Inject

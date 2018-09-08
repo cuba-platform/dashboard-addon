@@ -1,8 +1,8 @@
 package com.haulmont.addon.dashboard.web.dashboard.datasources;
 
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visual_model.GridArea;
-import com.haulmont.addon.dashboard.model.visual_model.GridLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
+import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 
 import java.util.UUID;
 

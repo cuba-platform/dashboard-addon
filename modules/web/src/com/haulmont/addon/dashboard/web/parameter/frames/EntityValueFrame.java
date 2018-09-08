@@ -1,7 +1,7 @@
 package com.haulmont.addon.dashboard.web.parameter.frames;
 
-import com.haulmont.addon.dashboard.model.param_value_types.EntityParameterValue;
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.EntityParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;

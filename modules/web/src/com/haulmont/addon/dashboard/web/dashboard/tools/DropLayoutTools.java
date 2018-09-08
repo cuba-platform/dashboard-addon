@@ -4,16 +4,16 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visual_model.GridLayout;
-import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid_creation_dialog.GridCreationDialog;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.HorizontalLayoutDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.VerticalLayoutDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.HorizontalLayoutDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.VerticalLayoutDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -29,7 +29,7 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-public class DropLayoutTools {//TODO добавление лайаутов
+public class DropLayoutTools {//TODO
     protected DashboardModelConverter modelConverter;
     protected CanvasFrame frame;
 

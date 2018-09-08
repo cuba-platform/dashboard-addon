@@ -15,8 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Table(name = "AMXD_PERSISTENT_DASHBOARD")
-@Entity(name = "amxd$PersistentDashboard")
+@Table(name = "DASHBOARD_PERSISTENT_DASHBOARD")
+@Entity(name = "dashboard$PersistentDashboard")
 public class PersistentDashboard extends StandardEntity {
     private static final long serialVersionUID = 3580405340289107373L;
 

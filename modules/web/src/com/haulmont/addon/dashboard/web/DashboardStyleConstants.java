@@ -5,9 +5,9 @@
 package com.haulmont.addon.dashboard.web;
 
 public interface DashboardStyleConstants {
-    String AMXD_DASHBOARD_BUTTON = "amxd-dashboard-button";
-    String AMXD_SHADOW_BORDER = "amxd-shadow-border";
-    String AMXD_LAYOUT_CONTROLS = "amxd-layout-controls";
-    String AMXD_EDIT_BUTTON = "amxd-edit-button";
-    String AMXD_TREE_SELECTED = "amxd-tree-selected";
+    String DASHBOARD_BUTTON = "dashboard-button";
+    String DASHBOARD_SHADOW_BORDER = "dashboard-shadow-border";
+    String DASHBOARD_LAYOUT_CONTROLS = "dashboard-layout-controls";
+    String DASHBOARD_EDIT_BUTTON = "dashboard-edit-button";
+    String DASHBOARD_TREE_SELECTED = "dashboard-tree-selected";
 }

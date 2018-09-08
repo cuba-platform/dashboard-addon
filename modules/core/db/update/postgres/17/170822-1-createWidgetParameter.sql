@@ -1,4 +1,4 @@
-create table AMXD_WIDGET_PARAMETER (
+create table DASHBOARD__WIDGET_PARAMETER (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,

@@ -6,19 +6,19 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visual_model.ContainerLayout;
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
-import com.haulmont.addon.dashboard.model.visual_model.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.ContainerLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.events.*;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight_dialog.WeightDialog;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.DropHandlerHelper;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.DropHandlerHelper;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClickedEvent;
@@ -46,8 +46,8 @@ import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLa
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
-public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper {
-    public static final String SCREEN_NAME = "canvasEditorFrame";
+public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper {//todo:
+    public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
     @Inject
     protected VBoxLayout canvas;
@@ -67,7 +67,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
     @Override
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
-        vLayout.addStyleName("amxd-main-shadow-border");
+        vLayout.addStyleName("dashboard-main-shadow-border");
         tools.init(this, converter, vLayout);
     }
 
@@ -119,9 +119,9 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
 
     protected void selectLayout(CanvasLayout layout, UUID layoutUuid, boolean needSelect) {
         if (layout.getUuid().equals(layoutUuid) && needSelect) {
-            layout.addStyleName(DashboardStyleConstants.AMXD_TREE_SELECTED);
+            layout.addStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
         } else {
-            layout.removeStyleName(DashboardStyleConstants.AMXD_TREE_SELECTED);
+            layout.removeStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
         }
 
         for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {

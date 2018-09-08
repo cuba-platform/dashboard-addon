@@ -178,7 +178,7 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 
 - `referenceName` - the attribute which will serve for a dashboard search in a database;
 - `jsonPath` - the `classPath` to the dashboard JSON file;
-- `class` - the controller class of the `dashboard-ui` component which has to be inherited from `com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame`;
+- `class` - the controller class of the `dashboard-ui` component which has to be inherited from `com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame`;
 - `timerDelay` - the time period in seconds for refresh a dashboard-ui.
 
 ***Note:*** when embedding a dashboard, you must specify the `referenceName` or `jsonPath` attribute. When specifying at the same time, the attribute `referenceName` takes precedence over `jsonPath`.
@@ -199,7 +199,7 @@ To add an additional widget type, you need to do the following:
 For example:
 
 ```java
-@MetaClass(name = "amxd$LookupWidget")
+@MetaClass(name = "dashboard$LookupWidget")
 @WidgetType(name = CAPTION,
         browseFrameId = "lookupWidgetBrowse",
         editFrameId = "lookupWidgetEdit")
@@ -225,7 +225,7 @@ public class LookupWidget extends Widget {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetEdit">
+        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetEdit">
     <layout spacing="true">
         <hbox id="lookupIdBox"
               spacing="true">
@@ -283,7 +283,7 @@ public class LookupWidgetEdit extends AbstractFrame {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetBrowse">
     <layout spacing="true"
             width="100%"
             height="100%">

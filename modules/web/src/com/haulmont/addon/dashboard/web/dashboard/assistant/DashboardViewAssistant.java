@@ -1,6 +1,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.assistant;
 
-import com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
 
 public interface DashboardViewAssistant {
 

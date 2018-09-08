@@ -1,1 +1,1 @@
-alter table AMXD_DASHBOARD_WIDGET add column IS_TEMPLATE boolean ;
+alter table DASHBOARD_DASHBOARD_WIDGET add column IS_TEMPLATE boolean ;

@@ -44,13 +44,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
-    public static final String SCREEN_NAME = "dashboardEdit";
+    public static final String SCREEN_NAME = "dashboard$DashboardEdit";
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
-    @Named("amxd$dashboardEditFieldGroup1")
+    @Named("dashboard$dashboardEditFieldGroup1")
     protected FieldGroup fieldGroup1;
-    @Named("amxd$dashboardEditFieldGroup2")
+    @Named("dashboard$dashboardEditFieldGroup2")
     protected FieldGroup fieldGroup2;
     @Inject
     protected GroupBoxLayout paramsBox;
@@ -157,7 +157,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     protected void postValidate(ValidationErrors errors) {
         //remove validation errors from widget frames
-        errors.getAll().removeIf(error -> !"amxd$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
+        errors.getAll().removeIf(error -> !"dashboard$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
     }
 
     @Override
@@ -165,9 +165,9 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         //remove ds contexts from widget frames
         dashboardDs.getDsContext().getChildren().removeIf(dsContext ->
                 !((dsContext.get("parametersDs") != null && dsContext.get("parametersDs").getMetaClass() != null &&
-                        "amxd$Parameter".equals(dsContext.get("parametersDs").getMetaClass().getName())) ||
+                        "dashboard$Parameter".equals(dsContext.get("parametersDs").getMetaClass().getName())) ||
                         (dsContext.get("widgetTemplatesDs") != null && dsContext.get("widgetTemplatesDs").getMetaClass() != null) &&
-                                "amxd$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
+                                "dashboard$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
 
         FieldGroup.FieldConfig assistantBeanName = fieldGroup2.getField("assistantBeanName");
         LookupField lookupField = (LookupField) assistantBeanName.getComponent();

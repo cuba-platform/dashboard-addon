@@ -7,8 +7,8 @@ package com.haulmont.addon.dashboard.web.dashboard.converter;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +22,7 @@ import static com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter
  */
 @Component(NAME)
 public class JsonConverter {
-    public static final String NAME = "amxd_JsonConverter";
+    public static final String NAME = "dashboard_JsonConverter";
 
     protected Gson gson;
 

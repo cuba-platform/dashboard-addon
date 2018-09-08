@@ -4,10 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
-import com.haulmont.addon.dashboard.model.dto.LayoutRemoveDto;
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dashboard.web.events.DashboardEvent;
+import com.haulmont.addon.dashboard.web.dto.LayoutRemoveDto;
 
 public class WidgetRemovedEvent extends DashboardEditEvent {
 

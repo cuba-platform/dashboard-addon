@@ -1,9 +1,9 @@
 
 package com.haulmont.addon.dashboard.web.parameter.frames;
 
-import com.haulmont.addon.dashboard.model.param_value_types.EntityParameterValue;
-import com.haulmont.addon.dashboard.model.param_value_types.ListEntitiesParameterValue;
-import com.haulmont.addon.dashboard.model.param_value_types.ParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.EntityParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ListEntitiesParameterValue;
+import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -70,7 +70,7 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
     }
 
     protected void openEntityValueWindow(EntityParameterValue value) {
-        EntityValueWindow editValueWindow = (EntityValueWindow) openWindow("entityValueWindow", DIALOG,
+        EntityValueWindow editValueWindow = (EntityValueWindow) openWindow("dashboard$EntityValueWindow", DIALOG,
                 ParamsMap.of(VALUE, value));
 
         editValueWindow.addCloseListener(actionId -> {

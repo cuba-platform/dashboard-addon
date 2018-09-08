@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @NamePattern("%s|name")
-@Table(name = "AMXD_WIDGET_TEMPLATE_GROUP")
-@Entity(name = "amxd$WidgetTemplateGroup")
+@Table(name = "DASHBOARD_WIDGET_TEMPLATE_GROUP")
+@Entity(name = "dashboard$WidgetTemplateGroup")
 public class WidgetTemplateGroup extends StandardEntity {
     private static final long serialVersionUID = 6414734907756492318L;
 

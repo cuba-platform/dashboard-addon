@@ -4,7 +4,7 @@
         class="com.haulmont.addon.dashboard.web.parameter.frames.EntityValueWindow">
     <layout expand="windowActions"
             spacing="true">
-        <frame id="entityValueFrame" screen="entityValueFrame"/>
+        <frame id="entityValueFrame" screen="dashboard$EntityValueFrame"/>
         <buttonsPanel id="windowActions">
             <button id="okBtn"
                     caption="msg://OK"

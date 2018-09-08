@@ -7,21 +7,21 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visual_model.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visual_model.RootLayout;
-import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
-import com.haulmont.addon.dashboard.web.annotation_analyzer.WidgetRepository;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClickedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.vaadin_components.PaletteButton;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
-import com.haulmont.addon.dashboard.web.dashboard.tools.component_factories.PaletteComponentsFactory;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.NotDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drop_handlers.TreeDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
@@ -45,7 +45,7 @@ import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLa
 import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
 
 public class PaletteFrame extends AbstractFrame {
-    public static final String SCREEN_NAME = "paletteFrame";
+    public static final String SCREEN_NAME = "dashboard$PaletteFrame";
 
     private Component.MouseEventDetails mouseEventDetails;
 

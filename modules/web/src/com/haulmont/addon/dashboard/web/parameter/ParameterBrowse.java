@@ -24,7 +24,7 @@ import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.Ca
 
 public class ParameterBrowse extends AbstractLookup {
     public static final String PARAMETERS = "PARAMETERS";
-    public static final String SCREEN_NAME = "amdx$Parameter.browse";
+    public static final String SCREEN_NAME = "dashboard$ParameterBrowse";
 
     @Inject
     protected GroupDatasource<Parameter, UUID> parametersDs;

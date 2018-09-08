@@ -13,7 +13,7 @@
                               class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
                               view="dashboard-group-view">
             <query>
-                <![CDATA[select e from amxd$PersistentDashboard e]]>
+                <![CDATA[select e from dashboard$PersistentDashboard e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="modelDashboardsDs"

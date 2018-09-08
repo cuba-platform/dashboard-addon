@@ -11,7 +11,7 @@
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
                               view="widget-group-view">
             <query>
-                <![CDATA[select e from amxd$WidgetTemplate e]]>
+                <![CDATA[select e from dashboard$WidgetTemplate e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="modelWidgetsDs"

@@ -11,7 +11,7 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.addon.dashboard.model.param_value_types.*;
+import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.EntitiesListValueFrame;
 import com.haulmont.addon.dashboard.web.parameter.frames.EnumValueFrame;
 import com.haulmont.addon.dashboard.web.parameter.frames.SimpleValueFrame;
@@ -126,7 +126,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected SimpleValueFrame openSimpleValueFrame(ParameterType type, ParameterValue parameterValue) {
         return (SimpleValueFrame) openFrame(
                 valueBox,
-                "simpleValueFrame",
+                "dashboard$SimpleValueFrame",
                 ParamsMap.of(ValueFrame.VALUE_TYPE, type, ValueFrame.VALUE, parameterValue)
         );
     }
@@ -134,7 +134,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected EnumValueFrame openEnumValueFrame(EnumParameterValue value) {
         return (EnumValueFrame) openFrame(
                 valueBox,
-                "enumValueFrame",
+                "dashboard$EnumValueFrame",
                 ParamsMap.of(ValueFrame.VALUE, value)
         );
     }
@@ -142,7 +142,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected EntityValueFrame openEntityValueFrame(EntityParameterValue value) {
         return (EntityValueFrame) openFrame(
                 valueBox,
-                "entityValueFrame",
+                "dashboard$EntityValueFrame",
                 ParamsMap.of(ValueFrame.VALUE, value)
         );
     }
@@ -150,7 +150,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesParameterValue value) {
         return (EntitiesListValueFrame) openFrame(
                 valueBox,
-                "entitiesListValueFrame",
+                "dashboard$EntitiesListValueFrame",
                 ParamsMap.of(ValueFrame.VALUE, value)
         );
     }

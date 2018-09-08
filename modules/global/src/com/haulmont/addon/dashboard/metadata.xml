@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
-    <metadata-model namespace="amxd"
+    <metadata-model namespace="dashboard"
                     root-package="com.haulmont.addon.dashboard">
         <!--widget model-->
         <class>com.haulmont.addon.dashboard.model.Dashboard</class>
         <class>com.haulmont.addon.dashboard.model.Widget</class>
         <class>com.haulmont.addon.dashboard.model.Parameter</class>
         <!--widget visual model-->
-        <class>com.haulmont.addon.dashboard.model.visual_model.DashboardLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.RootLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.VerticalLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.HorizontalLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.WidgetLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.GridLayout</class>
-        <class>com.haulmont.addon.dashboard.model.visual_model.GridArea</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.RootLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.GridLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.GridArea</class>
     </metadata-model>
 </metadata>

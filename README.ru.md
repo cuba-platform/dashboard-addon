@@ -182,7 +182,7 @@
 
 - `referenceName` - атрибут, по которому будет вестись поиск дашборда в базе данных;
 - `jsonPath` - `classPath` до JSON дашборда;
-- `class` - класс контроллера дашборда, должен быть наследован от `com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame`;
+- `class` - класс контроллера дашборда, должен быть наследован от `com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame`;
 - `timerDelay` - период времени в секундах, при котором дашборд будет обновляться.
 
 ***Замечание:*** при встраивании дашборда обязательно необходимо указать атрибут `referenceName` или `jsonPath`. Если заданы одновременно оба атрибута, `referenceName` имеет приоритет выше, чем `jsonPath`.
@@ -204,7 +204,7 @@
 Пример:
 
 ```java
-@MetaClass(name = "amxd$LookupWidget")
+@MetaClass(name = "dashboard$LookupWidget")
 @WidgetType(name = CAPTION,
         browseFrameId = "lookupWidgetBrowse",
         editFrameId = "lookupWidgetEdit")
@@ -230,7 +230,7 @@ public class LookupWidget extends Widget {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetEdit">
+        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetEdit">
     <layout spacing="true">
         <hbox id="lookupIdBox"
               spacing="true">
@@ -287,7 +287,7 @@ public class LookupWidgetEdit extends AbstractFrame {
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget_types.lookup.LookupWidgetBrowse">
+        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetBrowse">
     <layout spacing="true"
             width="100%"
             height="100%">

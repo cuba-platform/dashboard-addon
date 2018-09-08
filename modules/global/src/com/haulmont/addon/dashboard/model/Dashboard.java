@@ -4,7 +4,7 @@
 package com.haulmont.addon.dashboard.model;
 
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
-import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @NamePattern("%s|title")
-@MetaClass(name = "amxd$Dashboard")
+@MetaClass(name = "dashboard$Dashboard")
 public class Dashboard extends BaseUuidEntity {
     @NotNull
     @MetaProperty(mandatory = true)

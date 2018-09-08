@@ -4,6 +4,6 @@
         <tag>dashboard</tag>
         <name>amdxDashboardComponent</name>
         <componentLoader>com.haulmont.addon.dashboard.gui.components.loaders.DashboardFrameLoader</componentLoader>
-        <class>com.haulmont.addon.dashboard.web.dashboard.frames.ui_component.WebDashboardFrame</class>
+        <class>com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame</class>
     </component>
 </components>

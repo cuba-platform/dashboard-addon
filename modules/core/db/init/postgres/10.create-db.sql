@@ -1,5 +1,5 @@
--- begin AMXD_DASHBOARD_GROUP
-create table AMXD_DASHBOARD_GROUP (
+-- begin DASHBOARD_DASHBOARD_GROUP
+create table DASHBOARD_DASHBOARD_GROUP (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -13,9 +13,9 @@ create table AMXD_DASHBOARD_GROUP (
     --
     primary key (ID)
 )^
--- end AMXD_DASHBOARD_GROUP
--- begin AMXD_PERSISTENT_DASHBOARD
-create table AMXD_PERSISTENT_DASHBOARD (
+-- end DASHBOARD_DASHBOARD_GROUP
+-- begin DASHBOARD_PERSISTENT_DASHBOARD
+create table DASHBOARD_PERSISTENT_DASHBOARD (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -31,9 +31,9 @@ create table AMXD_PERSISTENT_DASHBOARD (
     --
     primary key (ID)
 )^
--- end AMXD_PERSISTENT_DASHBOARD
--- begin AMXD_WIDGET_TEMPLATE
-create table AMXD_WIDGET_TEMPLATE (
+-- end DASHBOARD_PERSISTENT_DASHBOARD
+-- begin DASHBOARD_WIDGET_TEMPLATE
+create table DASHBOARD_WIDGET_TEMPLATE (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -48,9 +48,9 @@ create table AMXD_WIDGET_TEMPLATE (
     --
     primary key (ID)
 )^
--- end AMXD_WIDGET_TEMPLATE
--- begin AMXD_WIDGET_TEMPLATE_GROUP
-create table AMXD_WIDGET_TEMPLATE_GROUP (
+-- end DASHBOARD_WIDGET_TEMPLATE
+-- begin DASHBOARD_WIDGET_TEMPLATE_GROUP
+create table DASHBOARD_WIDGET_TEMPLATE_GROUP (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -64,4 +64,4 @@ create table AMXD_WIDGET_TEMPLATE_GROUP (
     --
     primary key (ID)
 )^
--- end AMXD_WIDGET_TEMPLATE_GROUP
+-- end DASHBOARD_WIDGET_TEMPLATE_GROUP

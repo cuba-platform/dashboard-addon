@@ -7,7 +7,7 @@ package com.haulmont.addon.dashboard.web.parameter.frames;
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.chile.core.datatypes.DatatypeRegistry;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.addon.dashboard.model.param_value_types.*;
+import com.haulmont.addon.dashboard.model.paramtypes.*;
 
 import javax.inject.Inject;
 import java.util.Map;

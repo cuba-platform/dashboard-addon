@@ -6,13 +6,13 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.visual_model.VerticalLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.haulmont.addon.dashboard.web.widget_types.RefreshableWidget;
+import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CanvasFrame extends AbstractFrame {
-    public static final String SCREEN_NAME = "canvasFrame";
+    public static final String SCREEN_NAME = "dashboard$CanvasFrame";
     public static final String DASHBOARD = "dashboard";
     public static final String DASHBOARD_FRAME = "dashboardFrame";
 
@@ -74,7 +74,7 @@ public class CanvasFrame extends AbstractFrame {
             vLayout = getConverter().getFactory().createCanvasVerticalLayout();
         }
 
-        vLayout.removeStyleName("amxd-shadow-border");
+        vLayout.removeStyleName("dashboard-shadow-border");
 
         canvas.removeAll();
         canvas.add(vLayout);

@@ -17,8 +17,8 @@ import java.util.List;
  * The persistence dictionary of the {@link PersistentDashboard}
  */
 @NamePattern("%s|name")
-@Table(name = "AMXD_DASHBOARD_GROUP")
-@Entity(name = "amxd$DashboardGroup")
+@Table(name = "DASHBOARD_DASHBOARD_GROUP")
+@Entity(name = "dashboard$DashboardGroup")
 public class DashboardGroup extends StandardEntity {
     private static final long serialVersionUID = 7160480278020869794L;
 
