@@ -68,12 +68,12 @@
                     caption="msg://propagate"
                     icon="BULLHORN"
                     invoke="onPropagateBtnClick"
-                    stylename="amdx-left-margin-button"/>
+                    stylename="dashboard-left-margin-button"/>
             <button id="exportJsonBtn"
                     caption="msg://exportJson"
                     icon="DOWNLOAD"
                     invoke="onExportJsonBtnClick"
-                    stylename="amdx-left-margin-button"/>
+                    stylename="dashboard-left-margin-button"/>
             <upload id="importJsonField"
                     uploadButtonCaption="msg://importJson"
                     uploadButtonIcon="UPLOAD"/>

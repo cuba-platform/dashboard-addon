@@ -1,9 +1,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
@@ -14,6 +11,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import com.vaadin.event.DataBoundTransferable;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
@@ -45,6 +43,12 @@ public class TreeDropHandler implements DropHandler {//todo
         UUID parentLayoutUuid = (UUID) targetDetails.getItemIdOver();
 
         VerticalDropLocation location = targetDetails.getDropLocation();
+
+        if (vTransferable instanceof DataBoundTransferable && sourceComponent == null) {
+            DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) ((DataBoundTransferable) vTransferable).getItemId());
+            events.publish(new WidgetMovedEvent(dashboardLayout, (UUID) targetDetails.getItemIdOver(), location));
+            return;
+        }
 
         if (sourceComponent instanceof DraggedComponentWrapper) {
             Component component = ((DraggedComponentWrapper) sourceComponent).getDraggedComponent(vTransferable);
@@ -93,6 +97,9 @@ public class TreeDropHandler implements DropHandler {//todo
                     Component component = ((DraggedComponentWrapper) sourceComponent).getDraggedComponent(vTransferable);
                     if (component instanceof CanvasLayout) {
                         CanvasLayout canvasLayout = (CanvasLayout) component;
+                        if (canvasLayout.getUuid().equals(parentLayoutUuid)) {
+                            return false;
+                        }
                         sourceLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), canvasLayout.getUuid());
 
                     }
@@ -117,7 +124,8 @@ public class TreeDropHandler implements DropHandler {//todo
 
                 return location != VerticalDropLocation.MIDDLE
                         || dashboardLayout instanceof VerticalLayout
-                        || dashboardLayout instanceof HorizontalLayout;
+                        || dashboardLayout instanceof HorizontalLayout
+                        || dashboardLayout instanceof WidgetLayout;
             }
         };
     }

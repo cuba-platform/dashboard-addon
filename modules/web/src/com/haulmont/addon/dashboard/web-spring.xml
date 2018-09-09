@@ -9,10 +9,10 @@
     <context:component-scan base-package="com.haulmont.addon.dashboard"/>
 
     <bean id="uiModelConverter" class="com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter">
-        <property name="factory" ref="amdx_VaadinUiComponentsFactory"/>
+        <property name="factory" ref="dashboard_uiComponentsFactory"/>
     </bean>
 
     <bean id="dropModelConverter" class="com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter">
-        <property name="factory" ref="amdx_VaadinDropComponentsFactory"/>
+        <property name="factory" ref="dashboard_dropComponentsFactory"/>
     </bean>
 </beans>

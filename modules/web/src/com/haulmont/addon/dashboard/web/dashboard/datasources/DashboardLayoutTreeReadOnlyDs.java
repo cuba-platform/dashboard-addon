@@ -18,12 +18,10 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
 
     private DashboardLayout visualModel;
 
-    private Metadata metadata = AppBeans.get(Metadata.class);
-
     @Override
     protected Collection<DashboardLayout> getEntities(Map<String, Object> params) {
         ArrayList<DashboardLayout> al = new ArrayList<>();
-        al.add(visualModel == null ? metadata.create(RootLayout.class) : visualModel);
+        al.add(visualModel);
         return al;
     }
 

@@ -80,9 +80,6 @@ public class PaletteFrame extends AbstractFrame {
 
     @Override
     public void init(Map<String, Object> params) {
-        if (dashboard.getVisualModel() == null) {
-            dashboard.setVisualModel(metadata.create(RootLayout.class));
-        }
         dashboardLayoutTreeReadOnlyDs.setVisualModel(dashboard.getVisualModel());
         initWidgetBox();
         initLayoutBox();
@@ -178,7 +175,7 @@ public class PaletteFrame extends AbstractFrame {
         DashboardLayout parent = selected != null ?
                 findParentLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), selected) : null;
         dashboardLayoutTreeReadOnlyDs.setVisualModel(event.getSource());
-        dashboard.setVisualModel((VerticalLayout) event.getSource());
+        dashboard.setVisualModel((RootLayout) event.getSource());
         dashboardLayoutTreeReadOnlyDs.refresh();
         if (selected != null) {
             DashboardLayout dashboardLayout = dashboardLayoutTreeReadOnlyDs.getItem(selected.getId());

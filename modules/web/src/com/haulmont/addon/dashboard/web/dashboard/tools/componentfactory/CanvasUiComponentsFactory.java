@@ -26,7 +26,7 @@ import java.util.UUID;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.NONE;
 import static java.lang.String.format;
 
-@Component("amdx_VaadinUiComponentsFactory")
+@Component("dashboard_uiComponentsFactory")
 public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     public static final String WIDGET = "widget";
@@ -84,7 +84,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         params.putAll(widgetRepository.getWidgetParams(widget));
 
         AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
-//        widgetRepository.initializeWidgetFields(widgetFrame, widget);
 
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);

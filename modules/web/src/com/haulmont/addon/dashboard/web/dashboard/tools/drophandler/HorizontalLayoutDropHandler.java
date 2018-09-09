@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dnd.components.DDHorizontalLayout;
 import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
@@ -16,14 +17,13 @@ import com.haulmont.cuba.gui.components.Component;
 import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.CENTER;
 import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.RIGHT;
 
-public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler implements DropHandlerHelper {
+public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler {
     protected DropLayoutTools tools;
 
     public HorizontalLayoutDropHandler(DropLayoutTools tools) {
         this.tools = tools;
     }
 
-    //todo: refactoring, check
     @Override
     public void drop(DragAndDropEvent event) {
         DDHorizontalLayoutTargetDetails details = (DDHorizontalLayoutTargetDetails) event.getTargetDetails();
@@ -38,6 +38,14 @@ public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler im
 
         if (component == null) {
             return;
+        }
+
+        if (targetLayout.getParent() instanceof CanvasLayout && component instanceof CanvasLayout) {
+            CanvasLayout targetCanvasLayout = (CanvasLayout) targetLayout.getParent();
+            CanvasLayout sourceCanvasLayout = (CanvasLayout) component;
+            if (targetCanvasLayout.getUuid().equals(sourceCanvasLayout.getUuid())) {
+                return;
+            }
         }
 
         if (sourceLayout == targetLayout) {
@@ -57,9 +65,9 @@ public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler im
             }
 
             if (indexTo >= 0) {
-                targetLayout.add(component, indexTo);
+                tools.addCanvasComponent(targetLayout, component, indexTo);
             } else {
-                targetLayout.add(component);
+                tools.addCanvasComponent(targetLayout, component, 0);
             }
         } else {
             HorizontalDropLocation loc = details.getDropLocation();
@@ -67,7 +75,7 @@ public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler im
                 indexTo++;
             }
 
-            addComponent(tools, targetLayout, component, indexTo);
+            tools.addCanvasComponent(targetLayout, component, indexTo);
         }
     }
 

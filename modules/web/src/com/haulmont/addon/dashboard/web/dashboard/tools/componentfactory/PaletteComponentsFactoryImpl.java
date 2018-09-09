@@ -36,6 +36,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         button.setCaption(messages.getMainMessage("verticalLayout"));
         button.setIconFromSet(DashboardIcon.VERTICAL_LAYOUT_ICON);
         button.setLayout(metadata.create(VerticalLayout.class));
+        button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("verticalLayout"));
         return button;
     }
@@ -45,6 +46,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         button.setCaption(messages.getMainMessage("horizontalLayout"));
         button.setIconFromSet(DashboardIcon.HORIZONTAL_LAYOUT_ICON);
         button.setLayout(metadata.create(HorizontalLayout.class));
+        button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("horizontalLayout"));
         return button;
     }
@@ -54,6 +56,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         button.setCaption(messages.getMainMessage("gridLayout"));
         button.setIconFromSet(DashboardIcon.GRID_LAYOUT_ICON);
         button.setLayout(metadata.create(GridLayout.class));
+        button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("gridLayout"));
         return button;
     }
@@ -66,6 +69,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         button.setCaption(widget.getCaption());
         button.setDescription(widget.getDescription());
         button.setLayout(layout);
+        button.getLayout().setUuid(null);
         return button;
     }
 

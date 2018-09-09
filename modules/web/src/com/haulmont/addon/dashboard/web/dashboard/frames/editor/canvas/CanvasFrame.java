@@ -6,6 +6,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
@@ -47,7 +48,7 @@ public class CanvasFrame extends AbstractFrame {
         updateLayout(dashboard);
     }
 
-    public VerticalLayout getDashboardModel() {
+    public RootLayout getDashboardModel() {
         return getConverter().containerToModel(vLayout);
     }
 
@@ -68,12 +69,7 @@ public class CanvasFrame extends AbstractFrame {
             throw new DashboardException("DASHBOARD parameter can not be null");
         }
 
-        if (dashboard.getVisualModel() != null) {
-            vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
-        } else {
-            vLayout = getConverter().getFactory().createCanvasVerticalLayout();
-        }
-
+        vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
         vLayout.removeStyleName("dashboard-shadow-border");
 
         canvas.removeAll();

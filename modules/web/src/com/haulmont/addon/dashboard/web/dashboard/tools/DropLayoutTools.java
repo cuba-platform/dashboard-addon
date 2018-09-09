@@ -9,6 +9,7 @@ import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Draggable;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.HorizontalLayoutDropHandler;
@@ -119,7 +120,7 @@ public class DropLayoutTools {//TODO
         }
     }
 
-    protected void addCanvasLayout(CanvasLayout canvasLayout, Component target, List<Object> args) {
+    public void addCanvasLayout(CanvasLayout canvasLayout, Component target, List<Object> args) {
         if (args.size() == 0) {
             ((BoxLayout) target).add(canvasLayout);
         } else if (args.size() == 1) {
@@ -132,5 +133,33 @@ public class DropLayoutTools {//TODO
 
         Events events = AppBeans.get(Events.class);
         events.publish(new DashboardRefreshEvent(frame.getDashboardModel(), canvasLayout.getUuid()));
+    }
+
+    public void addCanvasComponent(BoxLayout target, Component comp, int idx) {
+        if (comp instanceof Draggable) {
+            if (idx >= 0) {
+                addComponent(target, ((Draggable) comp).getLayout(), idx);
+            } else {
+                addComponent(target, ((Draggable) comp).getLayout());
+            }
+        }
+        if (comp instanceof CanvasLayout && comp.getParent() instanceof Component.OrderedContainer) {
+            Component.OrderedContainer parent = (Component.OrderedContainer) comp.getParent();
+            if (parent != null) {
+                parent.remove(comp);
+                if (idx >= 0) {
+                    addCanvasLayout((CanvasLayout) comp, target, singletonList(idx));
+                } else {
+                    addCanvasLayout((CanvasLayout) comp, target, new ArrayList<>());
+                }
+            }
+        }
+        if (comp instanceof CanvasLayout && comp.getParent() == null) {
+            if (idx >= 0) {
+                addCanvasLayout((CanvasLayout) comp, target, singletonList(idx));
+            } else {
+                addCanvasLayout((CanvasLayout) comp, target, new ArrayList<>());
+            }
+        }
     }
 }

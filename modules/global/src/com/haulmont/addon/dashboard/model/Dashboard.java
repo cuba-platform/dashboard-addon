@@ -4,6 +4,7 @@
 package com.haulmont.addon.dashboard.model;
 
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
@@ -32,7 +33,7 @@ public class Dashboard extends BaseUuidEntity {
      * Stores a hierarchy of a visual model
      */
     @MetaProperty
-    protected VerticalLayout visualModel;
+    protected RootLayout visualModel;
     @MetaProperty
     protected List<Parameter> parameters;
     @MetaProperty
@@ -80,11 +81,11 @@ public class Dashboard extends BaseUuidEntity {
         return referenceName;
     }
 
-    public VerticalLayout getVisualModel() {
+    public RootLayout getVisualModel() {
         return visualModel;
     }
 
-    public void setVisualModel(VerticalLayout visualModel) {
+    public void setVisualModel(RootLayout visualModel) {
         this.visualModel = visualModel;
     }
 

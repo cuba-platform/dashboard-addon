@@ -6,10 +6,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.ContainerLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.events.*;
@@ -18,7 +15,6 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.DropHandlerHelper;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClickedEvent;
@@ -46,7 +42,7 @@ import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLa
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
-public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper {//todo:
+public class CanvasEditorFrame extends CanvasFrame {
     public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
     @Inject
@@ -220,7 +216,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DropHandlerHelper 
 
     @EventListener
     public void onLayoutRefreshedEvent(DashboardRefreshEvent event) {
-        VerticalLayout dashboardModel = (VerticalLayout) event.getSource();
+        RootLayout dashboardModel = (RootLayout) event.getSource();
         dashboard.setVisualModel(dashboardModel);
         updateLayout(dashboard);
     }

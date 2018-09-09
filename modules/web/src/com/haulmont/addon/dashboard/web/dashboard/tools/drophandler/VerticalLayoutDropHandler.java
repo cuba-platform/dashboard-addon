@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
@@ -16,7 +17,7 @@ import com.haulmont.cuba.gui.components.Component;
 import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.BOTTOM;
 import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.MIDDLE;
 
-public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implements DropHandlerHelper {
+public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler {
 
     protected DropLayoutTools tools;
 
@@ -40,6 +41,14 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implem
             return;
         }
 
+        if (targetLayout.getParent() instanceof CanvasLayout && component instanceof CanvasLayout) {
+            CanvasLayout targetCanvasLayout = (CanvasLayout) targetLayout.getParent();
+            CanvasLayout sourceCanvasLayout = (CanvasLayout) component;
+            if (targetCanvasLayout.getUuid().equals(sourceCanvasLayout.getUuid())) {
+                return;
+            }
+        }
+
         if (sourceLayout == targetLayout) {
             if (indexFrom == indexTo) {
                 return;
@@ -57,9 +66,9 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implem
             }
 
             if (indexTo >= 0) {
-                targetLayout.add(component, indexTo);
+                tools.addCanvasComponent(targetLayout, component, indexTo);
             } else {
-                targetLayout.add(component);
+                tools.addCanvasComponent(targetLayout, component, 0);
             }
 
         } else {
@@ -68,7 +77,7 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler implem
                 indexTo++;
             }
 
-            addComponent(tools, targetLayout, component, indexTo);
+            tools.addCanvasComponent(targetLayout, component, indexTo);
         }
 
     }

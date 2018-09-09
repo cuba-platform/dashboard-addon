@@ -5,7 +5,9 @@ package com.haulmont.addon.dashboard.model.visualmodel;
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+
 import javax.validation.constraints.NotNull;
+
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 @MetaClass(name = "dashboard$GridArea")
@@ -21,10 +23,6 @@ public class GridArea extends BaseUuidEntity {
     @NotNull
     @MetaProperty(mandatory = true)
     protected Integer col1;
-    @MetaProperty
-    protected String row2;
-    @MetaProperty
-    protected String col2;
 
     public void setComponent(DashboardLayout component) {
         this.component = component;
@@ -48,21 +46,5 @@ public class GridArea extends BaseUuidEntity {
 
     public Integer getCol1() {
         return col1;
-    }
-
-    public void setRow2(String row2) {
-        this.row2 = row2;
-    }
-
-    public String getRow2() {
-        return row2;
-    }
-
-    public void setCol2(String col2) {
-        this.col2 = col2;
-    }
-
-    public String getCol2() {
-        return col2;
     }
 }

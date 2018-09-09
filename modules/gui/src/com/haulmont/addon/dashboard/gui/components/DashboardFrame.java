@@ -18,8 +18,6 @@ import java.util.List;
  */
 public interface DashboardFrame extends Frame {
 
-    String NAME = "amdxDashboardComponent";
-
     void setReferenceName(String referenceName);
 
     void setJsonPath(String jsonPath);

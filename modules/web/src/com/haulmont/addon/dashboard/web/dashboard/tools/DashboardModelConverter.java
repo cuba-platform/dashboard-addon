@@ -18,7 +18,7 @@ import com.haulmont.cuba.gui.components.GridLayout.Area;
 import javax.inject.Inject;
 import java.util.UUID;
 
-public class DashboardModelConverter {
+public class DashboardModelConverter {//todo
     @Inject
     protected Metadata metadata;
 
@@ -33,8 +33,8 @@ public class DashboardModelConverter {
         this.factory = factory;
     }
 
-    public VerticalLayout containerToModel(CanvasVerticalLayout container) {
-        VerticalLayout model = metadata.create(RootLayout.class);
+    public RootLayout containerToModel(CanvasVerticalLayout container) {
+        RootLayout model = metadata.create(RootLayout.class);
         containerToModel(model, container);
         return model;
     }
@@ -68,7 +68,7 @@ public class DashboardModelConverter {
             }
         }
 
-        if (canvasLayout != null) {
+        if (canvasLayout != null && model.getUuid() != null) {
             canvasLayout.setUuid(model.getUuid());
         }
         return canvasLayout;

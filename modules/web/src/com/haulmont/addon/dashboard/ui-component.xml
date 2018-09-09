@@ -2,7 +2,7 @@
 <components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
     <component>
         <tag>dashboard</tag>
-        <name>amdxDashboardComponent</name>
+        <name>dashboardComponent</name>
         <componentLoader>com.haulmont.addon.dashboard.gui.components.loaders.DashboardFrameLoader</componentLoader>
         <class>com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame</class>
     </component>

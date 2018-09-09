@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
 
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.Dashboard;
@@ -69,6 +70,7 @@ public class PersistentDashboardBrowse extends AbstractLookup {
 
     public void createDashboard() {
         Dashboard dashboard = metadata.create(Dashboard.class);
+        dashboard.setVisualModel(metadata.create(RootLayout.class));
         openDashboardEditor(dashboard);
     }
 

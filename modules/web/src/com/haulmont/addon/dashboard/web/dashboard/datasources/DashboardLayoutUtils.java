@@ -27,9 +27,11 @@ public class DashboardLayoutUtils {
                 if (dashboardLayout.getId().equals(child.getId())) {
                     return root;
                 } else {
-                    if (findParentLayout(dashboardLayout, child) != null) {
-                        return dashboardLayout;
+                    DashboardLayout tmp = findParentLayout(dashboardLayout, child);
+                    if (tmp == null) {
+                        continue;
                     }
+                    return findParentLayout(dashboardLayout, child);
                 }
             }
         }
