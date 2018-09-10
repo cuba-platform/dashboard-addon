@@ -65,9 +65,9 @@ public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler {
             }
 
             if (indexTo >= 0) {
-                tools.addCanvasComponent(targetLayout, component, indexTo);
+                //tools.addCanvasComponent(targetLayout, component, indexTo);
             } else {
-                tools.addCanvasComponent(targetLayout, component, 0);
+                //tools.addCanvasComponent(targetLayout, component, 0);
             }
         } else {
             HorizontalDropLocation loc = details.getDropLocation();
@@ -75,7 +75,7 @@ public class HorizontalLayoutDropHandler extends DefaultHorizontalDropHandler {
                 indexTo++;
             }
 
-            tools.addCanvasComponent(targetLayout, component, indexTo);
+            //tools.addCanvasComponent(targetLayout, component, indexTo);
         }
     }
 

@@ -66,9 +66,9 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler {
             }
 
             if (indexTo >= 0) {
-                tools.addCanvasComponent(targetLayout, component, indexTo);
+                //tools.addCanvasComponent(targetLayout, component, indexTo);
             } else {
-                tools.addCanvasComponent(targetLayout, component, 0);
+                //tools.addCanvasComponent(targetLayout, component, 0);
             }
 
         } else {
@@ -77,7 +77,7 @@ public class VerticalLayoutDropHandler extends DefaultVerticalDropHandler {
                 indexTo++;
             }
 
-            tools.addCanvasComponent(targetLayout, component, indexTo);
+            //tools.addCanvasComponent(targetLayout, component, indexTo);
         }
 
     }

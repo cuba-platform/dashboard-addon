@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClicke
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -52,8 +53,8 @@ public class CanvasEditorFrame extends CanvasFrame {
     protected DropLayoutTools tools = new DropLayoutTools();
     @Inject
     protected Events events;
-    @Inject
-    protected WidgetRepository widgetRepository;
+    @WindowParam(name = DASHBOARD)
+    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -64,7 +65,8 @@ public class CanvasEditorFrame extends CanvasFrame {
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
         vLayout.addStyleName("dashboard-main-shadow-border");
-        tools.init(this, converter, vLayout);
+        tools.init(this, converter, dashboard);
+        tools.initDropHandler(vLayout);
     }
 
     @Override
@@ -160,12 +162,17 @@ public class CanvasEditorFrame extends CanvasFrame {
 
     @EventListener
     public void widgetAddedToTreeEventListener(WidgetAddedEvent event) {
-        tools.addComponent((BoxLayout) findCanvasLayout(vLayout, event.getParentLayoutUuid()).getDelegate(), event.getSource());
+        if (event.getIndex() > 0) {
+            tools.addComponent(event.getParentLayoutUuid(), event.getSource(), event.getIndex());
+        } else {
+            tools.addComponent(event.getParentLayoutUuid(), event.getSource());
+        }
+
     }
 
     @EventListener
     public void widgetMovedToTreeEventListener(WidgetMovedEvent event) {
-        VerticalLayout dashboardModel = getDashboardModel();
+        RootLayout dashboardModel = getDashboardModel();
         DashboardLayout target = findLayout(dashboardModel, event.getParentLayoutUuid());
         DashboardLayout layout = findLayout(dashboardModel, event.getSource().getId());
         DashboardLayout parent = findParentLayout(dashboardModel, layout);
@@ -173,16 +180,16 @@ public class CanvasEditorFrame extends CanvasFrame {
         parent.getChildren().remove(layout);
         if (target instanceof ContainerLayout) {
             switch (event.getLocation()) {
-                case MIDDLE:
+                case "MIDDLE":
                     target.addChild(layout);
                     break;
-                case BOTTOM:
+                case "BOTTOM":
                     List<DashboardLayout> newChildren = new ArrayList<>();
                     newChildren.add(layout);
                     newChildren.addAll(parent.getChildren());
                     parent.setChildren(newChildren);
                     break;
-                case TOP:
+                case "TOP":
                     newChildren = new ArrayList<>(parent.getChildren());
                     newChildren.add(layout);
                     parent.setChildren(newChildren);
@@ -194,12 +201,12 @@ public class CanvasEditorFrame extends CanvasFrame {
             for (DashboardLayout childLayout : parent.getChildren()) {
                 if (childLayout.getId().equals(target.getId())) {
                     switch (event.getLocation()) {
-                        case TOP:
+                        case "TOP":
                             newChildren.add(layout);
                             newChildren.add(childLayout);
                             break;
-                        case MIDDLE:
-                        case BOTTOM:
+                        case "MIDDLE":
+                        case "BOTTOM":
                             newChildren.add(childLayout);
                             newChildren.add(layout);
                             break;

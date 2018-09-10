@@ -12,12 +12,14 @@ import java.util.UUID;
 public class WidgetTreeEvent extends DashboardEditEvent {
 
     private UUID parentLayoutUuid;
-    private VerticalDropLocation location;
+    private String location;
+    private int index;
 
-    public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, VerticalDropLocation location) {
+    public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, String location, int index) {
         super(source);
         this.parentLayoutUuid = parentLayoutUuid;
         this.location = location;
+        this.index = index;
     }
 
     @Override
@@ -29,7 +31,11 @@ public class WidgetTreeEvent extends DashboardEditEvent {
         return parentLayoutUuid;
     }
 
-    public VerticalDropLocation getLocation() {
+    public String getLocation() {
         return location;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

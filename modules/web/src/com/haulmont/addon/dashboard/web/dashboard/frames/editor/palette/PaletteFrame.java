@@ -207,4 +207,8 @@ public class PaletteFrame extends AbstractFrame {
         widgetTree.setSelected(dashboardLayoutTreeReadOnlyDs.getItem(layoutUuid));
         widgetTree.expand(layoutUuid);
     }
+
+    public DashboardLayoutTreeReadOnlyDs getDashboardLayoutTreeReadOnlyDs() {
+        return dashboardLayoutTreeReadOnlyDs;
+    }
 }

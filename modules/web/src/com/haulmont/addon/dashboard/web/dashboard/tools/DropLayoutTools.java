@@ -4,47 +4,55 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
+import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Draggable;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.HorizontalLayoutDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.LayoutDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.VerticalLayoutDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
+import com.vaadin.event.DataBoundTransferable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-public class DropLayoutTools {//TODO
+public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
     protected CanvasFrame frame;
+    protected Dashboard dashboard;
+    private Metadata metadata = AppBeans.get(Metadata.class);
+    private Events events = AppBeans.get(Events.class);
 
-    public void init(CanvasFrame targetFrame, DashboardModelConverter modelConverter, CanvasLayout rootContainer) {
+    public void init(CanvasFrame targetFrame, DashboardModelConverter modelConverter, Dashboard dashboard) {
         this.frame = targetFrame;
         this.modelConverter = modelConverter;
-        initDropHandler(rootContainer);
+        this.dashboard = dashboard;
     }
 
     public void addDropHandler(CanvasLayout layout) {
         if (layout instanceof CanvasVerticalLayout) {
-            layout.setDropHandler(new VerticalLayoutDropHandler(this));
+            layout.setDropHandler(new LayoutDropHandler(this));
         } else if (layout instanceof CanvasHorizontalLayout) {
-            layout.setDropHandler(new HorizontalLayoutDropHandler(this));
+            layout.setDropHandler(new LayoutDropHandler(this));
         } else if (layout instanceof CanvasGridLayout) {
             layout.setDropHandler(new NotDropHandler());
         } else if (layout instanceof CanvasWidgetLayout) {
@@ -52,22 +60,15 @@ public class DropLayoutTools {//TODO
         }
     }
 
-    public void addComponent(BoxLayout target, DashboardLayout layout) {
+    public void addComponent(UUID target, DashboardLayout layout) {
         addComponent(target, layout, emptyList());
     }
 
-    public void addComponent(BoxLayout target, DashboardLayout layout, Integer indexTo) {
+    public void addComponent(UUID target, DashboardLayout layout, Integer indexTo) {
         addComponent(target, layout, singletonList(indexTo));
     }
 
-    public void addComponent(WebDDGridLayout target, DashboardLayout layout, Integer column, Integer row) {
-        addComponent(target, layout, new ArrayList<Object>() {{
-            add(column);
-            add(row);
-        }});
-    }
-
-    protected void initDropHandler(Component component) {
+    public void initDropHandler(Component component) {
         if (component instanceof CanvasLayout) {
             addDropHandler((CanvasLayout) component);
         }
@@ -78,7 +79,7 @@ public class DropLayoutTools {//TODO
         }
     }
 
-    protected void addComponent(Component target, DashboardLayout layout, List<Object> args) {//TODO
+    protected void addComponent(UUID targetLayoutUuid, DashboardLayout layout, List<Object> args) {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
@@ -86,28 +87,55 @@ public class DropLayoutTools {//TODO
                     int cols = dialog.getCols();
                     int rows = dialog.getRows();
 
-                    CanvasGridLayout canvasLayout = modelConverter.getFactory().createCanvasGridLayout(cols, rows);
+                    //CanvasGridLayout canvasLayout = modelConverter.getFactory().createCanvasGridLayout(cols, rows);
+                    GridLayout gridLayout = metadata.create(GridLayout.class);
+                    gridLayout.setColumns(cols);
+                    gridLayout.setRows(rows);
 
                     for (int i = 0; i < cols; i++) {
                         for (int j = 0; j < rows; j++) {
-                            CanvasVerticalLayout verticalLayout = modelConverter.getFactory().createCanvasVerticalLayout();
-                            addDropHandler(verticalLayout);
-                            canvasLayout.addComponent(verticalLayout, i, j);
+                            //CanvasVerticalLayout verticalLayout = modelConverter.getFactory().createCanvasVerticalLayout();
+                            //addDropHandler(verticalLayout);
+                            GridArea gridArea = metadata.create(GridArea.class);
+                            gridArea.setCol1(i);
+                            gridArea.setRow1(j);
+                            gridArea.setComponent(metadata.create(VerticalLayout.class));
+                            //canvasLayout.addComponent(verticalLayout, i, j);
+                            gridLayout.addArea(gridArea);
                         }
                     }
-                    addDropHandler(canvasLayout);
-                    addCanvasLayout(canvasLayout, target, args);
+                    //addDropHandler(canvasLayout);
+                    //addCanvasLayout(canvasLayout, target, args);
+                    DashboardLayout parentDashboardLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+                    parentDashboardLayout.addChild(gridLayout);
+                    events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
                 }
             });
         } else if (layout instanceof WidgetLayout) {
-            WidgetLayout widgetLayout = (WidgetLayout) layout;
-            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widgetLayout.getWidget(), THIS_TAB);
+            WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
+            Widget widget = metadata.create(((WidgetLayout) layout).getWidget().getClass());
+            widget.setBrowseFrameId(((WidgetLayout) layout).getWidget().getBrowseFrameId());
+            widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
+            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
             editor.addCloseWithCommitListener(() -> {
                 widgetLayout.setWidget(editor.getItem());
-                addDashboardLayout(widgetLayout, target, args);
+                //addDashboardLayout(widgetLayout, target, args);
+                DashboardLayout parentDashboardLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+                parentDashboardLayout.addChild(widgetLayout);
+                events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
             });
-        } else {
-            addDashboardLayout(layout, target, args);
+        } else if (layout instanceof VerticalLayout) {
+            //addDashboardLayout(layout, target, args);
+            VerticalLayout verticalLayout = metadata.create(VerticalLayout.class);
+            DashboardLayout parentDashboardLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+            parentDashboardLayout.addChild(verticalLayout);
+            events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
+        } else if (layout instanceof HorizontalLayout) {
+            //addDashboardLayout(layout, target, args);
+            HorizontalLayout horizontalLayout = metadata.create(HorizontalLayout.class);
+            DashboardLayout parentDashboardLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+            parentDashboardLayout.addChild(horizontalLayout);
+            events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
         }
     }
 
@@ -131,11 +159,10 @@ public class DropLayoutTools {//TODO
 
         canvasLayout.setWeight(1);
 
-        Events events = AppBeans.get(Events.class);
-        events.publish(new DashboardRefreshEvent(frame.getDashboardModel(), canvasLayout.getUuid()));
+//        events.publish(new DashboardRefreshEvent(frame.getDashboardModel(), canvasLayout.getUuid()));
     }
 
-    public void addCanvasComponent(BoxLayout target, Component comp, int idx) {
+    /*public void addCanvasComponent(BoxLayout target, Component comp, int idx) {
         if (comp instanceof Draggable) {
             if (idx >= 0) {
                 addComponent(target, ((Draggable) comp).getLayout(), idx);
@@ -161,5 +188,13 @@ public class DropLayoutTools {//TODO
                 addCanvasLayout((CanvasLayout) comp, target, new ArrayList<>());
             }
         }
+    }*/
+
+    public CanvasFrame getFrame() {
+        return frame;
+    }
+
+    public Dashboard getDashboard() {
+        return dashboard;
     }
 }

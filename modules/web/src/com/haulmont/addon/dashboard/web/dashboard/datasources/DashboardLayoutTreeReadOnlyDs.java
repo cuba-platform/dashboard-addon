@@ -3,9 +3,6 @@ package com.haulmont.addon.dashboard.web.dashboard.datasources;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
 import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.data.impl.CustomHierarchicalDatasource;
 
 import java.util.*;

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class WidgetAddedEvent extends WidgetTreeEvent {
 
-    public WidgetAddedEvent(DashboardLayout source, UUID parentLayoutUuid, VerticalDropLocation location) {
-        super(source, parentLayoutUuid, location);
+    public WidgetAddedEvent(DashboardLayout source, UUID parentLayoutUuid, String location, int index) {
+        super(source, parentLayoutUuid, location, index);
     }
 }

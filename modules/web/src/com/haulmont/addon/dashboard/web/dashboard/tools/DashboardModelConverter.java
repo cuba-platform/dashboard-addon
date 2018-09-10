@@ -18,7 +18,7 @@ import com.haulmont.cuba.gui.components.GridLayout.Area;
 import javax.inject.Inject;
 import java.util.UUID;
 
-public class DashboardModelConverter {//todo
+public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
 

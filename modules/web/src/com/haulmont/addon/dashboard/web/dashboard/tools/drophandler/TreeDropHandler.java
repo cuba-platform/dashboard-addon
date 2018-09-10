@@ -24,7 +24,7 @@ import java.util.UUID;
 import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
 
-public class TreeDropHandler implements DropHandler {//todo
+public class TreeDropHandler implements DropHandler {
 
     private Events events = AppBeans.get(Events.class);
 
@@ -46,7 +46,7 @@ public class TreeDropHandler implements DropHandler {//todo
 
         if (vTransferable instanceof DataBoundTransferable && sourceComponent == null) {
             DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) ((DataBoundTransferable) vTransferable).getItemId());
-            events.publish(new WidgetMovedEvent(dashboardLayout, (UUID) targetDetails.getItemIdOver(), location));
+            events.publish(new WidgetMovedEvent(dashboardLayout, (UUID) targetDetails.getItemIdOver(), location.name(), 0));
             return;
         }
 
@@ -55,19 +55,19 @@ public class TreeDropHandler implements DropHandler {//todo
             if (component instanceof CanvasLayout) {
                 CanvasLayout canvasLayout = (CanvasLayout) component;
                 DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), canvasLayout.getUuid());
-                events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location));
+                events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location.name(), 0));
             }
 
             if (component instanceof PaletteButton) {
                 PaletteButton paletteButton = (PaletteButton) component;
-                events.publish(new WidgetAddedEvent(paletteButton.getLayout(), parentLayoutUuid, location));
+                events.publish(new WidgetAddedEvent(paletteButton.getLayout(), parentLayoutUuid, location.name(), 0));
             }
         }
 
         if (sourceComponent instanceof CubaTree) {
             CubaTree cubaTree = (CubaTree) sourceComponent;
             DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) cubaTree.getValue());
-            events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location));
+            events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location.name(), 0));
         }
     }
 
