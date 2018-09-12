@@ -1,5 +1,5 @@
 /* Define your theme modifications inside next mixin */
-@mixin com_audimex_dashboard-halo-ext {
+@mixin com_haulmont_addon_dashboard-halo-ext {
     .min-height{
             min-height:100%;
     }
@@ -27,7 +27,7 @@
         margin: 10px;
     }
 
-    .dashboard-dashboard-button {
+    .dashboard-button {
         background: none;
         border: 2px dashed #b5b5b5 !important;
         color: #4e4e4e;
@@ -38,7 +38,7 @@
         margin-bottom: 5px;
     }
 
-    .dashboard-dashboard-selected-button {
+    .dashboard-selected-button {
       background: none;
       border: 2px solid $v-selection-color;
       color: #4e4e4e;
@@ -49,7 +49,7 @@
       margin-bottom: 5px;
     }
 
-    .dashboard-dashboard-button .v-button-caption {
+    .dashboard-button .v-button-caption {
         font-weight: 300;
     }
 
@@ -59,15 +59,15 @@
         border-radius: 3px;
     }
 
-    .dashboard-dashboard-button:after {
+    .dashboard-button:after {
         border: none;
     }
 
-    .dashboard-dashboard-button .v-icon {
+    .dashboard-button .v-icon {
         width: 30px;
     }
 
-    .dashboard-dashboard-button:focus:after {
+    .dashboard-button:focus:after {
         border: none;
         box-shadow: none;
     }
@@ -151,7 +151,7 @@
        border-radius: 3px;
     }
 
-    .dashboard-dashboard-disabled .dashboard-tree-selected {
+    .dashboard-disabled .dashboard-tree-selected {
        border: none;
        border-radius: 0;
        box-shadow: none;
@@ -161,7 +161,7 @@
             display: inline-block;
         }
 
-        .dashboard-dashboard-disabled .dashboard-tree-selected > .dashboard-layout-controls {
+        .dashboard-disabled .dashboard-tree-selected > .dashboard-layout-controls {
             display: none;
         }
 }
