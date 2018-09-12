@@ -7,7 +7,6 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Draggable;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
 import com.haulmont.addon.dnd.components.DropHandler;

@@ -10,15 +10,11 @@ import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.LayoutDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Window;
 
 import java.util.ArrayList;
