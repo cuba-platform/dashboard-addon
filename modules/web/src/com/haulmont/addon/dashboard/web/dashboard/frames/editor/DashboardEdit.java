@@ -5,14 +5,27 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
+import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
+import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
+import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
@@ -28,6 +41,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import javax.inject.Inject;
@@ -36,10 +50,13 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -82,10 +99,16 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     protected AbstractFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
 
+    @Named("dropModelConverter")
+    protected DashboardModelConverter modelConverter;
+
+    protected DropLayoutTools dropLayoutTools;
+
     @Override
     public void postInit() {
         dashboardDs.setItem(inputItem);
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
+        dropLayoutTools = new DropLayoutTools(this, getItem(), modelConverter);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
@@ -94,8 +117,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Override
     public Dashboard getItem() {
         Dashboard dashboard = dashboardDs.getItem();
-        //dashboard.setParameters(parametersFrame.getParameters());
-        dashboard.setVisualModel(canvasFrame.getDashboardModel());
         dashboard.setCreatedBy(accessHelper.getCurrentSessionLogin());
         return dashboard;
     }
@@ -189,7 +210,57 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
             lookupField.setValue(assistantBeanName);
         }
         return lookupField;
+    }
 
+    @EventListener
+    public void widgetMovedToTreeEventListener(WidgetMovedEvent event) {
+        UUID targetLayoutId = event.getParentLayoutUuid();
+        UUID sourceLayoutId = event.getSource().getId();
+        Dashboard dashboard = getItem();
+
+        dropLayoutTools.moveComponent(dashboard, sourceLayoutId, targetLayoutId, event.getLocation());
+        events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), sourceLayoutId));
+    }
+
+    @EventListener
+    public void onWeightChanged(WeightChangedEvent event) {
+        CanvasLayout source = event.getSource();
+
+        WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
+                WeightDialog.WEIGHT, source.getWeight()));
+        weightDialog.addCloseListener(actionId -> {
+            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                Dashboard dashboard = getItem();
+                DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
+                layout.setWeight(weightDialog.getWeight());
+                events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
+            }
+        });
+    }
+
+    @EventListener
+    public void onRemoveLayout(WidgetRemovedEvent event) {
+        DashboardLayout dashboardLayout = getItem().getVisualModel();
+        dashboardLayout.removeChild(event.getSource().getUuid());
+        events.publish(new DashboardRefreshEvent(dashboardLayout));
+    }
+
+    @EventListener
+    public void widgetAddedToTreeEventListener(WidgetAddedEvent event) {
+        if (event.getIndex() > 0) {
+            dropLayoutTools.addComponent(event.getParentLayoutUuid(), event.getSource(), event.getIndex());
+        } else {
+            dropLayoutTools.addComponent(event.getParentLayoutUuid(), event.getSource());
+        }
+    }
+
+    @EventListener
+    public void onOpenWidgetEditor(WidgetEditEvent event) {
+        Widget widget = event.getSource();
+        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
+        editor.addCloseWithCommitListener(() -> {
+            events.publish(new DashboardRefreshEvent(getItem().getVisualModel(), widget.getId()));
+        });
     }
 
 }

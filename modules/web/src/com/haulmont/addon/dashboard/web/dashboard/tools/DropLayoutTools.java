@@ -8,24 +8,25 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.LayoutDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
-import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.BoxLayout;
+import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Window;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.util.Collections.emptyList;
@@ -33,27 +34,21 @@ import static java.util.Collections.singletonList;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
-    protected CanvasFrame frame;
+    protected AbstractFrame frame;
     protected Dashboard dashboard;
     private Metadata metadata = AppBeans.get(Metadata.class);
     private Events events = AppBeans.get(Events.class);
 
-    public void init(CanvasFrame targetFrame, DashboardModelConverter modelConverter, Dashboard dashboard) {
-        this.frame = targetFrame;
+    public DropLayoutTools(AbstractFrame frame, Dashboard dashboard, DashboardModelConverter modelConverter) {
         this.modelConverter = modelConverter;
+        this.frame = frame;
         this.dashboard = dashboard;
     }
 
-    public void addDropHandler(CanvasLayout layout) {
-        if (layout instanceof CanvasVerticalLayout) {
-            layout.setDropHandler(new LayoutDropHandler(this));
-        } else if (layout instanceof CanvasHorizontalLayout) {
-            layout.setDropHandler(new LayoutDropHandler(this));
-        } else if (layout instanceof CanvasGridLayout) {
-            layout.setDropHandler(new NotDropHandler());
-        } else if (layout instanceof CanvasWidgetLayout) {
-            layout.setDropHandler(new NotDropHandler());
-        }
+    public void init(AbstractFrame targetFrame, DashboardModelConverter modelConverter, Dashboard dashboard) {
+        this.frame = targetFrame;
+        this.modelConverter = modelConverter;
+        this.dashboard = dashboard;
     }
 
     public void addComponent(UUID target, DashboardLayout layout) {
@@ -62,17 +57,6 @@ public class DropLayoutTools {
 
     public void addComponent(UUID target, DashboardLayout layout, Integer indexTo) {
         addComponent(target, layout, singletonList(indexTo));
-    }
-
-    public void initDropHandler(Component component) {
-        if (component instanceof CanvasLayout) {
-            addDropHandler((CanvasLayout) component);
-        }
-        if (component instanceof Component.Container) {
-            for (Component child : ((Component.Container) component).getOwnComponents()) {
-                initDropHandler(child);
-            }
-        }
     }
 
     protected void addComponent(UUID targetLayoutUuid, DashboardLayout layout, List<Object> args) {
@@ -135,58 +119,57 @@ public class DropLayoutTools {
         }
     }
 
-    protected void addDashboardLayout(DashboardLayout layout, Component target, List<Object> args) {
-        CanvasLayout canvasLayout = modelConverter.modelToContainer(frame, layout);
+    public RootLayout moveComponent(Dashboard dashboard, UUID sourceLayoutId, UUID targetLayoutId, WidgetTreeEvent.DropLocation location) {
+        RootLayout dashboardModel = dashboard.getVisualModel();
+        DashboardLayout target = findLayout(dashboardModel, targetLayoutId);
+        DashboardLayout layout = findLayout(dashboardModel, sourceLayoutId);
+        DashboardLayout parent = findParentLayout(dashboardModel, sourceLayoutId);
 
-        if (canvasLayout != null) {
-            addDropHandler(canvasLayout);
-            addCanvasLayout(canvasLayout, target, args);
-        }
-    }
+        parent.removeOwnChild(layout);
 
-    public void addCanvasLayout(CanvasLayout canvasLayout, Component target, List<Object> args) {
-        if (args.size() == 0) {
-            ((BoxLayout) target).add(canvasLayout);
-        } else if (args.size() == 1) {
-            ((BoxLayout) target).add(canvasLayout, (int) args.get(0));
-        } else if (args.size() == 2) {
-            ((WebDDGridLayout) target).add(canvasLayout, (int) args.get(0), (int) args.get(1));
-        }
-
-        canvasLayout.setWeight(1);
-
-//        events.publish(new DashboardRefreshEvent(frame.getDashboardModel(), canvasLayout.getUuid()));
-    }
-
-    /*public void addCanvasComponent(BoxLayout target, Component comp, int idx) {
-        if (comp instanceof Draggable) {
-            if (idx >= 0) {
-                addComponent(target, ((Draggable) comp).getLayout(), idx);
-            } else {
-                addComponent(target, ((Draggable) comp).getLayout());
+        if (target instanceof ContainerLayout) {
+            switch (location) {
+                case MIDDLE:
+                    target.addChild(layout);
+                    break;
+                case BOTTOM:
+                    List<DashboardLayout> newChildren = new ArrayList<>();
+                    newChildren.add(layout);
+                    newChildren.addAll(parent.getChildren());
+                    parent.setChildren(newChildren);
+                    break;
+                case TOP:
+                    newChildren = new ArrayList<>(parent.getChildren());
+                    newChildren.add(layout);
+                    parent.setChildren(newChildren);
+                    break;
             }
         }
-        if (comp instanceof CanvasLayout && comp.getParent() instanceof Component.OrderedContainer) {
-            Component.OrderedContainer parent = (Component.OrderedContainer) comp.getParent();
-            if (parent != null) {
-                parent.remove(comp);
-                if (idx >= 0) {
-                    addCanvasLayout((CanvasLayout) comp, target, singletonList(idx));
+        if (target instanceof WidgetLayout) {
+            List<DashboardLayout> newChildren = new ArrayList<>();
+            for (DashboardLayout childLayout : parent.getChildren()) {
+                if (childLayout.getId().equals(target.getId())) {
+                    switch (location) {
+                        case TOP:
+                            newChildren.add(layout);
+                            newChildren.add(childLayout);
+                            break;
+                        case MIDDLE:
+                        case BOTTOM:
+                            newChildren.add(childLayout);
+                            newChildren.add(layout);
+                            break;
+                    }
                 } else {
-                    addCanvasLayout((CanvasLayout) comp, target, new ArrayList<>());
+                    newChildren.add(childLayout);
                 }
             }
+            parent.setChildren(newChildren);
         }
-        if (comp instanceof CanvasLayout && comp.getParent() == null) {
-            if (idx >= 0) {
-                addCanvasLayout((CanvasLayout) comp, target, singletonList(idx));
-            } else {
-                addCanvasLayout((CanvasLayout) comp, target, new ArrayList<>());
-            }
-        }
-    }*/
+        return dashboardModel;
+    }
 
-    public CanvasFrame getFrame() {
+    public AbstractFrame getFrame() {
         return frame;
     }
 

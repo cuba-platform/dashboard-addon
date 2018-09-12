@@ -8,16 +8,24 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 
 import java.util.UUID;
 
-public class WidgetTreeEvent extends DashboardEditEvent {
+public class WidgetTreeEvent extends AbstractDashboardEditEvent {
 
     private UUID parentLayoutUuid;
-    private String location;
+    private DropLocation location;
     private int index;
+
+    public enum DropLocation {
+        TOP,
+        BOTTOM,
+        MIDDLE,
+        LEFT,
+        RIGHT;
+    }
 
     public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, String location, int index) {
         super(source);
         this.parentLayoutUuid = parentLayoutUuid;
-        this.location = location;
+        this.location = DropLocation.valueOf(location);
         this.index = index;
     }
 
@@ -30,7 +38,7 @@ public class WidgetTreeEvent extends DashboardEditEvent {
         return parentLayoutUuid;
     }
 
-    public String getLocation() {
+    public DropLocation getLocation() {
         return location;
     }
 

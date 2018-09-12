@@ -8,7 +8,7 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 
 import java.util.UUID;
 
-public class DashboardRefreshEvent extends DashboardEditEvent {
+public class DashboardRefreshEvent extends AbstractDashboardEditEvent {
 
     private UUID selectId;
 

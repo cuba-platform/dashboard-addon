@@ -7,7 +7,11 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardIcon;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
-import com.haulmont.addon.dashboard.web.dashboard.events.*;
+import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.cuba.core.global.Events;
@@ -109,13 +113,14 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.getDelegate().setMargin(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
-        layout.setDescription(messages.getMainMessage("widgetLayout"));
+        layout.setDescription(widget.getCaption());
 
         Button removeButton = createRemoveButton(layout);
         Button editButton = createEditButton(layout);
         Button weightButton = createWeightButton(layout);
         Button doTemplateButton = createDoTemplateButton(widget);
         Button captionButton = createCaptionButton(layout, "widgetLayout");
+        captionButton.setCaption(widget.getCaption());
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
@@ -132,7 +137,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected Button createEditButton(CanvasWidgetLayout layout) {
         Button editButton = factory.createComponent(Button.class);
         editButton.setAction(new BaseAction("editClicked")
-                .withHandler(e -> events.publish(new OpenWidgetEditorEvent(layout))));
+                .withHandler(e -> events.publish(new WidgetEditEvent(layout.getWidget()))));
         editButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         editButton.setIconFromSet(DashboardIcon.GEAR_ICON);
         editButton.setCaption("");
@@ -142,7 +147,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected Button createRemoveButton(CanvasLayout layout) {
         Button removeButton = factory.createComponent(Button.class);
         removeButton.setAction(new BaseAction("removeClicked")
-                .withHandler(e -> events.publish(new WidgetRemovedFromCanvasEvent(layout))));
+                .withHandler(e -> events.publish(new WidgetRemovedEvent(layout))));
         removeButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         removeButton.setIconFromSet(DashboardIcon.TRASH_ICON);
         removeButton.setCaption("");
@@ -180,7 +185,9 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected void addLayoutClickListener(CanvasLayout layout) {
         layout.addLayoutClickListener(e -> {
             CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+            //events.publish(new WidgetSelectedEvent(selectedLayout.getUuid(), WidgetSelectedEvent.Target.CANVAS));
             events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+
         });
     }
 }

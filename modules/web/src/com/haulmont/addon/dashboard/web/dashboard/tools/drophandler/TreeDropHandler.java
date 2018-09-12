@@ -21,8 +21,8 @@ import com.vaadin.shared.ui.dd.VerticalDropLocation;
 
 import java.util.UUID;
 
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
 public class TreeDropHandler implements DropHandler {
 

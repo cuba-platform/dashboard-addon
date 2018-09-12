@@ -4,12 +4,17 @@
 
 package com.haulmont.addon.dashboard.model.visualmodel;
 
+import com.haulmont.addon.dashboard.utils.DashboardLayoutUtils;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
 @MetaClass(name = "dashboard$DashboardLayout")
 public abstract class DashboardLayout extends BaseUuidEntity {
@@ -40,6 +45,32 @@ public abstract class DashboardLayout extends BaseUuidEntity {
 
     public void addChild(DashboardLayout child) {
         children.add(child);
+    }
+
+    public void removeOwnChild(DashboardLayout child) {
+        children.remove(child);
+    }
+
+    public void removeChild(DashboardLayout child) {
+        DashboardLayout parent = findParent(child);
+        parent.removeOwnChild(child);
+    }
+
+    public void removeChild(UUID childId) {
+        DashboardLayout parent = findParent(childId);
+        parent.removeOwnChild(findLayout(childId));
+    }
+
+    public DashboardLayout findParent(DashboardLayout child) {
+        return DashboardLayoutUtils.findParentLayout(this, child.getId());
+    }
+
+    public DashboardLayout findParent(UUID childId) {
+        return DashboardLayoutUtils.findParentLayout(this, childId);
+    }
+
+    public DashboardLayout findLayout(UUID uuid) {
+        return DashboardLayoutUtils.findLayout(this, uuid);
     }
 
     @MetaProperty

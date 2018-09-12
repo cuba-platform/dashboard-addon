@@ -8,8 +8,8 @@ import com.haulmont.cuba.gui.data.impl.CustomHierarchicalDatasource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
 public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<DashboardLayout, UUID> {
 

@@ -6,7 +6,6 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
@@ -45,10 +44,6 @@ public class CanvasFrame extends AbstractFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
         updateLayout(dashboard);
-    }
-
-    public RootLayout getDashboardModel() {
-        return getConverter().containerToModel(vLayout);
     }
 
     public Dashboard getDashboard() {

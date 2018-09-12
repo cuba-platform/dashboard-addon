@@ -11,10 +11,10 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
-import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeElementClickedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
@@ -40,13 +40,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
-public class PaletteFrame extends AbstractFrame {
+public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
-
-    private Component.MouseEventDetails mouseEventDetails;
 
     @Inject
     protected DDVerticalLayout ddWidgetBox;
@@ -121,7 +119,7 @@ public class PaletteFrame extends AbstractFrame {
         dashboardLayoutTreeReadOnlyDs.addItemChangeListener(e -> {
             DashboardLayout dashboardLayout = widgetTree.getSingleSelected();
             if (dashboardLayout != null) {
-                events.publish(new WidgetTreeElementClickedEvent(dashboardLayout.getId()));
+                events.publish(new WidgetSelectedEvent(dashboardLayout.getId(), WidgetSelectedEvent.Target.TREE));
             }
         });
         widgetTree.expandTree();
@@ -167,6 +165,16 @@ public class PaletteFrame extends AbstractFrame {
     }
 
     @EventListener
+    public void onWidgetSelectedEvent(WidgetSelectedEvent event) {
+        if (WidgetSelectedEvent.Target.TREE != event.getTarget()) {
+            UUID layoutUuid = event.getSource();
+            DashboardLayout layout = dashboardLayoutTreeReadOnlyDs.getVisualModel().findLayout(layoutUuid);
+            widgetTree.setSelected(layout);
+            widgetTree.expand(layout.getUuid());
+        }
+    }
+
+    @EventListener
     public void onLayoutRefreshedEvent(DashboardRefreshEvent event) {
         DashboardLayout selected = event.getSelectId() != null ?
                 findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), event.getSelectId())
@@ -181,31 +189,11 @@ public class PaletteFrame extends AbstractFrame {
             if (dashboardLayout == null) {
                 selected = parent;
                 if (selected != null) {
-                    widgetTree.setSelected(selected);
-                    widgetTree.expand(selected.getUuid());
+                    events.publish(new WidgetSelectedEvent(selected.getId(), WidgetSelectedEvent.Target.TREE));
                 }
             }
         }
         widgetTree.repaint();
-    }
-
-    @EventListener
-    public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
-        UUID layoutUuid = event.getSource();
-        Component.MouseEventDetails md = event.getMouseEventDetails();
-        //TODO: refactor, problem with addLayoutClickListener in every layout prod a lot of events, in root can't get clicked comp
-        if (mouseEventDetails == null) {
-            mouseEventDetails = md;
-        } else {
-            if (mouseEventDetails.getClientX() == md.getClientX() && mouseEventDetails.getClientY() == md.getClientY()) {
-                return;
-            } else {
-                mouseEventDetails = md;
-            }
-        }
-
-        widgetTree.setSelected(dashboardLayoutTreeReadOnlyDs.getItem(layoutUuid));
-        widgetTree.expand(layoutUuid);
     }
 
     public DashboardLayoutTreeReadOnlyDs getDashboardLayoutTreeReadOnlyDs() {

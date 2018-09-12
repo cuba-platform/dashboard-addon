@@ -7,9 +7,9 @@ package com.haulmont.addon.dashboard.web.dashboard.events;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 
-public class DashboardEditEvent extends ApplicationEvent implements UiEvent {
+public abstract class AbstractDashboardEditEvent extends ApplicationEvent implements UiEvent {
 
-    public DashboardEditEvent(Object source) {
+    public AbstractDashboardEditEvent(Object source) {
         super(source);
     }
 

@@ -2,15 +2,15 @@
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.events;
+package com.haulmont.addon.dashboard.web.dashboard.events.canvas;
 
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 
-public class WidgetCanvasEvent extends ApplicationEvent implements UiEvent {
+public abstract class AbstractWidgetCanvasEvent extends ApplicationEvent implements UiEvent {
 
-    public WidgetCanvasEvent(CanvasLayout source) {
+    public AbstractWidgetCanvasEvent(CanvasLayout source) {
         super(source);
     }
 

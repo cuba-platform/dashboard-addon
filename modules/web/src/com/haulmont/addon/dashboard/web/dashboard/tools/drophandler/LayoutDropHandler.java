@@ -1,5 +1,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
+import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
@@ -19,18 +20,18 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
 
-import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.CENTER;
 import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.RIGHT;
 import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.BOTTOM;
 import static com.haulmont.addon.dnd.components.enums.VerticalDropLocation.MIDDLE;
 
 public class LayoutDropHandler implements DropHandler {
-    protected DropLayoutTools tools;
+    protected Dashboard dashboard;
     private Events events = AppBeans.get(Events.class);
 
-    public LayoutDropHandler(DropLayoutTools tools) {
-        this.tools = tools;
+    public LayoutDropHandler(Dashboard dashboard) {
+        this.dashboard = dashboard;
     }
 
     @Override
@@ -72,12 +73,12 @@ public class LayoutDropHandler implements DropHandler {
         if (component instanceof CanvasLayout && component.getParent() instanceof Component.OrderedContainer) {
             Component.OrderedContainer parent = (Component.OrderedContainer) component.getParent();
             if (parent != null) {
-                DashboardLayout dashboardLayout = findLayout(tools.getDashboard().getVisualModel(), ((CanvasLayout) component).getUuid());
+                DashboardLayout dashboardLayout = findLayout(dashboard.getVisualModel(), ((CanvasLayout) component).getUuid());
                 events.publish(new WidgetMovedEvent(dashboardLayout, targetCanvasLayout.getUuid(), location, indexTo));
             }
         }
         if (component instanceof CanvasLayout && component.getParent() == null) {
-            DashboardLayout dashboardLayout = findLayout(tools.getDashboard().getVisualModel(), ((CanvasLayout) component).getUuid());
+            DashboardLayout dashboardLayout = findLayout(dashboard.getVisualModel(), ((CanvasLayout) component).getUuid());
             events.publish(new WidgetMovedEvent(dashboardLayout, targetCanvasLayout.getUuid(), location, indexTo));
         }
 
