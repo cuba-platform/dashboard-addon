@@ -3,17 +3,10 @@
  */
 package com.haulmont.addon.dashboard.entity;
 
-import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Table(name = "DASHBOARD_PERSISTENT_DASHBOARD")
 @Entity(name = "dashboard$PersistentDashboard")
@@ -21,7 +14,7 @@ public class PersistentDashboard extends StandardEntity {
     private static final long serialVersionUID = 3580405340289107373L;
 
     /**
-     * Stores not persistence model {@link Dashboard} as JSON
+     * Stores not persistence model {@link com.haulmont.addon.dashboard.model.Dashboard} as JSON
      */
     @NotNull
     @Lob
@@ -30,7 +23,7 @@ public class PersistentDashboard extends StandardEntity {
 
     /**
      * The unique identifier for searching in a database. Duplicates with
-     * {@link Dashboard#referenceName}
+     * {@link com.haulmont.addon.dashboard.model.Dashboard#referenceName}
      */
     @NotNull
     @Column(name = "REFERENCE_NAME", nullable = false, unique = true)

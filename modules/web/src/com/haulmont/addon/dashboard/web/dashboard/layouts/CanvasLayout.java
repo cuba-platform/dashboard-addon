@@ -14,7 +14,8 @@ import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
 
 import java.util.UUID;
 
-public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport, DropTarget, TargetConverter, Component.LayoutClickNotifier, HasWeight {
+public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport,
+        DropTarget, TargetConverter, Component.LayoutClickNotifier, HasWeight {
 
     WebAbstractComponent getDelegate();
 

@@ -134,8 +134,8 @@ public class PersistentDashboardBrowse extends AbstractLookup {
             persDashboardsDs.refresh();
             events.publish(new DashboardUpdatedEvent(result));
         });
-        editor.addCloseListener((actionId)->{
-            if (!"commit".equals(actionId)){
+        editor.addCloseListener((actionId) -> {
+            if (!"commit".equals(actionId)) {
                 updateTable();
             }
         });
@@ -150,9 +150,10 @@ public class PersistentDashboardBrowse extends AbstractLookup {
                     return emptyCollection();
                 }
                 return persDashboardsDs.getItems().stream()
-                        .filter(dash -> selectedDashboards.stream().anyMatch(
-                                selectedDashboard -> dash.getId().equals(selectedDashboard.getId()) &&
-                                        accessHelper.isDashboardAllowedCurrentUser(selectedDashboard)))
+                        .filter(dash -> selectedDashboards.stream()
+                                .anyMatch(selectedDashboard ->
+                                        dash.getId().equals(selectedDashboard.getId())
+                                                && accessHelper.isDashboardAllowedCurrentUser(selectedDashboard)))
 
                         .collect(Collectors.toList());
             }

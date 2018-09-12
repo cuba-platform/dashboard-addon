@@ -4,12 +4,12 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor;
 
-import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.DashboardException;
+import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
-import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
@@ -23,7 +23,6 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -34,7 +33,9 @@ import org.springframework.context.support.AbstractApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.InputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;

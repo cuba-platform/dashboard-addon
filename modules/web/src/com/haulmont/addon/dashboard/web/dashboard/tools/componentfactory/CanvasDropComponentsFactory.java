@@ -5,13 +5,11 @@
 package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WidgetRemovedFromCanvasEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.OpenWidgetEditorEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WeightChangedEvent;
+import com.haulmont.addon.dashboard.web.DashboardIcon;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
+import com.haulmont.addon.dashboard.web.dashboard.events.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -20,15 +18,9 @@ import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
-import com.haulmont.addon.dashboard.web.DashboardIcon;
-import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import org.springframework.stereotype.Component;
 
-
 import javax.inject.Inject;
-
-import java.util.UUID;
-
 
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 import static com.haulmont.cuba.gui.icons.CubaIcon.ARROWS;

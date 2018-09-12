@@ -45,7 +45,8 @@ public class TreeDropHandler implements DropHandler {
         VerticalDropLocation location = targetDetails.getDropLocation();
 
         if (vTransferable instanceof DataBoundTransferable && sourceComponent == null) {
-            DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) ((DataBoundTransferable) vTransferable).getItemId());
+            DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(),
+                    (UUID) ((DataBoundTransferable) vTransferable).getItemId());
             events.publish(new WidgetMovedEvent(dashboardLayout, (UUID) targetDetails.getItemIdOver(), location.name(), 0));
             return;
         }

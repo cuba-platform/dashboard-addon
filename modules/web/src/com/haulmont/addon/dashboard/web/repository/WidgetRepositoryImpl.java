@@ -106,7 +106,9 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         List<Parameter> widgetFieldValues = widget.getWidgetFields();
         List<Field> parameterFields = FieldUtils.getFieldsListWithAnnotation(widgetFrame.getClass(), WidgetParam.class);
         for (Field parameterField : parameterFields) {
-            Optional<Parameter> fieldValueOpt = widgetFieldValues.stream().filter(p -> p.getName().equals(parameterField.getName())).findFirst();
+            Optional<Parameter> fieldValueOpt = widgetFieldValues.stream()
+                    .filter(p -> p.getName().equals(parameterField.getName()))
+                    .findFirst();
             if (fieldValueOpt.isPresent()) {
                 Parameter p = fieldValueOpt.get();
                 WidgetParam ann = parameterField.getAnnotation(WidgetParam.class);

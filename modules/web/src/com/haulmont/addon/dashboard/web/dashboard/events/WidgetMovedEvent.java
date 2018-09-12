@@ -5,7 +5,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.vaadin.shared.ui.dd.VerticalDropLocation;
 
 import java.util.UUID;
 

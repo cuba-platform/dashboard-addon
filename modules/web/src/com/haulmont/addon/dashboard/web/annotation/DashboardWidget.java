@@ -4,13 +4,11 @@
 
 package com.haulmont.addon.dashboard.web.annotation;
 
-import com.haulmont.addon.dashboard.model.Widget;
-
 import java.lang.annotation.*;
 
 /**
  * Indicates that an annotated class is a widget type.
- * Such classes must be inherited from the {@link Widget}
+ * Such classes must be inherited from the {@link com.haulmont.addon.dashboard.model.Widget}
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

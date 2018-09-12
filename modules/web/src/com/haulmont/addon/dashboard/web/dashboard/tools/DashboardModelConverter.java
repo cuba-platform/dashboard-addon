@@ -91,7 +91,8 @@ public class DashboardModelConverter {
                 GridLayout gridModel = (GridLayout) childModel;
                 DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
                 model.addChild(gridModel);
-                childModel.setUuid((((CanvasGridLayout) childComponent).getUuid() == null ? UUID.randomUUID() : ((CanvasGridLayout) childComponent).getUuid()));
+                childModel.setUuid((((CanvasGridLayout) childComponent).getUuid() == null ?
+                        UUID.randomUUID() : ((CanvasGridLayout) childComponent).getUuid()));
 
                 for (Component gridChild : gridComponent.getOwnComponents()) {
                     GridArea modelArea = metadata.create(GridArea.class);

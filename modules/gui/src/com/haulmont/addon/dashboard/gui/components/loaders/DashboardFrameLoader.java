@@ -6,6 +6,7 @@ package com.haulmont.addon.dashboard.gui.components.loaders;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
@@ -15,7 +16,6 @@ import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.xml.layout.*;
 import com.haulmont.cuba.gui.xml.layout.loaders.ContainerLoader;
 import com.haulmont.cuba.gui.xml.layout.loaders.FrameLoader;
-import com.haulmont.addon.dashboard.model.paramtypes.*;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -28,8 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-//partially copy-pasted from com.haulmont.cuba.gui.xml.layout.loaders.FrameComponentLoader
-public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {//TODO: парсит xml и создает фрейм https://youtrack.haulmont.com/issue/DASH-92
+public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
     protected String frameId;
     protected ComponentLoader frameLoader;

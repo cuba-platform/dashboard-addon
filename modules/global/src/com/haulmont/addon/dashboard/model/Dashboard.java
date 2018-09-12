@@ -3,9 +3,7 @@
  */
 package com.haulmont.addon.dashboard.model;
 
-import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
@@ -23,7 +21,7 @@ public class Dashboard extends BaseUuidEntity {
 
     /**
      * The unique identifier for searching in a database. Duplicates with
-     * {@link PersistentDashboard#referenceName}
+     * {@link com.haulmont.addon.dashboard.entity.PersistentDashboard#referenceName}
      */
     @NotNull
     @MetaProperty(mandatory = true)

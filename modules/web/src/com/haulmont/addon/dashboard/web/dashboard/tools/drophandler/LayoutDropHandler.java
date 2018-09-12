@@ -7,7 +7,10 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Dragg
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
-import com.haulmont.addon.dnd.components.*;
+import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
+import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
+import com.haulmont.addon.dnd.components.DropHandler;
+import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
 import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.acceptcriterion.ServerSideCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
@@ -15,7 +18,6 @@ import com.haulmont.addon.dnd.components.dragevent.TargetDetails;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.HBoxLayout;
 
 import static com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dnd.components.enums.HorizontalDropLocation.CENTER;

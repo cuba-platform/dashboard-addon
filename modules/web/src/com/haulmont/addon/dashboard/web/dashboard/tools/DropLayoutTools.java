@@ -9,13 +9,10 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Draggable;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.HorizontalLayoutDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.LayoutDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.VerticalLayoutDropHandler;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -24,9 +21,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Window;
-import com.vaadin.event.DataBoundTransferable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

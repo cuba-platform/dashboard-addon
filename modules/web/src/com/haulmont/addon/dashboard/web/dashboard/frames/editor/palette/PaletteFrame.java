@@ -9,8 +9,6 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
-import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
@@ -22,6 +20,7 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
@@ -193,7 +192,8 @@ public class PaletteFrame extends AbstractFrame {
     @EventListener
     public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
         UUID layoutUuid = event.getSource();
-        Component.MouseEventDetails md = event.getMouseEventDetails();//TODO: refactor, problem with addLayoutClickListener in every layout prod a lot of events, in root can't get clicked comp
+        Component.MouseEventDetails md = event.getMouseEventDetails();
+        //TODO: refactor, problem with addLayoutClickListener in every layout prod a lot of events, in root can't get clicked comp
         if (mouseEventDetails == null) {
             mouseEventDetails = md;
         } else {

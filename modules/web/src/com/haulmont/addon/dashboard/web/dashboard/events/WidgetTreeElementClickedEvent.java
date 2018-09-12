@@ -4,10 +4,6 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
-import com.haulmont.addon.dashboard.web.dashboard.events.DashboardEditEvent;
-import com.haulmont.cuba.gui.events.UiEvent;
-import org.springframework.context.ApplicationEvent;
-
 import java.util.UUID;
 
 public class WidgetTreeElementClickedEvent extends DashboardEditEvent {

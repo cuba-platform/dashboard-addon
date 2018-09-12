@@ -1,8 +1,8 @@
 package com.haulmont.addon.dashboard.web.widget;
 
-import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractEditor;
@@ -121,9 +121,10 @@ public class WidgetTemplateBrowse extends AbstractLookup {
                     return emptyCollection();
                 }
                 return widgetTemplatesDs.getItems().stream()
-                        .filter(widgetTemplate -> selectedWidgets.stream().anyMatch(
-                                selectedWidget -> widgetTemplate.getId().equals(selectedWidget.getId()) &&
-                                        accessHelper.isWidgetTemplateAllowedCurrentUser(selectedWidget)))
+                        .filter(widgetTemplate -> selectedWidgets.stream()
+                                .anyMatch(selectedWidget ->
+                                        widgetTemplate.getId().equals(selectedWidget.getId())
+                                                && accessHelper.isWidgetTemplateAllowedCurrentUser(selectedWidget)))
 
                         .collect(Collectors.toList());
             }

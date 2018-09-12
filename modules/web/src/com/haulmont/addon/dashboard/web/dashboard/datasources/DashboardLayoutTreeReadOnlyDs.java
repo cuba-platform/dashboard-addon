@@ -28,9 +28,14 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         List<UUID> al = new ArrayList<>();
         if (item instanceof GridLayout) {
             GridLayout gridLayout = (GridLayout) item;
-            al.addAll(gridLayout.getAreas().stream().map(GridArea::getComponent).map(DashboardLayout::getId).collect(Collectors.toList()));
+            al.addAll(gridLayout.getAreas().stream()
+                    .map(GridArea::getComponent)
+                    .map(DashboardLayout::getId)
+                    .collect(Collectors.toList()));
         } else {
-            al.addAll(item.getChildren().stream().map(DashboardLayout::getId).collect(Collectors.toList()));
+            al.addAll(item.getChildren().stream()
+                    .map(DashboardLayout::getId)
+                    .collect(Collectors.toList()));
         }
         return al;
     }
@@ -41,7 +46,9 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
             return null;
         }
         DashboardLayout item = findLayout(getRootLayout(), itemId);
-        DashboardLayout root = getItems().stream().findFirst().orElse(null);
+        DashboardLayout root = getItems().stream()
+                .findFirst()
+                .orElse(null);
         if (item == null || root == null || Objects.equals(root.getId(), item.getId())) {
             return null;
         } else {
@@ -53,13 +60,19 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
     @Override
     public Collection<UUID> getRootItemIds() {
         List<UUID> al = new ArrayList<>(1);
-        al.add(getItems().stream().findFirst().map(DashboardLayout::getId).orElse(null));
+        al.add(getItems().stream()
+                .findFirst()
+                .map(DashboardLayout::getId)
+                .orElse(null));
         return al;
     }
 
     @Override
     public boolean isRoot(UUID itemId) {
-        UUID root = getItems().stream().findFirst().map(DashboardLayout::getId).orElse(null);
+        UUID root = getItems().stream()
+                .findFirst()
+                .map(DashboardLayout::getId)
+                .orElse(null);
         if (itemId.equals(root)) {
             return true;
         }
@@ -78,7 +91,9 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
     }
 
     private DashboardLayout getRootLayout() {
-        return getItems().stream().findFirst().orElse(null);
+        return getItems().stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

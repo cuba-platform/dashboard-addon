@@ -7,7 +7,6 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;

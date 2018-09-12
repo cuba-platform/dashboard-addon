@@ -4,20 +4,13 @@
 package com.haulmont.addon.dashboard.entity;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.addon.dashboard.model.Widget;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  *  Persistence Widget Template. The field {@link WidgetTemplate#widgetModel} stores not persistence model
- *  {@link Widget} as JSON
+ *  {@link com.haulmont.addon.dashboard.model.Widget} as JSON
  */
 @Table(name = "DASHBOARD_WIDGET_TEMPLATE")
 @Entity(name = "dashboard$WidgetTemplate")
