@@ -17,10 +17,7 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.Table;
-import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.components.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -59,18 +56,17 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     @Override
     public void init(Map<String, Object> params) {
         lookupFrame = openWindow(lookupWindowId, WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
-        List<Table> tables = findTables(lookupFrame);
-        for (Table table : tables) {
-            table.getDatasource().addItemChangeListener(e -> events.publish(new ItemsSelectedEvent(widget, table.getSelected())));
+        for (ListComponent c : findListComponents(lookupFrame)) {
+            c.getDatasource().addItemChangeListener(e -> events.publish(new ItemsSelectedEvent(widget, c.getSelected())));
         }
         lookupFrame.close(Window.CLOSE_ACTION_ID);
         this.add(lookupFrame.getFrame());
     }
 
-    protected List<Table> findTables(AbstractFrame abstractFrame) {
+    protected List<ListComponent> findListComponents(AbstractFrame abstractFrame) {
         return abstractFrame.getComponents().stream()
-                .filter(c -> c instanceof Table)
-                .map(c -> (Table) c)
+                .filter(c -> c instanceof ListComponent)
+                .map(c -> (ListComponent) c)
                 .collect(Collectors.toList());
     }
 
