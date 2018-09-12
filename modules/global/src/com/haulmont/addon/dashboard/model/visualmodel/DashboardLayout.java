@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
-
 @MetaClass(name = "dashboard$DashboardLayout")
 public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
