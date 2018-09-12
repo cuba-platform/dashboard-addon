@@ -26,24 +26,22 @@
                orientation="vertical"
                pos="70"
                width="100%">
-            <accordion id="accordionPalette"
-                       height="100%">
-                <tab id="widgetTab"
-                     caption="msg://widgets">
-                    <scrollBox id="widgetBox"
-                               height="100%">
-                        <dnd:dndVBoxLayout id="ddWidgetBox"
-                                           dragMode="CLONE"
-                                           height="100%"
-                                           margin="true"
-                                           width="100%"/>
-                    </scrollBox>
-                </tab>
-                <tab id="widgetLayoutsTab"
-                     caption="msg://layouts">
-                    <groupBox id="layoutGroupBox"
-                              caption="msg://layouts"
-                              spacing="true">
+            <vbox height="100%" margin="false,false,true,false">
+                <accordion id="accordionPalette"
+                           height="100%">
+                    <tab id="widgetTab"
+                         caption="msg://widgets">
+                        <scrollBox id="widgetBox"
+                                   height="100%">
+                            <dnd:dndVBoxLayout id="ddWidgetBox"
+                                               dragMode="CLONE"
+                                               height="100%"
+                                               margin="true"
+                                               width="100%"/>
+                        </scrollBox>
+                    </tab>
+                    <tab id="widgetLayoutsTab"
+                         caption="msg://layouts">
                         <scrollBox id="layoutBox"
                                    height="100%">
                             <dnd:dndVBoxLayout id="ddLayoutBox"
@@ -52,29 +50,33 @@
                                                margin="true"
                                                width="100%"/>
                         </scrollBox>
-                    </groupBox>
-                </tab>
-                <tab id="widgetTemplateTab"
-                     caption="msg://widgetTemplates">
-                    <scrollBox id="widgetTemplateBox"
-                               height="100%">
-                        <dnd:dndVBoxLayout id="ddWidgetTemplateBox"
-                                           dragMode="CLONE"
-                                           height="100%"
-                                           margin="true"
-                                           width="100%"/>
-                    </scrollBox>
-                </tab>
-            </accordion>
-            <scrollBox id="widgetTreeBox"
-                       height="100%">
-                <tree id="widgetTree"
-                      height="100%"
-                      width="100%">
-                    <treechildren captionProperty="caption"
-                                  datasource="dashboardLayoutTreeReadOnlyDs"/>
-                </tree>
-            </scrollBox>
+                    </tab>
+                    <tab id="widgetTemplateTab"
+                         caption="msg://widgetTemplates">
+                        <scrollBox id="widgetTemplateBox"
+                                   height="100%">
+                            <dnd:dndVBoxLayout id="ddWidgetTemplateBox"
+                                               dragMode="CLONE"
+                                               height="100%"
+                                               margin="true"
+                                               width="100%"/>
+                        </scrollBox>
+                    </tab>
+                </accordion>
+            </vbox>
+            <vbox margin="true,false,false,false"
+                  height="100%">
+                <scrollBox id="widgetTreeBox"
+
+                           height="100%">
+                    <tree id="widgetTree"
+                          height="100%"
+                          width="100%">
+                        <treechildren captionProperty="caption"
+                                      datasource="dashboardLayoutTreeReadOnlyDs"/>
+                    </tree>
+                </scrollBox>
+            </vbox>
         </split>
     </layout>
 </window>

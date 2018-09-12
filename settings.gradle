@@ -1,4 +1,4 @@
-rootProject.name = 'audimex-dashboards'
+rootProject.name = 'dashboard-addon'
 include(':dashboard-global', ':dashboard-core', ':dashboard-gui', ':dashboard-web', ':dashboard-web-themes')
 project(':dashboard-global').projectDir = new File(settingsDir, 'modules/global')
 project(':dashboard-core').projectDir = new File(settingsDir, 'modules/core')

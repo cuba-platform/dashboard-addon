@@ -23,6 +23,7 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Window;
 import com.vaadin.event.DataBoundTransferable;
 
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class DropLayoutTools {
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
-                if ("commit".equals(actionId)) {
+                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
                     int cols = dialog.getCols();
                     int rows = dialog.getRows();
 
