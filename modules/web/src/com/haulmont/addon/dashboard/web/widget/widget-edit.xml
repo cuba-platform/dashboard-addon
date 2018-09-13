@@ -19,7 +19,7 @@
                 <field property="caption"
                        required="true"/>
                 <field property="description"/>
-                <field property="isAvailableForAllUsers"/>
+                <!--<field property="isAvailableForAllUsers"/>-->
             </column>
         </fieldGroup>
         <hbox id="typeHbox"

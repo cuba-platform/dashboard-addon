@@ -34,20 +34,25 @@ public class LayoutDropHandler implements DropHandler {
     @Override
     public void drop(DragAndDropEvent event) {
         String location = null;
+        CanvasLayout targetCanvasLayout = null;
         if (event.getTargetDetails() instanceof DDVerticalLayoutTargetDetails) {
             DDVerticalLayoutTargetDetails vDetails = (DDVerticalLayoutTargetDetails) event.getTargetDetails();
             location = vDetails.getDropLocation().name();
+            targetCanvasLayout = (CanvasLayout) vDetails.getOverComponent();
         } else if (event.getTargetDetails() instanceof DDHorizontalLayoutTargetDetails) {
             DDHorizontalLayoutTargetDetails hDetails = (DDHorizontalLayoutTargetDetails) event.getTargetDetails();
             location = hDetails.getDropLocation().name();
+            targetCanvasLayout = (CanvasLayout) hDetails.getOverComponent();
         }
 
-        TargetDetails details = event.getTargetDetails();
-        LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
-        Component.OrderedContainer targetLayout = (Component.OrderedContainer) details.getTarget();
-        Component component = t.getTransferableComponent();
+        if (targetCanvasLayout==null) {
+            TargetDetails details = event.getTargetDetails();
+            Component.OrderedContainer targetLayout = (Component.OrderedContainer) details.getTarget();
+            targetCanvasLayout = (CanvasLayout) targetLayout.getParent();
+        }
 
-        CanvasLayout targetCanvasLayout = (CanvasLayout) targetLayout.getParent();
+        LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
+        Component component = t.getTransferableComponent();
 
         if (component instanceof Draggable) {
             PaletteButton paletteButton = (PaletteButton) component;

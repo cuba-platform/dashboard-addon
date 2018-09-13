@@ -18,6 +18,7 @@ public class WidgetTreeEvent extends AbstractDashboardEditEvent {
         BOTTOM,
         MIDDLE,
         LEFT,
+        CENTER,
         RIGHT;
     }
 

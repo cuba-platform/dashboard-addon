@@ -109,6 +109,7 @@ public class DropLayoutTools {
         if (target instanceof ContainerLayout) {
             switch (location) {
                 case MIDDLE:
+                case CENTER:
                     target.addChild(layout);
                     break;
                 case BOTTOM:
@@ -128,7 +129,8 @@ public class DropLayoutTools {
         }
         if (target instanceof WidgetLayout) {
             List<DashboardLayout> newChildren = new ArrayList<>();
-            for (DashboardLayout childLayout : parent.getChildren()) {
+            DashboardLayout targetParent = findParentLayout(dashboardModel,target);
+            for (DashboardLayout childLayout : targetParent.getChildren()) {
                 if (childLayout.getId().equals(target.getId())) {
                     switch (location) {
                         case TOP:
@@ -137,6 +139,7 @@ public class DropLayoutTools {
                             newChildren.add(childLayout);
                             break;
                         case MIDDLE:
+                        case CENTER:
                         case BOTTOM:
                         case RIGHT:
                             newChildren.add(childLayout);
@@ -147,7 +150,7 @@ public class DropLayoutTools {
                     newChildren.add(childLayout);
                 }
             }
-            parent.setChildren(newChildren);
+            targetParent.setChildren(newChildren);
         }
     }
 

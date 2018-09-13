@@ -213,7 +213,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     @EventListener
-    public void widgetMovedToTreeEventListener(WidgetMovedEvent event) {
+    public void onWidgetMoved(WidgetMovedEvent event) {
         UUID targetLayoutId = event.getParentLayoutUuid();
         Dashboard dashboard = getItem();
 

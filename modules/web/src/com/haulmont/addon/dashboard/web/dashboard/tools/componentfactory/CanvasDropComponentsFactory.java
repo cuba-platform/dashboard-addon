@@ -111,7 +111,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widget);
         layout.getDelegate().setMargin(true);
-        layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(widget.getCaption());
 
