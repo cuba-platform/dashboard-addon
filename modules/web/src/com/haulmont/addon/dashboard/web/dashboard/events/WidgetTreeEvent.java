@@ -12,7 +12,6 @@ public class WidgetTreeEvent extends AbstractDashboardEditEvent {
 
     private UUID parentLayoutUuid;
     private DropLocation location;
-    private int index;
 
     public enum DropLocation {
         TOP,
@@ -22,11 +21,10 @@ public class WidgetTreeEvent extends AbstractDashboardEditEvent {
         RIGHT;
     }
 
-    public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, String location, int index) {
+    public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, String location) {
         super(source);
         this.parentLayoutUuid = parentLayoutUuid;
         this.location = DropLocation.valueOf(location);
-        this.index = index;
     }
 
     @Override
@@ -42,7 +40,4 @@ public class WidgetTreeEvent extends AbstractDashboardEditEvent {
         return location;
     }
 
-    public int getIndex() {
-        return index;
-    }
 }

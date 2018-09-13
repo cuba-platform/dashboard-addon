@@ -9,7 +9,7 @@ import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
 import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
-import com.vaadin.event.dd.acceptcriteria.AcceptAll;
+import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 
 public class NotDropHandler implements DropHandler {
 
@@ -20,6 +20,11 @@ public class NotDropHandler implements DropHandler {
 
     @Override
     public AcceptCriterion getCriterion() {
-        return (AcceptCriterionWrapper) AcceptAll::get;
+        return (AcceptCriterionWrapper) () -> new ServerSideCriterion() {
+            @Override
+            public boolean accept(com.vaadin.event.dd.DragAndDropEvent dragEvent) {
+                return false;
+            }
+        };
     }
 }

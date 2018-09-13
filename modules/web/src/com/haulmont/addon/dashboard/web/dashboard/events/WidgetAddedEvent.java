@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class WidgetAddedEvent extends WidgetTreeEvent {
 
-    public WidgetAddedEvent(DashboardLayout source, UUID parentLayoutUuid, String location, int index) {
-        super(source, parentLayoutUuid, location, index);
+    public WidgetAddedEvent(DashboardLayout source, UUID parentLayoutUuid, String location) {
+        super(source, parentLayoutUuid, location);
     }
 }

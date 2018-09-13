@@ -215,11 +215,10 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @EventListener
     public void widgetMovedToTreeEventListener(WidgetMovedEvent event) {
         UUID targetLayoutId = event.getParentLayoutUuid();
-        UUID sourceLayoutId = event.getSource().getId();
         Dashboard dashboard = getItem();
 
-        dropLayoutTools.moveComponent(dashboard, sourceLayoutId, targetLayoutId, event.getLocation());
-        events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), sourceLayoutId));
+        dropLayoutTools.moveComponent(event.getSource(), targetLayoutId, event.getLocation());
+        events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), event.getSource().getId()));
     }
 
     @EventListener
@@ -247,11 +246,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @EventListener
     public void widgetAddedToTreeEventListener(WidgetAddedEvent event) {
-        if (event.getIndex() > 0) {
-            dropLayoutTools.addComponent(event.getParentLayoutUuid(), event.getSource(), event.getIndex());
-        } else {
-            dropLayoutTools.addComponent(event.getParentLayoutUuid(), event.getSource());
-        }
+        dropLayoutTools.addComponent(event.getSource(), event.getParentLayoutUuid(), event.getLocation());
     }
 
     @EventListener
