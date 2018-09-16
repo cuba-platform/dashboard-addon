@@ -45,7 +45,7 @@ public class LayoutDropHandler implements DropHandler {
             targetCanvasLayout = (CanvasLayout) hDetails.getOverComponent();
         }
 
-        if (targetCanvasLayout==null) {
+        if (targetCanvasLayout == null) {
             TargetDetails details = event.getTargetDetails();
             Component.OrderedContainer targetLayout = (Component.OrderedContainer) details.getTarget();
             targetCanvasLayout = (CanvasLayout) targetLayout.getParent();

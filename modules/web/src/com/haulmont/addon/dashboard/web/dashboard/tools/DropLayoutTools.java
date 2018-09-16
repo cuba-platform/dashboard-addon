@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentsLayout;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 
@@ -101,10 +102,9 @@ public class DropLayoutTools {
         DashboardLayout target = findLayout(dashboardModel, targetLayoutId);
         DashboardLayout parent = findParentLayout(dashboardModel, layout);
 
-        if (target.getId().equals(layout.getId())) {
+        if (!applyMoveAction(layout, target, parent, dashboardModel)) {
             return;
         }
-
         parent.removeOwnChild(layout);
 
         if (target instanceof ContainerLayout) {
@@ -130,7 +130,7 @@ public class DropLayoutTools {
         }
         if (target instanceof WidgetLayout) {
             List<DashboardLayout> newChildren = new ArrayList<>();
-            DashboardLayout targetParent = findParentLayout(dashboardModel,target);
+            DashboardLayout targetParent = findParentLayout(dashboardModel, target);
             for (DashboardLayout childLayout : targetParent.getChildren()) {
                 if (childLayout.getId().equals(target.getId())) {
                     switch (location) {
@@ -161,5 +161,21 @@ public class DropLayoutTools {
 
     public Dashboard getDashboard() {
         return dashboard;
+    }
+
+    private boolean applyMoveAction(DashboardLayout layout, DashboardLayout target, DashboardLayout parent, DashboardLayout dashboardModel) {
+        if (target.getId().equals(layout.getId())) {
+            return false;
+        }
+
+        List<DashboardLayout> targetParents = findParentsLayout(dashboardModel, target.getUuid());
+        if (targetParents.contains(layout)) {
+            return false;
+        }
+
+        if (parent instanceof GridLayout) {
+            return false;
+        }
+        return true;
     }
 }

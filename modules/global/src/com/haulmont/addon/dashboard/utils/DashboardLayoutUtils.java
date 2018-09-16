@@ -8,6 +8,8 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
 import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DashboardLayoutUtils {
@@ -80,5 +82,16 @@ public class DashboardLayoutUtils {
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    public static List<DashboardLayout> findParentsLayout(DashboardLayout root, UUID child) {
+        List<DashboardLayout> result = new ArrayList<>();
+        DashboardLayout layout;
+        UUID ch = child;
+        while ((layout = findParentLayout(root, ch)) != null) {
+            result.add(layout);
+            ch = layout.getUuid();
+        }
+        return result;
     }
 }

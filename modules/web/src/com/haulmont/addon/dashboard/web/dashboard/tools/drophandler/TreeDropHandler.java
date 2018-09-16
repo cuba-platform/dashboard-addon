@@ -39,7 +39,7 @@ public class TreeDropHandler implements DropHandler {
         com.vaadin.ui.Tree.TreeTargetDetails targetDetails =
                 (com.vaadin.ui.Tree.TreeTargetDetails) event.getTargetDetails();
         com.vaadin.ui.Component sourceComponent = vTransferable.getSourceComponent();
-        UUID parentLayoutUuid = (UUID) targetDetails.getItemIdOver();
+        UUID targetLayoutUuid = (UUID) targetDetails.getItemIdOver();
 
         VerticalDropLocation location = targetDetails.getDropLocation();
 
@@ -55,19 +55,19 @@ public class TreeDropHandler implements DropHandler {
             if (component instanceof CanvasLayout) {
                 CanvasLayout canvasLayout = (CanvasLayout) component;
                 DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), canvasLayout.getUuid());
-                events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location.name()));
+                events.publish(new WidgetMovedEvent(dashboardLayout, targetLayoutUuid, location.name()));
             }
 
             if (component instanceof PaletteButton) {
                 PaletteButton paletteButton = (PaletteButton) component;
-                events.publish(new WidgetAddedEvent(paletteButton.getLayout(), parentLayoutUuid, location.name()));
+                events.publish(new WidgetAddedEvent(paletteButton.getLayout(), targetLayoutUuid, location.name()));
             }
         }
 
         if (sourceComponent instanceof CubaTree) {
             CubaTree cubaTree = (CubaTree) sourceComponent;
             DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) cubaTree.getValue());
-            events.publish(new WidgetMovedEvent(dashboardLayout, parentLayoutUuid, location.name()));
+            events.publish(new WidgetMovedEvent(dashboardLayout, targetLayoutUuid, location.name()));
         }
     }
 

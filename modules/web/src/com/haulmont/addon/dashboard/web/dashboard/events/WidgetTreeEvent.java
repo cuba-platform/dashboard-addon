@@ -22,9 +22,9 @@ public class WidgetTreeEvent extends AbstractDashboardEditEvent {
         RIGHT;
     }
 
-    public WidgetTreeEvent(DashboardLayout source, UUID parentLayoutUuid, String location) {
+    public WidgetTreeEvent(DashboardLayout source, UUID targetLayoutUuid, String location) {
         super(source);
-        this.parentLayoutUuid = parentLayoutUuid;
+        this.parentLayoutUuid = targetLayoutUuid;
         this.location = DropLocation.valueOf(location);
     }
 
