@@ -6,7 +6,7 @@
             template="/com/haulmont/addon/dashboard/web/dashboard/frames/browse/persistent-dashboard-browse.xml"/>
     <screen id="dashboard$DashboardView"
             template="com/haulmont/addon/dashboard/web/dashboard/frames/browse/dashboard-view.xml"/>
-    <screen id="dashboard$DashboardEdit"
+    <screen id="dashboard$Dashboard.edit"
             template="/com/haulmont/addon/dashboard/web/dashboard/frames/editor/dashboard-edit.xml"/>
     <screen id="dashboard$DashboardComponent"
             template="/com/haulmont/addon/dashboard/web/dashboard/frames/uicomponent/web-dashboard-frame.xml"/>
@@ -24,7 +24,7 @@
     <!--parameters-->
     <screen id="dashboard$ParameterBrowse"
             template="com/haulmont/addon/dashboard/web/parameter/parameter-browse.xml"/>
-    <screen id="dashboard$ParameterEdit"
+    <screen id="dashboard$Parameter.edit"
             template="com/haulmont/addon/dashboard/web/parameter/parameter-edit.xml"/>
     <!--parameter value frames-->
     <screen id="dashboard$SimpleValueFrame"
@@ -40,7 +40,7 @@
     <!--widget-->
     <screen id="dashboard$WidgetTemplateBrowse"
             template="com/haulmont/addon/dashboard/web/widget/widget-template-browse.xml"/>
-    <screen id="dashboard$WidgetEdit"
+    <screen id="dashboard$Widget.edit"
             template="com/haulmont/addon/dashboard/web/widget/widget-edit.xml"/>
     <!--widget types-->
     <screen id="dashboard$ScreenWidgetBrowse"

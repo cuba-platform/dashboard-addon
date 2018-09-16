@@ -62,7 +62,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<Dashboard> {
-    public static final String SCREEN_NAME = "dashboard$DashboardEdit";
+    public static final String SCREEN_NAME = "dashboard$Dashboard.edit";
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;

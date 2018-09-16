@@ -28,7 +28,7 @@ import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMET
 import static java.lang.String.format;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
-    public static final String SCREEN_NAME = "dashboard$WidgetEdit";
+    public static final String SCREEN_NAME = "dashboard$Widget.edit";
     public static final String ITEM_DS = "ITEM_DS";
 
     @Inject
