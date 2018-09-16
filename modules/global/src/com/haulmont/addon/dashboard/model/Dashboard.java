@@ -3,13 +3,14 @@
  */
 package com.haulmont.addon.dashboard.model;
 
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @NamePattern("%s|title")
@@ -61,6 +62,34 @@ public class Dashboard extends BaseUuidEntity {
 
     public void setIsAvailableForAllUsers(Boolean availableForAllUsers) {
         isAvailableForAllUsers = availableForAllUsers;
+    }
+
+    public List<Widget> getWidgets() {
+        List<Widget> widgets = new ArrayList<>();
+        getWidgets(visualModel, widgets);
+        return widgets;
+    }
+
+    private void getWidgets(DashboardLayout dashboardLayout, List<Widget> widgets) {
+        if (dashboardLayout == null) {
+            return;
+        }
+        if (WidgetLayout.class.isAssignableFrom(dashboardLayout.getClass())) {
+            widgets.add(((WidgetLayout) dashboardLayout).getWidget());
+        }
+        if (GridLayout.class.isAssignableFrom(dashboardLayout.getClass())) {
+            for (GridArea gridArea : ((GridLayout) dashboardLayout).getAreas()) {
+                DashboardLayout component = gridArea.getComponent();
+                getWidgets(component, widgets);
+
+            }
+        } else {
+            for (DashboardLayout child : dashboardLayout.getChildren()) {
+                getWidgets(child, widgets);
+
+            }
+        }
+
     }
 
     public String getCreatedBy() {

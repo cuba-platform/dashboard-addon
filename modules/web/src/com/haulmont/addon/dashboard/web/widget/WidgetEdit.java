@@ -4,6 +4,8 @@
 package com.haulmont.addon.dashboard.web.widget;
 
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
@@ -14,16 +16,16 @@ import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
     public static final String SCREEN_NAME = "dashboard$WidgetEdit";
@@ -34,8 +36,6 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Inject
     protected FieldGroup fieldGroup;
     @Inject
-    protected LookupField typeLookup;
-    @Inject
     protected VBoxLayout widgetEditBox;
     @Inject
     protected ParameterBrowse paramsFrame;
@@ -44,7 +44,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Inject
     protected AccessConstraintsHelper accessHelper;
     @Inject
-    protected Messages messages;
+    protected ComponentsFactory componentsFactory;
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
@@ -56,11 +56,8 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Override
     public void postInit() {
         widgetDs.setItem(inputItem);
-
         typesInfo = widgetRepository.getWidgetTypesInfo();
-        typeLookup.setOptionsMap(getWidgetCaptions(typesInfo));
-        typeLookup.addValueChangeListener(e -> typeSelected((String) e.getValue()));
-        selectType();
+        setWidgetType();
         initParametersFrame();
     }
 
@@ -71,49 +68,17 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         return item;
     }
 
-    protected Map<String, String> getWidgetCaptions(List<WidgetTypeInfo> typesInfo) {
-        Map<String, String> map = new HashMap<>();
+    protected void setWidgetType() {
+        String browseFrameId = widgetDs.getItem().getBrowseFrameId();
 
-        for (WidgetTypeInfo typeInfo : typesInfo) {
-            String browseFrameId = typeInfo.getBrowseFrameId();
-            String name = typeInfo.getName();
-            String property = format("widgetType.%s", name);
-            String mainMessage = messages.getMainMessage(property);
-            String caption = mainMessage.equals(property) ? name : mainMessage;
+        WidgetTypeInfo widgetType = typesInfo.stream()
+                .filter(typeInfo -> browseFrameId.equals(typeInfo.getBrowseFrameId()))
+                .findFirst().orElseThrow(() -> new RuntimeException("Unknown widget type"));
 
-            map.put(caption, browseFrameId);
-        }
-
-        return map;
-    }
-
-    protected void typeSelected(String type) {
-        String editFrameId = typesInfo.stream()
-                .filter(widgetType -> type.equals(widgetType.getBrowseFrameId()))
-                .findFirst()
-                .get()
-                .getEditFrameId();
 
         Map<String, Object> params = new HashMap<>(ParamsMap.of(ITEM_DS, widgetDs));
         params.putAll(widgetRepository.getWidgetParams(widgetDs.getItem()));
-        widgetEditFrame = openFrame(widgetEditBox, editFrameId, params);
-//        widgetRepository.initializeWidgetFields(widgetEditFrame, widgetDs.getItem());
-    }
-
-    protected void selectType() {
-        String browseFrameId = widgetDs.getItem().getBrowseFrameId();
-
-        Optional<WidgetTypeInfo> widgetTypeOpt = typesInfo.stream()
-                .filter(typeInfo -> browseFrameId.equals(typeInfo.getBrowseFrameId()))
-                .findFirst();
-
-        if (widgetTypeOpt.isPresent()) {
-            String itemCaption = widgetTypeOpt.get().getBrowseFrameId();
-
-            if (isNotBlank(itemCaption)) {
-                typeLookup.setValue(itemCaption);
-            }
-        }
+        widgetEditFrame = openFrame(widgetEditBox, widgetType.getEditFrameId(), params);
     }
 
     protected void initParametersFrame() {
@@ -131,4 +96,25 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         widgetRepository.serializeWidgetFields(widgetEditFrame, inputItem);
         return super.preCommit();
     }
+
+    public Component generateWidgetTypeField(Datasource datasource, String fieldId) {
+        String property = format("widgetType.%s", inputItem.getName());
+        String mainMessage = messages.getMainMessage(property);
+        String widgetType = (mainMessage.equals(property) ? inputItem.getName() : mainMessage);
+        TextField textField = componentsFactory.createComponent(TextField.class);
+        textField.setValue(widgetType);
+        textField.setEnabled(false);
+        return textField;
+    }
+
+    @Override
+    protected void postValidate(ValidationErrors errors) {
+        super.postValidate(errors);
+        List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
+        long cnt = dashboardWidgets.stream().filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId())).count();
+        if (cnt > 0) {
+            errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));
+        }
+    }
+
 }

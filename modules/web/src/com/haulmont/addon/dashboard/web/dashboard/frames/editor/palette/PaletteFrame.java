@@ -155,7 +155,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                 .stream()
                 .map(type -> {
                     Widget widget = metadata.create(Widget.class);
-                    widget.setCaption(type.getName());
+                    widget.setName(type.getName());
                     widget.setBrowseFrameId(type.getBrowseFrameId());
                     widget.setDashboard(dashboard);
                     return widget;

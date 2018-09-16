@@ -66,7 +66,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         layout.setWidget(widget);
 
         PaletteButton button = createCommonButton();
-        button.setCaption(widget.getCaption());
+        button.setCaption(widget.getName());
         button.setDescription(widget.getDescription());
         button.setLayout(layout);
         button.getLayout().setUuid(null);

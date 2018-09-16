@@ -74,6 +74,7 @@ public class DropLayoutTools {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
             Widget widget = metadata.create(((WidgetLayout) layout).getWidget().getClass());
             widget.setBrowseFrameId(((WidgetLayout) layout).getWidget().getBrowseFrameId());
+            widget.setName(((WidgetLayout) layout).getWidget().getName());
             widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
             WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
             editor.addCloseWithCommitListener(() -> {

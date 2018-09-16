@@ -14,24 +14,20 @@
         <fieldGroup id="fieldGroup"
                     datasource="widgetDs">
             <column width="300px">
-                <field property="widgetId"
+                <field caption="msg://widgetId"
+                       property="widgetId"
                        required="true"/>
-                <field property="caption"
+                <field caption="msg://widgetCaption"
+                       property="caption"
                        required="true"/>
-                <field property="description"/>
-                <!--<field property="isAvailableForAllUsers"/>-->
+                <field caption="msg://widgetDescription"
+                       property="description"/>
+                <field caption="msg://widgeTypeName"
+                       editable="false"
+                       generator="generateWidgetTypeField"
+                       property="widgetType"/>
             </column>
         </fieldGroup>
-        <hbox id="typeHbox"
-              spacing="true">
-            <label id="typeLabel"
-                   value="msg://widgetType"
-                   width="145px"/>
-            <lookupField id="typeLookup"
-                         nullOptionVisible="false"
-                         required="true"
-                         width="300px"/>
-        </hbox>
         <vbox id="widgetEditBox"/>
         <groupBox id="paramsBox"
                   caption="msg://widgetParameters"

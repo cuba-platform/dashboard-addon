@@ -20,6 +20,8 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String caption;
     @MetaProperty
+    protected String name;
+    @MetaProperty
     protected String description;
     @MetaProperty
     protected List<Parameter> parameters = new ArrayList<>();
@@ -109,5 +111,13 @@ public class Widget extends BaseUuidEntity {
 
     public void setDashboard(Dashboard dashboard) {
         this.dashboard = dashboard;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
