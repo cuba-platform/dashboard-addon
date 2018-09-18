@@ -25,6 +25,8 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -50,6 +52,8 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public static final String SCREEN_NAME = "dashboard$DashboardComponent";
+
+    private Logger log = LoggerFactory.getLogger(WebDashboardFrame.class);
 
     @Inject
     protected VBoxLayout canvasBox;
@@ -112,9 +116,9 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     private void initTimer(Component frame) {
-        Window parentWindow = (Window) frame;
+        Window parentWindow = findWindow(frame);
         int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
-        if (timerDelay > 0) {
+        if (timerDelay > 0 && parentWindow != null) {
             Timer dashboardUpdatedTimer = componentsFactory.createTimer();
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
@@ -223,6 +227,19 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         for (RefreshableWidget rw : rws) {
             rw.refresh(dashboardEvent);
         }
+    }
+
+    protected Window findWindow(Component frame) {
+        Component parent = frame;
+        while (parent != null) {
+            if (parent instanceof Window) {
+                return (Window) parent;
+            } else {
+                parent = parent.getParent();
+            }
+        }
+        log.error(messages.getMessage(getClass(), "dashboard.noWindow"));
+        return null;
     }
 
     public AbstractFrame getWidget(String widgetId) {
