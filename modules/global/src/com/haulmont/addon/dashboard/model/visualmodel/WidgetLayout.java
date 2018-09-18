@@ -7,7 +7,11 @@ package com.haulmont.addon.dashboard.model.visualmodel;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import org.apache.commons.lang.StringUtils;
+
+import static java.lang.String.format;
 
 @MetaClass(name = "dashboard$WidgetLayout")
 public class WidgetLayout extends DashboardLayout {
@@ -26,7 +30,11 @@ public class WidgetLayout extends DashboardLayout {
     @Override
     public String getCaption() {
         if (widget != null) {
-            return widget.getCaption();
+            Messages messages = AppBeans.get(Messages.class);
+            String property = format("widgetType.%s", widget.getName());
+            String mainMessage = messages.getMainMessage(property);
+            String widgetType = (mainMessage.equals(property) ? widget.getName() : mainMessage);
+            return widget.getCaption() + "(" + widgetType + ")";
         }
         return StringUtils.EMPTY;
     }
