@@ -64,7 +64,7 @@ public class DropLayoutTools {
                             GridArea gridArea = metadata.create(GridArea.class);
                             gridArea.setCol1(i);
                             gridArea.setRow1(j);
-                            gridArea.setComponent(metadata.create(VerticalLayout.class));
+                            gridArea.setComponent(metadata.create(GridCellLayout.class));
                             gridLayout.addArea(gridArea);
                         }
                     }
@@ -173,7 +173,7 @@ public class DropLayoutTools {
             return false;
         }
 
-        if (parent instanceof GridLayout) {
+        if (layout instanceof GridCellLayout) {
             return false;
         }
         return true;

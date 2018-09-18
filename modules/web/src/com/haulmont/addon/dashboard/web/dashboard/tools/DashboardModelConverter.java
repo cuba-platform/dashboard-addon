@@ -118,6 +118,8 @@ public class DashboardModelConverter {
     protected DashboardLayout createDashboardLayout(Component component) {
         if (component.getParent() == null) {
             return metadata.create(RootLayout.class);
+        } else if (component.getParent() instanceof CanvasGridLayout) {
+            return metadata.create(GridCellLayout.class);
         } else if (component instanceof CanvasVerticalLayout) {
             return metadata.create(VerticalLayout.class);
         } else if (component instanceof CanvasHorizontalLayout) {
