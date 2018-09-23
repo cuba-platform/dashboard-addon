@@ -110,10 +110,12 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
-        List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
-        long cnt = dashboardWidgets.stream().filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId())).count();
-        if (cnt > 0) {
-            errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));
+        if (inputItem.getDashboard() != null) {
+            List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
+            long cnt = dashboardWidgets.stream().filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId())).count();
+            if (cnt > 0) {
+                errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));
+            }
         }
     }
 

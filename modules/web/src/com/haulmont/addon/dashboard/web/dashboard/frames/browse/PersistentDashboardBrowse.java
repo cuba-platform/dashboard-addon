@@ -41,15 +41,12 @@ public class PersistentDashboardBrowse extends AbstractLookup {
     @Inject
     protected Metadata metadata;
     @Inject
-    protected AccessConstraintsHelper accessHelper;
-    @Inject
     protected Events events;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
         initDs();
-        addSelectAction();
     }
 
     protected void initDs() {
@@ -61,10 +58,7 @@ public class PersistentDashboardBrowse extends AbstractLookup {
         modelDashboardsDs.clear();
         for (PersistentDashboard persDash : persDashboardsDs.getItems()) {
             Dashboard model = converter.dashboardFromJson(persDash.getDashboardModel());
-
-            if (accessHelper.isDashboardAllowedCurrentUser(model)) {
-                modelDashboardsDs.includeItem(model);
-            }
+            modelDashboardsDs.includeItem(model);
         }
     }
 
@@ -121,12 +115,14 @@ public class PersistentDashboardBrowse extends AbstractLookup {
                 PersistentDashboard persDash = persDashOpt.get();
                 persDash.setDashboardModel(jsonModel);
                 persDash.setReferenceName(result.getReferenceName());
+                persDash.setIsAvailableForAllUsers(result.getIsAvailableForAllUsers());
                 persDashboardsDs.updateItem(persDash);
             } else {
                 PersistentDashboard persDash = metadata.create(PersistentDashboard.class);
                 persDash.setId(dashId);
                 persDash.setDashboardModel(jsonModel);
                 persDash.setReferenceName(result.getReferenceName());
+                persDash.setIsAvailableForAllUsers(result.getIsAvailableForAllUsers());
                 persDashboardsDs.addItem(persDash);
             }
 
@@ -137,25 +133,6 @@ public class PersistentDashboardBrowse extends AbstractLookup {
         editor.addCloseListener((actionId) -> {
             if (!"commit".equals(actionId)) {
                 updateTable();
-            }
-        });
-    }
-
-    protected void addSelectAction() {
-        addAction(new SelectAction(this) {
-            @Override
-            protected Collection getSelectedItems(LookupComponent lookupComponent) {
-                Collection<Dashboard> selectedDashboards = super.getSelectedItems(lookupComponent);
-                if (isEmpty(selectedDashboards)) {
-                    return emptyCollection();
-                }
-                return persDashboardsDs.getItems().stream()
-                        .filter(dash -> selectedDashboards.stream()
-                                .anyMatch(selectedDashboard ->
-                                        dash.getId().equals(selectedDashboard.getId())
-                                                && accessHelper.isDashboardAllowedCurrentUser(selectedDashboard)))
-
-                        .collect(Collectors.toList());
             }
         });
     }

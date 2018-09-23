@@ -8,9 +8,9 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 
-public class DoWidgetTemplateEvent extends ApplicationEvent implements UiEvent {
+public class CreateWidgetTemplateEvent extends ApplicationEvent implements UiEvent {
 
-    public DoWidgetTemplateEvent(Widget source) {
+    public CreateWidgetTemplateEvent(Widget source) {
         super(source);
     }
 

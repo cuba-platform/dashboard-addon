@@ -14,6 +14,7 @@ import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Window;
 
@@ -33,6 +34,7 @@ public class DropLayoutTools {
     protected Dashboard dashboard;
     private Metadata metadata = AppBeans.get(Metadata.class);
     private Events events = AppBeans.get(Events.class);
+    private MetadataTools metadataTools = AppBeans.get(MetadataTools.class);
 
     public DropLayoutTools(AbstractFrame frame, Dashboard dashboard, DashboardModelConverter modelConverter) {
         this.modelConverter = modelConverter;
@@ -70,6 +72,15 @@ public class DropLayoutTools {
                     }
                     reorderWidgetsAndPushEvents(gridLayout, targetLayout, location);
                 }
+            });
+        } else if (layout instanceof WidgetTemplateLayout) {
+            WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
+            Widget widget = metadataTools.copy(((WidgetTemplateLayout) layout).getWidget());
+            widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
+            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
+            editor.addCloseWithCommitListener(() -> {
+                widgetLayout.setWidget(editor.getItem());
+                reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);
             });
         } else if (layout instanceof WidgetLayout) {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);

@@ -12,28 +12,28 @@ import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
+import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
+import com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Tree;
-import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -60,8 +60,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     @Inject
     protected JsonConverter converter;
     @Inject
-    protected AccessConstraintsHelper accessHelper;
-    @Inject
     protected WidgetRepository widgetRepository;
     @Inject
     protected DashboardLayoutTreeReadOnlyDs dashboardLayoutTreeReadOnlyDs;
@@ -69,8 +67,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     protected Tree<DashboardLayout> widgetTree;
     @Inject
     protected Events events;
-    @Inject
-    protected WindowConfig windowConfig;
     @WindowParam
     protected Dashboard dashboard;
 
@@ -84,15 +80,13 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     @EventListener
-    public void onDoTemplate(DoWidgetTemplateEvent event) {
+    public void onCreateWidgetTemplate(CreateWidgetTemplateEvent event) {
         Widget widget = event.getSource();
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
-        widget.setId(widgetTemplate.getId());
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
+        WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor("dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.NEW_TAB);
+        widgetEditor.addCloseWithCommitListener(() -> widgetTemplatesDs.refresh());
 
-        widgetTemplatesDs.addItem(widgetTemplate);
-        widgetTemplatesDs.commit();
-        widgetTemplatesDs.refresh();
     }
 
     protected void initWidgetBox() {
@@ -136,18 +130,10 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
 
     protected void updateWidgetTemplates() {
         ddWidgetTemplateBox.removeAll();
-
-        for (Widget widget : getWidgetTemplates(widgetTemplatesDs.getItems())) {
-            PaletteButton widgetBtn = factory.createWidgetButton(widget);
+        for (WidgetTemplate wt : widgetTemplatesDs.getItems()) {
+            PaletteButton widgetBtn = factory.createWidgetTemplateButton(wt);
             ddWidgetTemplateBox.add(widgetBtn);
         }
-    }
-
-    protected List<Widget> getWidgetTemplates(Collection<WidgetTemplate> items) {
-        return items.stream()
-                .map(widgetTemplate -> converter.widgetFromJson(widgetTemplate.getWidgetModel()))
-                .filter(accessHelper::isWidgetTemplateAllowedCurrentUser)
-                .collect(Collectors.toList());
     }
 
     protected List<? extends Widget> getSketchWidgets() {

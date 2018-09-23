@@ -1,0 +1,1 @@
+alter table DASHBOARD_WIDGET_TEMPLATE add column IS_AVAILABLE_FOR_ALL_USERS boolean ;

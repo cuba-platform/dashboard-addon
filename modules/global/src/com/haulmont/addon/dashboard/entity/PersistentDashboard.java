@@ -33,6 +33,18 @@ public class PersistentDashboard extends StandardEntity {
     @JoinColumn(name = "DASHBOARD_GROUP_ID")
     protected DashboardGroup dashboardGroup;
 
+    @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")
+    protected Boolean isAvailableForAllUsers = true;
+
+    public void setIsAvailableForAllUsers(Boolean isAvailableForAllUsers) {
+        this.isAvailableForAllUsers = isAvailableForAllUsers;
+    }
+
+    public Boolean getIsAvailableForAllUsers() {
+        return isAvailableForAllUsers;
+    }
+
+
     public void setDashboardGroup(DashboardGroup dashboardGroup) {
         this.dashboardGroup = dashboardGroup;
     }

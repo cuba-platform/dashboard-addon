@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit"
+        datasource="widgetTemplateDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.haulmont.addon.dashboard.web.widgettemplate">
+    <dsContext>
+        <datasource id="widgetTemplateDs"
+                    class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="widgetTemplateDs"
+                    height="100%"
+                    width="100%">
+            <column width="250px">
+                <field property="name"/>
+                <field property="description"/>
+                <field property="isAvailableForAllUsers"/>
+                <field id="widgetType"
+                       caption="msg://widgetType"
+                       generator="generateWidgetTypeField"/>
+            </column>
+        </fieldGroup>
+        <frame screen="editWindowActions"/>
+    </layout>
+</window>

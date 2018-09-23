@@ -11,11 +11,7 @@
     <dsContext>
         <collectionDatasource id="persDashboardsDs"
                               class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
-                              view="dashboard-group-view">
-            <query>
-                <![CDATA[select e from dashboard$PersistentDashboard e]]>
-            </query>
-        </collectionDatasource>
+                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedDashboarsDatasource"/>
         <collectionDatasource id="modelDashboardsDs"
                               class="com.haulmont.addon.dashboard.model.Dashboard"/>
     </dsContext>

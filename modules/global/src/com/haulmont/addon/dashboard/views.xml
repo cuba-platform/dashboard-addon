@@ -11,13 +11,15 @@
     </view>
     <view class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
           extends="_local"
-          name="dashboard-group-view">
+          name="dashboard-group-view"
+          systemProperties="true">
         <property name="dashboardGroup"
                   view="_minimal"/>
     </view>
     <view class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
           extends="_local"
-          name="widget-group-view">
+          name="widget-group-view"
+          systemProperties="true">
         <property name="widgetTemplateGroup"
                   view="_minimal"/>
     </view>

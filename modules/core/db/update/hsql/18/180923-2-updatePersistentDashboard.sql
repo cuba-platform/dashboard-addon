@@ -1,0 +1,1 @@
+alter table DASHBOARD_PERSISTENT_DASHBOARD add column IS_AVAILABLE_FOR_ALL_USERS boolean ;

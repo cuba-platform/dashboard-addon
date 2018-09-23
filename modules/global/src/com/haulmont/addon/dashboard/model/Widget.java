@@ -26,8 +26,6 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected List<Parameter> parameters = new ArrayList<>();
     @MetaProperty
-    protected Boolean isAvailableForAllUsers = true;
-    @MetaProperty
     protected List<Parameter> widgetFields = new ArrayList<>();
     @MetaProperty
     protected String browseFrameId;
@@ -40,14 +38,6 @@ public class Widget extends BaseUuidEntity {
      */
     @MetaProperty
     protected String createdBy;
-
-    public Boolean getIsAvailableForAllUsers() {
-        return isAvailableForAllUsers;
-    }
-
-    public void setIsAvailableForAllUsers(Boolean availableForAllUsers) {
-        isAvailableForAllUsers = availableForAllUsers;
-    }
 
     public String getWidgetId() {
         return widgetId;

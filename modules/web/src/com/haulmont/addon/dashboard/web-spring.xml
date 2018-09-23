@@ -15,4 +15,15 @@
     <bean id="dropModelConverter" class="com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter">
         <property name="factory" ref="dashboard_dropComponentsFactory"/>
     </bean>
+
+    <bean class="com.haulmont.cuba.web.sys.remoting.WebRemoteProxyBeanCreator">
+        <property name="serverSelector"
+                  ref="cuba_ServerSelector"/>
+        <property name="remoteServices">
+            <map>
+                <entry key="dashboard_UserRestrictedEntityService"
+                       value="com.haulmont.addon.dashboard.service.UserRestrictedEntityService"/>
+            </map>
+        </property>
+    </bean>
 </beans>

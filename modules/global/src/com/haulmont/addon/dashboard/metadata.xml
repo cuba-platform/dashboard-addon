@@ -12,6 +12,7 @@
         <class>com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.WidgetTemplateLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.GridLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.GridCellLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.GridArea</class>

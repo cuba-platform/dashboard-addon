@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
+import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 
@@ -16,4 +17,6 @@ public interface PaletteComponentsFactory {
     PaletteButton createGridLayoutButton();
 
     PaletteButton createWidgetButton(Widget widget);
+
+    PaletteButton createWidgetTemplateButton(WidgetTemplate widgetTemplate);
 }

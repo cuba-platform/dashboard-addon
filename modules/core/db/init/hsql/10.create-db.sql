@@ -12,6 +12,7 @@ create table DASHBOARD_PERSISTENT_DASHBOARD (
     DASHBOARD_MODEL longvarchar not null,
     REFERENCE_NAME varchar(255) not null,
     DASHBOARD_GROUP_ID varchar(36),
+    IS_AVAILABLE_FOR_ALL_USERS boolean,
     --
     primary key (ID)
 )^
@@ -27,6 +28,9 @@ create table DASHBOARD_WIDGET_TEMPLATE (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    NAME varchar(255) not null,
+    DESCRIPTION varchar(4000),
+    IS_AVAILABLE_FOR_ALL_USERS boolean,
     WIDGET_MODEL longvarchar not null,
     WIDGET_TEMPLATE_GROUP_ID varchar(36),
     --

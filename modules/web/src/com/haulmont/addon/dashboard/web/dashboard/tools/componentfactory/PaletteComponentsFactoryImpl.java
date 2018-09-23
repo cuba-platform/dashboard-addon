@@ -4,12 +4,12 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
+import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
+import com.haulmont.addon.dashboard.web.dashboard.tools.WidgetUtils;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -30,6 +30,10 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     protected Metadata metadata;
     @Inject
     protected Messages messages;
+    @Inject
+    protected JsonConverter converter;
+    @Inject
+    protected WidgetUtils widgetUtils;
 
     public PaletteButton createVerticalLayoutButton() {
         PaletteButton button = createCommonButton();
@@ -73,7 +77,21 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         return button;
     }
 
-    protected PaletteButton createCommonButton(){
+    public PaletteButton createWidgetTemplateButton(WidgetTemplate wt) {
+        Widget widget = converter.widgetFromJson(wt.getWidgetModel());
+        widget.setName(widgetUtils.getWidgetType(widget.getBrowseFrameId()));
+        WidgetTemplateLayout layout = metadata.create(WidgetTemplateLayout.class);
+        layout.setWidget(widget);
+
+        PaletteButton button = createCommonButton();
+        button.setCaption(wt.getName() + "(" + widget.getName() + ")");
+        button.setDescription(wt.getDescription());
+        button.setLayout(layout);
+        button.getLayout().setUuid(null);
+        return button;
+    }
+
+    protected PaletteButton createCommonButton() {
         PaletteButton button = new PaletteButton();
         button.setWidth("100%");
         button.setHeight("50px");

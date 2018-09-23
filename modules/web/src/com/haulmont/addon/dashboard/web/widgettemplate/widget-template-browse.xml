@@ -1,54 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
-        class="com.haulmont.addon.dashboard.web.widget.WidgetTemplateBrowse"
-        focusComponent="widgetsTable"
-        lookupComponent="widgetsTable"
-        datasource="modelWidgetsDs"
+        class="com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateBrowse"
+        focusComponent="widgetTemplateTable"
+        lookupComponent="widgetTemplateTable"
         messagesPack="com.haulmont.addon.dashboard.web.widget">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
-                              view="widget-group-view">
-            <query>
-                <![CDATA[select e from dashboard$WidgetTemplate e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="modelWidgetsDs"
-                              class="com.haulmont.addon.dashboard.model.Widget"/>
+                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedWidgetTemplatesDatasource"/>
     </dsContext>
     <layout spacing="true">
-        <table id="widgetsTable"
+        <table id="widgetTemplateTable"
                height="100%"
                width="100%">
             <actions>
                 <action id="create"
                         caption="msg://create"
-                        icon="CREATE_ACTION"
-                        invoke="createWidget"/>
+                        icon="CREATE_ACTION"/>
                 <action id="edit"
                         caption="msg://edit"
-                        icon="EDIT_ACTION"
-                        invoke="editWidget"/>
+                        icon="EDIT_ACTION"/>
                 <action id="remove"
                         caption="msg://remove"
-                        icon="REMOVE_ACTION"
-                        invoke="removeWidget"/>
+                        icon="REMOVE_ACTION"/>
             </actions>
             <columns>
-                <column id="caption"/>
+                <column id="name"/>
                 <column id="description"/>
             </columns>
-            <rows datasource="modelWidgetsDs"/>
+            <rows datasource="widgetTemplatesDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="widgetsTable.create"/>
+                        action="widgetTemplateTable.create"/>
                 <button id="editBtn"
-                        action="widgetsTable.edit"/>
+                        action="widgetTemplateTable.edit"/>
                 <button id="removeBtn"
-                        action="widgetsTable.remove"/>
+                        action="widgetTemplateTable.remove"/>
             </buttonsPanel>
         </table>
     </layout>

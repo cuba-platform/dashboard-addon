@@ -7,12 +7,9 @@
         xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
+                              allowCommit="false"
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
-                              view="_local">
-            <query>
-                <![CDATA[select e from dashboard$WidgetTemplate e]]>
-            </query>
-        </collectionDatasource>
+                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedWidgetTemplatesDatasource"/>
         <hierarchicalDatasource id="dashboardLayoutTreeReadOnlyDs"
                                 allowCommit="false"
                                 class="com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout"
@@ -26,7 +23,8 @@
                orientation="vertical"
                pos="70"
                width="100%">
-            <vbox height="100%" margin="false,false,true,false">
+            <vbox height="100%"
+                  margin="false,false,true,false">
                 <accordion id="accordionPalette"
                            height="100%">
                     <tab id="widgetTab"
@@ -64,10 +62,9 @@
                     </tab>
                 </accordion>
             </vbox>
-            <vbox margin="true,false,false,false"
-                  height="100%">
+            <vbox height="100%"
+                  margin="true,false,false,false">
                 <scrollBox id="widgetTreeBox"
-
                            height="100%">
                     <tree id="widgetTree"
                           height="100%"

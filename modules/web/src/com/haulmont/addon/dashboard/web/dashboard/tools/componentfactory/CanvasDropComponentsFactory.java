@@ -8,7 +8,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardIcon;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.DoWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
@@ -166,7 +166,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected Button createDoTemplateButton(Widget widget) {
         Button templateBtn = factory.createComponent(Button.class);
         templateBtn.setAction(new BaseAction("doTemplateClicked")
-                .withHandler(e -> events.publish(new DoWidgetTemplateEvent(widget))));
+                .withHandler(e -> events.publish(new CreateWidgetTemplateEvent(widget))));
         templateBtn.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         templateBtn.setIconFromSet(DATABASE);
         templateBtn.setCaption("");

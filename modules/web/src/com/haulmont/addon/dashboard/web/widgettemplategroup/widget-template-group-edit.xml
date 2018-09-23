@@ -9,7 +9,8 @@
         <datasource id="widgetTemplateGroupDs"
                     class="com.haulmont.addon.dashboard.entity.WidgetTemplateGroup"
                     view="widget-templates">
-            <collectionDatasource id="widgetTemplatesDs" property="widgetTemplates"/>
+            <collectionDatasource id="widgetTemplatesDs"
+                                  property="widgetTemplates"/>
         </datasource>
     </dsContext>
     <dialogMode height="600"
@@ -22,7 +23,6 @@
                 <field property="name"/>
             </column>
         </fieldGroup>
-
         <label id="tableLabel"
                value="msg://tableWidgetTemplatesGroup"/>
         <buttonsPanel id="buttonsPanel"
@@ -44,10 +44,12 @@
             </actions>
             <columns>
                 <column id="widgetModel"/>
+                <column id="name"/>
+                <column id="description"/>
+                <column id="isAvailableForAllUsers"/>
             </columns>
             <rows datasource="widgetTemplatesDs"/>
         </table>
-
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>
