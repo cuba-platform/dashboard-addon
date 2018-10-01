@@ -21,9 +21,6 @@ public class WidgetTemplate extends StandardEntity {
     @Column(name = "NAME", nullable = false)
     protected String name;
 
-    @Column(name = "DESCRIPTION", length = 4000)
-    protected String description;
-
     @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")
     protected Boolean isAvailableForAllUsers = true;
 
@@ -32,9 +29,19 @@ public class WidgetTemplate extends StandardEntity {
     @Column(name = "WIDGET_MODEL", nullable = false)
     protected String widgetModel;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "WIDGET_TEMPLATE_GROUP_ID")
-    protected WidgetTemplateGroup widgetTemplateGroup;
+    @JoinColumn(name = "GROUP_ID")
+    protected WidgetTemplateGroup group;
+
+    public void setGroup(WidgetTemplateGroup group) {
+        this.group = group;
+    }
+
+    public WidgetTemplateGroup getGroup() {
+        return group;
+    }
+
 
     public void setIsAvailableForAllUsers(Boolean isAvailableForAllUsers) {
         this.isAvailableForAllUsers = isAvailableForAllUsers;
@@ -53,22 +60,7 @@ public class WidgetTemplate extends StandardEntity {
         return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public String getDescription() {
-        return description;
-    }
-
-
-    public void setWidgetTemplateGroup(WidgetTemplateGroup widgetTemplateGroup) {
-        this.widgetTemplateGroup = widgetTemplateGroup;
-    }
-
-    public WidgetTemplateGroup getWidgetTemplateGroup() {
-        return widgetTemplateGroup;
-    }
 
     public void setWidgetModel(String widgetModel) {
         this.widgetModel = widgetModel;

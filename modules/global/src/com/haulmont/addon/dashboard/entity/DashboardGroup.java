@@ -26,7 +26,7 @@ public class DashboardGroup extends StandardEntity {
     @Column(name = "NAME", nullable = false, unique = true)
     protected String name;
 
-    @OneToMany(mappedBy = "dashboardGroup")
+    @OneToMany(mappedBy = "group")
     protected List<PersistentDashboard> dashboards;
 
     public void setName(String name) {

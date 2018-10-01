@@ -4,17 +4,13 @@
 
 package com.haulmont.addon.dashboard.web.widget.screen;
 
-import com.haulmont.addon.dashboard.model.ParameterType;
-import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
-import com.haulmont.cuba.gui.data.Datasource;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,9 +27,7 @@ public class ScreenWidgetEdit extends AbstractFrame {
     @Inject
     protected Metadata metadata;
 
-    protected Datasource<Widget> widgetDs;
-
-    @WidgetParam(type = ParameterType.STRING)
+    @WidgetParam
     @WindowParam
     protected String screenId;
 
@@ -44,19 +38,7 @@ public class ScreenWidgetEdit extends AbstractFrame {
         screenIdLookup.setOptionsList(getAllScreensIds());
         screenIdLookup.addValueChangeListener(e -> screenIdSelected((String) e.getValue()));
 
-        initWidgetDs(params);
         selectScreenId();
-    }
-
-    protected void initWidgetDs(Map<String, Object> params) {
-        widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS);
-        /*Widget widget = widgetDs.getItem();
-
-        if (!(widget instanceof ScreenWidget)) {
-            ScreenWidget screenWidget = metadata.create(ScreenWidget.class);
-            BeanUtils.copyProperties(widget, screenWidget);
-            widgetDs.setItem(screenWidget);
-        }*/
     }
 
     protected void selectScreenId() {

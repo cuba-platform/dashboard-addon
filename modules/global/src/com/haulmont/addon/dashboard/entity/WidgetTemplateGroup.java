@@ -23,7 +23,7 @@ public class WidgetTemplateGroup extends StandardEntity {
     @Column(name = "NAME", nullable = false, unique = true)
     protected String name;
 
-    @OneToMany(mappedBy = "widgetTemplateGroup")
+    @OneToMany(mappedBy = "group")
     protected List<WidgetTemplate> widgetTemplates;
 
     public void setWidgetTemplates(List<WidgetTemplate> widgetTemplates) {

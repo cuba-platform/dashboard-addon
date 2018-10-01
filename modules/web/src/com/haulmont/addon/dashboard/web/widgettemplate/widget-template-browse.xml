@@ -6,40 +6,36 @@
         lookupComponent="widgetTemplateTable"
         messagesPack="com.haulmont.addon.dashboard.web.widget">
     <dsContext>
-        <collectionDatasource id="widgetTemplatesDs"
+        <groupDatasource id="widgetTemplatesDs"
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
                               datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedWidgetTemplatesDatasource"/>
     </dsContext>
     <layout spacing="true">
-        <table id="widgetTemplateTable"
+        <groupTable id="widgetTemplateTable"
                height="100%"
                width="100%">
             <actions>
-                <action id="create"
-                        caption="msg://create"
-                        icon="CREATE_ACTION"/>
                 <action id="edit"
                         caption="msg://edit"
-                        icon="EDIT_ACTION"/>
+                        icon="EDIT_ACTION" openType="DIALOG"/>
                 <action id="remove"
                         caption="msg://remove"
                         icon="REMOVE_ACTION"/>
             </actions>
             <columns>
                 <column id="name"/>
-                <column id="description"/>
+                <column id="group"/>
+                <column id="isAvailableForAllUsers"/>
             </columns>
             <rows datasource="widgetTemplatesDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn"
-                        action="widgetTemplateTable.create"/>
                 <button id="editBtn"
                         action="widgetTemplateTable.edit"/>
                 <button id="removeBtn"
                         action="widgetTemplateTable.remove"/>
             </buttonsPanel>
-        </table>
+        </groupTable>
     </layout>
 </window>

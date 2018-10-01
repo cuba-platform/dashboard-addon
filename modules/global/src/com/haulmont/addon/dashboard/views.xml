@@ -13,14 +13,14 @@
           extends="_local"
           name="dashboard-group-view"
           systemProperties="true">
-        <property name="dashboardGroup"
+        <property name="group"
                   view="_minimal"/>
     </view>
     <view class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
           extends="_local"
           name="widget-group-view"
           systemProperties="true">
-        <property name="widgetTemplateGroup"
+        <property name="group"
                   view="_minimal"/>
     </view>
     <view class="com.haulmont.addon.dashboard.entity.WidgetTemplateGroup"

@@ -1,1 +1,0 @@
-alter table DASHBOARD_WIDGET_PARAMETER add column MASTER_PARAMETER_ID uuid ;

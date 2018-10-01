@@ -6,7 +6,6 @@ package com.haulmont.addon.dashboard.web.dashboard.tools;
 
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import org.springframework.stereotype.Component;
 

@@ -7,10 +7,9 @@ package com.haulmont.addon.dashboard.web.widget.screen;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
+import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -25,7 +24,7 @@ public class ScreenWidget extends AbstractFrame {
 
     public static final String CAPTION = "Screen";
 
-    @WidgetParam(type = ParameterType.STRING)
+    @WidgetParam
     @WindowParam
     protected String screenId;
 

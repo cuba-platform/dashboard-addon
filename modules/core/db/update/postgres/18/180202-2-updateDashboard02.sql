@@ -1,2 +1,0 @@
-alter table DASHBOARD_DASHBOARD add column SHOW_MAIN_REFRESH_BUTTON boolean ;
-alter table DASHBOARD_DASHBOARD add column SHOW_WIDGETS_REFRESH_BUTTONS boolean ;

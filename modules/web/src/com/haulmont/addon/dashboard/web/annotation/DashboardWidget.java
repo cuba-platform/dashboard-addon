@@ -17,7 +17,7 @@ public @interface DashboardWidget {
 
     /**
      * The name for widget-edit screen, can be localized in main message.properties by pattern:
-     * widgetType.{name} = {localization message}
+     * dashboard-widget.{name} = {localization message}
      */
     String name();
 

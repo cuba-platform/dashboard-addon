@@ -7,15 +7,16 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
+import com.haulmont.addon.dashboard.web.DashboardIcon;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.WidgetUtils;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.haulmont.addon.dashboard.web.DashboardIcon;
-import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -34,6 +35,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     protected JsonConverter converter;
     @Inject
     protected WidgetUtils widgetUtils;
+    @Inject
+    protected WidgetRepository widgetRepository;
 
     public PaletteButton createVerticalLayoutButton() {
         PaletteButton button = createCommonButton();
@@ -70,7 +73,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         layout.setWidget(widget);
 
         PaletteButton button = createCommonButton();
-        button.setCaption(widget.getName());
+
+        button.setCaption(widgetRepository.getLocalizedWidgetName(widget));
         button.setDescription(widget.getDescription());
         button.setLayout(layout);
         button.getLayout().setUuid(null);
@@ -84,8 +88,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         layout.setWidget(widget);
 
         PaletteButton button = createCommonButton();
-        button.setCaption(wt.getName() + "(" + widget.getName() + ")");
-        button.setDescription(wt.getDescription());
+        button.setCaption(wt.getName() + " (" + widgetRepository.getLocalizedWidgetName(widget) + ")");
         button.setLayout(layout);
         button.getLayout().setUuid(null);
         return button;

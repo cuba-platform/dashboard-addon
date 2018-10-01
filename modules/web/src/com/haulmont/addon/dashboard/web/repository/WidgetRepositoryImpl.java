@@ -7,9 +7,10 @@ package com.haulmont.addon.dashboard.web.repository;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
-import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
+import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -30,6 +31,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.haulmont.addon.dashboard.web.repository.WidgetRepository.NAME;
+import static java.lang.String.format;
 
 @Service(NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
@@ -42,6 +44,9 @@ public class WidgetRepositoryImpl implements WidgetRepository {
 
     @Inject
     private Metadata metadata;
+
+    @Inject
+    private Messages messages;
 
     @Inject
     private Resources resources;
@@ -111,14 +116,11 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                     .findFirst();
             if (fieldValueOpt.isPresent()) {
                 Parameter p = fieldValueOpt.get();
-                WidgetParam ann = parameterField.getAnnotation(WidgetParam.class);
-                if (parameterTransformer.compareParameterTypes(ann.type(), parameterField)) {
-                    Object rawValue = parameterTransformer.transform(p.getParameterValue());
-                    try {
-                        FieldUtils.writeField(parameterField, widgetFrame, rawValue, true);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
+                Object rawValue = parameterTransformer.transform(p.getParameterValue());
+                try {
+                    FieldUtils.writeField(parameterField, widgetFrame, rawValue, true);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
             }
 
@@ -154,15 +156,18 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         List<Field> parameterFields = FieldUtils.getFieldsListWithAnnotation(widgetFrame.getClass(), WidgetParam.class);
         for (Field parameterField : parameterFields) {
             WidgetParam ann = parameterField.getAnnotation(WidgetParam.class);
-            if (parameterTransformer.compareParameterTypes(ann.type(), parameterField)) {
-                Parameter parameter = metadata.create(Parameter.class);
-                parameter.setName(parameterField.getName());
-                ParameterValue parameterValue = parameterTransformer.createParameterValue(ann.type(), parameterField, widgetFrame);
-                parameter.setParameterValue(parameterValue);
-                widget.getWidgetFields().add(parameter);
-            }
-
+            Parameter parameter = metadata.create(Parameter.class);
+            parameter.setName(parameterField.getName());
+            ParameterValue parameterValue = parameterTransformer.createParameterValue(parameterField, widgetFrame);
+            parameter.setParameterValue(parameterValue);
+            widget.getWidgetFields().add(parameter);
         }
+    }
+
+    public String getLocalizedWidgetName(Widget widget) {
+        String property = format("dashboard-widget.%s", widget.getName());
+        String mainMessage = messages.getMainMessage(property);
+        return (mainMessage.equals(property) ? widget.getName() : mainMessage);
     }
 
 }

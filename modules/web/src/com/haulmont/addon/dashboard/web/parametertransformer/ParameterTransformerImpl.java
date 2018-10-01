@@ -90,9 +90,35 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         return false;
     }
 
+    public ParameterType getParameterType(Field field) {
+        if (Entity.class.isAssignableFrom(field.getType())) {
+            return ParameterType.ENTITY;
+        } else if (List.class.isAssignableFrom(field.getType())) {
+            return ParameterType.LIST_ENTITY;
+        } else if (field.isEnumConstant()) {
+            return ParameterType.ENUM;
+        } else if (Date.class.isAssignableFrom(field.getType())) {
+            return ParameterType.DATETIME;
+        } else if (UUID.class.isAssignableFrom(field.getType())) {
+            return ParameterType.UUID;
+        } else if (Integer.class.isAssignableFrom(field.getType()) || int.class.isAssignableFrom(field.getType())) {
+            return ParameterType.INTEGER;
+        } else if (String.class.isAssignableFrom(field.getType())) {
+            return ParameterType.STRING;
+        } else if (BigDecimal.class.isAssignableFrom(field.getType())) {
+            return ParameterType.DECIMAL;
+        } else if (Boolean.class.isAssignableFrom(field.getType()) || boolean.class.isAssignableFrom(field.getType())) {
+            return ParameterType.BOOLEAN;
+        } else if (Long.class.isAssignableFrom(field.getType()) || long.class.isAssignableFrom(field.getType())) {
+            return ParameterType.LONG;
+        }
+        return ParameterType.STRING;
+    }
+
     @Override
-    public ParameterValue createParameterValue(ParameterType parameterType, Field field, AbstractFrame widgetFrame) {
+    public ParameterValue createParameterValue(Field field, AbstractFrame widgetFrame) {
         ParameterValue parameterValue = null;
+        ParameterType parameterType = getParameterType(field);
         try {
             if (parameterType == ENTITY) {
                 Entity entity = (Entity) FieldUtils.readField(field, widgetFrame, true);

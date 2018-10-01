@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Scanning the project for use classes with the annotation {@link WidgetType} and
+ * Scanning the project for use classes with the annotation {@link Widget} and
  * provides information {@link WidgetTypeInfo} about these classes
  */
 public interface WidgetRepository {
@@ -25,4 +25,6 @@ public interface WidgetRepository {
     void serializeWidgetFields(AbstractFrame widgetFrame, Widget widget);
 
     Map<String, Object> getWidgetParams(Widget widget);
+
+    String getLocalizedWidgetName(Widget widget);
 }

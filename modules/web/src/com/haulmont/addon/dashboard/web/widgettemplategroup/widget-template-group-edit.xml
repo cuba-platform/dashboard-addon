@@ -45,7 +45,6 @@
             <columns>
                 <column id="widgetModel"/>
                 <column id="name"/>
-                <column id="description"/>
                 <column id="isAvailableForAllUsers"/>
             </columns>
             <rows datasource="widgetTemplatesDs"/>

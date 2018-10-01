@@ -6,7 +6,6 @@ package com.haulmont.addon.dashboard.web.widget.lookup;
 
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
-import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
@@ -17,7 +16,10 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.ListComponent;
+import com.haulmont.cuba.gui.components.Window;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -49,7 +51,7 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
 
     protected AbstractWindow lookupFrame;
 
-    @WidgetParam(type = ParameterType.STRING)
+    @WidgetParam
     @WindowParam
     protected String lookupWindowId;
 

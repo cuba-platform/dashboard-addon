@@ -11,8 +11,8 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
-import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
@@ -20,7 +20,6 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.Palette
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit;
 import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
@@ -84,7 +83,8 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         Widget widget = event.getSource();
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
-        WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor("dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.NEW_TAB);
+        WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor(
+                "dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.DIALOG);
         widgetEditor.addCloseWithCommitListener(() -> widgetTemplatesDs.refresh());
 
     }

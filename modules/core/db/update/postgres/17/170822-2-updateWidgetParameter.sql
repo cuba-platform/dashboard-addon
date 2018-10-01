@@ -1,1 +1,0 @@
-alter table DASHBOARD_WIDGET_PARAMETER add column DASHBOARD_WIDGET_ID uuid ;

@@ -44,11 +44,11 @@
             template="com/haulmont/addon/dashboard/web/widget/widget-edit.xml"/>
     <!--widget types-->
     <screen id="dashboard$ScreenWidgetBrowse"
-            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget-browse.xml"/>
+            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget.xml"/>
     <screen id="dashboard$ScreenWidgetEdit"
             template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget-edit.xml"/>
     <screen id="dashboard$LookupWidgetBrowse"
-            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget-browse.xml"/>
+            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget.xml"/>
     <screen id="dashboard$LookupWidgetEdit"
             template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget-edit.xml"/>
     <!--dashboard groups-->
@@ -61,8 +61,8 @@
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-browse.xml"/>
     <screen id="dashboard$WidgetTemplateGroupEdit"
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-edit.xml"/>
-    <screen id="dashboard$UserDispWidgetBrowse"
-            template="/com/haulmont/addon/dashboard/web/widget/displayer/userdisp-widget-browse.xml"/>
+    <screen id="dashboard$UserDispWidget"
+            template="/com/haulmont/addon/dashboard/web/widget/displayer/userdisp-widget.xml"/>
     <screen id="dashboard$UserDispWidgetEdit"
             template="/com/haulmont/addon/dashboard/web/widget/displayer/userdisp-widget-edit.xml"/>
     <screen id="dashboard$WidgetTemplate.edit"

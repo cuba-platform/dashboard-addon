@@ -4,7 +4,6 @@
 
 package com.haulmont.addon.dashboard.web.widget.lookup;
 
-import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
@@ -40,7 +39,7 @@ public class LookupWidgetEdit extends AbstractFrame {
 
     protected Datasource<Widget> widgetDs;
 
-    @WidgetParam(type = ParameterType.STRING)
+    @WidgetParam
     @WindowParam
     protected String lookupWindowId;
 

@@ -4,28 +4,23 @@
 package com.haulmont.addon.dashboard.web.widget;
 
 import com.haulmont.addon.dashboard.model.Parameter;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
-import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
-import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
+import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
+import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
-import static java.lang.String.format;
 
 public class WidgetEdit extends AbstractEditor<Widget> {
     public static final String SCREEN_NAME = "dashboard$Widget.edit";
@@ -97,22 +92,15 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         return super.preCommit();
     }
 
-    public Component generateWidgetTypeField(Datasource datasource, String fieldId) {
-        String property = format("widgetType.%s", inputItem.getName());
-        String mainMessage = messages.getMainMessage(property);
-        String widgetType = (mainMessage.equals(property) ? inputItem.getName() : mainMessage);
-        TextField textField = componentsFactory.createComponent(TextField.class);
-        textField.setValue(widgetType);
-        textField.setEnabled(false);
-        return textField;
-    }
-
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
         if (inputItem.getDashboard() != null) {
             List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
-            long cnt = dashboardWidgets.stream().filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId())).count();
+            long cnt = dashboardWidgets.stream()
+                    .filter(
+                            w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId()))
+                    .count();
             if (cnt > 0) {
                 errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));
             }

@@ -1,0 +1,1 @@
+alter table DASHBOARD_WIDGET_TEMPLATE drop column WIDGET_TEMPLATE_GROUP_ID__U04004 cascade ;

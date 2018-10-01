@@ -4,32 +4,25 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
 
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.Dashboard;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
-import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractLookup;
-import com.haulmont.cuba.gui.components.LookupComponent;
-import com.haulmont.cuba.gui.components.SelectAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.NEW_WINDOW;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
-import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class PersistentDashboardBrowse extends AbstractLookup {
     @Inject

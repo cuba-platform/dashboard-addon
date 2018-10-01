@@ -17,5 +17,5 @@ public interface ParameterTransformer {
 
     boolean compareParameterTypes(ParameterType parameterType, Field field);
 
-    ParameterValue createParameterValue(ParameterType parameterType, Field field, AbstractFrame widgetFrame);
+    ParameterValue createParameterValue(Field field, AbstractFrame widgetFrame);
 }

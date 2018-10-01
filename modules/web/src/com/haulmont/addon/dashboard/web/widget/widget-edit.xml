@@ -22,10 +22,6 @@
                        required="true"/>
                 <field caption="msg://widgetDescription"
                        property="description"/>
-                <field caption="msg://widgeTypeName"
-                       editable="false"
-                       generator="generateWidgetTypeField"
-                       property="widgetType"/>
             </column>
         </fieldGroup>
         <vbox id="widgetEditBox"/>

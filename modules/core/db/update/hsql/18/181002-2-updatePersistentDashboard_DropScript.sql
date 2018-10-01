@@ -1,0 +1,1 @@
+alter table DASHBOARD_PERSISTENT_DASHBOARD drop column DASHBOARD_GROUP_ID__U09668 cascade ;

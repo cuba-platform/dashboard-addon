@@ -29,12 +29,22 @@ public class PersistentDashboard extends StandardEntity {
     @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
     protected String referenceName;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DASHBOARD_GROUP_ID")
-    protected DashboardGroup dashboardGroup;
+    @JoinColumn(name = "GROUP_ID")
+    protected DashboardGroup group;
 
     @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")
     protected Boolean isAvailableForAllUsers = true;
+
+    public void setGroup(DashboardGroup group) {
+        this.group = group;
+    }
+
+    public DashboardGroup getGroup() {
+        return group;
+    }
+
 
     public void setIsAvailableForAllUsers(Boolean isAvailableForAllUsers) {
         this.isAvailableForAllUsers = isAvailableForAllUsers;
@@ -45,13 +55,7 @@ public class PersistentDashboard extends StandardEntity {
     }
 
 
-    public void setDashboardGroup(DashboardGroup dashboardGroup) {
-        this.dashboardGroup = dashboardGroup;
-    }
 
-    public DashboardGroup getDashboardGroup() {
-        return dashboardGroup;
-    }
 
 
     public void setReferenceName(String referenceName) {

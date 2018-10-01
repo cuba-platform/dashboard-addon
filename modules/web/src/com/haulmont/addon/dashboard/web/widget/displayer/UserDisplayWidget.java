@@ -16,11 +16,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.haulmont.addon.dashboard.web.widget.displayer.UserDisplayerBrowse.CAPTION;
+import static com.haulmont.addon.dashboard.web.widget.displayer.UserDisplayWidget.CAPTION;
 
 
 @DashboardWidget(name = CAPTION, editFrameId = "dashboard$UserDispWidgetEdit")
-public class UserDisplayerBrowse extends AbstractFrame {
+public class UserDisplayWidget extends AbstractFrame {
 
     public static final String CAPTION = "UserDisp";
 

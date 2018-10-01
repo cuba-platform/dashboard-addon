@@ -41,7 +41,7 @@ public class WidgetUtils {
         for (WidgetTypeInfo typeInfo : typesInfo) {
             String browseFrameId = typeInfo.getBrowseFrameId();
             String name = typeInfo.getName();
-            String property = format("widgetType.%s", name);
+            String property = format("dashboard-widget.%s", name);
             String mainMessage = messages.getMainMessage(property);
             String caption = mainMessage.equals(property) ? name : mainMessage;
 
