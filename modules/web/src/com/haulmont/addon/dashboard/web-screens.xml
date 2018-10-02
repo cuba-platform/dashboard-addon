@@ -64,9 +64,5 @@
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-browse.xml"/>
     <screen id="dashboard$WidgetTemplateGroup.edit"
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-edit.xml"/>
-    <screen id="dashboard$UserDispWidget"
-            template="/com/haulmont/addon/dashboard/web/widget/displayer/userdisp-widget.xml"/>
-    <screen id="dashboard$UserDispWidgetEdit"
-            template="/com/haulmont/addon/dashboard/web/widget/displayer/userdisp-widget-edit.xml"/>
 
 </screen-config>
