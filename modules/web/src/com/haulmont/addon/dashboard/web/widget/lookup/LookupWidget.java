@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import static com.haulmont.addon.dashboard.web.widget.lookup.LookupWidget.CAPTION;
 
 
-@DashboardWidget(name = CAPTION, editFrameId = "dashboard$LookupWidgetEdit")
+@DashboardWidget(name = CAPTION, editFrameId = "dashboard$LookupWidget.edit")
 public class LookupWidget extends AbstractFrame implements RefreshableWidget {
 
     public static final String CAPTION = "Lookup";

@@ -5,9 +5,15 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://dashboardEdit"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit"
-        datasource="dashboardDs"
+        datasource="persistentDashboardDs"
         focusComponent="dashboard$dashboardEditFieldGroup1">
     <dsContext>
+        <collectionDatasource id="groupsDs"
+                              class="com.haulmont.addon.dashboard.entity.DashboardGroup"
+                              view="_minimal"/>
+        <datasource id="persistentDashboardDs"
+                    class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
+                    view="dashboard-group-view"/>
         <datasource id="dashboardDs"
                     class="com.haulmont.addon.dashboard.model.Dashboard"/>
     </dsContext>
@@ -31,12 +37,18 @@
                            property="assistantBeanName"/>
                 </column>
             </fieldGroup>
-            <fieldGroup id="dashboard$dashboardEditFieldGroup3"
-                        datasource="dashboardDs">
-                <column width="250px">
-                    <field property="isAvailableForAllUsers"/>
-                </column>
-            </fieldGroup>
+
+            <vbox spacing="true">
+                <fieldGroup id="dashboard$dashboardEditFieldGroup3"
+                            datasource="persistentDashboardDs">
+                    <column width="250px">
+                        <field property="group" optionsDatasource="groupsDs"/>
+                    </column>
+                </fieldGroup>
+                <checkBox datasource="persistentDashboardDs"
+                          property="isAvailableForAllUsers"
+                          caption="msg://isAvailableForAllUsers"/>
+            </vbox>
         </hbox>
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"

@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2016-2018 Haulmont. All rights reserved.
  */
-package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
+package com.haulmont.addon.dashboard.web.dashboard.frames.view;
 
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
 import com.haulmont.cuba.gui.components.AbstractWindow;
+
 import java.util.Map;
 
 public class DashboardView extends AbstractWindow {
@@ -12,7 +13,6 @@ public class DashboardView extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$DashboardView";
     public static final String REFERENCE_NAME = "REFERENCE_NAME";
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
-
 
     @Override
     public void init(Map<String, Object> params) {

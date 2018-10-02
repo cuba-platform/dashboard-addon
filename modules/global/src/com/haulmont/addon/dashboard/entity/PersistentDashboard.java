@@ -7,7 +7,9 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import com.haulmont.chile.core.annotations.NamePattern;
 
+@NamePattern("%s (%s)|name,reference")
 @Table(name = "DASHBOARD_PERSISTENT_DASHBOARD")
 @Entity(name = "dashboard$PersistentDashboard")
 public class PersistentDashboard extends StandardEntity {
@@ -26,9 +28,12 @@ public class PersistentDashboard extends StandardEntity {
      * {@link com.haulmont.addon.dashboard.model.Dashboard#referenceName}
      */
     @NotNull
-    @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
-    protected String referenceName;
+    @Column(name = "NAME", nullable = false)
+    protected String name;
 
+    @NotNull
+    @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
+    protected String reference;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID")
@@ -36,6 +41,22 @@ public class PersistentDashboard extends StandardEntity {
 
     @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")
     protected Boolean isAvailableForAllUsers = true;
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public void setGroup(DashboardGroup group) {
         this.group = group;
@@ -58,13 +79,7 @@ public class PersistentDashboard extends StandardEntity {
 
 
 
-    public void setReferenceName(String referenceName) {
-        this.referenceName = referenceName;
-    }
 
-    public String getReferenceName() {
-        return referenceName;
-    }
 
 
     public void setDashboardModel(String dashboardModel) {

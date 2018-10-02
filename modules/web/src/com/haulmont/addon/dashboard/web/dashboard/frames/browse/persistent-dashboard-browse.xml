@@ -2,58 +2,60 @@
 <!--
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
+
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://dashboardsCaption"
+        caption="msg://browseCaption"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.browse.PersistentDashboardBrowse"
-        datasource="persDashboardsDs"
-        focusComponent="dashboardsTable"
-        lookupComponent="dashboardsTable">
+        focusComponent="persistentDashboardsTable"
+        lookupComponent="persistentDashboardsTable"
+        messagesPack="com.haulmont.addon.dashboard.web.dashboard.frames.browse">
     <dsContext>
-        <collectionDatasource id="persDashboardsDs"
-                              class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
-                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedDashboarsDatasource"/>
-        <collectionDatasource id="modelDashboardsDs"
-                              class="com.haulmont.addon.dashboard.model.Dashboard"/>
+        <groupDatasource id="persistentDashboardsDs"
+                         class="com.haulmont.addon.dashboard.entity.PersistentDashboard"
+                         view="dashboard-browse">
+            <query>
+                <![CDATA[select e from dashboard$PersistentDashboard e
+                where e.isAvailableForAllUsers = true or e.createdBy = :session$userLogin]]>
+            </query>
+        </groupDatasource>
     </dsContext>
-    <layout spacing="true">
-        <table id="dashboardsTable"
-               height="100%"
-               width="100%">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="persistentDashboardsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="persistentDashboardsTable"
+                datasource="persistentDashboardsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="persistentDashboardsTable"
+                    width="100%">
             <actions>
-                <action id="create"
-                        caption="msg://create"
-                        icon="CREATE_ACTION"
-                        invoke="createDashboard"/>
-                <action id="edit"
-                        caption="msg://edit"
-                        icon="EDIT_ACTION"
-                        invoke="editDashboard"/>
-                <action id="remove"
-                        caption="msg://remove"
-                        icon="REMOVE_ACTION"
-                        invoke="removeDashboard"/>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
                 <action id="view"
                         caption="msg://view"
                         icon="EYE"
                         invoke="viewDashboard"/>
             </actions>
             <columns>
-                <column id="title"/>
-                <column id="referenceName"/>
+                <column id="name"/>
+                <column id="reference"/>
+                <column id="group"/>
+                <column id="isAvailableForAllUsers"/>
             </columns>
-            <rows datasource="modelDashboardsDs"/>
+            <rows datasource="persistentDashboardsDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="dashboardsTable.create"/>
+                        action="persistentDashboardsTable.create"/>
                 <button id="editBtn"
-                        action="dashboardsTable.edit"/>
+                        action="persistentDashboardsTable.edit"/>
                 <button id="removeBtn"
-                        action="dashboardsTable.remove"/>
-                <button id="viewBtn"
-                        action="dashboardsTable.view"/>
+                        action="persistentDashboardsTable.remove"/>
             </buttonsPanel>
-        </table>
+        </groupTable>
     </layout>
 </window>

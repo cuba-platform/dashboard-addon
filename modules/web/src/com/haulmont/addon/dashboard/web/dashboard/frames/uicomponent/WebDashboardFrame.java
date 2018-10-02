@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.frames.browse.DashboardView.REFERENCE_NAME;
+import static com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView.REFERENCE_NAME;
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD_FRAME;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;

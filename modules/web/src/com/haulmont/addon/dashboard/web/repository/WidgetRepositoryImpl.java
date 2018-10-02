@@ -93,11 +93,15 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                     Element window = document.getDocumentElement();
                     String className = window.getAttribute("class");
                     if (StringUtils.isNoneEmpty(className)) {
-                        Class clazz = Class.forName(className);
-                        DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
-                        if (ann != null) {
-                            widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
+                        try {
+                            Class clazz = Class.forName(className);
+                            DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
+                            if (ann != null) {
+                                widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
+                            }
+                        } catch (ClassNotFoundException ignored) {
                         }
+
                     }
                 }
             }

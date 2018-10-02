@@ -10,6 +10,7 @@ create table DASHBOARD_PERSISTENT_DASHBOARD (
     DELETED_BY varchar(50),
     --
     DASHBOARD_MODEL longvarchar not null,
+    NAME varchar(255) not null,
     REFERENCE_NAME varchar(255) not null,
     GROUP_ID varchar(36),
     IS_AVAILABLE_FOR_ALL_USERS boolean,

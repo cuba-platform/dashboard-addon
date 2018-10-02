@@ -9,7 +9,7 @@
         <datasource id="dashboardGroupDs"
                     class="com.haulmont.addon.dashboard.entity.DashboardGroup"
                     view="dashboards">
-            <collectionDatasource id="dashboardsDs"
+            <groupDatasource id="dashboardsDs"
                                   property="dashboards"/>
         </datasource>
     </dsContext>
@@ -36,18 +36,19 @@
                     caption="msg://exclude"
                     icon="MINUS_CIRCLE"/>
         </buttonsPanel>
-        <table id="dashboardsTable"
+        <groupTable id="dashboardsTable"
                width="100%">
             <actions>
                 <action id="add"/>
                 <action id="exclude"/>
             </actions>
             <columns>
-                <column id="dashboardModel"/>
-                <column id="referenceName"/>
+                <column id="name"/>
+                <column id="reference"/>
+                <column id="isAvailableForAllUsers"/>
             </columns>
             <rows datasource="dashboardsDs"/>
-        </table>
+        </groupTable>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

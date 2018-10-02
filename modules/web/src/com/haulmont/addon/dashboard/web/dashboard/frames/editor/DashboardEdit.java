@@ -4,9 +4,11 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor;
 
+import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
@@ -30,8 +32,8 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.sys.AppContext;
-import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
@@ -61,8 +63,7 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class DashboardEdit extends AbstractEditor<Dashboard> {
-    public static final String SCREEN_NAME = "dashboard$Dashboard.edit";
+public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
@@ -91,10 +92,6 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     @Inject
     protected ComponentsFactory componentsFactory;
 
-    //The AbstractEditor replaces an item to another object, if one has status '[new]'
-    @WindowParam(name = "ITEM", required = true)
-    protected Dashboard inputItem;
-
     protected ParameterBrowse parametersFrame;
     protected AbstractFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
@@ -106,36 +103,45 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @Override
     public void postInit() {
-        dashboardDs.setItem(inputItem);
+        if (PersistenceHelper.isNew(getItem())) {
+            Dashboard model = metadata.create(Dashboard.class);
+            model.setVisualModel(metadata.create(RootLayout.class));
+            model.setCreatedBy(accessHelper.getCurrentSessionLogin());
+            dashboardDs.setItem(model);
+        } else {
+            Dashboard model = converter.dashboardFromJson(getItem().getDashboardModel());
+            dashboardDs.setItem(model);
+        }
+        String assistantBeanName = getDashboard().getAssistantBeanName();
+        if (StringUtils.isNotEmpty(assistantBeanName)) {
+            dashboardDs.getItem().setAssistantBeanName(assistantBeanName);
+        }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        dropLayoutTools = new DropLayoutTools(this, getItem(), modelConverter);
+        dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
     }
 
-    @Override
-    public Dashboard getItem() {
-        Dashboard dashboard = dashboardDs.getItem();
-        dashboard.setCreatedBy(accessHelper.getCurrentSessionLogin());
-        return dashboard;
+    public Dashboard getDashboard() {
+        return dashboardDs.getItem();
     }
 
     protected void initParametersFrame() {
         parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
-                PARAMETERS, dashboardDs.getItem().getParameters(), DASHBOARD, dashboardDs.getItem()
+                PARAMETERS, getDashboard().getParameters(), DASHBOARD, getDashboard()
         ));
     }
 
     protected void initPaletteFrame() {
         paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, dashboardDs.getItem()
+                DASHBOARD, getDashboard()
         ));
     }
 
     protected void initCanvasFrame() {
         canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, dashboardDs.getItem()
+                DASHBOARD, getDashboard()
         ));
     }
 
@@ -144,11 +150,11 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     public void onExportJsonBtnClick() {
-        String jsonModel = converter.dashboardToJson(getItem());
+        String jsonModel = converter.dashboardToJson(getDashboard());
 
         if (isNotBlank(jsonModel)) {
             byte[] bytes = jsonModel.getBytes(UTF_8);
-            String fileName = isNotBlank(dashboardDs.getItem().getTitle()) ? dashboardDs.getItem().getTitle() : "dashboard";
+            String fileName = isNotBlank(getDashboard().getTitle()) ? getDashboard().getTitle() : "dashboard";
             exportDisplay.show(new ByteArrayDataProvider(bytes), format("%s.json", fileName));
         }
     }
@@ -171,7 +177,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
     }
 
     public void onPropagateBtnClick() {
-        Dashboard dashboard = getItem();
+        Dashboard dashboard = getDashboard();
         events.publish(new DashboardUpdatedEvent(dashboard));
     }
 
@@ -196,26 +202,37 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         String val = lookupField.getValue();
         dashboardDs.getItem().setAssistantBeanName(val);
 
+        PersistentDashboard persDash = getItem();
+        Dashboard dashboard = getDashboard();
+        String jsonModel = converter.dashboardToJson(dashboard);
+        persDash.setDashboardModel(jsonModel);
+        persDash.setName(dashboard.getTitle());
+        persDash.setReference(dashboard.getReferenceName());
+        persDash.setIsAvailableForAllUsers(dashboard.getIsAvailableForAllUsers());
         return true;
+    }
+
+    @Override
+    protected boolean postCommit(boolean committed, boolean close) {
+        if (committed) {
+            events.publish(new DashboardUpdatedEvent(getDashboard()));
+        }
+        return super.postCommit(committed, close);
     }
 
     public Component generateAssistanceBeanNameField(Datasource<Dashboard> datasource, String fieldId) {
         Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
         BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
         List<String> prototypeBeanNames = assistantBeanMap.keySet().stream().filter(bn -> bf.isPrototype(bn)).collect(Collectors.toList());
-        String assistantBeanName = inputItem.getAssistantBeanName();
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setOptionsList(prototypeBeanNames);
-        if (StringUtils.isNotEmpty(assistantBeanName)) {
-            lookupField.setValue(assistantBeanName);
-        }
         return lookupField;
     }
 
     @EventListener
     public void onWidgetMoved(WidgetMovedEvent event) {
         UUID targetLayoutId = event.getParentLayoutUuid();
-        Dashboard dashboard = getItem();
+        Dashboard dashboard = getDashboard();
 
         dropLayoutTools.moveComponent(event.getSource(), targetLayoutId, event.getLocation());
         events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), event.getSource().getId()));
@@ -229,7 +246,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
                 WeightDialog.WEIGHT, source.getWeight()));
         weightDialog.addCloseListener(actionId -> {
             if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                Dashboard dashboard = getItem();
+                Dashboard dashboard = getDashboard();
                 DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
                 layout.setWeight(weightDialog.getWeight());
                 events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
@@ -239,7 +256,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
 
     @EventListener
     public void onRemoveLayout(WidgetRemovedEvent event) {
-        DashboardLayout dashboardLayout = getItem().getVisualModel();
+        DashboardLayout dashboardLayout = getDashboard().getVisualModel();
         dashboardLayout.removeChild(event.getSource().getUuid());
         events.publish(new DashboardRefreshEvent(dashboardLayout));
     }
@@ -254,7 +271,7 @@ public class DashboardEdit extends AbstractEditor<Dashboard> {
         Widget widget = event.getSource();
         WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
         editor.addCloseWithCommitListener(() -> {
-            events.publish(new DashboardRefreshEvent(getItem().getVisualModel(), widget.getId()));
+            events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
         });
     }
 

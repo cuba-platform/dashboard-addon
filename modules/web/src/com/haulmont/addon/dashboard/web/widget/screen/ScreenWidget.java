@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static com.haulmont.addon.dashboard.web.widget.screen.ScreenWidget.CAPTION;
 
-@DashboardWidget(name = CAPTION, editFrameId = "dashboard$ScreenWidgetEdit")
+@DashboardWidget(name = CAPTION, editFrameId = "dashboard$ScreenWidget.edit")
 public class ScreenWidget extends AbstractFrame {
 
     public static final String CAPTION = "Screen";
