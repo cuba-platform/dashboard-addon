@@ -55,6 +55,8 @@
                         action="persistentDashboardsTable.edit"/>
                 <button id="removeBtn"
                         action="persistentDashboardsTable.remove"/>
+                <button id="viewBtn"
+                        action="persistentDashboardsTable.view"/>
             </buttonsPanel>
         </groupTable>
     </layout>
