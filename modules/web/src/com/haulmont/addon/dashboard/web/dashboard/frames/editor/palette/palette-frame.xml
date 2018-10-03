@@ -8,8 +8,7 @@
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               allowCommit="false"
-                              class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
-                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedWidgetTemplatesDatasource"/>
+                              class="com.haulmont.addon.dashboard.entity.WidgetTemplate"/>
         <hierarchicalDatasource id="dashboardLayoutTreeReadOnlyDs"
                                 allowCommit="false"
                                 class="com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout"

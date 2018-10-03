@@ -17,6 +17,6 @@ public class WidgetTemplateGroupEdit extends AbstractEditor<WidgetTemplateGroup>
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        add.setWindowId("dashboard$WidgetTemplateBrowse");
+        add.setWindowId("dashboard$WidgetTemplate.browse");
     }
 }
