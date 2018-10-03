@@ -159,7 +159,6 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         widget.getWidgetFields().clear();
         List<Field> parameterFields = FieldUtils.getFieldsListWithAnnotation(widgetFrame.getClass(), WidgetParam.class);
         for (Field parameterField : parameterFields) {
-            WidgetParam ann = parameterField.getAnnotation(WidgetParam.class);
             Parameter parameter = metadata.create(Parameter.class);
             parameter.setName(parameterField.getName());
             ParameterValue parameterValue = parameterTransformer.createParameterValue(parameterField, widgetFrame);

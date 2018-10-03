@@ -24,5 +24,5 @@ public @interface DashboardWidget {
     /**
      *  Contains frame ID for editing a widget. This frame is embedded in the "widget-edit" screen
      */
-    String editFrameId();
+    String editFrameId() default "";
 }

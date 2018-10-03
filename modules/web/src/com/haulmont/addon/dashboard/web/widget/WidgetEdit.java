@@ -14,6 +14,7 @@ import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -73,7 +74,9 @@ public class WidgetEdit extends AbstractEditor<Widget> {
 
         Map<String, Object> params = new HashMap<>(ParamsMap.of(ITEM_DS, widgetDs));
         params.putAll(widgetRepository.getWidgetParams(widgetDs.getItem()));
-        widgetEditFrame = openFrame(widgetEditBox, widgetType.getEditFrameId(), params);
+        if (StringUtils.isNotEmpty(widgetType.getEditFrameId())) {
+            widgetEditFrame = openFrame(widgetEditBox, widgetType.getEditFrameId(), params);
+        }
     }
 
     protected void initParametersFrame() {
@@ -88,7 +91,9 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected boolean preCommit() {
         List<Parameter> parameters = paramsFrame.getParameters();
         getItem().setParameters(parameters);
-        widgetRepository.serializeWidgetFields(widgetEditFrame, inputItem);
+        if (widgetEditFrame != null) {
+            widgetRepository.serializeWidgetFields(widgetEditFrame, inputItem);
+        }
         return super.preCommit();
     }
 
