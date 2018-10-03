@@ -7,12 +7,22 @@
         messagesPack="com.haulmont.addon.dashboard.web.widget">
     <dsContext>
         <groupDatasource id="widgetTemplatesDs"
-                              class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
-                              datasourceClass="com.haulmont.addon.dashboard.web.datasource.AllowedWidgetTemplatesDatasource"/>
+                         class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
+                         view="widget-group-view">
+            <query>
+                <![CDATA[select e from dashboard$WidgetTemplate e
+                where e.isAvailableForAllUsers = true or e.createdBy = :session$userLogin]]>
+            </query>
+        </groupDatasource>
     </dsContext>
-    <layout spacing="true">
+    <layout expand="widgetTemplateTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="widgetTemplateTable"
+                datasource="widgetTemplatesDs">
+            <properties include=".*"/>
+        </filter>
         <groupTable id="widgetTemplateTable"
-               height="100%"
                width="100%">
             <actions>
                 <action id="edit"

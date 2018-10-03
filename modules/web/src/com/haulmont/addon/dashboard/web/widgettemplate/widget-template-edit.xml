@@ -22,7 +22,7 @@
                 <field property="name"
                        required="true"/>
                 <field optionsDatasource="widgetTemplateGroupsDs"
-                       property="widgetTemplateGroup"/>
+                       property="group"/>
                 <field property="isAvailableForAllUsers"/>
             </column>
         </fieldGroup>
