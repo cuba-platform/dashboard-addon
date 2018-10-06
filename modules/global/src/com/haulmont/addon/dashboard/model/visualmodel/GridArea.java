@@ -19,10 +19,10 @@ public class GridArea extends BaseUuidEntity {
     protected DashboardLayout component;
     @NotNull
     @MetaProperty(mandatory = true)
-    protected Integer row1;
+    protected Integer row;
     @NotNull
     @MetaProperty(mandatory = true)
-    protected Integer col1;
+    protected Integer col;
 
     public void setComponent(DashboardLayout component) {
         this.component = component;
@@ -32,19 +32,19 @@ public class GridArea extends BaseUuidEntity {
         return component;
     }
 
-    public void setRow1(Integer row1) {
-        this.row1 = row1;
+    public void setRow(Integer row) {
+        this.row = row;
     }
 
-    public Integer getRow1() {
-        return row1;
+    public Integer getRow() {
+        return row;
     }
 
-    public void setCol1(Integer col1) {
-        this.col1 = col1;
+    public void setCol(Integer col) {
+        this.col = col;
     }
 
-    public Integer getCol1() {
-        return col1;
+    public Integer getCol() {
+        return col;
     }
 }

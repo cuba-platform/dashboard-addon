@@ -64,9 +64,12 @@ public class DropLayoutTools {
                     for (int i = 0; i < cols; i++) {
                         for (int j = 0; j < rows; j++) {
                             GridArea gridArea = metadata.create(GridArea.class);
-                            gridArea.setCol1(i);
-                            gridArea.setRow1(j);
-                            gridArea.setComponent(metadata.create(GridCellLayout.class));
+                            gridArea.setRow(j);
+                            gridArea.setCol(i);
+                            GridCellLayout gcl = metadata.create(GridCellLayout.class);
+                            gcl.setRow(j + 1);
+                            gcl.setColumn(i + 1);
+                            gridArea.setComponent(gcl);
                             gridLayout.addArea(gridArea);
                         }
                     }
