@@ -100,7 +100,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
     }
 
     protected void loadReferenceName(DashboardFrame resultComponent, Element element) {
-        String referenceName = element.attributeValue("referenceName");
+        String referenceName = element.attributeValue("code");
         if (isNotBlank(referenceName)) {
             resultComponent.setReferenceName(referenceName);
         }

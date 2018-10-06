@@ -207,7 +207,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         String jsonModel = converter.dashboardToJson(dashboard);
         persDash.setDashboardModel(jsonModel);
         persDash.setName(dashboard.getTitle());
-        persDash.setReference(dashboard.getReferenceName());
+        persDash.setCode(dashboard.getCode());
         persDash.setIsAvailableForAllUsers(dashboard.getIsAvailableForAllUsers());
         return true;
     }

@@ -170,8 +170,7 @@
         xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
         <dash:dashboard id="dashboardId"
-                        referenceName="usersDashboard"
-                        referenceName="usersDashboard"
+                        code="usersDashboard"
                         timerDelay="60">
              <dash:parameter name="role" value="Admin" type="string"/>           
         </dash:dashboard> 
@@ -180,12 +179,12 @@
 
 #### Атрибуты тега dashboard
 
-- `referenceName` - атрибут, по которому будет вестись поиск дашборда в базе данных;
+- `code` - атрибут, по которому будет вестись поиск дашборда в базе данных;
 - `jsonPath` - `classPath` до JSON дашборда;
 - `class` - класс контроллера дашборда, должен быть наследован от `com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame`;
 - `timerDelay` - период времени в секундах, при котором дашборд будет обновляться.
 
-***Замечание:*** при встраивании дашборда обязательно необходимо указать атрибут `referenceName` или `jsonPath`. Если заданы одновременно оба атрибута, `referenceName` имеет приоритет выше, чем `jsonPath`.
+***Замечание:*** при встраивании дашборда обязательно необходимо указать атрибут `code` или `jsonPath`. Если заданы одновременно оба атрибута, `code` имеет приоритет выше, чем `jsonPath`.
 
 #### Атрибуты тега parameter
 

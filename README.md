@@ -167,7 +167,7 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
         xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
         <dash:dashboard id="dashboardId"
-                        referenceName="usersDashboard"
+                        code="usersDashboard"
                         timerDelay="60">
              <dash:parameter name="role" value="Admin" type="string"/>           
         </dash:dashboard> 
@@ -176,12 +176,12 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 
 #### Dashboard Tag Attributes
 
-- `referenceName` - the attribute which will serve for a dashboard search in a database;
+- `code` - the attribute which will serve for a dashboard search in a database;
 - `jsonPath` - the `classPath` to the dashboard JSON file;
 - `class` - the controller class of the `dashboard-ui` component which has to be inherited from `com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame`;
 - `timerDelay` - the time period in seconds for refresh a dashboard-ui.
 
-***Note:*** when embedding a dashboard, you must specify the `referenceName` or `jsonPath` attribute. When specifying at the same time, the attribute `referenceName` takes precedence over `jsonPath`.
+***Note:*** when embedding a dashboard, you must specify the `code` or `jsonPath` attribute. When specifying at the same time, the attribute `code` takes precedence over `jsonPath`.
 
 #### Parameter Tag Attributes
 

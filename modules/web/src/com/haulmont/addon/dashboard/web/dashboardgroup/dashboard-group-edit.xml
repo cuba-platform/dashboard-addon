@@ -44,7 +44,7 @@
             </actions>
             <columns>
                 <column id="name"/>
-                <column id="reference"/>
+                <column id="code"/>
                 <column id="isAvailableForAllUsers"/>
             </columns>
             <rows datasource="dashboardsDs"/>

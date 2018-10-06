@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import com.haulmont.chile.core.annotations.NamePattern;
 
-@NamePattern("%s (%s)|name,reference")
+@NamePattern("%s (%s)|name,code")
 @Table(name = "DASHBOARD_PERSISTENT_DASHBOARD")
 @Entity(name = "dashboard$PersistentDashboard")
 public class PersistentDashboard extends StandardEntity {
@@ -24,8 +24,7 @@ public class PersistentDashboard extends StandardEntity {
     protected String dashboardModel;
 
     /**
-     * The unique identifier for searching in a database. Duplicates with
-     * {@link com.haulmont.addon.dashboard.model.Dashboard#referenceName}
+     * The unique identifier for searching in a database.
      */
     @NotNull
     @Column(name = "NAME", nullable = false)
@@ -33,7 +32,7 @@ public class PersistentDashboard extends StandardEntity {
 
     @NotNull
     @Column(name = "REFERENCE_NAME", nullable = false, unique = true)
-    protected String reference;
+    protected String code;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID")
@@ -42,12 +41,12 @@ public class PersistentDashboard extends StandardEntity {
     @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")
     protected Boolean isAvailableForAllUsers = true;
 
-    public void setReference(String reference) {
-        this.reference = reference;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getReference() {
-        return reference;
+    public String getCode() {
+        return code;
     }
 
     public void setName(String name) {

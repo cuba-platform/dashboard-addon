@@ -6,7 +6,7 @@
         <property name="dashboards"
                   view="_minimal">
             <property name="name"/>
-            <property name="reference"/>
+            <property name="code"/>
             <property name="isAvailableForAllUsers"/>
         </property>
     </view>

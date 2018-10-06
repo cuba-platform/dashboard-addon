@@ -21,12 +21,11 @@ public class Dashboard extends BaseUuidEntity {
     protected String title;
 
     /**
-     * The unique identifier for searching in a database. Duplicates with
-     * {@link com.haulmont.addon.dashboard.entity.PersistentDashboard#referenceName}
+     * The unique identifier for searching in a database.
      */
     @NotNull
     @MetaProperty(mandatory = true)
-    protected String referenceName;
+    protected String code;
 
     /**
      * Stores a hierarchy of a visual model
@@ -100,12 +99,12 @@ public class Dashboard extends BaseUuidEntity {
         this.createdBy = createdBy;
     }
 
-    public void setReferenceName(String referenceName) {
-        this.referenceName = referenceName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getReferenceName() {
-        return referenceName;
+    public String getCode() {
+        return code;
     }
 
     public RootLayout getVisualModel() {

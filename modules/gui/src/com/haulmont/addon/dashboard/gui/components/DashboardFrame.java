@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Represents in a frame  a dashboard {@link Dashboard}
- * Dashboard can be configured by {@link Dashboard#referenceName} or by the classpath of dashboard.json
+ * Dashboard can be configured by {@link Dashboard#code} or by the classpath of dashboard.json
  * It is possible to add (or rewrite) primitive parameters in the dashboard.
  */
 public interface DashboardFrame extends Frame {

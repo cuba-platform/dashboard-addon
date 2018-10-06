@@ -25,7 +25,7 @@
                         datasource="dashboardDs">
                 <column width="300px">
                     <field property="title"/>
-                    <field property="referenceName"/>
+                    <field property="code"/>
                 </column>
             </fieldGroup>
             <fieldGroup id="dashboard$dashboardEditFieldGroup2"

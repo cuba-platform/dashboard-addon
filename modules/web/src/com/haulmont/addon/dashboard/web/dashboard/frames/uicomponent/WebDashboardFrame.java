@@ -188,8 +188,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected Dashboard loadDashboardByReferenceName(String referenceName) {
         LoadContext<PersistentDashboard> loadContext = LoadContext.create(PersistentDashboard.class)
-                .setQuery(LoadContext.createQuery("select d from dashboard$PersistentDashboard d where d.reference = :referenceName")
-                        .setParameter("referenceName", referenceName))
+                .setQuery(LoadContext.createQuery("select d from dashboard$PersistentDashboard d where d.code = :code")
+                        .setParameter("code", referenceName))
                 .setView("_local");
 
         PersistentDashboard entity = dataManager.load(loadContext);
