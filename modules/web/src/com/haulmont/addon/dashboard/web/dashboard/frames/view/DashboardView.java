@@ -11,7 +11,7 @@ import java.util.Map;
 public class DashboardView extends AbstractWindow {
 
     public static final String SCREEN_NAME = "dashboard$DashboardView";
-    public static final String REFERENCE_NAME = "REFERENCE_NAME";
+    public static final String CODE = "CODE";
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
 
     @Override

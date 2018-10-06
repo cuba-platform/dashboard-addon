@@ -115,6 +115,10 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         String assistantBeanName = getDashboard().getAssistantBeanName();
         if (StringUtils.isNotEmpty(assistantBeanName)) {
             dashboardDs.getItem().setAssistantBeanName(assistantBeanName);
+
+            FieldGroup.FieldConfig assistantBeanNameField = fieldGroup2.getField("assistantBeanName");
+            LookupField lookupField = (LookupField) assistantBeanNameField.getComponent();
+            lookupField.setValue(assistantBeanName);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
         dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter);

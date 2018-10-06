@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView.REFERENCE_NAME;
+import static com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView.CODE;
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD_FRAME;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -78,7 +78,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected CanvasFrame canvasFrame;
 
-    protected String referenceName;
+    protected String code;
     protected String jsonPath;
     protected Integer timerDelay = 0;
     protected List<Parameter> xmlParameters = new ArrayList<>();
@@ -88,7 +88,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        setReferenceName(StringUtils.isEmpty(referenceName) ? (String) params.getOrDefault(REFERENCE_NAME, "") : referenceName);
+        setCode(StringUtils.isEmpty(code) ? (String) params.getOrDefault(CODE, "") : code);
         refresh();
         initAssistant(this);
         initTimer(this.getParent());
@@ -98,8 +98,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     public void refresh() {
         if (isNotBlank(jsonPath)) {
             updateDashboard(loadDashboardByJson(jsonPath));
-        } else if (isNotBlank(referenceName)) {
-            updateDashboard(loadDashboardByReferenceName(referenceName));
+        } else if (isNotBlank(code)) {
+            updateDashboard(loadDashboardByCode(code));
         }
     }
 
@@ -186,10 +186,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    protected Dashboard loadDashboardByReferenceName(String referenceName) {
+    protected Dashboard loadDashboardByCode(String code) {
         LoadContext<PersistentDashboard> loadContext = LoadContext.create(PersistentDashboard.class)
                 .setQuery(LoadContext.createQuery("select d from dashboard$PersistentDashboard d where d.code = :code")
-                        .setParameter("code", referenceName))
+                        .setParameter("code", code))
                 .setView("_local");
 
         PersistentDashboard entity = dataManager.load(loadContext);
@@ -264,8 +264,8 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     }
 
     @Override
-    public void setReferenceName(String referenceName) {
-        this.referenceName = referenceName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override

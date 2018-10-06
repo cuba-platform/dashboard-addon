@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface DashboardFrame extends Frame {
 
-    void setReferenceName(String referenceName);
+    void setCode(String code);
 
     void setJsonPath(String jsonPath);
 
