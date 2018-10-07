@@ -13,10 +13,10 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +39,13 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected WidgetRepository widgetRepository;
     @Inject
     protected AccessConstraintsHelper accessHelper;
-    @Inject
-    protected ComponentsFactory componentsFactory;
+
+    @Named("fieldGroup.caption")
+    protected TextField widgetCaption;
+
+    @Named("fieldGroup.widgetId")
+    protected TextField widgetId;
+
 
     //The AbstractEditor replaces an item to another object, if one has status '[new]'
     @WindowParam(name = "ITEM", required = true)
@@ -55,6 +60,11 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         typesInfo = widgetRepository.getWidgetTypesInfo();
         setWidgetType();
         initParametersFrame();
+        widgetCaption.addValueChangeListener(v -> {
+            if (StringUtils.isEmpty(widgetId.getValue())) {
+                widgetId.setValue(v.getValue());
+            }
+        });
     }
 
     @Override

@@ -14,11 +14,11 @@
         <fieldGroup id="fieldGroup"
                     datasource="widgetDs">
             <column width="300px">
-                <field caption="msg://widgetId"
-                       property="widgetId"
-                       required="true"/>
                 <field caption="msg://widgetCaption"
                        property="caption"
+                       required="true"/>
+                <field caption="msg://widgetId"
+                       property="widgetId"
                        required="true"/>
                 <field caption="msg://widgetDescription"
                        property="description"/>

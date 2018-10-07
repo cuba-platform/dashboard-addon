@@ -17,7 +17,6 @@
                 <action id="remove"/>
             </actions>
             <columns>
-                <column id="id"/>
                 <column id="name"/>
                 <column id="alias"/>
                 <column id="value"
