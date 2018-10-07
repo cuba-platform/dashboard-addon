@@ -133,6 +133,15 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
     }
 
+    @Override
+    public CanvasVerticalLayout createCanvasRootLayout() {
+        CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
+        layout.getDelegate().setMargin(true);
+        layout.setDragMode(CLONE);
+        layout.setDescription(messages.getMainMessage("rootLayout"));
+        return layout;
+    }
+
     protected Button createEditButton(CanvasWidgetLayout layout) {
         Button editButton = factory.createComponent(Button.class);
         editButton.setAction(new BaseAction("editClicked")

@@ -62,10 +62,7 @@ public class CanvasFrame extends AbstractFrame {
         if (dashboard == null) {
             throw new DashboardException("DASHBOARD parameter can not be null");
         }
-
         vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
-        vLayout.removeStyleName("dashboard-shadow-border");
-
         canvas.removeAll();
         canvas.add(vLayout);
     }

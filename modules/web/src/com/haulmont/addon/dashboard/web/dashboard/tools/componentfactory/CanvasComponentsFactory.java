@@ -20,4 +20,6 @@ public interface CanvasComponentsFactory {
     CanvasGridLayout createCanvasGridLayout(int cols, int rows);
 
     CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget);
+
+    CanvasVerticalLayout createCanvasRootLayout();
 }

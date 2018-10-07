@@ -41,8 +41,9 @@ public class DashboardModelConverter {
 
     public CanvasLayout modelToContainer(CanvasFrame frame, DashboardLayout model) {
         CanvasLayout canvasLayout = null;
-
-        if (model instanceof VerticalLayout) {
+        if (model instanceof RootLayout) {
+            canvasLayout = factory.createCanvasRootLayout();
+        } else if (model instanceof VerticalLayout) {
             canvasLayout = factory.createCanvasVerticalLayout();
         } else if (model instanceof HorizontalLayout) {
             canvasLayout = factory.createCanvasHorizontalLayout();

@@ -96,4 +96,13 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         layout.setSizeFull();
         return layout;
     }
+
+    @Override
+    public CanvasVerticalLayout createCanvasRootLayout() {
+        CanvasVerticalLayout layout = new CanvasVerticalLayout();
+        layout.setUuid(UUID.randomUUID());
+        layout.setDragMode(NONE);
+        layout.setSizeFull();
+        return layout;
+    }
 }
