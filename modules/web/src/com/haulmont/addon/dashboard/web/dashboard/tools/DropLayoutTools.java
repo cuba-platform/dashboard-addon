@@ -91,7 +91,7 @@ public class DropLayoutTools {
             widget.setBrowseFrameId(((WidgetLayout) layout).getWidget().getBrowseFrameId());
             widget.setName(((WidgetLayout) layout).getWidget().getName());
             widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
-            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
+            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
             editor.addCloseWithCommitListener(() -> {
                 widgetLayout.setWidget(editor.getItem());
                 reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);
