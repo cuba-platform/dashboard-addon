@@ -20,36 +20,40 @@
     <layout expand="dashboardLayoutBox"
             height="100%"
             spacing="true">
-        <hbox spacing="true">
-            <fieldGroup id="dashboard$dashboardEditFieldGroup1"
-                        datasource="dashboardDs">
-                <column width="300px">
-                    <field property="title"/>
-                    <field property="code"/>
-                </column>
-            </fieldGroup>
-            <fieldGroup id="dashboard$dashboardEditFieldGroup2"
-                        datasource="dashboardDs">
-                <column width="250px">
-                    <field property="timerDelay"/>
-                    <field custom="true"
-                           generator="generateAssistanceBeanNameField"
-                           property="assistantBeanName"/>
-                </column>
-            </fieldGroup>
-
-            <vbox spacing="true">
-                <fieldGroup id="dashboard$dashboardEditFieldGroup3"
-                            datasource="persistentDashboardDs">
-                    <column width="250px">
-                        <field property="group" optionsDatasource="groupsDs"/>
+        <groupBox id="mainDashboardInfo"
+                  caption="msg://dashBoardInfo"
+                  collapsable="true">
+            <hbox spacing="true">
+                <fieldGroup id="dashboard$dashboardEditFieldGroup1"
+                            datasource="dashboardDs">
+                    <column width="300px">
+                        <field property="title"/>
+                        <field property="code"/>
                     </column>
                 </fieldGroup>
-                <checkBox datasource="persistentDashboardDs"
-                          property="isAvailableForAllUsers"
-                          caption="msg://isAvailableForAllUsers"/>
-            </vbox>
-        </hbox>
+                <fieldGroup id="dashboard$dashboardEditFieldGroup2"
+                            datasource="dashboardDs">
+                    <column width="250px">
+                        <field property="timerDelay"/>
+                        <field custom="true"
+                               generator="generateAssistanceBeanNameField"
+                               property="assistantBeanName"/>
+                    </column>
+                </fieldGroup>
+                <vbox spacing="true">
+                    <fieldGroup id="dashboard$dashboardEditFieldGroup3"
+                                datasource="persistentDashboardDs">
+                        <column width="250px">
+                            <field optionsDatasource="groupsDs"
+                                   property="group"/>
+                        </column>
+                    </fieldGroup>
+                    <checkBox caption="msg://isAvailableForAllUsers"
+                              datasource="persistentDashboardDs"
+                              property="isAvailableForAllUsers"/>
+                </vbox>
+            </hbox>
+        </groupBox>
         <groupBox id="paramsBox"
                   caption="msg://dashboardParameters"
                   collapsable="true"
