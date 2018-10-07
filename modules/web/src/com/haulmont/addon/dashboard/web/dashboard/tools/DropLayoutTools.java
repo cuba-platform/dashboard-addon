@@ -80,11 +80,8 @@ public class DropLayoutTools {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
             Widget widget = metadataTools.copy(((WidgetTemplateLayout) layout).getWidget());
             widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
-            WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
-            editor.addCloseWithCommitListener(() -> {
-                widgetLayout.setWidget(editor.getItem());
-                reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);
-            });
+            widgetLayout.setWidget(widget);
+            reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);
         } else if (layout instanceof WidgetLayout) {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
             Widget widget = metadata.create(((WidgetLayout) layout).getWidget().getClass());
