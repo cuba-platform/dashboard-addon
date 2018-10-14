@@ -21,7 +21,7 @@ public class GridCellLayout extends VerticalLayout {
     @Override
     public String getCaption() {
         Messages messages = AppBeans.get(Messages.class);
-        return messages.getMessage(getClass(), "Layout.gridCell") + "(" + row + "," + column + ")";
+        return messages.formatMessage(this.getClass(), "Layout.gridCell", row, column);
     }
 
     public Integer getRow() {

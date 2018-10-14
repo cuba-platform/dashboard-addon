@@ -29,7 +29,8 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         if (item instanceof GridLayout) {
             GridLayout gridLayout = (GridLayout) item;
             al.addAll(gridLayout.getAreas().stream()
-                    .sorted(Comparator.comparingInt(GridArea::getRow).thenComparingInt(GridArea::getCol))
+                    .sorted(Comparator.comparingInt(GridArea::getRow)
+                    .thenComparingInt(GridArea::getCol))
                     .map(GridArea::getComponent)
                     .map(DashboardLayout::getId)
                     .collect(Collectors.toList()));
