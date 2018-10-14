@@ -101,6 +101,9 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     protected DropLayoutTools dropLayoutTools;
 
+    @Named("isAvailableForAllUsersCheckBox")
+    protected CheckBox availableCheckBox;
+
     @Override
     public void postInit() {
         if (PersistenceHelper.isNew(getItem())) {
@@ -119,6 +122,10 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
             FieldGroup.FieldConfig assistantBeanNameField = fieldGroup2.getField("assistantBeanName");
             LookupField lookupField = (LookupField) assistantBeanNameField.getComponent();
             lookupField.setValue(assistantBeanName);
+        }
+
+        if (!accessHelper.getCurrentSessionLogin().equals(dashboardDs.getItem().getCreatedBy())) {
+            availableCheckBox.setVisible(false);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
         dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter);

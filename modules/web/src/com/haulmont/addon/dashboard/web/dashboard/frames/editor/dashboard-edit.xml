@@ -48,8 +48,9 @@
                                    property="group"/>
                         </column>
                     </fieldGroup>
-                    <checkBox caption="msg://isAvailableForAllUsers"
-                              datasource="persistentDashboardDs"
+                    <checkBox id="isAvailableForAllUsersCheckBox"
+                              caption="msg://isAvailableForAllUsers"
+                              datasource="dashboardDs"
                               property="isAvailableForAllUsers"/>
                 </vbox>
             </hbox>
