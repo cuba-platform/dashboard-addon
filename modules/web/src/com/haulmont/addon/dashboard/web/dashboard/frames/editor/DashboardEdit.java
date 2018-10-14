@@ -273,7 +273,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @EventListener
     public void onOpenWidgetEditor(WidgetEditEvent event) {
         Widget widget = event.getSource();
-        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
+        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
         editor.addCloseWithCommitListener(() -> {
             events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
         });
