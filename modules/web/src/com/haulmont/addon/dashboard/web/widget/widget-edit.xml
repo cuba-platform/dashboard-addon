@@ -4,7 +4,8 @@
         class="com.haulmont.addon.dashboard.web.widget.WidgetEdit"
         datasource="widgetDs"
         focusComponent="fieldGroup"
-        messagesPack="com.haulmont.addon.dashboard.web.widget">
+        messagesPack="com.haulmont.addon.dashboard.web.widget"
+        dataSupplier="com.haulmont.addon.dashboard.web.datasupplier.NonPersistentDataSupplier">
     <dsContext>
         <datasource id="widgetDs"
                     class="com.haulmont.addon.dashboard.model.Widget"/>

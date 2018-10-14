@@ -4,7 +4,8 @@
         class="com.haulmont.addon.dashboard.web.parameter.ParameterEdit"
         datasource="parameterDs"
         focusComponent="fieldGroup"
-        messagesPack="com.haulmont.addon.dashboard.web.parameter">
+        messagesPack="com.haulmont.addon.dashboard.web.parameter"
+        dataSupplier="com.haulmont.addon.dashboard.web.datasupplier.NonPersistentDataSupplier">
     <dsContext>
         <datasource id="parameterDs"
                     class="com.haulmont.addon.dashboard.model.Parameter"
