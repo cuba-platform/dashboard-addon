@@ -3,6 +3,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.browse;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 
@@ -25,4 +26,8 @@ public class PersistentDashboardBrowse extends AbstractLookup {
 
     @Inject
     protected GroupDatasource<PersistentDashboard, UUID> persistentDashboardsDs;
+
+    public void onDashboardGroupsBrowseClick() {
+        openWindow("dashboard$DashboardGroup.browse", WindowManager.OpenType.NEW_TAB);
+    }
 }

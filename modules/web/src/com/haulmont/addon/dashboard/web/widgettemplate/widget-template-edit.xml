@@ -24,6 +24,9 @@
                 <field optionsDatasource="widgetTemplateGroupsDs"
                        property="group"/>
                 <field property="isAvailableForAllUsers"/>
+                <field id="widgetType"
+                       caption="msg://widgetType"
+                       generator="generateWidgetTypeField"/>
             </column>
         </fieldGroup>
         <hbox spacing="true"
@@ -34,10 +37,6 @@
             <button id="windowClose"
                     action="windowClose"
                     icon="EDITOR_CANCEL"/>
-            <button id="customizeWidget"
-                    caption="msg://customize"
-                    icon="icons/gear.png"
-                    invoke="openWidgetEditor"/>
         </hbox>
     </layout>
 </window>

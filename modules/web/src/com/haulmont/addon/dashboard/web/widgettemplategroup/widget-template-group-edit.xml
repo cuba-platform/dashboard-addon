@@ -43,7 +43,6 @@
                 <action id="exclude"/>
             </actions>
             <columns>
-                <column id="widgetModel"/>
                 <column id="name"/>
                 <column id="isAvailableForAllUsers"/>
             </columns>

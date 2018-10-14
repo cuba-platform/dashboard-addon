@@ -2,7 +2,6 @@
 <!--
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
-
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.browse.PersistentDashboardBrowse"
@@ -57,6 +56,9 @@
                         action="persistentDashboardsTable.remove"/>
                 <button id="viewBtn"
                         action="persistentDashboardsTable.view"/>
+                <button id="dashboardGroupsBrowse"
+                        caption="msg://dashboardGroupsBrowse"
+                        invoke="onDashboardGroupsBrowseClick"/>
             </buttonsPanel>
         </groupTable>
     </layout>

@@ -34,4 +34,8 @@ public class WidgetTemplateBrowse extends AbstractLookup {
         openEditor("dashboard$WidgetTemplate.edit", widgetTemplatesDs.getItem(), WindowManager.OpenType.NEW_TAB);
     }
 
+
+    public void onWidgetTemplateGroupsBrowseClick() {
+        openWindow("dashboard$WidgetTemplateGroup.browse", WindowManager.OpenType.NEW_TAB);
+    }
 }

@@ -23,11 +23,16 @@
             <properties include=".*"/>
         </filter>
         <groupTable id="widgetTemplateTable"
-               width="100%">
+                    width="100%">
             <actions>
+                <action id="create"
+                        caption="msg://create"
+                        icon="CREATE_ACTION"
+                        openType="DIALOG"/>
                 <action id="edit"
                         caption="msg://edit"
-                        icon="EDIT_ACTION" openType="DIALOG"/>
+                        icon="EDIT_ACTION"
+                        openType="DIALOG"/>
                 <action id="remove"
                         caption="msg://remove"
                         icon="REMOVE_ACTION"/>
@@ -41,10 +46,15 @@
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
+                <button id="createBtn"
+                        action="widgetTemplateTable.create"/>
                 <button id="editBtn"
                         action="widgetTemplateTable.edit"/>
                 <button id="removeBtn"
                         action="widgetTemplateTable.remove"/>
+                <button id="widgetTemplateGroupsBrowse"
+                        caption="msg://widgetTemplateGroupsBrowse"
+                        invoke="onWidgetTemplateGroupsBrowseClick"/>
             </buttonsPanel>
         </groupTable>
     </layout>

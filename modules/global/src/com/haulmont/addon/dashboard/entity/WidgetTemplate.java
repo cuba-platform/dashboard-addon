@@ -4,6 +4,8 @@
 package com.haulmont.addon.dashboard.entity;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.global.DeletePolicy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,7 @@ public class WidgetTemplate extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID")
+    @OnDeleteInverse(DeletePolicy.DENY)
     protected WidgetTemplateGroup group;
 
     public void setGroup(WidgetTemplateGroup group) {

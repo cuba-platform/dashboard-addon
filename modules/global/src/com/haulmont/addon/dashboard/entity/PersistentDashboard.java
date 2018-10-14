@@ -8,6 +8,8 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.global.DeletePolicy;
 
 @NamePattern("%s (%s)|name,code")
 @Table(name = "DASHBOARD_PERSISTENT_DASHBOARD")
@@ -36,6 +38,7 @@ public class PersistentDashboard extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID")
+    @OnDeleteInverse(DeletePolicy.DENY)
     protected DashboardGroup group;
 
     @Column(name = "IS_AVAILABLE_FOR_ALL_USERS")

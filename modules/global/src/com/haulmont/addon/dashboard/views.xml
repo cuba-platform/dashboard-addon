@@ -25,7 +25,6 @@
         <property name="group"
                   view="_minimal"/>
     </view>
-
     <view class="com.haulmont.addon.dashboard.entity.WidgetTemplate"
           extends="_local"
           name="widget-group-view"
@@ -38,7 +37,8 @@
           name="widget-templates">
         <property name="widgetTemplates"
                   view="_minimal">
-            <property name="widgetModel"/>
+            <property name="name"/>
+            <property name="isAvailableForAllUsers"/>
         </property>
     </view>
 </views>
