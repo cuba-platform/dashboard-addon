@@ -113,8 +113,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         if (inputItem.getDashboard() != null) {
             List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
             long cnt = dashboardWidgets.stream()
-                    .filter(
-                            w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId()))
+                    .filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId()))
                     .count();
             if (cnt > 0) {
                 errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));

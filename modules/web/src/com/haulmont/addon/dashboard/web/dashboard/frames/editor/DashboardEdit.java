@@ -49,10 +49,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
@@ -61,14 +58,13 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @Inject
     protected Datasource<Dashboard> dashboardDs;
-    @Named("dashboard$dashboardEditFieldGroup1")
-    protected FieldGroup fieldGroup1;
     @Named("dashboard$dashboardEditFieldGroup2")
     protected FieldGroup fieldGroup2;
     @Inject
@@ -194,12 +190,6 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
 
     @Override
-    protected void postValidate(ValidationErrors errors) {
-        //remove validation errors from widget frames
-        errors.getAll().removeIf(error -> !"dashboard$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
-    }
-
-    @Override
     protected boolean preCommit() {
         //remove ds contexts from widget frames
         dashboardDs.getDsContext().getChildren().removeIf(dsContext ->
@@ -234,7 +224,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public Component generateAssistanceBeanNameField(Datasource<Dashboard> datasource, String fieldId) {
         Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
         BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
-        List<String> prototypeBeanNames = assistantBeanMap.keySet().stream().filter(bn -> bf.isPrototype(bn)).collect(Collectors.toList());
+        List<String> prototypeBeanNames = assistantBeanMap.keySet().stream().filter(bn -> bf.isPrototype(bn)).collect(toList());
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setOptionsList(prototypeBeanNames);
         return lookupField;
@@ -284,6 +274,21 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         editor.addCloseWithCommitListener(() -> {
             events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
         });
+    }
+
+    @Override
+    protected void postValidate(ValidationErrors errors) {
+        super.postValidate(errors);
+        //remove errors from widget frames
+        errors.getAll().removeIf(error -> !"dashboard$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
+
+        List<Widget> dashboardWidgets = dashboardDs.getItem().getWidgets();
+        Map<String, Long> widgetsCount = dashboardWidgets.stream().collect(Collectors.groupingBy(Widget::getWidgetId, Collectors.counting()));
+        List<String> nonUniqueIds = widgetsCount.entrySet().stream().filter(es -> es.getValue() > 1).map(Map.Entry::getKey).collect(toList());
+
+        if (nonUniqueIds.size() > 0) {
+            errors.add(null, formatMessage("uniqueWidgetId", String.join(",", nonUniqueIds)));
+        }
     }
 
 }
