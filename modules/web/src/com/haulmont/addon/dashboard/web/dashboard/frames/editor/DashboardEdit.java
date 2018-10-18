@@ -224,7 +224,9 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public Component generateAssistanceBeanNameField(Datasource<Dashboard> datasource, String fieldId) {
         Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
         BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
-        List<String> prototypeBeanNames = assistantBeanMap.keySet().stream().filter(bn -> bf.isPrototype(bn)).collect(toList());
+        List<String> prototypeBeanNames = assistantBeanMap.keySet().stream()
+                .filter(bn -> bf.isPrototype(bn))
+                .collect(toList());
         LookupField lookupField = componentsFactory.createComponent(LookupField.class);
         lookupField.setOptionsList(prototypeBeanNames);
         return lookupField;
@@ -283,8 +285,12 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         errors.getAll().removeIf(error -> !"dashboard$dashboardEditFieldGroup1".equals(error.component.getParent().getId()));
 
         List<Widget> dashboardWidgets = dashboardDs.getItem().getWidgets();
-        Map<String, Long> widgetsCount = dashboardWidgets.stream().collect(Collectors.groupingBy(Widget::getWidgetId, Collectors.counting()));
-        List<String> nonUniqueIds = widgetsCount.entrySet().stream().filter(es -> es.getValue() > 1).map(Map.Entry::getKey).collect(toList());
+        Map<String, Long> widgetsCount = dashboardWidgets.stream()
+                .collect(Collectors.groupingBy(Widget::getWidgetId, Collectors.counting()));
+        List<String> nonUniqueIds = widgetsCount.entrySet().stream()
+                .filter(es -> es.getValue() > 1)
+                .map(Map.Entry::getKey)
+                .collect(toList());
 
         if (nonUniqueIds.size() > 0) {
             errors.add(null, formatMessage("uniqueWidgetId", String.join(",", nonUniqueIds)));

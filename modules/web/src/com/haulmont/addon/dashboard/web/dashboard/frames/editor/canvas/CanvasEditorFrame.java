@@ -50,6 +50,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
     @Override
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
+        vLayout.addStyleName("dashboard-main-shadow-border");
         new DropHandlerTools(dashboard).initDropHandler(vLayout);
     }
 

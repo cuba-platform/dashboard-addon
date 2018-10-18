@@ -46,7 +46,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
-        layout.getDelegate().setMargin(true);
+        layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(messages.getMainMessage("verticalLayout"));
@@ -67,7 +67,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout() {
         CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout();
-        layout.getDelegate().setMargin(true);
+        layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(messages.getMainMessage("horizontalLayout"));
@@ -88,7 +88,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
         CanvasGridLayout layout = super.createCanvasGridLayout(cols, rows);
-        layout.getDelegate().setMargin(true);
+        layout.getDelegate().setSpacing(true);
 
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
@@ -110,7 +110,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widget);
-        layout.getDelegate().setMargin(true);
+        layout.getDelegate().setSpacing(true);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(widget.getCaption());
 
@@ -136,7 +136,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasVerticalLayout createCanvasRootLayout() {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
-        layout.getDelegate().setMargin(true);
+        layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.setDescription(messages.getMainMessage("rootLayout"));
         return layout;
