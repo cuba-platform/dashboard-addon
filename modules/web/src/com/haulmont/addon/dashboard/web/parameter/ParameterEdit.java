@@ -1,24 +1,32 @@
 /*
- * Copyright (c) 2016-2018 Haulmont. All rights reserved.
+ * Copyright (c) 2008-2018 Haulmont.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 package com.haulmont.addon.dashboard.web.parameter;
 
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.ParameterType;
+import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.addon.dashboard.model.paramtypes.*;
-import com.haulmont.addon.dashboard.web.parameter.frames.EntitiesListValueFrame;
-import com.haulmont.addon.dashboard.web.parameter.frames.EnumValueFrame;
-import com.haulmont.addon.dashboard.web.parameter.frames.SimpleValueFrame;
-import com.haulmont.addon.dashboard.web.parameter.frames.ValueFrame;
 
 import javax.inject.Inject;
-
 import java.util.Map;
 
 import static com.haulmont.addon.dashboard.model.ParameterType.*;

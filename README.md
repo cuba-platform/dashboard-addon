@@ -1,3 +1,5 @@
+[![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
 # 1. Introduction 
 This component is designed to create and embed dashboards. Dashboard consists of widgets - individual elements based on a frame.
 The widgets can be positioned inside a dashboard using vertical, horizontal and grid layouts.
