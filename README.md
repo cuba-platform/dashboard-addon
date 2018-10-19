@@ -10,9 +10,49 @@ The widgets can be positioned inside a dashboard using vertical, horizontal and 
 
 # 2. Installation 
 
+The complete add-ons installation guide see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/app_components_usage.html).
+
 ## 2.1. Add the Repository and the Component in CUBA Studio
 
+1. Edit **Project properties** and on the **App components** panel click the **plus** button next to **Custom components**.
+
+2. Paste the add-on coordinates in the coordinates field as follows: `group:name:version`. For example:
+	
+    com.audimex.dashboard:dashboard-global:2.0.0
+
+Select the add-on version compatible with the CUBA platform version used in your project:
+
+| Platform Version  | Component Version |
+|-------------------|-------------------|
+| 6.9.X             | 1.0.+             |
+| 6.10.X            | 2.0.+             |
+
+3. Click **OK** in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
+
+4. Save the project properties by clicking **OK**.
+
 ## 2.2. Add the Repository and the Component in build.gradle
+
+1. Edit `build.gradle` and specify the add-on coordinates in the root `dependencies` section:
+
+```groovy
+dependencies {
+    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
+    // your add-ons go here
+    appComponent("com.audimex.dashboard:dashboard-global:2.0.0")
+}
+```
+
+2. Execute `gradlew idea` in the command line to include add-on in your project’s development environment.
+
+3. Edit `web.xml` files of the **core** and **web** modules and add the add-on identifier (which is equal to Maven `groupId`) to the space-separated list of application components in the `appComponents` context parameter:
+
+```xml
+<context-param>
+    <param-name>appComponents</param-name>
+    <param-value>com.haulmont.cuba com.audimex.dashboard</param-value>
+</context-param>
+```
 
 # 3. Screens
 
@@ -28,16 +68,25 @@ This screen allows creating, editing and removing widget templates. Widget templ
 
 This screen allows editing a widget and consists of the following elements:
 
-- the **Caption** field;
-- the **Description** field;
-- the **Widget Type** lookup field. The following widget types are available by default: 
-  - **Screen**, for any frame;
-  - **Lookup**, for the frames inherited from the `com.haulmont.cuba.gui.components.AbstractLookup`. Widgets of this type fire `WidgetEntitiesSelectedEvent` which contains the selected entities;  
-- an Area (a frame) specific to this widget type. For more information, see 
-[5. Adding additional widget types](#5-Adding additional widget types);
-- the frame with widget parameters which allows adding, editing and removing widget parameters. These parameters are passed as input parameters for the frame, based on which the widget was taken. For more information on adding and editing parameters, see [3.3. Parameter Editor](#33-Parameter Editor).
+- the **Name** field;
+- the **Group** drop-down;
+- the checkbox to set the widget visibility;
+- the **Widget Type** lookup field;
+- the **Customize** button.
 
 ![widget-editor](img/widget-editor.png)
+
+When the user clicks the **Customize** button, the enhanced widget editor is opened, consisting of the following elements:
+
+- the **Caption** field;
+- the **Widget id** field;
+- the **Description** field;
+- depending on the selected **Widget Type**, one of the following fields will be displayed: 
+  - **Screen id**, for any frame;
+  - **Lookup id**, for the frames inherited from the `com.haulmont.cuba.gui.components.AbstractLookup`. Widgets of this type fire `WidgetEntitiesSelectedEvent` which contains the selected entities;  
+- the frame with widget parameters which allows adding, editing and removing widget parameters. These parameters are passed as input parameters for the frame, based on which the widget was taken. For more information on adding and editing parameters, see [3.3. Parameter Editor](#33-Parameter Editor).
+
+![widget-editor-customize](img/widget-editor-customize.png)
 
 ## 3.3. Parameter Editor
 
