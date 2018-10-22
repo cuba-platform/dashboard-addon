@@ -90,7 +90,7 @@ dependencies {
 Значение может иметь следующие типы:
 ```
     ENTITY("ENTITY"), содержит поля metaClass, entityId, view
-    LIST_ENTITY("LIST_ENTITY"), коллекция параметров ENTITY
+    LIST_ENTITY("LIST ENTITY"), коллекция параметров ENTITY
     ENUM("ENUM"), содержит поле emunClass
     DATE("DATE")
     DATETIME("DATETIME")

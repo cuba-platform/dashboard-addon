@@ -94,7 +94,7 @@ This screen allows editing a parameter. A parameter is a key-value pair, where t
 A value can have the following types:
 ```
     ENTITY("ENTITY"), contains fields metaClass, entityId, view
-    LIST_ENTITY("LIST_ENTITY"), a collection of parameters with the type ENTITY
+    LIST_ENTITY("LIST ENTITY"), a collection of parameters with the type ENTITY
     ENUM("ENUM"), contains the field emunClass
     DATE("DATE")
     DATETIME("DATETIME")
