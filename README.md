@@ -128,13 +128,17 @@ Dashboard Editor contains 5 areas:
 - the dashboard fields;
 - the dashboard parameters;
 - the palette with widgets and layouts;
+- the tree representation of the edited dashboard structure
 - the canvas  where the position of dashboard elements (widgets and layouts) is specified;
 - the buttons panel.
 
 ### 3.5.1. Dashboard Fields
 
-- **Title** - a name of the dashboard;
-- **Reference name** - a unique identifier for a more convenient search in a database;
+- **Title** - the name of the dashboard;
+- **Code** - the unique identifier for a more convenient search in a database;
+- **Refresh period** - the time period in seconds for refresh a dashboard UI;
+- **Assistant bean name** - an optional reference to a Spring bean class that should be used for customizing the dashboard. 
+- **Group** - the dashboard group;
 - **Is available for all users** - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
 ### 3.5.2. Dashboard Parameters
@@ -147,7 +151,7 @@ It is a container with 3 collapsible tabs. Each tab contains a container with co
 
 #### 3.5.3.1 Widgets
 
-Contains a container in which you can add or exclude any widget. It is possible to make the widget a template (in this case, it is added to the tab **Widget Templates**). 
+Contains **Lookup** and **Screen** widgets. Drag and drop an element from the palette for adding it on the canvas, and the widget editor will be opened in a dialog window. It is possible to make the widget a template (in this case, it is added to the tab **Widget Templates**). 
 
 ![palette-widgets](img/palette-widgets.png)
 
@@ -161,7 +165,13 @@ Contains horizontal, vertical, and grid layouts.
 
 Contains widget templates from a database.
 
-![palette-layouts](img/palette-wiget-templates.png)
+![palette-widget-templates](img/palette-widget-templates.png)
+
+#### 3.5.3.4. Dashboad Layout Structure
+
+Displays the current dashboard structure as a tree. The **Root** element is available by default and cannot be removed.
+
+![palette-tree](img/palette-tree.png)
 
 ### 3.5.4. Canvas
 
