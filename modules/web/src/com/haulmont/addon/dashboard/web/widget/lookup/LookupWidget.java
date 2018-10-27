@@ -29,10 +29,7 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.ListComponent;
-import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.components.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -68,6 +65,9 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     @WindowParam
     protected String lookupWindowId;
 
+    @Inject
+    private ScrollBoxLayout scroll;
+
     @Override
     public void init(Map<String, Object> params) {
         lookupFrame = openWindow(lookupWindowId, WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
@@ -75,7 +75,7 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
             c.getDatasource().addItemChangeListener(e -> events.publish(new ItemsSelectedEvent(widget, c.getSelected())));
         }
         lookupFrame.close(Window.CLOSE_ACTION_ID);
-        this.add(lookupFrame.getFrame());
+        scroll.add(lookupFrame.getFrame());
     }
 
     protected List<ListComponent> findListComponents(AbstractFrame abstractFrame) {

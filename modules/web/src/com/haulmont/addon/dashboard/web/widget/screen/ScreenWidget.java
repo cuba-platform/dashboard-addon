@@ -26,6 +26,7 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.ScrollBoxLayout;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -53,11 +54,14 @@ public class ScreenWidget extends AbstractFrame {
     @WindowParam
     protected DashboardFrame dashboardFrame;
 
+    @Inject
+    private ScrollBoxLayout scroll;
+
     protected AbstractFrame screenFrame;
 
     @Override
     public void init(Map<String, Object> params) {
-        screenFrame = openFrame(this, screenId, widgetRepository.getWidgetParams(widget));
+        screenFrame = openFrame(scroll, screenId, widgetRepository.getWidgetParams(widget));
         screenFrame.setSizeFull();
     }
 }

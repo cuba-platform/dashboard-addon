@@ -28,8 +28,7 @@ import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.ScrollBoxLayout;
-import com.haulmont.cuba.web.gui.components.WebScrollBoxLayout;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -50,6 +49,9 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Inject
     protected WidgetRepository widgetRepository;
+
+    @Inject
+    protected ComponentsFactory componentsFactory;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout() {
@@ -103,14 +105,9 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         widgetFrame.setSizeFull();
         widgetFrame.setMargin(true);
 
-        ScrollBoxLayout scrollBoxLayout = new WebScrollBoxLayout();
-        scrollBoxLayout.add(widgetFrame);
-        scrollBoxLayout.setWidth("100%");
-        scrollBoxLayout.setHeight("100%");
-
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
         layout.setUuid(UUID.randomUUID());
-        layout.getDelegate().add(scrollBoxLayout);
+        layout.getDelegate().add(widgetFrame);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
         layout.setSizeFull();
