@@ -65,8 +65,14 @@ public class ScreenWidgetEdit extends AbstractFrame {
     }
 
     protected List<String> getAllScreensIds() {
-        return windowConfig.getWindows().stream()
+        List<String> screenList = windowConfig.getWindows().stream()
                 .map(WindowInfo::getId)
                 .collect(Collectors.toList());
+        filterLookupFields(screenList);
+        return screenList;
+    }
+
+    protected void filterLookupFields(List<String> lookupIds) {
+        lookupIds.removeIf(li -> "addcondition".equalsIgnoreCase(li));
     }
 }
