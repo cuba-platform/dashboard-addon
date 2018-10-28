@@ -257,13 +257,12 @@ dependencies {
 
 Для добавления собственного типа виджета необходимо выполнить следующие шаги:
 
-- Добавить неперсистетную сущность, расширяющию класс `com.haulmont.addon.dashboard.model.Widget`, добавить к ней аннотацию `com.haulmont.addon.dashboard.annotation.WidgetType`. В аннотации заполнить поля `name`, `frameId`, `editFrameId` (см. JavaDoc).
+- Добавить неперсистетную сущность, расширяющию класс `com.haulmont.addon.dashboard.model.Widget`, добавить к ней аннотацию `com.haulmont.addon.dashboard.annotation.WidgetType`. В аннотации заполнить поля `name`, `editFrameId` (см. JavaDoc).
 Пример:
 
 ```java
 @MetaClass(name = "dashboard$LookupWidget")
 @WidgetType(name = CAPTION,
-        frameId = "lookupWidgetBrowse",
         editFrameId = "lookupWidgetEdit")
 public class LookupWidget extends Widget {
     public static final String CAPTION = "Lookup";

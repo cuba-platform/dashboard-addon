@@ -256,13 +256,12 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 
 To add an additional widget type, you need to do the following:
 
-- Create a not persistent entity class which extends the class `com.haulmont.addon.dashboard.model.Widget`, then add the annotation `com.haulmont.addon.dashboard.annotation.WidgetType`. Fill the fields: `name`, `frameId`, `editFrameId` in the annotation (see JavaDoc).
+- Create a not persistent entity class which extends the class `com.haulmont.addon.dashboard.model.Widget`, then add the annotation `com.haulmont.addon.dashboard.annotation.WidgetType`. Fill the fields: `name`, `editFrameId` in the annotation (see JavaDoc).
 For example:
 
 ```java
 @MetaClass(name = "dashboard$LookupWidget")
 @WidgetType(name = CAPTION,
-        frameId = "lookupWidgetBrowse",
         editFrameId = "lookupWidgetEdit")
 public class LookupWidget extends Widget {
     public static final String CAPTION = "Lookup";
