@@ -87,6 +87,9 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         } else if (parameterValue instanceof IntegerParameterValue) {
             typeLookup.setValue(INTEGER);
             valueFrame = openSimpleValueFrame(INTEGER, parameterValue);
+        } else if (parameterValue instanceof LongParameterValue) {
+            typeLookup.setValue(LONG);
+            valueFrame = openSimpleValueFrame(LONG, parameterValue);
         } else if (parameterValue instanceof StringParameterValue) {
             typeLookup.setValue(STRING);
             valueFrame = openSimpleValueFrame(STRING, parameterValue);
