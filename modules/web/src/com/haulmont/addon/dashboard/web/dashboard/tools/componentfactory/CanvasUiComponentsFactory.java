@@ -28,7 +28,10 @@ import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -103,11 +106,26 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
 
         widgetFrame.setSizeFull();
-        widgetFrame.setMargin(true);
+
+
+        VBoxLayout vBoxLayout = componentsFactory.createComponent(VBoxLayout.class);
+        vBoxLayout.setSpacing(true);
+        vBoxLayout.setMargin(true);
+        vBoxLayout.setSizeFull();
+
+        if (BooleanUtils.isTrue(widget.getShowWidgetCaption())){
+            Label label = componentsFactory.createComponent(Label.class);
+            label.setValue(widget.getCaption());
+            label.setStyleName("h2");
+            vBoxLayout.add(label);
+        }
+
+        vBoxLayout.add(widgetFrame);
+        vBoxLayout.expand(widgetFrame);
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
         layout.setUuid(UUID.randomUUID());
-        layout.getDelegate().add(widgetFrame);
+        layout.getDelegate().add(vBoxLayout);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
         layout.setSizeFull();

@@ -23,6 +23,7 @@
                        required="true"/>
                 <field caption="msg://widgetDescription"
                        property="description"/>
+                <field property="showWidgetCaption"/>
             </column>
         </fieldGroup>
         <vbox id="widgetEditBox"/>
