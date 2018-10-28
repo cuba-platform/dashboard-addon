@@ -29,6 +29,8 @@ import java.util.List;
 @MetaClass(name = "dashboard$Widget")
 public class Widget extends BaseUuidEntity {
     @MetaProperty
+    protected Boolean showWidgetCaption = false;
+    @MetaProperty
     protected String widgetId;
     @MetaProperty
     protected String caption;
@@ -123,5 +125,13 @@ public class Widget extends BaseUuidEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getShowWidgetCaption() {
+        return showWidgetCaption;
+    }
+
+    public void setShowWidgetCaption(Boolean showWidgetCaption) {
+        this.showWidgetCaption = showWidgetCaption;
     }
 }
