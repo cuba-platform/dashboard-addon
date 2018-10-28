@@ -101,6 +101,7 @@ public class LookupWidgetEdit extends AbstractFrame {
             }
         }
 
+        filterLookupFields(lookupIds);
         return lookupIds;
     }
 
@@ -118,5 +119,9 @@ public class LookupWidgetEdit extends AbstractFrame {
             return false;
         }
         return false;
+    }
+
+    protected void filterLookupFields(List<String> lookupIds) {
+        lookupIds.removeIf(li -> "commonlookup".equalsIgnoreCase(li));
     }
 }
