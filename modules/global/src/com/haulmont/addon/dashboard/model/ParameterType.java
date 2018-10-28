@@ -33,8 +33,7 @@ public enum ParameterType implements EnumClass<String> {
     STRING("STRING"),
     DECIMAL("DECIMAL"),
     BOOLEAN("BOOLEAN"),
-    LONG("LONG"),
-    UNDEFINED("UNDEFINED");
+    LONG("LONG");
 
     private String id;
 

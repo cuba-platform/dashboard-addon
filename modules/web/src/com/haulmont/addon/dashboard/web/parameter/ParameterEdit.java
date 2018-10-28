@@ -99,8 +99,8 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         } else if (parameterValue instanceof BooleanParameterValue) {
             typeLookup.setValue(BOOLEAN);
             valueFrame = openSimpleValueFrame(BOOLEAN, parameterValue);
-        } else { //if UNDEFINED
-            typeLookup.setValue(UNDEFINED);
+        } else {
+            typeLookup.setValue(null);
         }
     }
 
@@ -126,7 +126,6 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             case UUID:
                 valueFrame = openSimpleValueFrame(type, null);
                 break;
-            case UNDEFINED:
             default:
                 valueFrame = null;
                 valueBox.removeAll();

@@ -2,10 +2,10 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
         class="com.haulmont.addon.dashboard.web.parameter.ParameterEdit"
+        dataSupplier="com.haulmont.addon.dashboard.web.datasupplier.NonPersistentDataSupplier"
         datasource="parameterDs"
         focusComponent="fieldGroup"
-        messagesPack="com.haulmont.addon.dashboard.web.parameter"
-        dataSupplier="com.haulmont.addon.dashboard.web.datasupplier.NonPersistentDataSupplier">
+        messagesPack="com.haulmont.addon.dashboard.web.parameter">
     <dsContext>
         <datasource id="parameterDs"
                     class="com.haulmont.addon.dashboard.model.Parameter"
@@ -14,28 +14,30 @@
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
-                    datasource="parameterDs">
+                    datasource="parameterDs"
+                    height="70px">
             <column width="300px">
                 <field property="name"
                        required="true"/>
-                <field property="alias"/>
+                <field property="alias"
+                       required="true"/>
             </column>
         </fieldGroup>
-        <vbox width="100%"
-              spacing="true">
+        <vbox spacing="true">
             <hbox id="valueTypeBox"
                   spacing="true">
-                <label value="msg://valueType"
-                       align="MIDDLE_LEFT"
+                <label align="MIDDLE_LEFT"
+                       value="msg://valueType"
                        width="85px"/>
                 <lookupField id="typeLookup"
-                             optionsEnum="com.haulmont.addon.dashboard.model.ParameterType"
                              nullOptionVisible="false"
+                             optionsEnum="com.haulmont.addon.dashboard.model.ParameterType"
+                             required="true"
+                             requiredMessage="msg://parameterValueRequired"
                              width="300px"/>
             </hbox>
             <vbox id="valueBox"
-                  spacing="true"
-                  width="100%"/>
+                  spacing="true"/>
         </vbox>
         <frame id="windowActions"
                screen="editWindowActions"/>
