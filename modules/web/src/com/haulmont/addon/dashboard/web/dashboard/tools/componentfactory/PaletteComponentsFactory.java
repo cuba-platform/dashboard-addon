@@ -29,6 +29,8 @@ public interface PaletteComponentsFactory {
 
     PaletteButton createGridLayoutButton();
 
+    PaletteButton createCssLayoutButton();
+
     PaletteButton createWidgetButton(Widget widget);
 
     PaletteButton createWidgetTemplateButton(WidgetTemplate widgetTemplate);

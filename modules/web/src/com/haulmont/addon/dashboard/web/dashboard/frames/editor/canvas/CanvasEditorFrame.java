@@ -30,7 +30,6 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.DropHandlerT
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.VBoxLayout;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -44,7 +43,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
     private Component.MouseEventDetails mouseEventDetails;
 
     @Inject
-    protected VBoxLayout canvas;
+    protected OrderedContainer canvas;
 
     @Named("dropModelConverter")
     protected DashboardModelConverter converter;

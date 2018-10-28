@@ -114,7 +114,7 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
             String browserFrameId = (String) e.getValue();
             if (browserFrameId != null) {
                 Widget widget = metadata.create(Widget.class);
-                widget.setBrowseFrameId(browserFrameId);
+                widget.setFrameId(browserFrameId);
                 widget.setName(widgetUtils.getWidgetType((String) e.getValue()));
                 openWidgetEditor(widget);
             }
@@ -149,14 +149,14 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
             lookupField.setValue(null);
             return;
         }
-        String browseFrameId = widget.getBrowseFrameId();
+        String browseFrameId = widget.getFrameId();
 
         Optional<WidgetTypeInfo> widgetTypeOpt = widgetRepository.getWidgetTypesInfo().stream()
-                .filter(typeInfo -> browseFrameId.equals(typeInfo.getBrowseFrameId()))
+                .filter(typeInfo -> browseFrameId.equals(typeInfo.getFrameId()))
                 .findFirst();
 
         if (widgetTypeOpt.isPresent()) {
-            String itemCaption = widgetTypeOpt.get().getBrowseFrameId();
+            String itemCaption = widgetTypeOpt.get().getFrameId();
 
             if (isNotBlank(itemCaption)) {
                 lookupField.setValue(itemCaption);

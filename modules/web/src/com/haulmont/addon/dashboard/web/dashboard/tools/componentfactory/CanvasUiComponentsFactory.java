@@ -18,12 +18,10 @@
 package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasGridLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasHorizontalLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
@@ -57,7 +55,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     protected ComponentsFactory componentsFactory;
 
     @Override
-    public CanvasVerticalLayout createCanvasVerticalLayout() {
+    public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
         CanvasVerticalLayout layout = new CanvasVerticalLayout();
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
@@ -66,7 +64,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     }
 
     @Override
-    public CanvasHorizontalLayout createCanvasHorizontalLayout() {
+    public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
         CanvasHorizontalLayout layout = new CanvasHorizontalLayout();
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
@@ -75,8 +73,8 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     }
 
     @Override
-    public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
-        CanvasGridLayout layout = new CanvasGridLayout(cols, rows);
+    public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
+        CanvasCssLayout layout = new CanvasCssLayout(cssLayoutModel.getStyleName(), cssLayoutModel.getResponsive());
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -84,18 +82,28 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     }
 
     @Override
-    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
+    public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
+        CanvasGridLayout layout = new CanvasGridLayout(gridLayout.getColumns(), gridLayout.getRows());
+        layout.setUuid(UUID.randomUUID());
+        layout.setDragMode(NONE);
+        layout.setSizeFull();
+        return layout;
+    }
+
+    @Override
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout) {
+        Widget widget = widgetLayout.getWidget();
         Optional<WidgetTypeInfo> widgetTypeOpt = widgetRepository.getWidgetTypesInfo().stream()
-                .filter(widgetType -> widget.getBrowseFrameId().equals(widgetType.getBrowseFrameId()))
+                .filter(widgetType -> widget.getFrameId().equals(widgetType.getFrameId()))
                 .findFirst();
 
         if (!widgetTypeOpt.isPresent()) {
-            throw new DashboardException(format("There isn't found a screen for the widget %s", widget.getBrowseFrameId()));
+            throw new DashboardException(format("There isn't found a screen for the widget %s", widget.getFrameId()));
         }
 
         widget.setDashboard(frame.getDashboard());
 
-        String frameId = widgetTypeOpt.get().getBrowseFrameId();
+        String frameId = widgetTypeOpt.get().getFrameId();
         Map<String, Object> params = new HashMap<>(ParamsMap.of(
                 WIDGET, widget,
                 DASHBOARD, frame.getDashboard(),
@@ -107,25 +115,27 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
         widgetFrame.setSizeFull();
 
+        com.haulmont.cuba.gui.components.Component widgetComponent = widgetFrame;
 
-        VBoxLayout vBoxLayout = componentsFactory.createComponent(VBoxLayout.class);
-        vBoxLayout.setSpacing(true);
-        vBoxLayout.setMargin(true);
-        vBoxLayout.setSizeFull();
+        if (BooleanUtils.isTrue(widget.getShowWidgetCaption())) {
+            VBoxLayout vBoxLayout = componentsFactory.createComponent(VBoxLayout.class);
+            vBoxLayout.setSpacing(true);
+            vBoxLayout.setMargin(true);
+            vBoxLayout.setSizeFull();
 
-        if (BooleanUtils.isTrue(widget.getShowWidgetCaption())){
             Label label = componentsFactory.createComponent(Label.class);
             label.setValue(widget.getCaption());
             label.setStyleName("h2");
             vBoxLayout.add(label);
-        }
 
-        vBoxLayout.add(widgetFrame);
-        vBoxLayout.expand(widgetFrame);
+            vBoxLayout.add(widgetFrame);
+            vBoxLayout.expand(widgetFrame);
+            widgetComponent = vBoxLayout;
+        }
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout();
         layout.setUuid(UUID.randomUUID());
-        layout.getDelegate().add(vBoxLayout);
+        layout.getDelegate().add(widgetComponent);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -133,7 +143,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     }
 
     @Override
-    public CanvasVerticalLayout createCanvasRootLayout() {
+    public CanvasVerticalLayout createCanvasRootLayout(RootLayout rootLayout) {
         CanvasVerticalLayout layout = new CanvasVerticalLayout();
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);

@@ -18,10 +18,12 @@
 package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardIcon;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.StyleChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
@@ -40,8 +42,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
-import static com.haulmont.cuba.gui.icons.CubaIcon.ARROWS;
-import static com.haulmont.cuba.gui.icons.CubaIcon.DATABASE;
+import static com.haulmont.cuba.gui.icons.CubaIcon.*;
 
 @Component("dashboard_dropComponentsFactory")
 public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
@@ -57,98 +58,113 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     protected Messages messages;
 
     @Override
-    public CanvasVerticalLayout createCanvasVerticalLayout() {
-        CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
+    public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
+        CanvasVerticalLayout layout = super.createCanvasVerticalLayout(verticalLayout);
         layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(messages.getMainMessage("verticalLayout"));
 
-        Button removeButton = createRemoveButton(layout);
-        Button weightButton = createWeightButton(layout);
-        Button captionButton = createCaptionButton(layout, "verticalLayout");
-
-        HBoxLayout buttonsPanel = layout.getButtonsPanel();
-        buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
-        buttonsPanel.add(removeButton);
-        buttonsPanel.add(weightButton);
-        buttonsPanel.add(captionButton);
+        createBaseLayoutAction("verticalLayout", layout, verticalLayout);
         addLayoutClickListener(layout);
         return layout;
     }
 
     @Override
-    public CanvasHorizontalLayout createCanvasHorizontalLayout() {
-        CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout();
+    public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
+        CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout(horizontalLayout);
         layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(messages.getMainMessage("horizontalLayout"));
 
-        Button removeButton = createRemoveButton(layout);
-        Button weightButton = createWeightButton(layout);
-        Button captionButton = createCaptionButton(layout, "horizontalLayout");
-
-        HBoxLayout buttonsPanel = layout.getButtonsPanel();
-        buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
-        buttonsPanel.add(removeButton);
-        buttonsPanel.add(weightButton);
-        buttonsPanel.add(captionButton);
+        createBaseLayoutAction("horizontalLayout", layout, horizontalLayout);
         addLayoutClickListener(layout);
         return layout;
     }
 
     @Override
-    public CanvasGridLayout createCanvasGridLayout(int cols, int rows) {
-        CanvasGridLayout layout = super.createCanvasGridLayout(cols, rows);
+    public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
+        CanvasCssLayout layout = super.createCssLayout(cssLayoutModel);
+        layout.setDragMode(CLONE);
+        layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
+        layout.setDescription(messages.getMainMessage("cssLayout"));
+
+        createBaseLayoutAction("cssLayout", layout, cssLayoutModel);
+        return layout;
+    }
+
+    @Override
+    public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
+        CanvasGridLayout layout = super.createCanvasGridLayout(gridLayout);
         layout.getDelegate().setSpacing(true);
 
         layout.setDragMode(CLONE);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(messages.getMainMessage("gridLayout"));
 
-        Button removeButton = createRemoveButton(layout);
-        Button weightButton = createWeightButton(layout);
-        Button captionButton = createCaptionButton(layout, "gridLayout");
-
-        HBoxLayout buttonsPanel = layout.getButtonsPanel();
-        buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
-        buttonsPanel.add(removeButton);
-        buttonsPanel.add(weightButton);
-        buttonsPanel.add(captionButton);
+        createBaseLayoutAction("gridLayout", layout, gridLayout);
         addLayoutClickListener(layout);
         return layout;
     }
 
+    private void createBaseLayoutAction(String captionKey, AbstractCanvasLayout canvasLayout, DashboardLayout layout) {
+        Button removeButton = createRemoveButton(canvasLayout);
+        Button weightButton = createWeightButton(canvasLayout);
+        Button styleButton = createStyleButton(canvasLayout);
+        Button captionButton = createCaptionButton(canvasLayout, captionKey);
+
+        HBoxLayout buttonsPanel = canvasLayout.getButtonsPanel();
+        buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
+        buttonsPanel.add(removeButton);
+        if (isParentCssLayout(layout)) {
+            buttonsPanel.add(styleButton);
+        } else {
+            buttonsPanel.add(weightButton);
+        }
+        buttonsPanel.add(captionButton);
+    }
+
     @Override
-    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, Widget widget) {
-        CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widget);
+    public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout) {
+        CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widgetLayout);
+        Widget widget = widgetLayout.getWidget();
         layout.getDelegate().setSpacing(true);
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
-        layout.setDescription(widget.getCaption());
+        layout.setDescription(widgetLayout.getCaption());
 
         Button removeButton = createRemoveButton(layout);
         Button editButton = createEditButton(layout);
+        Button styleButton = createStyleButton(layout);
         Button weightButton = createWeightButton(layout);
         Button doTemplateButton = createDoTemplateButton(widget);
         Button captionButton = createCaptionButton(layout, "widgetLayout");
-        captionButton.setCaption(widget.getCaption());
+        captionButton.setCaption(widgetLayout.getCaption());
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(editButton);
-        buttonsPanel.add(weightButton);
+
         buttonsPanel.add(doTemplateButton);
+        if (isParentCssLayout(widgetLayout)) {
+            buttonsPanel.add(styleButton);
+        } else {
+            buttonsPanel.add(weightButton);
+        }
         buttonsPanel.add(captionButton);
         addLayoutClickListener(layout);
         return layout;
 
     }
 
+    private boolean isParentCssLayout(DashboardLayout layout) {
+        return layout instanceof CssLayout || layout.getParent() instanceof CssLayout;
+    }
+
     @Override
-    public CanvasVerticalLayout createCanvasRootLayout() {
-        CanvasVerticalLayout layout = super.createCanvasVerticalLayout();
+    public CanvasVerticalLayout createCanvasRootLayout(RootLayout rootLayout) {
+        CanvasVerticalLayout layout = super.createCanvasRootLayout(rootLayout);
         layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.setDescription(messages.getMainMessage("rootLayout"));
@@ -181,6 +197,16 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
                 .withHandler(e -> events.publish(new WeightChangedEvent(layout))));
         weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         weightButton.setIconFromSet(ARROWS);
+        weightButton.setCaption("");
+        return weightButton;
+    }
+
+    protected Button createStyleButton(CanvasLayout layout) {
+        Button weightButton = factory.createComponent(Button.class);
+        weightButton.setAction(new BaseAction("styleClicked")
+                .withHandler(e -> events.publish(new StyleChangedEvent(layout))));
+        weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
+        weightButton.setIconFromSet(PENCIL);
         weightButton.setCaption("");
         return weightButton;
     }

@@ -27,6 +27,8 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
+import com.haulmont.cuba.gui.components.ScrollBoxLayout;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -34,6 +36,9 @@ import java.util.UUID;
 public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
+
+    @Inject
+    protected ComponentsFactory componentsFactory;
 
     protected CanvasComponentsFactory factory;
 
@@ -55,18 +60,19 @@ public class DashboardModelConverter {
     public CanvasLayout modelToContainer(CanvasFrame frame, DashboardLayout model) {
         CanvasLayout canvasLayout = null;
         if (model instanceof RootLayout) {
-            canvasLayout = factory.createCanvasRootLayout();
+            canvasLayout = factory.createCanvasRootLayout((RootLayout) model);
         } else if (model instanceof VerticalLayout) {
-            canvasLayout = factory.createCanvasVerticalLayout();
+            canvasLayout = factory.createCanvasVerticalLayout((VerticalLayout) model);
         } else if (model instanceof HorizontalLayout) {
-            canvasLayout = factory.createCanvasHorizontalLayout();
+            canvasLayout = factory.createCanvasHorizontalLayout((HorizontalLayout) model);
+        } else if (model instanceof CssLayout) {
+            CssLayout cssLayoutModel = (CssLayout) model;
+            canvasLayout = factory.createCssLayout(cssLayoutModel);
         } else if (model instanceof WidgetLayout) {
-            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model).getWidget());
+            canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model));
         } else if (model instanceof GridLayout) {
             GridLayout gridModel = (GridLayout) model;
-            Integer columns = gridModel.getColumns();
-            Integer rows = gridModel.getRows();
-            canvasLayout = factory.createCanvasGridLayout(columns, rows);
+            canvasLayout = factory.createCanvasGridLayout(gridModel);
 
             for (GridArea area : gridModel.getAreas()) {
                 CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent());
@@ -77,8 +83,32 @@ public class DashboardModelConverter {
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
                 CanvasLayout childContainer = modelToContainer(frame, childModel);
-                ((Container) canvasLayout.getDelegate()).add(childContainer);
-                childContainer.setWeight(childModel.getWeight());
+                if (childContainer instanceof CanvasCssLayout) {
+                    ScrollBoxLayout scrollBoxLayout = componentsFactory.createComponent(ScrollBoxLayout.class);
+                    scrollBoxLayout.setSizeFull();
+                    scrollBoxLayout.add(childContainer);
+                    canvasLayout.getDelegate().add(scrollBoxLayout);
+                } else {
+                    canvasLayout.getDelegate().add(childContainer);
+                }
+
+                if (childModel instanceof CssLayout || childModel.getParent() instanceof CssLayout) {
+                    if (childModel.getStyleName() != null) {
+                        childContainer.addStyleName(childModel.getStyleName());
+                    }
+                    if (childModel.getParent() instanceof CssLayout) {
+                        String width = childModel.getWidthWithUnits();
+                        if (width != null) {
+                            childContainer.setWidth(width);
+                        }
+                        String height = childModel.getHeightWithUnits();
+                        if (height != null) {
+                            childContainer.setHeight(height);
+                        }
+                    }
+                } else {
+                    childContainer.setWeight(childModel.getWeight());
+                }
             }
         }
 

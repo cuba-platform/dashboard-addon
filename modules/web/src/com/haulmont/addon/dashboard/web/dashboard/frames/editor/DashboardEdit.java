@@ -23,16 +23,19 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.canvas.StyleChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
@@ -270,6 +273,40 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                 events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
             }
         });
+    }
+
+    @EventListener
+    public void onStyleChanged(StyleChangedEvent event) {
+        CanvasLayout source = event.getSource();
+
+        StyleDialog weightDialog = (StyleDialog) openWindow(StyleDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
+                StyleDialog.STYLENAME, getAdditionalStyleName(source),
+                StyleDialog.WIDTH, source.getWidth(),
+                StyleDialog.WIDTH_UNITS, source.getWidthUnits(),
+                StyleDialog.HEIGHT, source.getHeight(),
+                StyleDialog.HEIGHT_UNITS, source.getHeightUnits()));
+        weightDialog.addCloseListener(actionId -> {
+            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                Dashboard dashboard = getDashboard();
+                DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
+                layout.setStyleName(weightDialog.getLayoutStyleName());
+                layout.setHeight(weightDialog.getLayoutHeight());
+                layout.setHeightUnit(weightDialog.getLayoutHeightUnit());
+                layout.setWidth(weightDialog.getLayoutWidth());
+                layout.setWidthUnit(weightDialog.getLayoutWidthUnit());
+                events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
+            }
+        });
+    }
+
+    private String getAdditionalStyleName(CanvasLayout source) {
+        String styleName = source.getStyleName();
+        if (styleName != null) {
+            styleName = styleName.replace(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER, "");
+            styleName = styleName.replace(DashboardStyleConstants.DASHBOARD_TREE_SELECTED, "");
+            return styleName.trim();
+        }
+        return null;
     }
 
     @EventListener

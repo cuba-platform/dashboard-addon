@@ -150,21 +150,25 @@ public class WidgetRepositoryImpl implements WidgetRepository {
 
         for (Parameter p : widget.getWidgetFields()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
-            widgetParams.put(p.getAlias(), rawValue);
+            widgetParams.put(getAlias(p), rawValue);
         }
 
         if (widget.getDashboard() != null) {
             for (Parameter p : widget.getDashboard().getParameters()) {
                 Object rawValue = parameterTransformer.transform(p.getParameterValue());
-                widgetParams.put(p.getAlias(), rawValue);
+                widgetParams.put(getAlias(p), rawValue);
             }
         }
 
         for (Parameter p : widget.getParameters()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
-            widgetParams.put(p.getAlias(), rawValue);
+            widgetParams.put(getAlias(p), rawValue);
         }
         return widgetParams;
+    }
+
+    private String getAlias(Parameter p) {
+        return p.getAlias() != null ? p.getAlias() : p.getName();
     }
 
     @Override

@@ -43,6 +43,8 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -56,6 +58,8 @@ import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParent
 
 public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
+
+    private static Logger log = LoggerFactory.getLogger(PaletteFrame.class);
 
     @Inject
     protected DDVerticalLayout ddWidgetBox;
@@ -117,6 +121,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         ddLayoutBox.add(factory.createVerticalLayoutButton());
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
+        ddLayoutBox.add(factory.createCssLayoutButton());
 
     }
 
@@ -144,8 +149,12 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     protected void updateWidgetTemplates() {
         ddWidgetTemplateBox.removeAll();
         for (WidgetTemplate wt : widgetTemplatesDs.getItems()) {
-            PaletteButton widgetBtn = factory.createWidgetTemplateButton(wt);
-            ddWidgetTemplateBox.add(widgetBtn);
+            try {
+                PaletteButton widgetBtn = factory.createWidgetTemplateButton(wt);
+                ddWidgetTemplateBox.add(widgetBtn);
+            } catch (Exception e) {
+                log.error(String.format("Unable to create widget template %s <%s>. Cause: %s", wt.getName(), wt.getId(), e.getMessage()), e);
+            }
         }
     }
 
@@ -155,7 +164,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                 .map(type -> {
                     Widget widget = metadata.create(Widget.class);
                     widget.setName(type.getName());
-                    widget.setBrowseFrameId(type.getBrowseFrameId());
+                    widget.setFrameId(type.getFrameId());
                     widget.setDashboard(dashboard);
                     return widget;
                 })

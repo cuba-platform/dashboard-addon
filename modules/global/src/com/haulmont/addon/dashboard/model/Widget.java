@@ -43,6 +43,9 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected List<Parameter> widgetFields = new ArrayList<>();
     @MetaProperty
+    protected String frameId;
+    @MetaProperty
+    @Deprecated
     protected String browseFrameId;
     @MetaProperty
     @Exclude
@@ -102,12 +105,15 @@ public class Widget extends BaseUuidEntity {
         this.widgetFields = widgetFields;
     }
 
-    public String getBrowseFrameId() {
-        return browseFrameId;
+    public String getFrameId() {
+        if (frameId == null) {
+            frameId = browseFrameId;
+        }
+        return frameId;
     }
 
-    public void setBrowseFrameId(String browseFrameId) {
-        this.browseFrameId = browseFrameId;
+    public void setFrameId(String frameId) {
+        this.frameId = frameId;
     }
 
     public Dashboard getDashboard() {

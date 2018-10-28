@@ -25,6 +25,7 @@ import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import org.springframework.stereotype.Component;
 
 import static com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter.NAME;
@@ -58,7 +59,19 @@ public class JsonConverter {
     }
 
     public Dashboard dashboardFromJson(String json) {
-        return gson.fromJson(json, Dashboard.class);
+        Dashboard dashboard = gson.fromJson(json, Dashboard.class);
+        RootLayout rootLayout = dashboard.getVisualModel();
+        initLayoutParents(rootLayout);
+        return dashboard;
+    }
+
+    private void initLayoutParents(DashboardLayout rootLayout) {
+        if (rootLayout.getChildren() != null) {
+            for (DashboardLayout layout : rootLayout.getChildren()) {
+                layout.setParent(rootLayout);
+                initLayoutParents(layout);
+            }
+        }
     }
 
     public Widget widgetFromJson(String json) {

@@ -26,10 +26,10 @@ import com.haulmont.addon.dnd.components.dragfilter.DragFilter;
 import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
 import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
 import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.web.gui.components.WebAbstractComponent;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebCssLayout;
-import com.haulmont.cuba.web.gui.components.WebHBoxLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
@@ -38,23 +38,23 @@ import java.util.Map;
 import java.util.UUID;
 
 public abstract class AbstractCanvasLayout extends WebCssLayout implements CanvasLayout {
-    protected WebAbstractComponent delegate;
+    protected Container delegate;
     protected HBoxLayout buttonsPanel;
     protected UUID uuid;
 
-    public AbstractCanvasLayout(WebAbstractComponent delegate) {
+    public AbstractCanvasLayout(Container delegate) {
         this.delegate = delegate;
-        buttonsPanel = new WebHBoxLayout();
+        buttonsPanel = AppBeans.get(ComponentsFactory.class).createComponent(HBoxLayout.class);
         super.add(delegate);
         super.add(buttonsPanel);
     }
 
     @Override
-    public WebAbstractComponent getDelegate() {
+    public Container getDelegate() {
         return delegate;
     }
 
-    public void setDelegate(WebAbstractComponent delegate) {
+    public void setDelegate(Container delegate) {
         this.delegate = delegate;
     }
 

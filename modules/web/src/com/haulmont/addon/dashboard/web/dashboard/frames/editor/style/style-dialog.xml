@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog"
+        messagesPack="com.haulmont.addon.dashboard.web.dashboard.frames.editor.style">
+    <dialogMode height="250"
+                width="480"/>
+    <layout height="100%"
+            spacing="true" expand="btnPanel"
+            width="100%">
+        <grid id="grid" spacing="true" width="100%">
+            <columns>
+                <column/>
+                <column flex="1"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="msg://styleName"/>
+                    <textField id="styleName" width="100%"/>
+                </row>
+                <row>
+                    <label value="msg://width"/>
+                    <hbox spacing="true" width="100%" expand="width">
+                        <textField id="width" datatype="int"/>
+                        <lookupField id="widthUnits" width="60px" required="true"/>
+                    </hbox>
+                </row>
+                <row>
+                    <label value="msg://height"/>
+                    <hbox spacing="true" width="100%" expand="height">
+                        <textField id="height" datatype="int"/>
+                        <lookupField id="heightUnits" width="60px" required="true"/>
+                    </hbox>
+                </row>
+            </rows>
+        </grid>
+        <buttonsPanel id="btnPanel">
+            <button id="okBtn"
+                    caption="msg://ok"
+                    icon="OK"
+                    invoke="apply"/>
+            <button id="cancelBtn"
+                    caption="msg://cancel"
+                    icon="CANCEL"
+                    invoke="cancel"/>
+        </buttonsPanel>
+    </layout>
+</window>

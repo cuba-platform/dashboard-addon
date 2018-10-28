@@ -81,6 +81,17 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         return button;
     }
 
+    @Override
+    public PaletteButton createCssLayoutButton() {
+        PaletteButton button = createCommonButton();
+        button.setCaption(messages.getMainMessage("cssLayout"));
+        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
+        button.setLayout(metadata.create(CssLayout.class));
+        button.getLayout().setUuid(null);
+        button.setDescription(messages.getMainMessage("cssLayout"));
+        return button;
+    }
+
     public PaletteButton createWidgetButton(Widget widget) {
         WidgetLayout layout = metadata.create(WidgetLayout.class);
         layout.setWidget(widget);
@@ -96,7 +107,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
 
     public PaletteButton createWidgetTemplateButton(WidgetTemplate wt) {
         Widget widget = converter.widgetFromJson(wt.getWidgetModel());
-        widget.setName(widgetUtils.getWidgetType(widget.getBrowseFrameId()));
+        widget.setName(widgetUtils.getWidgetType(widget.getFrameId()));
         WidgetTemplateLayout layout = metadata.create(WidgetTemplateLayout.class);
         layout.setWidget(widget);
 

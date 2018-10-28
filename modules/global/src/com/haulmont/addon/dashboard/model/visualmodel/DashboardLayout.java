@@ -31,11 +31,29 @@ public abstract class DashboardLayout extends BaseUuidEntity {
     @MetaProperty
     protected List<DashboardLayout> children = new ArrayList<>();
 
+    @MetaProperty
+    protected transient DashboardLayout parent;
+
     /**
      * The expand ratio of given layout in a parent layout.
      */
     @MetaProperty
     protected Integer weight = 1;
+
+    @MetaProperty
+    protected String styleName;
+
+    @MetaProperty
+    protected Integer width;
+
+    @MetaProperty
+    protected Integer height;
+
+    @MetaProperty
+    protected String widthUnit;
+
+    @MetaProperty
+    protected String heightUnit;
 
     public Integer getWeight() {
         return weight;
@@ -88,5 +106,61 @@ public abstract class DashboardLayout extends BaseUuidEntity {
 
     public boolean isRoot() {
         return false;
+    }
+
+    public String getStyleName() {
+        return styleName;
+    }
+
+    public void setStyleName(String styleName) {
+        this.styleName = styleName;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public SizeUnit getWidthUnit() {
+        return SizeUnit.fromId(widthUnit);
+    }
+
+    public void setWidthUnit(SizeUnit widthUnit) {
+        this.widthUnit = widthUnit != null ? widthUnit.getId() : null;
+    }
+
+    public SizeUnit getHeightUnit() {
+        return SizeUnit.fromId(heightUnit);
+    }
+
+    public void setHeightUnit(SizeUnit heightUnit) {
+        this.heightUnit = heightUnit != null ? heightUnit.getId() : null;
+    }
+
+    public String getWidthWithUnits() {
+        return getWidth() != null ? getWidth() + getWidthUnit().getId() : null;
+    }
+
+    public String getHeightWithUnits() {
+        return getHeight() != null ? getHeight() + getHeightUnit().getId() : null;
+    }
+
+    public DashboardLayout getParent() {
+        return parent;
+    }
+
+    public void setParent(DashboardLayout parent) {
+        this.parent = parent;
     }
 }

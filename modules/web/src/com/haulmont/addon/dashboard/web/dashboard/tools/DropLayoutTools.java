@@ -22,6 +22,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -60,6 +61,17 @@ public class DropLayoutTools {
 
     public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
         DashboardLayout targetLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+        if (layout instanceof CssLayout) {
+            CssLayoutCreationDialog dialog = (CssLayoutCreationDialog) frame.openWindow(CssLayoutCreationDialog.SCREEN_NAME, DIALOG);
+            dialog.addCloseListener(actionId -> {
+                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                    CssLayout cssLayout = metadata.create(CssLayout.class);
+                    cssLayout.setResponsive(dialog.getResponsive());
+                    cssLayout.setStyleName(dialog.getCssStyleName());
+                    reorderWidgetsAndPushEvents(cssLayout, targetLayout, location);
+                }
+            });
+        }
         if (layout instanceof GridLayout) {
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
@@ -95,7 +107,7 @@ public class DropLayoutTools {
         } else if (layout instanceof WidgetLayout) {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
             Widget widget = metadata.create(((WidgetLayout) layout).getWidget().getClass());
-            widget.setBrowseFrameId(((WidgetLayout) layout).getWidget().getBrowseFrameId());
+            widget.setFrameId(((WidgetLayout) layout).getWidget().getFrameId());
             widget.setName(((WidgetLayout) layout).getWidget().getName());
             widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
             WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);

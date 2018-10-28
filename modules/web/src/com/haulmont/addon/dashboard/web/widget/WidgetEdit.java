@@ -88,10 +88,10 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     }
 
     protected void setWidgetType() {
-        String browseFrameId = widgetDs.getItem().getBrowseFrameId();
+        String browseFrameId = widgetDs.getItem().getFrameId();
 
         WidgetTypeInfo widgetType = typesInfo.stream()
-                .filter(typeInfo -> browseFrameId.equals(typeInfo.getBrowseFrameId()))
+                .filter(typeInfo -> browseFrameId.equals(typeInfo.getFrameId()))
                 .findFirst().orElseThrow(() -> new RuntimeException("Unknown widget type"));
 
 

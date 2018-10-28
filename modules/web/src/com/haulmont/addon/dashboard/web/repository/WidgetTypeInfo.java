@@ -25,15 +25,15 @@ import java.io.Serializable;
 public class WidgetTypeInfo implements Serializable {
 
     protected String name;
-    protected String browseFrameId;
+    protected String frameId;
     protected String editFrameId;
 
     public WidgetTypeInfo() {
     }
 
-    public WidgetTypeInfo(String name, String browseFrameId, String editFrameId) {
+    public WidgetTypeInfo(String name, String frameId, String editFrameId) {
         this.name = name;
-        this.browseFrameId = browseFrameId;
+        this.frameId = frameId;
         this.editFrameId = editFrameId;
     }
 
@@ -45,12 +45,12 @@ public class WidgetTypeInfo implements Serializable {
         this.name = name;
     }
 
-    public String getBrowseFrameId() {
-        return browseFrameId;
+    public String getFrameId() {
+        return frameId;
     }
 
-    public void setBrowseFrameId(String browseFrameId) {
-        this.browseFrameId = browseFrameId;
+    public void setFrameId(String frameId) {
+        this.frameId = frameId;
     }
 
     public String getEditFrameId() {

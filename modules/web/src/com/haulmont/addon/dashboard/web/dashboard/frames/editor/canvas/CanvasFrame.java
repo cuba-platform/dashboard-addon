@@ -28,7 +28,6 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.VBoxLayout;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,7 +41,7 @@ public class CanvasFrame extends AbstractFrame {
     public static final String DASHBOARD_FRAME = "dashboardFrame";
 
     @Inject
-    protected VBoxLayout canvas;
+    protected OrderedContainer canvas;
     @Named("uiModelConverter")
     protected DashboardModelConverter converter;
     @WindowParam

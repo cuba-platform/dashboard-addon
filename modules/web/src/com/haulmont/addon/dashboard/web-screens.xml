@@ -19,8 +19,12 @@
             template="/com/haulmont/addon/dashboard/web/dashboard/frames/editor/canvas/canvas-editor-frame.xml"/>
     <screen id="dashboard$GridDialog"
             template="/com/haulmont/addon/dashboard/web/dashboard/frames/editor/grid/grid-creation-dialog.xml"/>
+    <screen id="dashboard$CssLayoutDialog"
+            template="/com/haulmont/addon/dashboard/web/dashboard/frames/editor/css/css-creation-dialog.xml"/>
     <screen id="dashboard$WeightDialog"
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/weight/weight-dialog.xml"/>
+    <screen id="dashboard$StyleDialog"
+            template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/style/style-dialog.xml"/>
     <!--parameters-->
     <screen id="dashboard$ParameterBrowse"
             template="com/haulmont/addon/dashboard/web/parameter/parameter-browse.xml"/>

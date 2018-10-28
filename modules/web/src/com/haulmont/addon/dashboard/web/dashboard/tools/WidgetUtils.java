@@ -23,10 +23,10 @@ public class WidgetUtils {
     @Inject
     protected Messages messages;
 
-    public String getWidgetType(String browseFrameId) {
+    public String getWidgetType(String frameId) {
         String result = StringUtils.EMPTY;
         Optional<WidgetTypeInfo> widgetTypeOpt = widgetRepository.getWidgetTypesInfo().stream()
-                .filter(typeInfo -> browseFrameId.equals(typeInfo.getBrowseFrameId()))
+                .filter(typeInfo -> frameId.equals(typeInfo.getFrameId()))
                 .findFirst();
 
         if (widgetTypeOpt.isPresent()) {
@@ -39,7 +39,7 @@ public class WidgetUtils {
         Map<String, String> map = new HashMap<>();
         List<WidgetTypeInfo> typesInfo = widgetRepository.getWidgetTypesInfo();
         for (WidgetTypeInfo typeInfo : typesInfo) {
-            String browseFrameId = typeInfo.getBrowseFrameId();
+            String browseFrameId = typeInfo.getFrameId();
             String name = typeInfo.getName();
             String property = format("dashboard-widget.%s", name);
             String mainMessage = messages.getMainMessage(property);
