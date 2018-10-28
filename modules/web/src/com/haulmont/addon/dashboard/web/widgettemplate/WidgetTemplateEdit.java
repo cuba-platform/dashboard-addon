@@ -30,6 +30,7 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -99,6 +100,7 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
             fieldGroup.getField("isAvailableForAllUsers").setVisible(false);
         }
         openWidgetEditor = true;
+        ((AbstractDatasource) widgetTemplateDs).setModified(false);
     }
 
     public Component generateWidgetTypeField(Datasource datasource, String fieldId) {

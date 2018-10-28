@@ -17,6 +17,8 @@
 
 package com.haulmont.addon.dashboard.model.paramtypes;
 
+import java.util.Objects;
+
 public class EnumParameterValue implements ParameterValue {
     protected String enumClassName;
 
@@ -38,5 +40,19 @@ public class EnumParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return String.format("type: enum; enumClassName=%s", enumClassName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EnumParameterValue that = (EnumParameterValue) o;
+        return Objects.equals(enumClassName, that.enumClassName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(enumClassName);
     }
 }

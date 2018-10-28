@@ -18,6 +18,7 @@
 package com.haulmont.addon.dashboard.model.paramtypes;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class EntityParameterValue implements ParameterValue {
     protected String metaClassName;
@@ -71,5 +72,21 @@ public class EntityParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return String.format("type: entity; metaClassName=%s, entityId=%s, viewName=%s", metaClassName, entityId, viewName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityParameterValue that = (EntityParameterValue) o;
+        return Objects.equals(metaClassName, that.metaClassName) &&
+                Objects.equals(entityId, that.entityId) &&
+                Objects.equals(viewName, that.viewName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(metaClassName, entityId, viewName);
     }
 }

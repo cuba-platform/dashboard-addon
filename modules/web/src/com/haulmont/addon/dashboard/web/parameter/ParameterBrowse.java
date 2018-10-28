@@ -19,19 +19,22 @@ package com.haulmont.addon.dashboard.web.parameter;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.MetadataTools;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.inject.Named;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 
@@ -56,6 +59,10 @@ public class ParameterBrowse extends AbstractLookup {
         return new ArrayList<>(parametersDs.getItems());
     }
 
+    public GroupDatasource<Parameter, UUID> getParametersDs() {
+        return parametersDs;
+    }
+
     protected void initDs(Map<String, Object> params) {
         List<Parameter> parameters = (List<Parameter>) params.get(PARAMETERS);
 
@@ -69,9 +76,17 @@ public class ParameterBrowse extends AbstractLookup {
 
         parametersDs.addCollectionChangeListener(event -> {
             if (dashboard != null) {//if edit dashboard params
+
+                List<Parameter> dashboardParameters = dashboard.getParameters();
+                Collection<Parameter> dsParameters = event.getDs().getItems();
+                if ((dashboardParameters.isEmpty() && dsParameters.isEmpty())) {
+                    return;
+                }
+
                 dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
             }
         });
+        ((AbstractDatasource) parametersDs).setModified(false);
     }
 
     public Component generateValueCell(Entity entity) {

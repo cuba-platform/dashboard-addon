@@ -46,7 +46,7 @@ public class Dashboard extends BaseUuidEntity {
     @MetaProperty
     protected RootLayout visualModel;
     @MetaProperty
-    protected List<Parameter> parameters;
+    protected List<Parameter> parameters = new ArrayList<>();
     @MetaProperty
     protected Boolean isAvailableForAllUsers = true;
 

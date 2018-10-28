@@ -18,6 +18,7 @@
 package com.haulmont.addon.dashboard.model.paramtypes;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class DecimalParameterValue implements ParameterValue {
     BigDecimal value;
@@ -40,5 +41,19 @@ public class DecimalParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return String.format("type: decimal; value=%s", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DecimalParameterValue that = (DecimalParameterValue) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(value);
     }
 }

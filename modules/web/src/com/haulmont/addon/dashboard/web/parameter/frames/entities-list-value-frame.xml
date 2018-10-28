@@ -6,9 +6,12 @@
     <dsContext>
         <valueCollectionDatasource id="entitiesDs">
             <properties>
-                <property datatype="string" name="metaClassName"/>
-                <property datatype="string" name="entityId"/>
-                <property datatype="string" name="viewName"/>
+                <property datatype="string"
+                          name="metaClassName"/>
+                <property datatype="string"
+                          name="entityId"/>
+                <property datatype="string"
+                          name="viewName"/>
             </properties>
         </valueCollectionDatasource>
     </dsContext>
@@ -18,7 +21,8 @@
                width="100%">
             <actions>
                 <action id="create"/>
-                <action id="edit"/>
+                <action id="edit"
+                        invoke="onEdit"/>
                 <action id="remove"/>
             </actions>
             <columns>
