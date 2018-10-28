@@ -19,14 +19,13 @@
                     datasource="widgetTemplateDs"
                     width="100%">
             <column width="250px">
-                <field property="name"
-                       required="true"/>
+                <field property="name"/>
                 <field optionsDatasource="widgetTemplateGroupsDs"
                        property="group"/>
-                <field property="isAvailableForAllUsers"/>
                 <field id="widgetType"
                        caption="msg://widgetType"
                        generator="generateWidgetTypeField"/>
+                <field property="isAvailableForAllUsers"/>
             </column>
         </fieldGroup>
         <hbox spacing="true"

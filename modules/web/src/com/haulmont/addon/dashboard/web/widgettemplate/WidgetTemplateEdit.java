@@ -26,6 +26,7 @@ import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -76,6 +77,10 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
     @Override
     protected void postInit() {
         super.postInit();
+        if (PersistenceHelper.isNew(getItem())) {
+            getItem().setCreatedBy(accessHelper.getCurrentSessionLogin());
+        }
+
         if (StringUtils.isNotEmpty(widgetTemplateDs.getItem().getWidgetModel())) {
             Widget widget = converter.widgetFromJson(widgetTemplateDs.getItem().getWidgetModel());
             setWidgetTypeLookupValue(widget, widgetTypeLookup);
