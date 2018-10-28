@@ -106,10 +106,13 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
         editWidgetButton.setIcon("icons/gear.png");
         widgetTypeLookup.setOptionsMap(widgetUtils.getWidgetCaptions());
         widgetTypeLookup.addValueChangeListener(e -> {
-            Widget widget = metadata.create(Widget.class);
-            widget.setBrowseFrameId((String) e.getValue());
-            widget.setName(widgetUtils.getWidgetType((String) e.getValue()));
-            openWidgetEditor(widget);
+            String browserFrameId = (String) e.getValue();
+            if (browserFrameId != null) {
+                Widget widget = metadata.create(Widget.class);
+                widget.setBrowseFrameId(browserFrameId);
+                widget.setName(widgetUtils.getWidgetType((String) e.getValue()));
+                openWidgetEditor(widget);
+            }
         });
         this.widgetTypeLookup = widgetTypeLookup;
         this.editWidgetButton = editWidgetButton;
@@ -137,6 +140,10 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
     }
 
     protected void setWidgetTypeLookupValue(Widget widget, LookupField lookupField) {
+        if (widget == null) {
+            lookupField.setValue(null);
+            return;
+        }
         String browseFrameId = widget.getBrowseFrameId();
 
         Optional<WidgetTypeInfo> widgetTypeOpt = widgetRepository.getWidgetTypesInfo().stream()
