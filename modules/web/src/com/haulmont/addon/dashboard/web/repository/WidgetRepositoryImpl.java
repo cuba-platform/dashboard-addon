@@ -145,24 +145,24 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     }
 
     @Override
-    public Map<String, Object> getWidgetParams(Widget widget) {
+    public Map<String, Object> getWidgetParams(Widget widget) {//
         Map<String, Object> widgetParams = new HashMap<>();
 
         for (Parameter p : widget.getWidgetFields()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
-            widgetParams.put(p.getName(), rawValue);
+            widgetParams.put(p.getAlias(), rawValue);
         }
 
         if (widget.getDashboard() != null) {
             for (Parameter p : widget.getDashboard().getParameters()) {
                 Object rawValue = parameterTransformer.transform(p.getParameterValue());
-                widgetParams.put(p.getName(), rawValue);
+                widgetParams.put(p.getAlias(), rawValue);
             }
         }
 
         for (Parameter p : widget.getParameters()) {
             Object rawValue = parameterTransformer.transform(p.getParameterValue());
-            widgetParams.put(p.getName(), rawValue);
+            widgetParams.put(p.getAlias(), rawValue);
         }
         return widgetParams;
     }
@@ -174,6 +174,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         for (Field parameterField : parameterFields) {
             Parameter parameter = metadata.create(Parameter.class);
             parameter.setName(parameterField.getName());
+            parameter.setAlias(parameterField.getName());
             ParameterValue parameterValue = parameterTransformer.createParameterValue(parameterField, widgetFrame);
             parameter.setParameterValue(parameterValue);
             widget.getWidgetFields().add(parameter);
