@@ -87,15 +87,19 @@ public class CanvasFrame extends AbstractFrame {
 
     protected void searchRefreshableWidgets(CanvasLayout layout, List<RefreshableWidget> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
-            Component wb = ((Container) layout.getDelegate()).getOwnComponents().iterator().next();
+            Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
             if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
                 wbList.add((RefreshableWidget) wb);
             }
         } else {
-            for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+            for (Component child : layout.getDelegate().getOwnComponents()) {
                 searchRefreshableWidgets((CanvasLayout) child, wbList);
             }
         }
+    }
+
+    private Component getWidgetFrame(CanvasWidgetLayout layout) {
+        return layout.getWidgetComponent();
     }
 
     public CanvasVerticalLayout getvLayout() {

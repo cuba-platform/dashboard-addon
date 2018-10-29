@@ -18,14 +18,17 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDVerticalLayout;
+import com.haulmont.cuba.gui.components.Component;
 
 public class CanvasWidgetLayout extends AbstractCanvasLayout {
     protected WebDDVerticalLayout verticalLayout;
     protected Widget widget = null;
+    protected Component widgetComponent;
 
-    public CanvasWidgetLayout() {
-        super(new WebDDVerticalLayout());
+    public CanvasWidgetLayout(WidgetLayout model) {
+        super(model, new WebDDVerticalLayout());
         verticalLayout = (WebDDVerticalLayout) delegate;
     }
 
@@ -40,5 +43,13 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
 
     public void setWidget(Widget widget) {
         this.widget = widget;
+    }
+
+    public Component getWidgetComponent() {
+        return widgetComponent;
+    }
+
+    public void setWidgetComponent(Component widgetComponent) {
+        this.widgetComponent = widgetComponent;
     }
 }

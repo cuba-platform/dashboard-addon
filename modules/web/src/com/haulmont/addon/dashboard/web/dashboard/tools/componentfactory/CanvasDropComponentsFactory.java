@@ -163,8 +163,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     @Override
-    public CanvasVerticalLayout createCanvasRootLayout(RootLayout rootLayout) {
-        CanvasVerticalLayout layout = super.createCanvasRootLayout(rootLayout);
+    public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
+        CanvasRootLayout layout = super.createCanvasRootLayout(rootLayout);
         layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.setDescription(messages.getMainMessage("rootLayout"));

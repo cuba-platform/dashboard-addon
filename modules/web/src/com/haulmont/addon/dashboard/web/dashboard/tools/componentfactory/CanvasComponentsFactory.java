@@ -33,5 +33,5 @@ public interface CanvasComponentsFactory {
 
     CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout);
 
-    CanvasVerticalLayout createCanvasRootLayout(RootLayout rootLayout);
+    CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout);
 }

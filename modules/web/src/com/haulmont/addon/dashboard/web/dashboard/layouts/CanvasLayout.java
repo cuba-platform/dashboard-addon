@@ -17,6 +17,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dnd.components.DDLayout;
 import com.haulmont.addon.dnd.components.dragevent.DropTarget;
 import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
@@ -40,5 +41,7 @@ public interface CanvasLayout extends Component, Component.Container, DDLayout, 
     UUID getUuid();
 
     void setUuid(UUID uuid);
+
+    DashboardLayout getModel();
 
 }

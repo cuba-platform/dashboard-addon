@@ -56,7 +56,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
-        CanvasVerticalLayout layout = new CanvasVerticalLayout();
+        CanvasVerticalLayout layout = new CanvasVerticalLayout(verticalLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -65,7 +65,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
-        CanvasHorizontalLayout layout = new CanvasHorizontalLayout();
+        CanvasHorizontalLayout layout = new CanvasHorizontalLayout(horizontalLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -74,7 +74,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
-        CanvasCssLayout layout = new CanvasCssLayout(cssLayoutModel.getStyleName(), cssLayoutModel.getResponsive());
+        CanvasCssLayout layout = new CanvasCssLayout(cssLayoutModel);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -83,7 +83,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
-        CanvasGridLayout layout = new CanvasGridLayout(gridLayout.getColumns(), gridLayout.getRows());
+        CanvasGridLayout layout = new CanvasGridLayout(gridLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -133,9 +133,10 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
             widgetComponent = vBoxLayout;
         }
 
-        CanvasWidgetLayout layout = new CanvasWidgetLayout();
+        CanvasWidgetLayout layout = new CanvasWidgetLayout(widgetLayout);
         layout.setUuid(UUID.randomUUID());
         layout.getDelegate().add(widgetComponent);
+        layout.setWidgetComponent(widgetFrame);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
         layout.setSizeFull();
@@ -143,8 +144,8 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     }
 
     @Override
-    public CanvasVerticalLayout createCanvasRootLayout(RootLayout rootLayout) {
-        CanvasVerticalLayout layout = new CanvasVerticalLayout();
+    public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
+        CanvasRootLayout layout = new CanvasRootLayout(rootLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
         layout.setSizeFull();

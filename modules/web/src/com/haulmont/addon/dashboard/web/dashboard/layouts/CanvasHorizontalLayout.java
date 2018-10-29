@@ -17,13 +17,14 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
+import com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDHorizontalLayout;
 
 public class CanvasHorizontalLayout extends AbstractCanvasLayout {
     protected WebDDHorizontalLayout horizontalLayout;
 
-    public CanvasHorizontalLayout() {
-        super(new WebDDHorizontalLayout());
+    public CanvasHorizontalLayout(HorizontalLayout model) {
+        super(model, new WebDDHorizontalLayout());
         horizontalLayout = (WebDDHorizontalLayout) delegate;
     }
 

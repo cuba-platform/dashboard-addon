@@ -4,6 +4,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
+import com.haulmont.addon.dashboard.model.visualmodel.CssLayout;
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
 import com.haulmont.addon.dnd.web.gui.components.WebDDCssLayout;
 import com.haulmont.cuba.gui.components.Component;
@@ -16,12 +17,12 @@ public class CanvasCssLayout extends AbstractCanvasLayout {
 
     protected WebDDCssLayout cssLayout;
 
-    public CanvasCssLayout(String styleName, Boolean responsive) {
-        super(new WebDDCssLayout());
+    public CanvasCssLayout(CssLayout cssLayoutModel) {
+        super(cssLayoutModel, new WebDDCssLayout());
         cssLayout = (WebDDCssLayout) delegate;
 
-        cssLayout.setStyleName(styleName);
-        cssLayout.setResponsive(responsive);
+        cssLayout.setStyleName(cssLayoutModel.getStyleName());
+        cssLayout.setResponsive(cssLayoutModel.getResponsive());
 
     }
 
@@ -43,4 +44,6 @@ public class CanvasCssLayout extends AbstractCanvasLayout {
     public void removeLayoutClickListener(LayoutClickListener listener) {
         log.info("Click listener is not supported yet in Css layout");
     }
+
+
 }

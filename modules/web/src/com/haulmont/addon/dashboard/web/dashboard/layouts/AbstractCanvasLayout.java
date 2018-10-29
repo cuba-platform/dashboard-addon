@@ -18,6 +18,7 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dnd.components.DDLayout;
 import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.addon.dnd.components.dragevent.DropTarget;
@@ -41,9 +42,11 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     protected Container delegate;
     protected HBoxLayout buttonsPanel;
     protected UUID uuid;
+    protected DashboardLayout model;
 
-    public AbstractCanvasLayout(Container delegate) {
+    public AbstractCanvasLayout(DashboardLayout model, Container delegate) {
         this.delegate = delegate;
+        this.model = model;
         buttonsPanel = AppBeans.get(ComponentsFactory.class).createComponent(HBoxLayout.class);
         super.add(delegate);
         super.add(buttonsPanel);
@@ -160,5 +163,9 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     @Override
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public DashboardLayout getModel() {
+        return model;
     }
 }
