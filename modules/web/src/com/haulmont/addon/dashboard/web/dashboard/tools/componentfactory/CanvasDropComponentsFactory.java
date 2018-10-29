@@ -117,9 +117,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         HBoxLayout buttonsPanel = canvasLayout.getButtonsPanel();
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
-        if (isParentCssLayout(layout)) {
-            buttonsPanel.add(styleButton);
-        } else {
+        buttonsPanel.add(styleButton);
+        if (!isParentCssLayout(layout)) {
             buttonsPanel.add(weightButton);
         }
         buttonsPanel.add(captionButton);
@@ -147,9 +146,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(editButton);
 
         buttonsPanel.add(doTemplateButton);
-        if (isParentCssLayout(widgetLayout)) {
-            buttonsPanel.add(styleButton);
-        } else {
+        buttonsPanel.add(styleButton);
+        if (!isParentCssLayout(widgetLayout)) {
             buttonsPanel.add(weightButton);
         }
         buttonsPanel.add(captionButton);
