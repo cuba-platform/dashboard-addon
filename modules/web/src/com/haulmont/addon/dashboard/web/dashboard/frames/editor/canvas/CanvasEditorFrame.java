@@ -71,18 +71,19 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
         return converter;
     }
 
-    protected void selectLayout(CanvasLayout layout, UUID layoutUuid, boolean needSelect) {
-        if (layout.getUuid().equals(layoutUuid) && needSelect) {
-            layout.addStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
-        } else {
-            layout.removeStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
+    protected void selectLayout(Container layout, UUID layoutUuid, boolean needSelect) {
+        if (layout instanceof CanvasLayout) {
+            if (((CanvasLayout) layout).getUuid().equals(layoutUuid) && needSelect) {
+                layout.addStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
+            } else {
+                layout.removeStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
+            }
         }
 
-        for (Component child : layout.getDelegate().getOwnComponents()) {
-            if (!(child instanceof CanvasLayout)) {
-                continue;
+        for (Component child : layout.getComponents()) {
+            if (child instanceof Container) {
+                selectLayout((Container) child, layoutUuid, needSelect);
             }
-            selectLayout((CanvasLayout) child, layoutUuid, needSelect);
         }
     }
 

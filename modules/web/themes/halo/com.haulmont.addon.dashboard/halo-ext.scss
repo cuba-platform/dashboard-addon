@@ -89,15 +89,7 @@
         position: relative;
     }
 
-    .v-csslayout.dashboard-shadow-border:focus {
-        border: 2px solid $v-selection-color;
-        border-radius: 3px;
-        display: inline-block;
-    }
 
-    .v-csslayout.dashboard-shadow-border:focus > .dashboard-layout-controls .dashboard-edit-button {
-        display: inline-block;
-    }
 
     .dashboard-tree-selected > .dashboard-layout-controls .dashboard-edit-button {
         display: inline-block;
