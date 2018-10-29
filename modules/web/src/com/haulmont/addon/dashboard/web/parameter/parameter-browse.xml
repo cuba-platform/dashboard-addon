@@ -7,9 +7,8 @@
         <groupDatasource id="parametersDs"
                          class="com.haulmont.addon.dashboard.model.Parameter"/>
     </dsContext>
-    <layout spacing="true">
+    <layout spacing="true" expand="parametersTable">
         <table id="parametersTable"
-               height="100%"
                width="100%">
             <actions>
                 <action id="create"/>

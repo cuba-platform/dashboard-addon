@@ -30,8 +30,10 @@
         <groupBox id="paramsBox"
                   caption="msg://widgetParameters"
                   collapsable="true">
-            <frame id="paramsFrame"
-                   screen="dashboard$ParameterBrowse"/>
+            <vbox spacing="true">
+                <frame id="paramsFrame"
+                       screen="dashboard$ParameterBrowse"/>
+            </vbox>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>
