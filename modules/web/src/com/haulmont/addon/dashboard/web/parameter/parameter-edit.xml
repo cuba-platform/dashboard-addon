@@ -11,11 +11,13 @@
                     class="com.haulmont.addon.dashboard.model.Parameter"
                     view="_local"/>
     </dsContext>
+    <dialogMode height="350"
+                width="480"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="parameterDs"
-                    height="70px">
+                    height="70px" fieldCaptionWidth="90px">
             <column width="300px">
                 <field property="name"
                        required="true"/>

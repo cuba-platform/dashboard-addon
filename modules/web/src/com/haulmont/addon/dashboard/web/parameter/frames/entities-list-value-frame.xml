@@ -22,9 +22,9 @@
                 <action id="remove"/>
             </actions>
             <columns>
-                <column id="metaClassName"/>
-                <column id="entityId"/>
-                <column id="viewName"/>
+                <column id="metaClassName" caption="msg://metaClassName"/>
+                <column id="entityId" caption="msg://entityId"/>
+                <column id="viewName" caption="msg://viewName"/>
             </columns>
             <rows datasource="entitiesDs"/>
             <rowsCount/>
