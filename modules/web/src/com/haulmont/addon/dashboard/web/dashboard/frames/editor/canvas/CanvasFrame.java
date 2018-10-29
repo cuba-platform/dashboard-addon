@@ -20,7 +20,6 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.DashboardException;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
@@ -85,15 +84,17 @@ public class CanvasFrame extends AbstractFrame {
         return result;
     }
 
-    protected void searchRefreshableWidgets(CanvasLayout layout, List<RefreshableWidget> wbList) {
+    protected void searchRefreshableWidgets(Container layout, List<RefreshableWidget> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
             Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
             if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
                 wbList.add((RefreshableWidget) wb);
             }
         } else {
-            for (Component child : layout.getDelegate().getOwnComponents()) {
-                searchRefreshableWidgets((CanvasLayout) child, wbList);
+            for (Component child : layout.getOwnComponents()) {
+                if (child instanceof Container) {
+                    searchRefreshableWidgets((Container) child, wbList);
+                }
             }
         }
     }
