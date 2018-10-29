@@ -25,8 +25,12 @@ import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
+import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 import static com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter.NAME;
 
@@ -66,7 +70,15 @@ public class JsonConverter {
     }
 
     private void initLayoutParents(DashboardLayout rootLayout) {
-        if (rootLayout.getChildren() != null) {
+        if (rootLayout instanceof GridLayout) {
+            GridLayout gridLayout = (GridLayout) rootLayout;
+            Set<GridArea> gridAreas = gridLayout.getAreas();
+            for (GridArea gridArea:gridAreas){
+                DashboardLayout dashboardLayout = gridArea.getComponent();
+                dashboardLayout.setParent(rootLayout);
+                initLayoutParents(dashboardLayout);
+            }
+        } else if (rootLayout.getChildren() != null) {
             for (DashboardLayout layout : rootLayout.getChildren()) {
                 layout.setParent(rootLayout);
                 initLayoutParents(layout);
