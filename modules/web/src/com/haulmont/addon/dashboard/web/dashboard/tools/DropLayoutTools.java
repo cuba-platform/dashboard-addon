@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
@@ -92,6 +93,7 @@ public class DropLayoutTools {
                             gcl.setRow(j + 1);
                             gcl.setColumn(i + 1);
                             gridArea.setComponent(gcl);
+                            gcl.setParent(gridLayout);
                             gridLayout.addArea(gridArea);
                         }
                     }
@@ -126,8 +128,10 @@ public class DropLayoutTools {
         DashboardLayout parentLayout = targetLayout instanceof WidgetLayout ?
                 findParentLayout(dashboard.getVisualModel(), targetLayout) : targetLayout;
         parentLayout.addChild(layout);
+        layout.setParent(parentLayout);
         moveComponent(layout, targetLayout.getId(), location);
         events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
+        events.publish(new WidgetSelectedEvent(layout.getId(), WidgetSelectedEvent.Target.CANVAS));
     }
 
     public void moveComponent(DashboardLayout layout, UUID targetLayoutId, WidgetTreeEvent.DropLocation location) {
