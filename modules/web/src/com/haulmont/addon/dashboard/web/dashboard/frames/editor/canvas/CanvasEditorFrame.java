@@ -78,7 +78,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
             layout.removeStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
         }
 
-        for (Component child : ((Container) layout.getDelegate()).getOwnComponents()) {
+        for (Component child : layout.getDelegate().getOwnComponents()) {
             if (!(child instanceof CanvasLayout)) {
                 continue;
             }

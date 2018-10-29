@@ -21,7 +21,7 @@ import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
@@ -49,7 +49,7 @@ public class CanvasFrame extends AbstractFrame {
     @WindowParam
     protected Dashboard dashboard;
 
-    protected CanvasVerticalLayout vLayout;
+    protected CanvasRootLayout vLayout;
 
 
     @Override
@@ -74,7 +74,7 @@ public class CanvasFrame extends AbstractFrame {
         if (dashboard == null) {
             throw new DashboardException("DASHBOARD parameter can not be null");
         }
-        vLayout = (CanvasVerticalLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
+        vLayout = (CanvasRootLayout) getConverter().modelToContainer(this, dashboard.getVisualModel());
         canvas.removeAll();
         canvas.add(vLayout);
     }
@@ -102,7 +102,7 @@ public class CanvasFrame extends AbstractFrame {
         return layout.getWidgetComponent();
     }
 
-    public CanvasVerticalLayout getvLayout() {
+    public CanvasRootLayout getvLayout() {
         return vLayout;
     }
 }
