@@ -41,7 +41,9 @@ public class DropHandlerTools {
     }
 
     public void addDropHandler(CanvasLayout layout) {
-        if (layout instanceof CanvasVerticalLayout) {
+        if (layout instanceof CanvasRootLayout) {
+            layout.setDropHandler(new LayoutDropHandler(dashboard));
+        } else if (layout instanceof CanvasVerticalLayout) {
             layout.setDropHandler(new LayoutDropHandler(dashboard));
         } else if (layout instanceof CanvasHorizontalLayout) {
             layout.setDropHandler(new LayoutDropHandler(dashboard));
