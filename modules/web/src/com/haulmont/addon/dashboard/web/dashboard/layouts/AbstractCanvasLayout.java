@@ -72,52 +72,52 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
 
     @Override
     public void setDropHandler(DropHandler dropHandler) {
-        ((DDLayout) delegate).setDropHandler(dropHandler);
+        ((DDLayout) getDelegate()).setDropHandler(dropHandler);
     }
 
     @Override
     public DropHandler getDropHandler() {
-        return ((DDLayout) delegate).getDropHandler();
+        return ((DDLayout) getDelegate()).getDropHandler();
     }
 
     @Override
     public LayoutDragMode getDragMode() {
-        return ((DDLayout) delegate).getDragMode();
+        return ((DDLayout) getDelegate()).getDragMode();
     }
 
     @Override
     public void setDragMode(LayoutDragMode mode) {
-        ((DDLayout) delegate).setDragMode(mode);
+        ((DDLayout) getDelegate()).setDragMode(mode);
     }
 
     @Override
     public void addLayoutClickListener(LayoutClickListener listener) {
-        ((LayoutClickNotifier) delegate).addLayoutClickListener(listener);
+        ((LayoutClickNotifier) getDelegate()).addLayoutClickListener(listener);
     }
 
     @Override
     public void removeLayoutClickListener(LayoutClickListener listener) {
-        ((LayoutClickNotifier) delegate).removeLayoutClickListener(listener);
+        ((LayoutClickNotifier) getDelegate()).removeLayoutClickListener(listener);
     }
 
     @Override
     public DragFilter getDragFilter() {
-        return ((DragFilterSupport) delegate).getDragFilter();
+        return ((DragFilterSupport) getDelegate()).getDragFilter();
     }
 
     @Override
     public void setDragFilter(DragFilter dragFilter) {
-        ((DragFilterSupport) delegate).setDragFilter(dragFilter);
+        ((DragFilterSupport) getDelegate()).setDragFilter(dragFilter);
     }
 
     @Override
     public TargetDetails convertTargetDetails(com.vaadin.event.dd.TargetDetails details) {
-        return ((TargetConverter) delegate).convertTargetDetails(details);
+        return ((TargetConverter) getDelegate()).convertTargetDetails(details);
     }
 
     @Override
     public TargetDetails translateDropTargetDetails(Map<String, Object> clientVariables) {
-        return ((DropTarget) delegate).translateDropTargetDetails(clientVariables);
+        return ((DropTarget) getDelegate()).translateDropTargetDetails(clientVariables);
     }
 
     @Override
@@ -152,7 +152,7 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     @Override
     public void setSizeFull() {
         super.setSizeFull();
-        delegate.setSizeFull();
+        getDelegate().setSizeFull();
     }
 
     @Override

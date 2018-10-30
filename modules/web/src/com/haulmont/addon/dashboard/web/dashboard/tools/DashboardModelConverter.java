@@ -27,7 +27,6 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
-import com.haulmont.cuba.gui.components.ScrollBoxLayout;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
@@ -83,32 +82,21 @@ public class DashboardModelConverter {
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
             for (DashboardLayout childModel : model.getChildren()) {
                 CanvasLayout childContainer = modelToContainer(frame, childModel);
-                if (childContainer instanceof CanvasCssLayout) {
-                    ScrollBoxLayout scrollBoxLayout = componentsFactory.createComponent(ScrollBoxLayout.class);
-                    scrollBoxLayout.setSizeFull();
-                    scrollBoxLayout.add(childContainer);
-                    canvasLayout.getDelegate().add(scrollBoxLayout);
-                } else {
-                    canvasLayout.getDelegate().add(childContainer);
+                canvasLayout.getDelegate().add(childContainer);
+                if (childModel.getStyleName() != null) {
+                    childContainer.addStyleName(childModel.getStyleName());
                 }
-
-                if (childModel instanceof CssLayout || childModel.getParent() instanceof CssLayout) {
-                    if (childModel.getStyleName() != null) {
-                        childContainer.addStyleName(childModel.getStyleName());
+                if (childModel.getParent() instanceof CssLayout) {
+                    String width = childModel.getWidthWithUnits();
+                    if (width != null) {
+                        childContainer.setWidth(width);
                     }
-                    if (childModel.getParent() instanceof CssLayout) {
-                        String width = childModel.getWidthWithUnits();
-                        if (width != null) {
-                            childContainer.setWidth(width);
-                        }
-                        String height = childModel.getHeightWithUnits();
-                        if (height != null) {
-                            childContainer.setHeight(height);
-                        }
+                    String height = childModel.getHeightWithUnits();
+                    if (height != null) {
+                        childContainer.setHeight(height);
                     }
-                } else {
-                    childContainer.setWeight(childModel.getWeight());
                 }
+                childContainer.setWeight(childModel.getWeight());
             }
         }
 

@@ -7,7 +7,10 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 import com.haulmont.addon.dashboard.model.visualmodel.CssLayout;
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
 import com.haulmont.addon.dnd.web.gui.components.WebDDCssLayout;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ScrollBoxLayout;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +21,11 @@ public class CanvasCssLayout extends AbstractCanvasLayout {
     protected WebDDCssLayout cssLayout;
 
     public CanvasCssLayout(CssLayout cssLayoutModel) {
-        super(cssLayoutModel, new WebDDCssLayout());
-        cssLayout = (WebDDCssLayout) delegate;
+        super(cssLayoutModel, AppBeans.get(ComponentsFactory.class).createComponent(ScrollBoxLayout.class));
+        cssLayout = new WebDDCssLayout();
+        ScrollBoxLayout scrollBox = (ScrollBoxLayout) delegate;
+        scrollBox.setSizeFull();
+        scrollBox.add(cssLayout);
 
         cssLayout.setStyleName(cssLayoutModel.getStyleName());
         cssLayout.setResponsive(cssLayoutModel.getResponsive());

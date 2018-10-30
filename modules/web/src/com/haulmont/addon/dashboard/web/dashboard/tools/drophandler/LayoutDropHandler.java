@@ -7,10 +7,7 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.Draggable;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
-import com.haulmont.addon.dnd.components.DDHorizontalLayoutTargetDetails;
-import com.haulmont.addon.dnd.components.DDVerticalLayoutTargetDetails;
-import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.addon.dnd.components.LayoutBoundTransferable;
+import com.haulmont.addon.dnd.components.*;
 import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
 import com.haulmont.addon.dnd.components.dragevent.TargetDetails;
@@ -43,12 +40,21 @@ public class LayoutDropHandler implements DropHandler {
             DDHorizontalLayoutTargetDetails hDetails = (DDHorizontalLayoutTargetDetails) event.getTargetDetails();
             location = hDetails.getDropLocation().name();
             targetCanvasLayout = (CanvasLayout) hDetails.getOverComponent();
+        } else if (event.getTargetDetails() instanceof DDCssLayoutTargetDetails) {
+            DDCssLayoutTargetDetails cssLayoutTargetDetails = (DDCssLayoutTargetDetails) event.getTargetDetails();
+            if (cssLayoutTargetDetails.getHorizontalDropLocation() != null) {
+                location = cssLayoutTargetDetails.getHorizontalDropLocation().name();
+            }
+            if (location == null && cssLayoutTargetDetails.getVerticalDropLocation() != null) {
+                location = cssLayoutTargetDetails.getVerticalDropLocation().name();
+            }
+            targetCanvasLayout = (CanvasLayout) cssLayoutTargetDetails.getOverComponent();
         }
 
         if (targetCanvasLayout == null) {
             TargetDetails details = event.getTargetDetails();
             Component.OrderedContainer targetLayout = (Component.OrderedContainer) details.getTarget();
-            targetCanvasLayout = (CanvasLayout) targetLayout.getParent();
+            targetCanvasLayout = findParentCanvas(targetLayout);
         }
 
         LayoutBoundTransferable t = (LayoutBoundTransferable) event.getTransferable();
@@ -70,6 +76,15 @@ public class LayoutDropHandler implements DropHandler {
             events.publish(new WidgetMovedEvent(dashboardLayout, targetCanvasLayout.getUuid(), location));
         }
 
+    }
+
+    private CanvasLayout findParentCanvas(Component.OrderedContainer targetLayout) {
+        if (targetLayout.getParent() instanceof CanvasLayout) {
+            return (CanvasLayout) targetLayout.getParent();
+        } else if (targetLayout.getParent() instanceof Component.OrderedContainer) {
+            return findParentCanvas((Component.OrderedContainer) targetLayout.getParent());
+        }
+        return null;
     }
 
     @Override
