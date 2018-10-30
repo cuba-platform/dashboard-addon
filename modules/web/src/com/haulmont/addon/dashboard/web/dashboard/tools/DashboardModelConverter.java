@@ -86,15 +86,13 @@ public class DashboardModelConverter {
                 if (childModel.getStyleName() != null) {
                     childContainer.addStyleName(childModel.getStyleName());
                 }
-                if (childModel.getParent() instanceof CssLayout) {
-                    String width = childModel.getWidthWithUnits();
-                    if (width != null) {
-                        childContainer.setWidth(width);
-                    }
-                    String height = childModel.getHeightWithUnits();
-                    if (height != null) {
-                        childContainer.setHeight(height);
-                    }
+                String width = childModel.getWidthWithUnits();
+                if (width != null) {
+                    childContainer.setWidth(width);
+                }
+                String height = childModel.getHeightWithUnits();
+                if (height != null) {
+                    childContainer.setHeight(height);
                 }
                 childContainer.setWeight(childModel.getWeight());
             }
