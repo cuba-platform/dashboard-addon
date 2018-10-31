@@ -43,41 +43,24 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     protected ValueFrame valueFrame;
 
-    @Inject
-    protected MetadataTools metadataTools;
-
-    private Parameter editedValue;
 
     @Override
     protected void postInit() {
         super.postInit();
-
-        //TODO: rewrite cancel don't work
-        Parameter source = parameterDs.getItem();
-        Parameter clone = metadataTools.deepCopy(source);
-        clone.setParameterValue(source.getParameterValue());
-        parameterDs.setItem(clone);
-        parameterDs.refresh();
-        editedValue = source;
-
         initParameter();
         typeLookup.addValueChangeListener(e -> parameterTypeChanged((ParameterType) e.getValue()));
-        ((AbstractDatasource) parameterDs).setModified(false);
     }
 
     @Override
     protected boolean preCommit() {
         ParameterValue parameterValue = valueFrame == null ? null : valueFrame.getValue();
-        Parameter par = parameterDs.getItem();
-        editedValue.setName(par.getName());
-        editedValue.setAlias(par.getAlias());
-        editedValue.setParameterValue(parameterValue);
+        parameterDs.getItem().setParameterValue(parameterValue);
         return super.preCommit();
     }
 
     @Override
     protected boolean preClose(String actionId) {
-        if ("windowClose".equals(actionId)) {
+        if (WINDOW_CLOSE.equals(actionId)) {
             ParameterValue newValue = valueFrame == null ? null : valueFrame.getValue();
             ParameterValue oldValue = parameterDs.getItem().getParameterValue();
             if ((newValue == null && oldValue != null) || (newValue != null && oldValue == null)) {
@@ -90,10 +73,6 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
             }
         }
         return super.preClose(actionId);
-    }
-
-    public void cancel() {
-        close("close", false);
     }
 
     protected void initParameter() {

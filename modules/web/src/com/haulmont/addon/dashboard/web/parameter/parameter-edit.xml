@@ -2,7 +2,7 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
         class="com.haulmont.addon.dashboard.web.parameter.ParameterEdit"
-        dataSupplier="com.haulmont.addon.dashboard.web.datasupplier.NonPersistentDataSupplier"
+        dataSupplier="com.haulmont.addon.dashboard.web.datasuplier.CloneNonPersistentDataSupplier"
         datasource="parameterDs"
         focusComponent="fieldGroup"
         messagesPack="com.haulmont.addon.dashboard.web.parameter">

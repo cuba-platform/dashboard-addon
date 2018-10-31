@@ -25,6 +25,7 @@ import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @NamePattern("%s|title")
 @MetaClass(name = "dashboard$Dashboard")
@@ -102,6 +103,40 @@ public class Dashboard extends BaseUuidEntity {
             }
         }
 
+    }
+
+    public WidgetLayout getWidgetLayout(UUID widgetId) {
+        return getWidgetLayout(visualModel, widgetId);
+    }
+
+    private WidgetLayout getWidgetLayout(DashboardLayout dashboardLayout, UUID widgetId) {
+        if (dashboardLayout == null || widgetId == null) {
+            return null;
+        }
+        if (WidgetLayout.class.isAssignableFrom(dashboardLayout.getClass())) {
+            Widget widget = ((WidgetLayout) dashboardLayout).getWidget();
+            if (widgetId.equals(widget.getId())) {
+                return (WidgetLayout) dashboardLayout;
+            }
+        }
+        if (GridLayout.class.isAssignableFrom(dashboardLayout.getClass())) {
+            for (GridArea gridArea : ((GridLayout) dashboardLayout).getAreas()) {
+                DashboardLayout component = gridArea.getComponent();
+                WidgetLayout tmp = getWidgetLayout(component, widgetId);
+                if (tmp != null) {
+                    return tmp;
+                }
+            }
+        } else {
+            for (DashboardLayout child : dashboardLayout.getChildren()) {
+                WidgetLayout tmp = getWidgetLayout(child, widgetId);
+                if (tmp != null) {
+                    return tmp;
+                }
+
+            }
+        }
+        return null;
     }
 
     public String getCreatedBy() {

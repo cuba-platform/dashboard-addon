@@ -19,10 +19,7 @@ package com.haulmont.addon.dashboard.web.parameter;
 
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
-import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.MetadataTools;
-import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
@@ -32,11 +29,10 @@ import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
+import static com.haulmont.cuba.gui.data.CollectionDatasource.Operation.REFRESH;
 
 public class ParameterBrowse extends AbstractLookup {
     public static final String PARAMETERS = "PARAMETERS";
@@ -71,19 +67,15 @@ public class ParameterBrowse extends AbstractLookup {
         }
 
         for (Parameter param : parameters) {
-            parametersDs.addItem(param);
+            parametersDs.includeItem(param);
         }
 
         parametersDs.addCollectionChangeListener(event -> {
-            if (dashboard != null) {//if edit dashboard params
-
-                List<Parameter> dashboardParameters = dashboard.getParameters();
-                Collection<Parameter> dsParameters = event.getDs().getItems();
-                if ((dashboardParameters.isEmpty() && dsParameters.isEmpty())) {
-                    return;
+            if (REFRESH != event.getOperation()) {
+                if (dashboard != null) {//if edit dashboard params
+                    dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
                 }
-
-                dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
+                ((AbstractDatasource) parametersDs).setModified(true);
             }
         });
         ((AbstractDatasource) parametersDs).setModified(false);
