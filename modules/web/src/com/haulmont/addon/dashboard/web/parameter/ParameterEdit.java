@@ -21,10 +21,12 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -41,10 +43,6 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     protected ValueFrame valueFrame;
 
-    @Override
-    public void init(Map<String, Object> params) {
-        super.init(params);
-    }
 
     @Override
     protected void postInit() {
@@ -58,6 +56,23 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
         ParameterValue parameterValue = valueFrame == null ? null : valueFrame.getValue();
         parameterDs.getItem().setParameterValue(parameterValue);
         return super.preCommit();
+    }
+
+    @Override
+    protected boolean preClose(String actionId) {
+        if (WINDOW_CLOSE.equals(actionId)) {
+            ParameterValue newValue = valueFrame == null ? null : valueFrame.getValue();
+            ParameterValue oldValue = parameterDs.getItem().getParameterValue();
+            if ((newValue == null && oldValue != null) || (newValue != null && oldValue == null)) {
+                ((AbstractDatasource) parameterDs).setModified(true);
+            }
+            if (oldValue != null && newValue != null) {
+                if (!oldValue.equals(newValue)) {
+                    ((AbstractDatasource) parameterDs).setModified(true);
+                }
+            }
+        }
+        return super.preClose(actionId);
     }
 
     protected void initParameter() {
@@ -131,6 +146,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
                 valueBox.removeAll();
                 break;
         }
+        ((AbstractDatasource) parameterDs).setModified(true);
     }
 
     protected SimpleValueFrame openSimpleValueFrame(ParameterType type, ParameterValue parameterValue) {

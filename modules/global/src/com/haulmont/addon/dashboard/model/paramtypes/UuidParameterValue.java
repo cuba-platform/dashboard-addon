@@ -17,6 +17,7 @@
 
 package com.haulmont.addon.dashboard.model.paramtypes;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class UuidParameterValue implements ParameterValue {
@@ -40,5 +41,19 @@ public class UuidParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return String.format("type: uuid; value=%s", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UuidParameterValue that = (UuidParameterValue) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(value);
     }
 }

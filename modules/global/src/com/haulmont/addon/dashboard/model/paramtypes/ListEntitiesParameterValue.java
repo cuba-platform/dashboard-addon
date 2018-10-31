@@ -19,6 +19,8 @@ package com.haulmont.addon.dashboard.model.paramtypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ListEntitiesParameterValue implements ParameterValue {
     protected List<EntityParameterValue> entityValues;
@@ -42,5 +44,35 @@ public class ListEntitiesParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return "type: list entities";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListEntitiesParameterValue that = (ListEntitiesParameterValue) o;
+        if ((entityValues == null & that.entityValues != null) || (entityValues != null & that.entityValues == null)) {
+            return false;
+        }
+
+        if (entityValues != null && that.entityValues != null) {
+            if (entityValues.size() != that.entityValues.size()) {
+                return false;
+            }
+
+            for (EntityParameterValue epv : entityValues) {
+                Optional<EntityParameterValue> epvOpt = that.entityValues.stream().filter(v -> v.equals(epv)).findFirst();
+                if (!epvOpt.isPresent()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(entityValues);
     }
 }
