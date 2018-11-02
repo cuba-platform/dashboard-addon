@@ -17,8 +17,8 @@
     </dsContext>
     <layout height="100%"
             spacing="true"
-            width="100%">
-        <split height="100%"
+            width="100%" expand="split">
+        <split id="split"
                orientation="vertical"
                pos="70"
                width="100%">
@@ -61,17 +61,20 @@
                     </tab>
                 </accordion>
             </vbox>
-            <vbox height="100%"
+            <vbox height="100%" width="100%" expand="widgetTreeBox"
                   margin="true,false,false,false">
-                <scrollBox id="widgetTreeBox"
-                           height="100%">
-                    <tree id="widgetTree"
-                          height="100%"
-                          width="100%">
-                        <treechildren captionProperty="caption"
-                                      datasource="dashboardLayoutTreeReadOnlyDs"/>
-                    </tree>
-                </scrollBox>
+                <groupBox id="widgetTreeBox">
+                    <scrollBox
+                               height="100%">
+                        <tree id="widgetTree"
+                              height="100%"
+                              width="100%">
+                            <treechildren captionProperty="caption"
+                                          datasource="dashboardLayoutTreeReadOnlyDs"/>
+                        </tree>
+
+                    </scrollBox>
+                </groupBox>
             </vbox>
         </split>
     </layout>

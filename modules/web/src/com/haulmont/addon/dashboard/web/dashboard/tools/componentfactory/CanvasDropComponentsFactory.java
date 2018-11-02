@@ -23,10 +23,7 @@ import com.haulmont.addon.dashboard.web.DashboardIcon;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.StyleChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WeightChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetRemovedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetEditEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.cuba.core.global.Events;
@@ -108,10 +105,11 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         return layout;
     }
 
-    private void createBaseLayoutAction(String captionKey, AbstractCanvasLayout canvasLayout, DashboardLayout layout) {
+    private void createBaseLayoutAction(String captionKey, CanvasLayout canvasLayout, DashboardLayout layout) {
         Button removeButton = createRemoveButton(layout);
         Button weightButton = createWeightButton(layout);
         Button styleButton = createStyleButton(layout);
+        Button expandButton = createExpandButton(layout);
         Button captionButton = createCaptionButton(layout, captionKey);
 
         HBoxLayout buttonsPanel = canvasLayout.getButtonsPanel();
@@ -121,7 +119,14 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         if (!isParentCssLayout(layout)) {
             buttonsPanel.add(weightButton);
         }
+        if (isLinearLayout(layout)) {
+            buttonsPanel.add(expandButton);
+        }
         buttonsPanel.add(captionButton);
+    }
+
+    private boolean isLinearLayout(DashboardLayout layout) {
+        return layout instanceof HorizontalLayout || layout instanceof VerticalLayout;
     }
 
     @Override
@@ -157,7 +162,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     private boolean isParentCssLayout(DashboardLayout layout) {
-        return layout instanceof CssLayout || layout.getParent() instanceof CssLayout;
+        return layout.getParent() instanceof CssLayout;
     }
 
     @Override
@@ -166,6 +171,16 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.getDelegate().setSpacing(true);
         layout.setDragMode(CLONE);
         layout.setDescription(messages.getMainMessage("rootLayout"));
+
+        Button expandButton = createExpandButton(rootLayout);
+        Button captionButton = createCaptionButton(rootLayout, "rootLayout");
+
+        HBoxLayout buttonsPanel = layout.getButtonsPanel();
+        buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
+        buttonsPanel.add(expandButton);
+
+        buttonsPanel.add(captionButton);
+        addLayoutClickListener(layout);
         return layout;
     }
 
@@ -204,7 +219,17 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         weightButton.setAction(new BaseAction("styleClicked")
                 .withHandler(e -> events.publish(new StyleChangedEvent(layout))));
         weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
-        weightButton.setIconFromSet(PENCIL);
+        weightButton.setIconFromSet(PAINT_BRUSH);
+        weightButton.setCaption("");
+        return weightButton;
+    }
+
+    protected Button createExpandButton(DashboardLayout layout) {
+        Button weightButton = factory.createComponent(Button.class);
+        weightButton.setAction(new BaseAction("expandClicked")
+                .withHandler(e -> events.publish(new ExpandChangedEvent(layout))));
+        weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
+        weightButton.setIconFromSet(EXPAND);
         weightButton.setCaption("");
         return weightButton;
     }

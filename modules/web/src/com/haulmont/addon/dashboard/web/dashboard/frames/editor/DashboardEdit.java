@@ -30,11 +30,9 @@ import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.StyleChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WeightChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetRemovedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetEditEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.expand.ExpandDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
@@ -277,6 +275,27 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                 DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
                 layout.setWeight(weightDialog.getWeight());
                 events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
+            }
+        });
+        ((AbstractDatasource) dashboardDs).setModified(true);
+    }
+
+    @EventListener
+    public void onExpandChanged(ExpandChangedEvent event) {
+        DashboardLayout source = event.getSource();
+
+        ExpandDialog expandDialog = (ExpandDialog) openWindow(ExpandDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
+                ExpandDialog.EXPAND, source.getExpand(),
+                ExpandDialog.LAYOUT, source));
+        expandDialog.addCloseListener(actionId -> {
+            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                DashboardLayout expandLayout = expandDialog.getExpand();
+                if (expandLayout != null) {
+                    source.setExpand(expandLayout.getId());
+                } else {
+                    source.setExpand(null);
+                }
+                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
             }
         });
         ((AbstractDatasource) dashboardDs).setModified(true);

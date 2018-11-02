@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
@@ -140,7 +141,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
             createActions(widgetTree, dashboardLayout);
         });
         widgetTree.expandTree();
-
+        widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
         CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
         cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
         cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
@@ -148,7 +149,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
         widgetTree.removeAllActions();
-        if (isActionsAvailable(layout)) {
+        if (layout != null && isActionsAvailable(layout)) {
             if (!isGridCellLayout(layout)) {
                 widgetTree.addAction(new AbstractAction("remove") {
                     @Override
@@ -191,7 +192,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     private boolean isGridCellLayout(DashboardLayout layout) {
-        return !(layout.getParent() instanceof GridLayout);
+        return (layout.getParent() instanceof GridLayout);
     }
 
     private boolean isActionsAvailable(DashboardLayout layout) {

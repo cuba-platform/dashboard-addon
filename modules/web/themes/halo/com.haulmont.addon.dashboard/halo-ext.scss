@@ -138,6 +138,11 @@
         padding-top: 5px;
     }
 
+    .dashboard-tree .v-tree {
+        padding: 0px;
+        border: none;
+    }
+
     .v-tree-node-caption.v-drag-element {
         padding: 2px 0px 0px 14px;
         width: initial !important;

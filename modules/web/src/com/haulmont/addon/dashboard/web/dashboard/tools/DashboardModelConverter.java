@@ -19,10 +19,12 @@ package com.haulmont.addon.dashboard.web.dashboard.tools;
 
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
+import com.haulmont.addon.dashboard.utils.DashboardLayoutUtils;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
 import com.haulmont.addon.dnd.components.DDGridLayout;
+import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
@@ -80,9 +82,16 @@ public class DashboardModelConverter {
         }
 
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
+
+            boolean expanded = isExpanded(model);
             for (DashboardLayout childModel : model.getChildren()) {
                 CanvasLayout childContainer = modelToContainer(frame, childModel);
                 canvasLayout.getDelegate().add(childContainer);
+                if (childModel.getId().equals(model.getExpand())) {
+                    if (canvasLayout.getDelegate() instanceof WebDDAbstractOrderedLayout) {
+                        ((WebDDAbstractOrderedLayout) canvasLayout.getDelegate()).expand(childContainer);
+                    }
+                }
                 if (childModel.getStyleName() != null) {
                     childContainer.addStyleName(childModel.getStyleName());
                 }
@@ -94,7 +103,9 @@ public class DashboardModelConverter {
                 if (height != null) {
                     childContainer.setHeight(height);
                 }
-                childContainer.setWeight(childModel.getWeight());
+                if (!expanded) {
+                    childContainer.setWeight(childModel.getWeight());
+                }
             }
         }
 
@@ -104,9 +115,15 @@ public class DashboardModelConverter {
         return canvasLayout;
     }
 
+    private boolean isExpanded(DashboardLayout model) {
+        return model.getExpand()!=null&& model.getChildren().stream()
+                .anyMatch(e->model.getExpand().equals(e.getId()));
+    }
+
     protected void containerToModel(DashboardLayout model, Component container) {
-        if (container instanceof AbstractCanvasLayout) {
-            model.setUuid(((AbstractCanvasLayout) container).getUuid() == null ? UUID.randomUUID() : ((AbstractCanvasLayout) container).getUuid());
+        if (container instanceof CanvasLayout) {
+            CanvasLayout canvasLayout = (CanvasLayout) container;
+            model.setUuid(canvasLayout.getUuid() == null ? UUID.randomUUID() : canvasLayout.getUuid());
         }
         if (container instanceof HasWeight) {
             model.setWeight(((HasWeight) container).getWeight());

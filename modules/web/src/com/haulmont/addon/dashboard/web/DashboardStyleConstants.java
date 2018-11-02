@@ -24,4 +24,5 @@ public interface DashboardStyleConstants {
     String DASHBOARD_LAYOUT_CONTROLS = "dashboard-layout-controls";
     String DASHBOARD_EDIT_BUTTON = "dashboard-edit-button";
     String DASHBOARD_TREE_SELECTED = "dashboard-tree-selected";
+    String DASHBOARD_TREE = "dashboard-tree";
 }

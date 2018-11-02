@@ -25,6 +25,8 @@
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/weight/weight-dialog.xml"/>
     <screen id="dashboard$StyleDialog"
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/style/style-dialog.xml"/>
+    <screen id="dashboard$ExpandDialog"
+            template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/expand/expand-dialog.xml"/>
     <!--parameters-->
     <screen id="dashboard$ParameterBrowse"
             template="com/haulmont/addon/dashboard/web/parameter/parameter-browse.xml"/>

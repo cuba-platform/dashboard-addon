@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.expand.ExpandDialog"
+        messagesPack="com.haulmont.addon.dashboard.web.dashboard.frames.editor.expand">
+    <dsContext>
+        <collectionDatasource id="layoutsDs"
+                              allowCommit="false"
+                              class="com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout"/>
+    </dsContext>
+    <dialogMode height="140"
+                width="480"/>
+    <layout spacing="true"
+            width="100%"
+            expand="btnPanel">
+        <hbox width="100%" spacing="true" expand="expandLookupField">
+            <label value="msg://expand"/>
+            <lookupField id="expandLookupField" width="100%" optionsDatasource="layoutsDs"/>
+        </hbox>
+        <buttonsPanel id="btnPanel">
+            <button id="okBtn"
+                    caption="msg://ok"
+                    icon="OK"
+                    invoke="apply"/>
+            <button id="cancelBtn"
+                    caption="msg://cancel"
+                    icon="CANCEL"
+                    invoke="cancel"/>
+        </buttonsPanel>
+    </layout>
+</window>

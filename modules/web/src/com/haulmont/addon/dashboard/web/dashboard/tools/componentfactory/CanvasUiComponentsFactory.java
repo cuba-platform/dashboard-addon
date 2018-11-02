@@ -131,6 +131,8 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
             vBoxLayout.add(widgetFrame);
             vBoxLayout.expand(widgetFrame);
             widgetComponent = vBoxLayout;
+        } else {
+            widgetFrame.setMargin(true);
         }
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout(widgetLayout);
