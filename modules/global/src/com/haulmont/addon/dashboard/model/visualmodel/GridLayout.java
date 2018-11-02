@@ -66,12 +66,12 @@ public class GridLayout extends DashboardLayout implements ContainerLayout {
 
     @Override
     public List<DashboardLayout> getChildren() {
-        throw new UnsupportedOperationException("Use getArea() method");
+        return null;
     }
 
     @Override
     public void setChildren(List<DashboardLayout> children) {
-        throw new UnsupportedOperationException("Use setArea() method");
+
     }
 
     @Override

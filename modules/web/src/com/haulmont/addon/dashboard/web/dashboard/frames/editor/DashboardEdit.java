@@ -172,6 +172,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
                 DASHBOARD, getDashboard()
         ));
+        canvasBox.expand(canvasFrame);
     }
 
     public void cancel() {

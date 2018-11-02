@@ -20,9 +20,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
@@ -150,13 +148,15 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
         widgetTree.removeAllActions();
-        if (!(layout instanceof RootLayout)) {
-            widgetTree.addAction(new AbstractAction("remove") {
-                @Override
-                public void actionPerform(Component component) {
-                    events.publish(new WidgetRemovedEvent(layout));
-                }
-            });
+        if (isActionsAvailable(layout)) {
+            if (!isGridCellLayout(layout)) {
+                widgetTree.addAction(new AbstractAction("remove") {
+                    @Override
+                    public void actionPerform(Component component) {
+                        events.publish(new WidgetRemovedEvent(layout));
+                    }
+                });
+            }
             if (layout instanceof WidgetLayout) {
                 WidgetLayout widgetLayout = (WidgetLayout) layout;
                 widgetTree.addAction(new AbstractAction("edit") {
@@ -173,12 +173,14 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                     }
                 });
             }
-            widgetTree.addAction(new AbstractAction("weight") {
-                @Override
-                public void actionPerform(Component component) {
-                    events.publish(new WeightChangedEvent(layout));
-                }
-            });
+            if (!isGridCellLayout(layout)) {
+                widgetTree.addAction(new AbstractAction("weight") {
+                    @Override
+                    public void actionPerform(Component component) {
+                        events.publish(new WeightChangedEvent(layout));
+                    }
+                });
+            }
             widgetTree.addAction(new AbstractAction("style") {
                 @Override
                 public void actionPerform(Component component) {
@@ -186,6 +188,14 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                 }
             });
         }
+    }
+
+    private boolean isGridCellLayout(DashboardLayout layout) {
+        return !(layout.getParent() instanceof GridLayout);
+    }
+
+    private boolean isActionsAvailable(DashboardLayout layout) {
+        return !(layout instanceof RootLayout);
     }
 
     protected void initWidgetTemplateBox() {

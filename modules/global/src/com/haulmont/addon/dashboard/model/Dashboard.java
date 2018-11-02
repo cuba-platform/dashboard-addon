@@ -99,7 +99,6 @@ public class Dashboard extends BaseUuidEntity {
         } else {
             for (DashboardLayout child : dashboardLayout.getChildren()) {
                 getWidgets(child, widgets);
-
             }
         }
 

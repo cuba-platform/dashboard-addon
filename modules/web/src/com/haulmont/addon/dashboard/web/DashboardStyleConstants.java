@@ -18,6 +18,7 @@
 package com.haulmont.addon.dashboard.web;
 
 public interface DashboardStyleConstants {
+    String DASHBOARD_ROOT_LAYOUT = "dashboard-root-layout";
     String DASHBOARD_BUTTON = "dashboard-button";
     String DASHBOARD_SHADOW_BORDER = "dashboard-shadow-border";
     String DASHBOARD_LAYOUT_CONTROLS = "dashboard-layout-controls";
