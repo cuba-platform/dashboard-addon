@@ -50,10 +50,10 @@ public abstract class DashboardLayout extends BaseUuidEntity {
     protected Integer height;
 
     @MetaProperty
-    protected String widthUnit;
+    protected String widthUnit = SizeUnit.PERCENTAGE.getId();
 
     @MetaProperty
-    protected String heightUnit;
+    protected String heightUnit = SizeUnit.PERCENTAGE.getId();
 
     public Integer getWeight() {
         return weight;

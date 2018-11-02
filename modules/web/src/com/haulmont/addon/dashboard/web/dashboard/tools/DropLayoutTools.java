@@ -23,6 +23,7 @@ import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
@@ -44,22 +45,24 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
-    protected AbstractFrame frame;
-    protected Dashboard dashboard;
+    protected DashboardEdit frame;
     protected Datasource<Dashboard> dashboardDs;
     private Metadata metadata = AppBeans.get(Metadata.class);
     private Events events = AppBeans.get(Events.class);
     private MetadataTools metadataTools = AppBeans.get(MetadataTools.class);
 
-    public DropLayoutTools(AbstractFrame frame, Dashboard dashboard, DashboardModelConverter modelConverter, Datasource<Dashboard> dashboardDs) {
+    public DropLayoutTools(DashboardEdit frame, DashboardModelConverter modelConverter, Datasource<Dashboard> dashboardDs) {
         this.modelConverter = modelConverter;
         this.frame = frame;
-        this.dashboard = dashboard;
         this.dashboardDs = dashboardDs;
     }
 
+    public Dashboard getDashboard(){
+        return frame.getDashboard();
+    }
+
     public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
-        DashboardLayout targetLayout = findLayout(dashboard.getVisualModel(), targetLayoutUuid);
+        DashboardLayout targetLayout = findLayout(getDashboard().getVisualModel(), targetLayoutUuid);
         if (layout instanceof CssLayout) {
             CssLayoutCreationDialog dialog = (CssLayoutCreationDialog) frame.openWindow(CssLayoutCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
@@ -125,16 +128,16 @@ public class DropLayoutTools {
 
     private void reorderWidgetsAndPushEvents(DashboardLayout layout, DashboardLayout targetLayout, WidgetTreeEvent.DropLocation location) {
         DashboardLayout parentLayout = targetLayout instanceof WidgetLayout ?
-                findParentLayout(dashboard.getVisualModel(), targetLayout) : targetLayout;
+                findParentLayout(getDashboard().getVisualModel(), targetLayout) : targetLayout;
         parentLayout.addChild(layout);
         layout.setParent(parentLayout);
         moveComponent(layout, targetLayout.getId(), location);
-        events.publish(new DashboardRefreshEvent(dashboard.getVisualModel()));
+        events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel()));
         events.publish(new WidgetSelectedEvent(layout.getId(), WidgetSelectedEvent.Target.CANVAS));
     }
 
     public void moveComponent(DashboardLayout layout, UUID targetLayoutId, WidgetTreeEvent.DropLocation location) {
-        RootLayout dashboardModel = dashboard.getVisualModel();
+        RootLayout dashboardModel = getDashboard().getVisualModel();
         DashboardLayout target = findLayout(dashboardModel, targetLayoutId);
         DashboardLayout parent = findParentLayout(dashboardModel, layout);
 
@@ -193,10 +196,6 @@ public class DropLayoutTools {
 
     public AbstractFrame getFrame() {
         return frame;
-    }
-
-    public Dashboard getDashboard() {
-        return dashboard;
     }
 
     private boolean applyMoveAction(DashboardLayout layout, DashboardLayout target, DashboardLayout parent, DashboardLayout dashboardModel) {

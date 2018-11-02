@@ -144,7 +144,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
             availableCheckBox.setVisible(false);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter, dashboardDs);
+        dropLayoutTools = new DropLayoutTools(this, modelConverter, dashboardDs);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
