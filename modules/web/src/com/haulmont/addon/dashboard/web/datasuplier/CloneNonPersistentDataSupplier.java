@@ -28,14 +28,14 @@ public class CloneNonPersistentDataSupplier extends GenericDataSupplier {
             Widget widgetClone = (Widget) clone;
             for (Parameter p : widgetEntity.getParameters()) {
                 Parameter clonePar = widgetClone.getParameters().stream()
-                        .filter(cp -> p.equals(cp)).findFirst()
+                        .filter(p::equals).findFirst()
                         .orElseThrow(() -> new RuntimeException("Can't find parameter " + p.getName()));
                 clonePar.setParameterValue(p.getParameterValue());
             }
 
             for (Parameter p : widgetEntity.getWidgetFields()) {
                 Parameter clonePar = widgetClone.getWidgetFields().stream()
-                        .filter(cp -> p.equals(cp)).findFirst()
+                        .filter(p::equals).findFirst()
                         .orElseThrow(() -> new RuntimeException("Can't find widget field " + p.getName()));
                 clonePar.setParameterValue(p.getParameterValue());
             }
@@ -43,7 +43,7 @@ public class CloneNonPersistentDataSupplier extends GenericDataSupplier {
             if (widgetEntity.getDashboard() != null) {
                 for (Parameter p : widgetEntity.getDashboard().getParameters()) {
                     Parameter clonePar = widgetClone.getDashboard().getParameters().stream()
-                            .filter(cp -> p.equals(cp)).findFirst()
+                            .filter(p::equals).findFirst()
                             .orElseThrow(() -> new RuntimeException("Can't find dashboard parameter " + p.getName()));
                     clonePar.setParameterValue(p.getParameterValue());
                 }
