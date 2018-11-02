@@ -105,6 +105,7 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     public Component generateWidgetTypeField(Datasource datasource, String fieldId) {
         HBoxLayout hBoxLayout = componentsFactory.createComponent(HBoxLayout.class);
+        hBoxLayout.setSpacing(true);
         LookupField widgetTypeLookup = componentsFactory.createComponent(LookupField.class);
         widgetTypeLookup.setWidth("100%");
         Button editWidgetButton = componentsFactory.createComponent(Button.class);

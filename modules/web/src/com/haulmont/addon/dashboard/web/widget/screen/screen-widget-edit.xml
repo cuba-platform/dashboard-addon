@@ -4,7 +4,7 @@
     <layout spacing="true">
         <hbox id="screenIdBox"
               spacing="true">
-            <label width="145px"
+            <label width="135px"
                    value="msg://screenId"/>
             <lookupField id="screenIdLookup"
                          nullOptionVisible="false"
