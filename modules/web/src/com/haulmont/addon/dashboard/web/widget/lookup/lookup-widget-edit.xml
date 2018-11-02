@@ -9,6 +9,7 @@
             <lookupField id="lookupIdLookup"
                          nullOptionVisible="false"
                          required="true"
+                         requiredMessage="msg://lookupIdRequired"
                          width="300px"/>
         </hbox>
     </layout>

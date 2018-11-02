@@ -9,6 +9,7 @@
             <lookupField id="screenIdLookup"
                          nullOptionVisible="false"
                          required="true"
+                         requiredMessage="msg://screenIdRequired"
                          width="300px"/>
         </hbox>
     </layout>
