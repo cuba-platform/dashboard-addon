@@ -7,12 +7,15 @@ import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.haulmont.cuba.gui.components.Component;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
@@ -27,6 +30,7 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
     public void init(Map<String, Object> params) {
         super.init(params);
         initDs(params);
+        entitiesDs.setModified(false);
     }
 
     @Override
@@ -98,5 +102,13 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
         keyValueEntity.setValue("entityId", value.getEntityId());
         keyValueEntity.setValue("viewName", value.getViewName());
         return keyValueEntity;
+    }
+
+    public void onEdit(Component source) {
+        KeyValueEntity item = entitiesDs.getItem();
+        if (item != null) {
+            oldValue = item;
+            openEntityValueWindow(tableValues.get(item));
+        }
     }
 }

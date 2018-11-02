@@ -32,6 +32,8 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,20 +46,16 @@ public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
     protected AbstractFrame frame;
     protected Dashboard dashboard;
+    protected Datasource<Dashboard> dashboardDs;
     private Metadata metadata = AppBeans.get(Metadata.class);
     private Events events = AppBeans.get(Events.class);
     private MetadataTools metadataTools = AppBeans.get(MetadataTools.class);
 
-    public DropLayoutTools(AbstractFrame frame, Dashboard dashboard, DashboardModelConverter modelConverter) {
+    public DropLayoutTools(AbstractFrame frame, Dashboard dashboard, DashboardModelConverter modelConverter, Datasource<Dashboard> dashboardDs) {
         this.modelConverter = modelConverter;
         this.frame = frame;
         this.dashboard = dashboard;
-    }
-
-    public void init(AbstractFrame targetFrame, DashboardModelConverter modelConverter, Dashboard dashboard) {
-        this.frame = targetFrame;
-        this.modelConverter = modelConverter;
-        this.dashboard = dashboard;
+        this.dashboardDs = dashboardDs;
     }
 
     public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
@@ -115,6 +113,7 @@ public class DropLayoutTools {
             WidgetEdit editor = (WidgetEdit) frame.openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
             editor.addCloseWithCommitListener(() -> {
                 widgetLayout.setWidget(editor.getItem());
+                ((AbstractDatasource) dashboardDs).setModified(true);
                 reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);
             });
         } else if (layout instanceof VerticalLayout) {

@@ -26,13 +26,12 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
@@ -59,17 +58,11 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Named("fieldGroup.widgetId")
     protected TextField widgetId;
 
-
-    //The AbstractEditor replaces an item to another object, if one has status '[new]'
-    @WindowParam(name = "ITEM", required = true)
-    protected Widget inputItem;
-
     protected List<WidgetTypeInfo> typesInfo;
     protected AbstractFrame widgetEditFrame;
 
     @Override
     public void postInit() {
-        widgetDs.setItem(inputItem);
         typesInfo = widgetRepository.getWidgetTypesInfo();
         setWidgetType();
         initParametersFrame();
@@ -78,6 +71,8 @@ public class WidgetEdit extends AbstractEditor<Widget> {
                 widgetId.setValue(v.getValue());
             }
         });
+
+        ((AbstractDatasource) widgetDs).setModified(false);
     }
 
     @Override
@@ -115,7 +110,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         List<Parameter> parameters = paramsFrame.getParameters();
         getItem().setParameters(parameters);
         if (widgetEditFrame != null) {
-            widgetRepository.serializeWidgetFields(widgetEditFrame, inputItem);
+            widgetRepository.serializeWidgetFields(widgetEditFrame, widgetDs.getItem());
         }
         return super.preCommit();
     }
@@ -123,10 +118,11 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
-        if (inputItem.getDashboard() != null) {
-            List<Widget> dashboardWidgets = inputItem.getDashboard().getWidgets();
+        Widget widget = widgetDs.getItem();
+        if (widget.getDashboard() != null) {
+            List<Widget> dashboardWidgets = widget.getDashboard().getWidgets();
             long cnt = dashboardWidgets.stream()
-                    .filter(w -> !w.getId().equals(inputItem.getId()) && w.getWidgetId().equals(inputItem.getWidgetId()))
+                    .filter(w -> !w.getId().equals(widget.getId()) && w.getWidgetId().equals(widget.getWidgetId()))
                     .count();
             if (cnt > 0) {
                 errors.add(fieldGroup.getComponent("widgetId"), getMessage("uniqueWidgetId"));
@@ -134,4 +130,14 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         }
     }
 
+    @Override
+    protected boolean preClose(String actionId) {
+        if (!widgetDs.isModified()) {
+            if (paramsFrame.getParametersDs().isModified()) {
+                ((AbstractDatasource) widgetDs).setModified(true);
+            }
+        }
+        return super.preClose(actionId);
+
+    }
 }

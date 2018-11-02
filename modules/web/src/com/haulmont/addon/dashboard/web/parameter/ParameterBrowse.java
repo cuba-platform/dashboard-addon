@@ -25,15 +25,14 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
+import static com.haulmont.cuba.gui.data.CollectionDatasource.Operation.REFRESH;
 
 public class ParameterBrowse extends AbstractFrame {
     public static final String PARAMETERS = "PARAMETERS";
@@ -56,6 +55,10 @@ public class ParameterBrowse extends AbstractFrame {
         return new ArrayList<>(parametersDs.getItems());
     }
 
+    public GroupDatasource<Parameter, UUID> getParametersDs() {
+        return parametersDs;
+    }
+
     protected void initDs(Map<String, Object> params) {
         List<Parameter> parameters = (List<Parameter>) params.get(PARAMETERS);
 
@@ -64,14 +67,18 @@ public class ParameterBrowse extends AbstractFrame {
         }
 
         for (Parameter param : parameters) {
-            parametersDs.addItem(param);
+            parametersDs.includeItem(param);
         }
 
         parametersDs.addCollectionChangeListener(event -> {
-            if (dashboard != null) {//if edit dashboard params
-                dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
+            if (REFRESH != event.getOperation()) {
+                if (dashboard != null) {//if edit dashboard params
+                    dashboard.setParameters(new ArrayList<>(event.getDs().getItems()));
+                }
+                ((AbstractDatasource) parametersDs).setModified(true);
             }
         });
+        ((AbstractDatasource) parametersDs).setModified(false);
     }
 
     public Component generateValueCell(Entity entity) {

@@ -17,6 +17,8 @@
 
 package com.haulmont.addon.dashboard.model.paramtypes;
 
+import java.util.Objects;
+
 public class IntegerParameterValue implements ParameterValue {
     protected Integer value;
 
@@ -38,5 +40,19 @@ public class IntegerParameterValue implements ParameterValue {
     @Override
     public String toString() {
         return String.format("type: integer; value=%s", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntegerParameterValue that = (IntegerParameterValue) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(value);
     }
 }

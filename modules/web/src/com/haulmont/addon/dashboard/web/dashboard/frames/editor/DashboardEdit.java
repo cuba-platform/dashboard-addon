@@ -22,6 +22,7 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
@@ -52,6 +53,7 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
@@ -142,10 +144,12 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
             availableCheckBox.setVisible(false);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter);
+        dropLayoutTools = new DropLayoutTools(this, getDashboard(), modelConverter, dashboardDs);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();
+
+        ((AbstractDatasource) dashboardDs).setModified(false);
     }
 
     public Dashboard getDashboard() {
@@ -171,7 +175,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     }
 
     public void cancel() {
-        close("close", true);
+        close("close", false);
     }
 
     public void onExportJsonBtnClick() {
@@ -257,6 +261,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
         dropLayoutTools.moveComponent(event.getSource(), targetLayoutId, event.getLocation());
         events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), event.getSource().getId()));
+        ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
     @EventListener
@@ -273,6 +278,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                 events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
             }
         });
+        ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
     @EventListener
@@ -297,6 +303,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                 events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
             }
         });
+        ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
     private String getAdditionalStyleName(CanvasLayout source) {
@@ -314,11 +321,13 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         DashboardLayout dashboardLayout = getDashboard().getVisualModel();
         dashboardLayout.removeChild(event.getSource().getUuid());
         events.publish(new DashboardRefreshEvent(dashboardLayout));
+        ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
     @EventListener
     public void widgetAddedToTreeEventListener(WidgetAddedEvent event) {
         dropLayoutTools.addComponent(event.getSource(), event.getParentLayoutUuid(), event.getLocation());
+        ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
     @EventListener
@@ -326,6 +335,9 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         Widget widget = event.getSource();
         WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
         editor.addCloseWithCommitListener(() -> {
+            WidgetLayout widgetLayout = getDashboard().getWidgetLayout(widget.getId());
+            widgetLayout.setWidget(editor.getItem());
+            ((AbstractDatasource) dashboardDs).setModified(true);
             events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
         });
     }
