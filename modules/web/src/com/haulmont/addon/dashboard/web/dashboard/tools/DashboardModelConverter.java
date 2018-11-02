@@ -19,7 +19,6 @@ package com.haulmont.addon.dashboard.web.dashboard.tools;
 
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
-import com.haulmont.addon.dashboard.utils.DashboardLayoutUtils;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
@@ -116,8 +115,8 @@ public class DashboardModelConverter {
     }
 
     private boolean isExpanded(DashboardLayout model) {
-        return model.getExpand()!=null&& model.getChildren().stream()
-                .anyMatch(e->model.getExpand().equals(e.getId()));
+        return model.getExpand() != null && model.getChildren().stream()
+                .anyMatch(e -> model.getExpand().equals(e.getId()));
     }
 
     protected void containerToModel(DashboardLayout model, Component container) {
