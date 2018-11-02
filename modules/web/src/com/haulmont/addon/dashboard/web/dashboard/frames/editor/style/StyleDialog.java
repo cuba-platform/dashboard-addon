@@ -38,17 +38,10 @@ public class StyleDialog extends AbstractWindow {
         styleName.setValue(params.get(STYLENAME));
         width.setValue(params.get(WIDTH));
         widthUnits.setOptionsMap(getSizeUnitsValues());
-        widthUnits.setValue(getSizeUnitFromComponent((Integer) params.get(WIDTH_UNITS)));
+        widthUnits.setValue(params.get(WIDTH_UNITS));
         height.setValue(params.get(HEIGHT));
         heightUnits.setOptionsMap(getSizeUnitsValues());
-        heightUnits.setValue(getSizeUnitFromComponent((Integer) params.get(HEIGHT_UNITS)));
-    }
-
-    protected SizeUnit getSizeUnitFromComponent(Integer sizeUnit) {
-        if (sizeUnit == null) {
-            return SizeUnit.PIXELS;
-        }
-        return UNITS_PERCENTAGE == sizeUnit ? SizeUnit.PERCENTAGE : SizeUnit.PIXELS;
+        heightUnits.setValue(params.get(HEIGHT_UNITS));
     }
 
     protected Map<String, Object> getSizeUnitsValues() {

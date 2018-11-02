@@ -22,11 +22,16 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.StyleChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WeightChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetEditEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetRemovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
@@ -39,7 +44,9 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
+import com.haulmont.cuba.gui.components.AbstractAction;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
@@ -132,12 +139,53 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
             if (dashboardLayout != null) {
                 events.publish(new WidgetSelectedEvent(dashboardLayout.getId(), WidgetSelectedEvent.Target.TREE));
             }
+            createActions(widgetTree, dashboardLayout);
         });
         widgetTree.expandTree();
 
         CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
         cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
         cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
+    }
+
+    private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
+        widgetTree.removeAllActions();
+        if (!(layout instanceof RootLayout)) {
+            widgetTree.addAction(new AbstractAction("remove") {
+                @Override
+                public void actionPerform(Component component) {
+                    events.publish(new WidgetRemovedEvent(layout));
+                }
+            });
+            if (layout instanceof WidgetLayout) {
+                WidgetLayout widgetLayout = (WidgetLayout) layout;
+                widgetTree.addAction(new AbstractAction("edit") {
+                    @Override
+                    public void actionPerform(Component component) {
+                        events.publish(new WidgetEditEvent(widgetLayout));
+                    }
+                });
+
+                widgetTree.addAction(new AbstractAction("template") {
+                    @Override
+                    public void actionPerform(Component component) {
+                        events.publish(new CreateWidgetTemplateEvent(widgetLayout.getWidget()));
+                    }
+                });
+            }
+            widgetTree.addAction(new AbstractAction("weight") {
+                @Override
+                public void actionPerform(Component component) {
+                    events.publish(new WeightChangedEvent(layout));
+                }
+            });
+            widgetTree.addAction(new AbstractAction("style") {
+                @Override
+                public void actionPerform(Component component) {
+                    events.publish(new StyleChangedEvent(layout));
+                }
+            });
+        }
     }
 
     protected void initWidgetTemplateBox() {

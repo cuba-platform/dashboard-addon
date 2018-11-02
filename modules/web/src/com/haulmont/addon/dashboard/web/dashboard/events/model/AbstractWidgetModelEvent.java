@@ -15,12 +15,20 @@
  *
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.events.widget;
+package com.haulmont.addon.dashboard.web.dashboard.events.model;
 
-import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.cuba.gui.events.UiEvent;
+import org.springframework.context.ApplicationEvent;
 
-public class WidgetEditEvent extends AbstractWidgetEvent {
-    public WidgetEditEvent(Widget source) {
+public abstract class AbstractWidgetModelEvent extends ApplicationEvent implements UiEvent {
+
+    public AbstractWidgetModelEvent(DashboardLayout source) {
         super(source);
+    }
+
+    @Override
+    public DashboardLayout getSource() {
+        return (DashboardLayout) super.getSource();
     }
 }

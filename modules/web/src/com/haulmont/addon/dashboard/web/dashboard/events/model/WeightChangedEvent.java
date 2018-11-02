@@ -15,13 +15,12 @@
  *
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.events.canvas;
+package com.haulmont.addon.dashboard.web.dashboard.events.model;
 
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 
-public class WidgetRemovedEvent extends AbstractWidgetCanvasEvent {
-
-    public WidgetRemovedEvent(CanvasLayout source) {
+public class WeightChangedEvent extends AbstractWidgetModelEvent {
+    public WeightChangedEvent(DashboardLayout source) {
         super(source);
     }
 }

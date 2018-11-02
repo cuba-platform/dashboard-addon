@@ -30,10 +30,10 @@ import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.canvas.StyleChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WeightChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.canvas.WidgetRemovedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.widget.WidgetEditEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.StyleChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WeightChangedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetRemovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetEditEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
@@ -266,7 +266,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @EventListener
     public void onWeightChanged(WeightChangedEvent event) {
-        CanvasLayout source = event.getSource();
+        DashboardLayout source = event.getSource();
 
         WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
                 WeightDialog.WEIGHT, source.getWeight()));
@@ -283,14 +283,14 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @EventListener
     public void onStyleChanged(StyleChangedEvent event) {
-        CanvasLayout source = event.getSource();
+        DashboardLayout source = event.getSource();
 
         StyleDialog weightDialog = (StyleDialog) openWindow(StyleDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                StyleDialog.STYLENAME, getAdditionalStyleName(source),
+                StyleDialog.STYLENAME, source.getStyleName(),
                 StyleDialog.WIDTH, source.getWidth(),
-                StyleDialog.WIDTH_UNITS, source.getWidthUnits(),
+                StyleDialog.WIDTH_UNITS, source.getWidthUnit(),
                 StyleDialog.HEIGHT, source.getHeight(),
-                StyleDialog.HEIGHT_UNITS, source.getHeightUnits()));
+                StyleDialog.HEIGHT_UNITS, source.getHeightUnit()));
         weightDialog.addCloseListener(actionId -> {
             if (Window.COMMIT_ACTION_ID.equals(actionId)) {
                 Dashboard dashboard = getDashboard();
@@ -332,7 +332,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @EventListener
     public void onOpenWidgetEditor(WidgetEditEvent event) {
-        Widget widget = event.getSource();
+        Widget widget = event.getSource().getWidget();
         WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
         editor.addCloseWithCommitListener(() -> {
             WidgetLayout widgetLayout = getDashboard().getWidgetLayout(widget.getId());
