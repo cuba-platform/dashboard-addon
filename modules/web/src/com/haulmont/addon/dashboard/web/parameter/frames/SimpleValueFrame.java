@@ -66,8 +66,9 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case LONG:
                 return new LongParameterValue(textField.getValue());
             case STRING:
-            case UUID:
                 return new StringParameterValue(textField.getValue());
+            case UUID:
+                return new UuidParameterValue(textField.getValue());
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:
@@ -96,8 +97,10 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
                 setLong((LongParameterValue) parameterValue);
                 break;
             case STRING:
-            case UUID:
                 setString((StringParameterValue) parameterValue);
+                break;
+            case UUID:
+                setUUID((UuidParameterValue) parameterValue);
                 break;
             case BOOLEAN:
                 setBoolean((BooleanParameterValue) parameterValue);
@@ -141,6 +144,11 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     }
 
     protected void setString(StringParameterValue value) {
+        textField.setValue(value == null ? null : value.getValue());
+        initTextField(null);
+    }
+
+    protected void setUUID(UuidParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
         initTextField(null);
     }
