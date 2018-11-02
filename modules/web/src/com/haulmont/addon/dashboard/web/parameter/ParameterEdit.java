@@ -21,7 +21,6 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
@@ -29,7 +28,6 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 import static com.haulmont.addon.dashboard.model.ParameterType.*;
 

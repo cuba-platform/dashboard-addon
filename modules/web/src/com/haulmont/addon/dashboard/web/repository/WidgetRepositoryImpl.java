@@ -110,7 +110,13 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                             Class clazz = Class.forName(className);
                             DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
                             if (ann != null) {
-                                widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), ann.editFrameId()));
+                                String editFrameId = ann.editFrameId();
+                                if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
+                                    throw new IllegalArgumentException(String.format("Unable to find %s edit screen in screen config for widget %s",
+                                            editFrameId, ann.name()));
+                                }
+                                widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
+
                             }
                         } catch (ClassNotFoundException ignored) {
                         }

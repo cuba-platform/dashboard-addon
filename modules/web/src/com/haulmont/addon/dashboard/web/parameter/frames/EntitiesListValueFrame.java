@@ -7,15 +7,13 @@ import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.haulmont.cuba.gui.components.Component;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
