@@ -42,6 +42,9 @@ public class TreeDropHandler implements DropHandler {
         UUID targetLayoutUuid = (UUID) targetDetails.getItemIdOver();
 
         VerticalDropLocation location = targetDetails.getDropLocation();
+        if (location == null) {
+            location = VerticalDropLocation.MIDDLE;
+        }
 
         if (vTransferable instanceof DataBoundTransferable && sourceComponent == null) {
             DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(),
