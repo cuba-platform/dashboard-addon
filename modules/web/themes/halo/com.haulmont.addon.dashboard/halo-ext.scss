@@ -1,12 +1,18 @@
 /* Define your theme modifications inside next mixin */
 @mixin com_haulmont_addon_dashboard-halo-ext {
     .min-height{
-            min-height:100%;
+        min-height:100%;
+    }
+
+    .dashboard-main-shadow-border{
+        border: 2px solid transparent;
+    }
+
+    .dashboard-main-shadow-border .dashboard-root-layout {
+        padding : 4px !important;
     }
 
     .dashboard-root-layout {
-        height:100%;
-        width:100%;
         overflow: auto;
     }
 
@@ -15,7 +21,6 @@
         border: 2px solid transparent;
         background : none;
         margin : 2px !important;
-        padding : 2px !important;
         border-radius: 3px;
     }
 
@@ -139,7 +144,7 @@
     }
 
     .dashboard-tree .v-tree {
-        padding: 0px;
+        margin: 2px;
         border: none;
     }
 

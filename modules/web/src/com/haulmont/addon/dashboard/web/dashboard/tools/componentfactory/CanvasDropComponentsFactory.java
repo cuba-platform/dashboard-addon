@@ -116,7 +116,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
         buttonsPanel.add(removeButton);
         buttonsPanel.add(styleButton);
-        if (!isParentCssLayout(layout)) {
+        if (!isParentCssLayout(layout) && !isParentHasExpand(layout)) {
             buttonsPanel.add(weightButton);
         }
         if (isLinearLayout(layout)) {
@@ -127,6 +127,15 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
     private boolean isLinearLayout(DashboardLayout layout) {
         return layout instanceof HorizontalLayout || layout instanceof VerticalLayout;
+    }
+
+    private boolean isParentHasExpand(DashboardLayout layout) {
+        DashboardLayout parent = layout.getParent();
+        if (isLinearLayout(parent) && parent.getExpand() != null) {
+            return parent.getChildren().stream()
+                    .anyMatch(e -> e.getId().equals(parent.getExpand()));
+        }
+        return false;
     }
 
     @Override
@@ -152,7 +161,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
         buttonsPanel.add(doTemplateButton);
         buttonsPanel.add(styleButton);
-        if (!isParentCssLayout(widgetLayout)) {
+        if (!isParentCssLayout(widgetLayout) && !isParentHasExpand(widgetLayout)) {
             buttonsPanel.add(weightButton);
         }
         buttonsPanel.add(captionButton);
@@ -215,23 +224,23 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     protected Button createStyleButton(DashboardLayout layout) {
-        Button weightButton = factory.createComponent(Button.class);
-        weightButton.setAction(new BaseAction("styleClicked")
+        Button styleButton = factory.createComponent(Button.class);
+        styleButton.setAction(new BaseAction("styleClicked")
                 .withHandler(e -> events.publish(new StyleChangedEvent(layout))));
-        weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
-        weightButton.setIconFromSet(PAINT_BRUSH);
-        weightButton.setCaption("");
-        return weightButton;
+        styleButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
+        styleButton.setIconFromSet(PAINT_BRUSH);
+        styleButton.setCaption("");
+        return styleButton;
     }
 
     protected Button createExpandButton(DashboardLayout layout) {
-        Button weightButton = factory.createComponent(Button.class);
-        weightButton.setAction(new BaseAction("expandClicked")
+        Button expandButton = factory.createComponent(Button.class);
+        expandButton.setAction(new BaseAction("expandClicked")
                 .withHandler(e -> events.publish(new ExpandChangedEvent(layout))));
-        weightButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
-        weightButton.setIconFromSet(EXPAND);
-        weightButton.setCaption("");
-        return weightButton;
+        expandButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
+        expandButton.setIconFromSet(EXPAND);
+        expandButton.setCaption("");
+        return expandButton;
     }
 
     protected Button createDoTemplateButton(Widget widget) {
