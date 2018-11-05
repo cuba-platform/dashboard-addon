@@ -11,7 +11,6 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ExpandDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$ExpandDialog";
