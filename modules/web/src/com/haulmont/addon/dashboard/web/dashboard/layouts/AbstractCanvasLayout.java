@@ -28,6 +28,7 @@ import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
 import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
 import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebCssLayout;
@@ -35,6 +36,8 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -57,8 +60,8 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
         return delegate;
     }
 
-    public void setDelegate(Container delegate) {
-        this.delegate = delegate;
+    public void addComponent(Component component) {
+        delegate.add(component);
     }
 
     @Override

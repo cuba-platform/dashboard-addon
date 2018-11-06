@@ -182,10 +182,12 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         layout.setDescription(messages.getMainMessage("rootLayout"));
 
         Button expandButton = createExpandButton(rootLayout);
+        Button styleButton = createStyleButton(rootLayout);
         Button captionButton = createCaptionButton(rootLayout, "rootLayout");
 
         HBoxLayout buttonsPanel = layout.getButtonsPanel();
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
+        buttonsPanel.add(styleButton);
         buttonsPanel.add(expandButton);
 
         buttonsPanel.add(captionButton);

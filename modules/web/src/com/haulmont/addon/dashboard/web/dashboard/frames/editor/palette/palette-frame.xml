@@ -65,7 +65,7 @@
                   margin="true,false,false,false">
                 <groupBox id="widgetTreeBox">
                     <scrollBox
-                               height="100%">
+                               height="100%" scrollBars="vertical">
                         <tree id="widgetTree"
                               height="100%"
                               width="100%">

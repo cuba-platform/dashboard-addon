@@ -80,6 +80,18 @@ public class DashboardModelConverter {
             }
         }
 
+        if (model.getStyleName() != null) {
+            canvasLayout.addStyleName(model.getStyleName());
+        }
+        String width = model.getWidthWithUnits();
+        if (width != null) {
+            canvasLayout.setWidth(width);
+        }
+        String height = model.getHeightWithUnits();
+        if (height != null) {
+            canvasLayout.setHeight(height);
+        }
+
         if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
 
             boolean expanded = isExpanded(model);
@@ -91,17 +103,7 @@ public class DashboardModelConverter {
                         ((WebDDAbstractOrderedLayout) canvasLayout.getDelegate()).expand(childContainer);
                     }
                 }
-                if (childModel.getStyleName() != null) {
-                    childContainer.addStyleName(childModel.getStyleName());
-                }
-                String width = childModel.getWidthWithUnits();
-                if (width != null) {
-                    childContainer.setWidth(width);
-                }
-                String height = childModel.getHeightWithUnits();
-                if (height != null) {
-                    childContainer.setHeight(height);
-                }
+
                 if (!expanded) {
                     childContainer.setWeight(childModel.getWeight());
                 }

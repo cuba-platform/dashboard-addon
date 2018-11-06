@@ -11,8 +11,13 @@ import com.haulmont.cuba.gui.components.TextField;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StyleDialog extends AbstractWindow {
+
+    private static final Pattern DIMENSION_PATTERN=Pattern.compile("^(\\d+)(px|%)$");
+
     public static final String SCREEN_NAME = "dashboard$StyleDialog";
     public static final String STYLENAME = "STYLENAME";
     public static final String HEIGHT = "HEIGHT";
@@ -42,6 +47,26 @@ public class StyleDialog extends AbstractWindow {
         height.setValue(params.get(HEIGHT));
         heightUnits.setOptionsMap(getSizeUnitsValues());
         heightUnits.setValue(params.get(HEIGHT_UNITS));
+
+        width.addTextChangeListener(e->{
+            String text = e.getText();
+            checkFieldInput(text, width, widthUnits);
+        });
+
+        height.addTextChangeListener(e->{
+            String text = e.getText();
+            checkFieldInput(text, height, heightUnits);
+        });
+    }
+
+    private void checkFieldInput(String text, TextField width, LookupField widthUnits) {
+        Matcher matcher = DIMENSION_PATTERN.matcher(text);
+        if (matcher.matches()) {
+            String value = matcher.group(1);
+            SizeUnit sizeUnit = SizeUnit.fromId(matcher.group(2));
+            width.setValue(value);
+            widthUnits.setValue(sizeUnit);
+        }
     }
 
     protected Map<String, Object> getSizeUnitsValues() {

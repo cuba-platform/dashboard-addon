@@ -25,6 +25,7 @@ import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport,
@@ -32,9 +33,9 @@ public interface CanvasLayout extends Component, Component.Container, DDLayout, 
 
     Container getDelegate();
 
-    HBoxLayout getButtonsPanel();
+    void addComponent(Component component);
 
-    void setDelegate(Container delegate);
+    HBoxLayout getButtonsPanel();
 
     void setButtonsPanel(HBoxLayout buttonsPanel);
 

@@ -137,7 +137,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
         CanvasWidgetLayout layout = new CanvasWidgetLayout(widgetLayout);
         layout.setUuid(UUID.randomUUID());
-        layout.getDelegate().add(widgetComponent);
+        layout.addComponent(widgetComponent);
         layout.setWidgetComponent(widgetFrame);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
