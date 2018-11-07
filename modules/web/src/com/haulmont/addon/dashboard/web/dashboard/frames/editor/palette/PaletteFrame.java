@@ -53,9 +53,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
@@ -209,7 +207,10 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
 
     protected void updateWidgetTemplates() {
         ddWidgetTemplateBox.removeAll();
-        for (WidgetTemplate wt : widgetTemplatesDs.getItems()) {
+        Collection<WidgetTemplate> templates = widgetTemplatesDs.getItems().stream()
+                .sorted(Comparator.comparing(WidgetTemplate::getName))
+                .collect(Collectors.toList());
+        for (WidgetTemplate wt : templates) {
             try {
                 PaletteButton widgetBtn = factory.createWidgetTemplateButton(wt);
                 ddWidgetTemplateBox.add(widgetBtn);
@@ -229,6 +230,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                     widget.setDashboard(dashboard);
                     return widget;
                 })
+                .sorted(Comparator.comparing(Widget::getName))
                 .collect(Collectors.toList());
     }
 
