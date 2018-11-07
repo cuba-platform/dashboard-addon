@@ -25,6 +25,7 @@
                 <row>
                     <label value="msg://width"/>
                     <hbox spacing="true" width="100%" expand="width">
+                        <checkBox id="autoWidth" caption="msg://autoSize"/>
                         <textField id="width" datatype="int"/>
                         <lookupField id="widthUnits" width="60px" required="true"/>
                     </hbox>
@@ -32,6 +33,7 @@
                 <row>
                     <label value="msg://height"/>
                     <hbox spacing="true" width="100%" expand="height">
+                        <checkBox id="autoHeight" caption="msg://autoSize"/>
                         <textField id="height" datatype="int"/>
                         <lookupField id="heightUnits" width="60px" required="true"/>
                     </hbox>

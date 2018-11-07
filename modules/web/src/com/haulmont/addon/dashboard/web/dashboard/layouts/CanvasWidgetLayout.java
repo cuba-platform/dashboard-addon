@@ -26,6 +26,7 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
     protected WebDDVerticalLayout verticalLayout;
     protected Widget widget = null;
     protected Component widgetComponent;
+    protected Component innerLayout;
 
     public CanvasWidgetLayout(WidgetLayout model) {
         super(model, new WebDDVerticalLayout());
@@ -51,5 +52,41 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
 
     public void setWidgetComponent(Component widgetComponent) {
         this.widgetComponent = widgetComponent;
+    }
+
+    public Component getInnerLayout() {
+        return innerLayout;
+    }
+
+    public void setInnerLayout(Component innerLayout) {
+        this.innerLayout = innerLayout;
+    }
+
+    @Override
+    public void setSizeFull() {
+        super.setSizeFull();
+        innerLayout.setSizeFull();
+        widgetComponent.setSizeFull();
+    }
+
+    @Override
+    public void setSizeAuto() {
+        super.setSizeAuto();
+        innerLayout.setSizeAuto();
+        widgetComponent.setSizeAuto();
+    }
+
+    @Override
+    public void setHeight(String height) {
+        super.setHeight(height);
+        innerLayout.setHeight(height);
+        widgetComponent.setHeight(height);
+    }
+
+    @Override
+    public void setWidth(String width) {
+        super.setWidth(width);
+        innerLayout.setWidth(width);
+        widgetComponent.setWidth(width);
     }
 }

@@ -80,19 +80,17 @@ public class DashboardModelConverter {
             }
         }
 
+        if (canvasLayout == null) {
+            throw new IllegalStateException("Unknown layout class: " + model.getClass());
+        }
+
         if (model.getStyleName() != null) {
             canvasLayout.addStyleName(model.getStyleName());
         }
-        String width = model.getWidthWithUnits();
-        if (width != null) {
-            canvasLayout.setWidth(width);
-        }
-        String height = model.getHeightWithUnits();
-        if (height != null) {
-            canvasLayout.setHeight(height);
-        }
+        canvasLayout.setWidth(model.getWidthWithUnits());
+        canvasLayout.setHeight(model.getHeightWithUnits());
 
-        if (canvasLayout != null && !(canvasLayout instanceof CanvasGridLayout)) {
+        if (!(canvasLayout instanceof CanvasGridLayout)) {
 
             boolean expanded = isExpanded(model);
             for (DashboardLayout childModel : model.getChildren()) {
@@ -110,7 +108,7 @@ public class DashboardModelConverter {
             }
         }
 
-        if (canvasLayout != null && model.getUuid() != null) {
+        if (model.getUuid() != null) {
             canvasLayout.setUuid(model.getUuid());
         }
         return canvasLayout;

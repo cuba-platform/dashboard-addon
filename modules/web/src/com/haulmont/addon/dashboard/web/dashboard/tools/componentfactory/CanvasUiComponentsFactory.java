@@ -139,8 +139,10 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         layout.setUuid(UUID.randomUUID());
         layout.addComponent(widgetComponent);
         layout.setWidgetComponent(widgetFrame);
+        layout.setInnerLayout(widgetComponent);
         layout.setWidget(widget);
         layout.setDragMode(NONE);
+        layout.getDelegate().expand(widgetComponent);
         layout.setSizeFull();
         return layout;
     }
@@ -150,7 +152,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         CanvasRootLayout layout = new CanvasRootLayout(rootLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setDragMode(NONE);
-        layout.setSizeFull();
+//        layout.setSizeFull();
         return layout;
     }
 }

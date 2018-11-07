@@ -49,10 +49,10 @@ public abstract class DashboardLayout extends BaseUuidEntity {
     protected String styleName;
 
     @MetaProperty
-    protected Integer width;
+    protected Integer width = 100;
 
     @MetaProperty
-    protected Integer height;
+    protected Integer height = 100;
 
     @MetaProperty
     protected String widthUnit = SizeUnit.PERCENTAGE.getId();

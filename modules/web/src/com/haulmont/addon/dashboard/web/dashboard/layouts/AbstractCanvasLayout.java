@@ -159,6 +159,24 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     @Override
+    public void setSizeAuto() {
+        super.setSizeAuto();
+        getDelegate().setSizeAuto();
+    }
+
+    @Override
+    public void setHeight(String height) {
+        super.setHeight(height);
+        getDelegate().setHeight(height);
+    }
+
+    @Override
+    public void setWidth(String width) {
+        super.setWidth(width);
+        getDelegate().setWidth(width);
+    }
+
+    @Override
     public UUID getUuid() {
         return uuid;
     }

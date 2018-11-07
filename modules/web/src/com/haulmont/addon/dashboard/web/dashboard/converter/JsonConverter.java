@@ -46,6 +46,7 @@ public class JsonConverter {
 
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
         builder.setExclusionStrategies(new AnnotationExclusionStrategy());
         builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
         builder.registerTypeAdapter(DashboardLayout.class, new InheritanceAdapter());

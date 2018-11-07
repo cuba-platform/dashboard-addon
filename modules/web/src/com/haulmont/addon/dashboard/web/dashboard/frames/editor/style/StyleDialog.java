@@ -4,9 +4,7 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.style;
 
 import com.haulmont.addon.dashboard.model.visualmodel.SizeUnit;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.LookupField;
-import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.components.*;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -16,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class StyleDialog extends AbstractWindow {
 
-    private static final Pattern DIMENSION_PATTERN=Pattern.compile("^(\\d+)(px|%)$");
+    private static final Pattern DIMENSION_PATTERN = Pattern.compile("^(\\d+)(px|%)$");
 
     public static final String SCREEN_NAME = "dashboard$StyleDialog";
     public static final String STYLENAME = "STYLENAME";
@@ -36,6 +34,10 @@ public class StyleDialog extends AbstractWindow {
     private LookupField widthUnits;
     @Inject
     private LookupField heightUnits;
+    @Inject
+    private CheckBox autoHeight;
+    @Inject
+    private CheckBox autoWidth;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -48,24 +50,58 @@ public class StyleDialog extends AbstractWindow {
         heightUnits.setOptionsMap(getSizeUnitsValues());
         heightUnits.setValue(params.get(HEIGHT_UNITS));
 
-        width.addTextChangeListener(e->{
+        width.addTextChangeListener(e -> {
             String text = e.getText();
             checkFieldInput(text, width, widthUnits);
+            setSizeAutoVisible(autoWidth, height, heightUnits);
         });
 
-        height.addTextChangeListener(e->{
+        height.addTextChangeListener(e -> {
             String text = e.getText();
             checkFieldInput(text, height, heightUnits);
+            setSizeAutoVisible(autoHeight, height, heightUnits);
+        });
+
+        setSizeAutoVisible(autoWidth, width, widthUnits);
+        setSizeAutoVisible(autoHeight, height, heightUnits);
+
+        addSizeAutoFieldListener(autoWidth, width, widthUnits);
+        addSizeAutoFieldListener(autoHeight, height, heightUnits);
+    }
+
+    private void addSizeAutoFieldListener(CheckBox sizeAutoCheckbox, TextField field, LookupField unitsField) {
+        sizeAutoCheckbox.addValueChangeListener(e -> {
+            Boolean value = (Boolean) e.getValue();
+            if (value) {
+                field.setValue(-1);
+                unitsField.setValue(SizeUnit.PIXELS);
+            } else {
+                field.setValue(100);
+                unitsField.setValue(SizeUnit.PERCENTAGE);
+            }
+            field.setVisible(!value);
+            unitsField.setVisible(!value);
         });
     }
 
-    private void checkFieldInput(String text, TextField width, LookupField widthUnits) {
+    private void setSizeAutoVisible(CheckBox sizeAutoCheckbox, TextField field, LookupField unitsField) {
+        boolean autoSize = isAutoSize(field, unitsField);
+        field.setVisible(!autoSize);
+        unitsField.setVisible(!autoSize);
+        sizeAutoCheckbox.setValue(autoSize);
+    }
+
+    private boolean isAutoSize(TextField field, LookupField unitsField) {
+        return field.getValue() != null && field.getValue().equals(-1) && SizeUnit.PIXELS == unitsField.getValue();
+    }
+
+    private void checkFieldInput(String text, TextField field, LookupField unitsField) {
         Matcher matcher = DIMENSION_PATTERN.matcher(text);
         if (matcher.matches()) {
             String value = matcher.group(1);
             SizeUnit sizeUnit = SizeUnit.fromId(matcher.group(2));
-            width.setValue(value);
-            widthUnits.setValue(sizeUnit);
+            field.setValue(value);
+            unitsField.setValue(sizeUnit);
         }
     }
 
@@ -98,7 +134,9 @@ public class StyleDialog extends AbstractWindow {
     }
 
     public void apply() {
-        this.close(COMMIT_ACTION_ID);
+        if (validateAll()) {
+            this.close(COMMIT_ACTION_ID);
+        }
     }
 
     public void cancel() {
