@@ -25,7 +25,6 @@ import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 
-import java.util.Collection;
 import java.util.UUID;
 
 public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport,

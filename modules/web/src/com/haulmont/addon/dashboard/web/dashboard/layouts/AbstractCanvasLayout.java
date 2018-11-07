@@ -36,8 +36,6 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
