@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 import static com.haulmont.cuba.gui.icons.CubaIcon.*;
 
@@ -125,19 +126,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         buttonsPanel.add(captionButton);
     }
 
-    private boolean isLinearLayout(DashboardLayout layout) {
-        return layout instanceof HorizontalLayout || layout instanceof VerticalLayout;
-    }
-
-    private boolean isParentHasExpand(DashboardLayout layout) {
-        DashboardLayout parent = layout.getParent();
-        if (isLinearLayout(parent) && parent.getExpand() != null) {
-            return parent.getChildren().stream()
-                    .anyMatch(e -> e.getId().equals(parent.getExpand()));
-        }
-        return false;
-    }
-
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widgetLayout);
@@ -168,10 +156,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         addLayoutClickListener(layout);
         return layout;
 
-    }
-
-    private boolean isParentCssLayout(DashboardLayout layout) {
-        return layout.getParent() instanceof CssLayout;
     }
 
     @Override

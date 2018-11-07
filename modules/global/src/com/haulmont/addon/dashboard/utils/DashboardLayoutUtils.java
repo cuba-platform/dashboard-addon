@@ -17,9 +17,7 @@
 
 package com.haulmont.addon.dashboard.utils;
 
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +93,31 @@ public class DashboardLayoutUtils {
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    public static boolean isLinearLayout(DashboardLayout layout) {
+        return layout instanceof HorizontalLayout || layout instanceof VerticalLayout;
+    }
+
+    public static boolean isParentCssLayout(DashboardLayout layout) {
+        return layout.getParent() instanceof CssLayout;
+    }
+
+    public static boolean isParentHasExpand(DashboardLayout layout) {
+        DashboardLayout parent = layout.getParent();
+        if (isLinearLayout(parent) && parent.getExpand() != null) {
+            return parent.getChildren().stream()
+                    .anyMatch(e -> e.getId().equals(parent.getExpand()));
+        }
+        return false;
+    }
+
+    public static boolean isGridCellLayout(DashboardLayout layout) {
+        return (layout.getParent() instanceof GridLayout);
+    }
+
+    public static boolean isRootLayout(DashboardLayout layout) {
+        return (layout instanceof RootLayout);
     }
 
     public static List<DashboardLayout> findParentsLayout(DashboardLayout root, UUID child) {

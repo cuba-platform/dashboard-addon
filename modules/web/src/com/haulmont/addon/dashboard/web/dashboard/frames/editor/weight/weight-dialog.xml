@@ -3,7 +3,7 @@
         caption="msg://caption"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog"
         messagesPack="com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight">
-    <dialogMode height="200"
+    <dialogMode height="AUTO"
                 width="480"/>
     <layout height="100%"
             spacing="true"

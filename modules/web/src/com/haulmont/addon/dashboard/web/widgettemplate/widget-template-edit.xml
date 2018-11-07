@@ -13,7 +13,8 @@
                               class="com.haulmont.addon.dashboard.entity.WidgetTemplateGroup"
                               view="_minimal"/>
     </dsContext>
-    <dialogMode width="800"/>
+    <dialogMode width="AUTO"
+                height="AUTO"/>
     <layout spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="widgetTemplateDs"

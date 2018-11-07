@@ -20,17 +20,16 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.*;
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.StyleChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WeightChangedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetEditEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.WidgetRemovedEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
@@ -59,8 +58,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
 
 public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
@@ -150,7 +148,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
         widgetTree.removeAllActions();
         if (layout != null && isActionsAvailable(layout)) {
-            if (!isGridCellLayout(layout)) {
+            if (!isGridCellLayout(layout) && !isRootLayout(layout)) {
                 widgetTree.addAction(new AbstractAction("remove") {
                     @Override
                     public void actionPerform(Component component) {
@@ -174,11 +172,19 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
                     }
                 });
             }
-            if (!isGridCellLayout(layout)) {
+            if (!isRootLayout(layout) && !isGridCellLayout(layout) && !isParentCssLayout(layout) && !isParentHasExpand(layout)) {
                 widgetTree.addAction(new AbstractAction("weight") {
                     @Override
                     public void actionPerform(Component component) {
                         events.publish(new WeightChangedEvent(layout));
+                    }
+                });
+            }
+            if (isLinearLayout(layout)) {
+                widgetTree.addAction(new AbstractAction("expand") {
+                    @Override
+                    public void actionPerform(Component component) {
+                        events.publish(new ExpandChangedEvent(layout));
                     }
                 });
             }
@@ -191,12 +197,8 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         }
     }
 
-    private boolean isGridCellLayout(DashboardLayout layout) {
-        return (layout.getParent() instanceof GridLayout);
-    }
-
     private boolean isActionsAvailable(DashboardLayout layout) {
-        return !(layout instanceof RootLayout);
+        return true;
     }
 
     protected void initWidgetTemplateBox() {

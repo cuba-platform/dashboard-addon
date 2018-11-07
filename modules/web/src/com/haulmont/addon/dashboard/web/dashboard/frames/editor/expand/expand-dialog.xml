@@ -12,7 +12,7 @@
                               allowCommit="false"
                               class="com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout"/>
     </dsContext>
-    <dialogMode height="140"
+    <dialogMode height="AUTO"
                 width="480"/>
     <layout spacing="true"
             width="100%"
