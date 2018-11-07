@@ -17,6 +17,8 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.converter;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +32,8 @@ import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Transient;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter.NAME;
@@ -46,6 +50,18 @@ public class JsonConverter {
 
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
+        builder.setExclusionStrategies(new ExclusionStrategy(){
+
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getAnnotations().contains(Transient.class)||f.hasModifier(Modifier.TRANSIENT);
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        });
         builder.serializeNulls();
         builder.setExclusionStrategies(new AnnotationExclusionStrategy());
         builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
