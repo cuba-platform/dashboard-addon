@@ -20,7 +20,6 @@ import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import java.util.UUID;
 
 @NamePattern("%s|title")
 @MetaClass(name = "dashboard$Dashboard")
-public class Dashboard extends BaseUuidEntity {
+public class Dashboard extends AbstractNonPersistentEntity {
     @NotNull
     @MetaProperty(mandatory = true)
     protected String title;

@@ -50,11 +50,11 @@ public class JsonConverter {
 
     public JsonConverter() {
         GsonBuilder builder = new GsonBuilder();
-        builder.setExclusionStrategies(new ExclusionStrategy(){
+        builder.addSerializationExclusionStrategy(new ExclusionStrategy() {
 
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                return f.getAnnotations().contains(Transient.class)||f.hasModifier(Modifier.TRANSIENT);
+                return f.getAnnotations().contains(Transient.class) || f.hasModifier(Modifier.TRANSIENT);
             }
 
             @Override
@@ -62,8 +62,9 @@ public class JsonConverter {
                 return false;
             }
         });
+        builder.addSerializationExclusionStrategy(new AnnotationExclusionStrategy());
         builder.serializeNulls();
-        builder.setExclusionStrategies(new AnnotationExclusionStrategy());
+        builder.setPrettyPrinting();
         builder.registerTypeAdapter(ParameterValue.class, new InheritanceAdapter());
         builder.registerTypeAdapter(DashboardLayout.class, new InheritanceAdapter());
         gson = builder.create();
@@ -90,7 +91,7 @@ public class JsonConverter {
         if (rootLayout instanceof GridLayout) {
             GridLayout gridLayout = (GridLayout) rootLayout;
             Set<GridArea> gridAreas = gridLayout.getAreas();
-            for (GridArea gridArea:gridAreas){
+            for (GridArea gridArea : gridAreas) {
                 DashboardLayout dashboardLayout = gridArea.getComponent();
                 dashboardLayout.setParent(rootLayout);
                 initLayoutParents(dashboardLayout);

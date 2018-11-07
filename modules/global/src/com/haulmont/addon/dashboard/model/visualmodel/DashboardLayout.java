@@ -21,7 +21,6 @@ import com.haulmont.addon.dashboard.utils.DashboardLayoutUtils;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.UUID;
 
 @MetaClass(name = "dashboard$DashboardLayout")
 @NamePattern("%s|caption")
-public abstract class DashboardLayout extends BaseUuidEntity {
+public abstract class DashboardLayout extends AbstractNonPersistentEntity {
     @MetaProperty
     protected List<DashboardLayout> children = new ArrayList<>();
 

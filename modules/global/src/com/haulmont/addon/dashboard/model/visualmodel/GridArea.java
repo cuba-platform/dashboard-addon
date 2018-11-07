@@ -18,12 +18,11 @@ package com.haulmont.addon.dashboard.model.visualmodel;
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import javax.validation.constraints.NotNull;
 
 @MetaClass(name = "dashboard$GridArea")
-public class GridArea extends BaseUuidEntity {
+public class GridArea extends AbstractNonPersistentEntity {
     private static final long serialVersionUID = 5378347946733397250L;
 
     @NotNull
