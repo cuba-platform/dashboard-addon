@@ -65,28 +65,28 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
     @Override
     public void setSizeFull() {
         super.setSizeFull();
-        innerLayout.setSizeFull();
-        widgetComponent.setSizeFull();
+//        innerLayout.setSizeFull();
+//        widgetComponent.setSizeFull();
     }
 
     @Override
     public void setSizeAuto() {
         super.setSizeAuto();
-        innerLayout.setSizeAuto();
-        widgetComponent.setSizeAuto();
+//        innerLayout.setSizeAuto();
+//        widgetComponent.setSizeAuto();
     }
 
     @Override
     public void setHeight(String height) {
         super.setHeight(height);
-        innerLayout.setHeight(height);
-        widgetComponent.setHeight(height);
+//        innerLayout.setHeight(height);
+//        widgetComponent.setHeight(height);
     }
 
     @Override
     public void setWidth(String width) {
         super.setWidth(width);
-        innerLayout.setWidth(width);
-        widgetComponent.setWidth(width);
+//        innerLayout.setWidth(width);
+//        widgetComponent.setWidth(width);
     }
 }

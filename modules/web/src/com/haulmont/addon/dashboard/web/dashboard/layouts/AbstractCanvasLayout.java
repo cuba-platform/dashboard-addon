@@ -19,6 +19,7 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dnd.components.DDLayout;
 import com.haulmont.addon.dnd.components.DropHandler;
 import com.haulmont.addon.dnd.components.dragevent.DropTarget;
@@ -49,8 +50,10 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
         this.delegate = delegate;
         this.model = model;
         buttonsPanel = AppBeans.get(ComponentsFactory.class).createComponent(HBoxLayout.class);
-        super.add(delegate);
+        this.delegate.setSizeFull();
+        super.add(this.delegate);
         super.add(buttonsPanel);
+        super.addStyleName(DashboardStyleConstants.DASHBOARD_WIDGET);
     }
 
     @Override
@@ -153,25 +156,25 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     @Override
     public void setSizeFull() {
         super.setSizeFull();
-        getDelegate().setSizeFull();
+//        getDelegate().setSizeFull();
     }
 
     @Override
     public void setSizeAuto() {
         super.setSizeAuto();
-        getDelegate().setSizeAuto();
+//        getDelegate().setSizeAuto();
     }
 
     @Override
     public void setHeight(String height) {
         super.setHeight(height);
-        getDelegate().setHeight(height);
+//        getDelegate().setHeight(height);
     }
 
     @Override
     public void setWidth(String width) {
         super.setWidth(width);
-        getDelegate().setWidth(width);
+//        getDelegate().setWidth(width);
     }
 
     @Override
