@@ -17,17 +17,17 @@
 package com.haulmont.addon.dashboard.model;
 
 import com.haulmont.addon.dashboard.model.json.Exclude;
-import com.haulmont.addon.dashboard.model.visualmodel.AbstractNonPersistentEntity;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NamePattern("%s|caption")
 @MetaClass(name = "dashboard$Widget")
-public class Widget extends AbstractNonPersistentEntity {
+public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected Boolean showWidgetCaption = false;
     @MetaProperty

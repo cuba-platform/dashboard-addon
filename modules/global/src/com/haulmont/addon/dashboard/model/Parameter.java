@@ -17,14 +17,14 @@
 package com.haulmont.addon.dashboard.model;
 
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
-import com.haulmont.addon.dashboard.model.visualmodel.AbstractNonPersistentEntity;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 @NamePattern("%s|name")
 @MetaClass(name = "dashboard$Parameter")
-public class Parameter extends AbstractNonPersistentEntity {
+public class Parameter extends BaseUuidEntity {
     @MetaProperty
     protected String name;
     @MetaProperty
