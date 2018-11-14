@@ -96,7 +96,7 @@ public class DashboardLayoutUtils {
     }
 
     public static boolean isLinearLayout(DashboardLayout layout) {
-        return layout instanceof HorizontalLayout || layout instanceof VerticalLayout;
+        return layout instanceof HorizontalLayout || layout instanceof VerticalLayout || layout instanceof GridCellLayout;
     }
 
     public static boolean isParentCssLayout(DashboardLayout layout) {
@@ -113,7 +113,7 @@ public class DashboardLayoutUtils {
     }
 
     public static boolean isGridCellLayout(DashboardLayout layout) {
-        return (layout.getParent() instanceof GridLayout);
+        return (layout instanceof GridCellLayout);
     }
 
     public static boolean isRootLayout(DashboardLayout layout) {
@@ -130,4 +130,42 @@ public class DashboardLayoutUtils {
         }
         return result;
     }
+
+    public static int availableColumns(GridLayout gridLayout, GridCellLayout gridCell) {
+        int availableColumns = 0;
+        for (int column = gridCell.getColumn() + 1; column < gridLayout.getColumns(); column++) {
+            GridArea gridArea = gridLayout.getGridArea(column, gridCell.getRow());
+            if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
+                break;
+            }
+            availableColumns++;
+        }
+        return availableColumns + 1;
+    }
+
+    public static int availableRows(GridLayout gridLayout, GridCellLayout gridCell) {
+        int availableRows = 0;
+        for (int row = gridCell.getRow() + 1; row < gridLayout.getRows(); row++) {
+            GridArea gridArea = gridLayout.getGridArea(gridCell.getColumn(), row);
+            if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
+                break;
+            }
+            availableRows++;
+        }
+        return availableRows + 1;
+    }
+
+    public static boolean isEmptyGridArea(GridArea gridArea) {
+        return gridArea.getComponent().getChildren().isEmpty();
+    }
+
+    public static boolean isGridExpanded(GridArea gridArea) {
+        Integer col1 = gridArea.getCol();
+        Integer col2 = gridArea.getCol2() != null ? gridArea.getCol2() : gridArea.getCol();
+        Integer row1 = gridArea.getRow();
+        Integer row2 = gridArea.getRow2() != null ? gridArea.getRow2() : gridArea.getRow();
+        return !(col1.equals(col2) && row1.equals(row2));
+    }
+
+
 }

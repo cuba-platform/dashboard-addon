@@ -16,6 +16,7 @@
  */
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight;
 
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.vaadin.data.Property;
@@ -28,36 +29,40 @@ import java.util.Map;
 
 public class WeightDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$WeightDialog";
-    public static final String WEIGHT = "WEIGHT";
+    public static final String WIDGET = "WIDGET";
 
     @Inject
     protected HBoxLayout sliderBox;
 
-    protected Slider slider = new Slider(1, 16);
+    protected Slider weightSlider = new Slider(1, 16);
+    private DashboardLayout layout;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        int initWeight = (int) params.getOrDefault(WEIGHT, 1);
+        layout = (DashboardLayout) params.get(WIDGET);
 
-        slider.setValue((double) initWeight);
-        slider.setCaption(formatMessage("dashboard.weight", initWeight));
-        slider.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        slider.setCaptionAsHtml(true);
+        int initWeight = layout.getWeight();
 
-        slider.addValueChangeListener((Property.ValueChangeListener) event ->
-                slider.setCaption(formatMessage("dashboard.weight", slider.getValue().intValue()))
+        weightSlider.setValue((double) initWeight);
+        weightSlider.setCaption(formatMessage("dashboard.weight", initWeight));
+        weightSlider.setWidth(100, Sizeable.Unit.PERCENTAGE);
+        weightSlider.setCaptionAsHtml(true);
+
+        weightSlider.addValueChangeListener((Property.ValueChangeListener) event ->
+                weightSlider.setCaption(formatMessage("dashboard.weight", weightSlider.getValue().intValue()))
         );
-        slider.focus();
+        weightSlider.focus();
 
-        sliderBox.unwrap(Layout.class).addComponent(slider);
+        sliderBox.unwrap(Layout.class).addComponent(weightSlider);
     }
 
     public int getWeight() {
-        return slider.getValue().intValue();
+        return weightSlider.getValue().intValue();
     }
 
     public void apply() {
+        layout.setWeight(weightSlider.getValue().intValue());
         this.close(COMMIT_ACTION_ID);
     }
 

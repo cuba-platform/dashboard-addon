@@ -28,7 +28,7 @@ public class GridArea extends BaseUuidEntity {
 
     @NotNull
     @MetaProperty(mandatory = true)
-    protected DashboardLayout component;
+    protected GridCellLayout component;
     @NotNull
     @MetaProperty(mandatory = true)
     protected Integer row;
@@ -36,11 +36,17 @@ public class GridArea extends BaseUuidEntity {
     @MetaProperty(mandatory = true)
     protected Integer col;
 
-    public void setComponent(DashboardLayout component) {
+    @MetaProperty
+    protected Integer col2;
+
+    @MetaProperty
+    protected Integer row2;
+
+    public void setComponent(GridCellLayout component) {
         this.component = component;
     }
 
-    public DashboardLayout getComponent() {
+    public GridCellLayout getComponent() {
         return component;
     }
 
@@ -58,5 +64,21 @@ public class GridArea extends BaseUuidEntity {
 
     public Integer getCol() {
         return col;
+    }
+
+    public Integer getCol2() {
+        return col2;
+    }
+
+    public void setCol2(Integer col2) {
+        this.col2 = col2;
+    }
+
+    public Integer getRow2() {
+        return row2;
+    }
+
+    public void setRow2(Integer row2) {
+        this.row2 = row2;
     }
 }

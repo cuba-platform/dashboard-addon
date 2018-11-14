@@ -22,16 +22,15 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.datasources.DashboardLayoutTreeReadOnlyDs;
 import com.haulmont.addon.dashboard.web.dashboard.events.CreateWidgetTemplateEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
+import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.ActionProviderFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
@@ -42,9 +41,8 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractAction;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
@@ -56,7 +54,8 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
 public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
@@ -87,6 +86,8 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     protected Events events;
     @WindowParam
     protected Dashboard dashboard;
+    @Inject
+    protected ActionProviderFactory actionProviderFactory;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -145,58 +146,10 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
         widgetTree.removeAllActions();
-        if (layout != null && isActionsAvailable(layout)) {
-            if (!isGridCellLayout(layout) && !isRootLayout(layout)) {
-                widgetTree.addAction(new AbstractAction("remove") {
-                    @Override
-                    public void actionPerform(Component component) {
-                        events.publish(new WidgetRemovedEvent(layout));
-                    }
-                });
-            }
-            if (layout instanceof WidgetLayout) {
-                WidgetLayout widgetLayout = (WidgetLayout) layout;
-                widgetTree.addAction(new AbstractAction("edit") {
-                    @Override
-                    public void actionPerform(Component component) {
-                        events.publish(new WidgetEditEvent(widgetLayout));
-                    }
-                });
-
-                widgetTree.addAction(new AbstractAction("template") {
-                    @Override
-                    public void actionPerform(Component component) {
-                        events.publish(new CreateWidgetTemplateEvent(widgetLayout.getWidget()));
-                    }
-                });
-            }
-            if (!isRootLayout(layout) && !isGridCellLayout(layout) && !isParentCssLayout(layout) && !isParentHasExpand(layout)) {
-                widgetTree.addAction(new AbstractAction("weight") {
-                    @Override
-                    public void actionPerform(Component component) {
-                        events.publish(new WeightChangedEvent(layout));
-                    }
-                });
-            }
-            if (isLinearLayout(layout)) {
-                widgetTree.addAction(new AbstractAction("expand") {
-                    @Override
-                    public void actionPerform(Component component) {
-                        events.publish(new ExpandChangedEvent(layout));
-                    }
-                });
-            }
-            widgetTree.addAction(new AbstractAction("style") {
-                @Override
-                public void actionPerform(Component component) {
-                    events.publish(new StyleChangedEvent(layout));
-                }
-            });
+        List<Action> actions = actionProviderFactory.getLayoutActions(layout);
+        for (Action action : actions) {
+            widgetTree.addAction(action);
         }
-    }
-
-    private boolean isActionsAvailable(DashboardLayout layout) {
-        return true;
     }
 
     protected void initWidgetTemplateBox() {

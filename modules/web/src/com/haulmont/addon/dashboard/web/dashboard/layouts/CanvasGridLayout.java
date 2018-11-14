@@ -37,7 +37,7 @@ public class CanvasGridLayout extends AbstractCanvasLayout {
         return gridLayout;
     }
 
-    public void addComponent(Component component, int column, int row) {
-        gridLayout.add(component, column, row);
+    public void addComponent(Component component, int col, int row, int col2, int row2) {
+        gridLayout.add(component, col, row, col2, row2);
     }
 }

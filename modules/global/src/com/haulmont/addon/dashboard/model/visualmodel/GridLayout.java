@@ -74,6 +74,27 @@ public class GridLayout extends DashboardLayout implements ContainerLayout {
 
     }
 
+    public GridArea getGridArea(Integer col, Integer row) {
+        GridArea selectedArea = null;
+        Integer area = 0;
+        for (GridArea gridArea : areas) {
+            Integer col1 = gridArea.getCol();
+            Integer col2 = gridArea.getCol2() != null ? gridArea.getCol2() : gridArea.getCol();
+            Integer row1 = gridArea.getRow();
+            Integer row2 = gridArea.getRow2() != null ? gridArea.getRow2() : gridArea.getRow();
+            if (col1 <= col && col <= col2
+                    && row1 <= row && row <= row2) {
+                Integer newArea = ((row2 + 1) - row1) * ((col2 + 1) - col1);
+                if (newArea > area) {
+                    selectedArea = gridArea;
+                    area = newArea;
+                }
+
+            }
+        }
+        return selectedArea;
+    }
+
     @Override
     public void addChild(DashboardLayout child) {
         throw new UnsupportedOperationException("Use addArea() method");

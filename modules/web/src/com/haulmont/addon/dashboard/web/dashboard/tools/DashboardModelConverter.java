@@ -75,8 +75,11 @@ public class DashboardModelConverter {
             canvasLayout = factory.createCanvasGridLayout(gridModel);
 
             for (GridArea area : gridModel.getAreas()) {
-                CanvasLayout childGridCanvas = modelToContainer(frame, area.getComponent());
-                ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol(), area.getRow());
+                GridCellLayout cellLayout = area.getComponent();
+                CanvasLayout childGridCanvas = modelToContainer(frame, cellLayout);
+                Integer col2 = area.getCol() + cellLayout.getColSpan();
+                Integer row2 = area.getRow() + cellLayout.getRowSpan();
+                ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol(), area.getRow(), col2, row2);
             }
         }
 
@@ -149,7 +152,7 @@ public class DashboardModelConverter {
 
                     modelArea.setCol(area.getColumn1());
                     modelArea.setRow(area.getRow1());
-                    modelArea.setComponent(modelChildGridArea);
+                    modelArea.setComponent((GridCellLayout) modelChildGridArea);
                     gridModel.addArea(modelArea);
                 }
             } else if (childModel != null) {

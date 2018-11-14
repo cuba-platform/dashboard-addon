@@ -90,9 +90,11 @@ public class DropLayoutTools {
                             GridArea gridArea = metadata.create(GridArea.class);
                             gridArea.setRow(j);
                             gridArea.setCol(i);
+                            gridArea.setRow2(j);
+                            gridArea.setCol2(i);
                             GridCellLayout gcl = metadata.create(GridCellLayout.class);
-                            gcl.setRow(j + 1);
-                            gcl.setColumn(i + 1);
+                            gcl.setRow(j);
+                            gcl.setColumn(i);
                             gridArea.setComponent(gcl);
                             gcl.setParent(gridLayout);
                             gridLayout.addArea(gridArea);
@@ -104,6 +106,7 @@ public class DropLayoutTools {
         } else if (layout instanceof WidgetTemplateLayout) {
             WidgetLayout widgetLayout = metadata.create(WidgetLayout.class);
             Widget widget = metadataTools.copy(((WidgetTemplateLayout) layout).getWidget());
+            widget.setId(UUID.randomUUID());
             widget.setDashboard(((WidgetLayout) layout).getWidget().getDashboard());
             widgetLayout.setWidget(widget);
             reorderWidgetsAndPushEvents(widgetLayout, targetLayout, location);

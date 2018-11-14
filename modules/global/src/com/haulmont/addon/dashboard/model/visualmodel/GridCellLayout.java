@@ -18,10 +18,16 @@ public class GridCellLayout extends VerticalLayout {
     @MetaProperty(mandatory = true)
     protected Integer column = 0;
 
+    @MetaProperty
+    protected Integer colSpan = 0;
+
+    @MetaProperty
+    protected Integer rowSpan = 0;
+
     @Override
     public String getCaption() {
         Messages messages = AppBeans.get(Messages.class);
-        return messages.formatMessage(this.getClass(), "Layout.gridCell", row, column);
+        return messages.formatMessage(this.getClass(), "Layout.gridCell", row+1, column+1);
     }
 
     public Integer getRow() {
@@ -38,5 +44,21 @@ public class GridCellLayout extends VerticalLayout {
 
     public void setColumn(Integer column) {
         this.column = column;
+    }
+
+    public Integer getColSpan() {
+        return colSpan;
+    }
+
+    public void setColSpan(Integer colSpan) {
+        this.colSpan = colSpan;
+    }
+
+    public Integer getRowSpan() {
+        return rowSpan;
+    }
+
+    public void setRowSpan(Integer rowSpan) {
+        this.rowSpan = rowSpan;
     }
 }

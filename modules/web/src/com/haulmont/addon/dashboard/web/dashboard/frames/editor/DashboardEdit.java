@@ -32,6 +32,7 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEditorFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.colspan.ColspanDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.expand.ExpandDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
@@ -268,13 +269,24 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         DashboardLayout source = event.getSource();
 
         WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                WeightDialog.WEIGHT, source.getWeight()));
+                WeightDialog.WIDGET, source));
         weightDialog.addCloseListener(actionId -> {
             if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                Dashboard dashboard = getDashboard();
-                DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
-                layout.setWeight(weightDialog.getWeight());
-                events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
+                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+            }
+        });
+        ((AbstractDatasource) dashboardDs).setModified(true);
+    }
+
+    @EventListener
+    public void onColspanChanged(ColspanChangedEvent event) {
+        DashboardLayout source = event.getSource();
+
+        ColspanDialog weightDialog = (ColspanDialog) openWindow(ColspanDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
+                ColspanDialog.WIDGET, source));
+        weightDialog.addCloseListener(actionId -> {
+            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
             }
         });
         ((AbstractDatasource) dashboardDs).setModified(true);
