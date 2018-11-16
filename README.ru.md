@@ -1,6 +1,13 @@
+[![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
 # 1. Введение 
 Данный компонент предназначен для создания и внедрения дашбордов - визуального интерфейса для отображения бизнес-процессов, состояний какого-либо объекта и т.п. Дашборд состоит из виджетов - отдельных элементов, основанных на фрейме.
  Для размещения виджетов внутри дашборда используются вертикальная, горизонтальная и сетчатая компоновки (layout).
+Чтобы попробовать дашборды в действии, вы можете скачать демо-проект [dashboard-addon-demo](https://git.haulmont.com/app-components/dashboard-addon-demo).
+
+# 1.1 Структура дашборда
+
+![dashboard-structure](img/dashboard-structure.png)
 
 # 2. Установка
 
@@ -48,6 +55,10 @@ dependencies {
 </context-param>
 ```
 
+## 2.3. Расширение темы приложения
+
+Для корректного отображения UI-компонентов дополнения рекомендуется расширить тему `halo` согласно инструкции в  [документации платформы](https://doc.cuba-platform.com/manual-latest/web_theme_extension.html).
+
 # 3. Экраны
 
 ## 3.1 Widget Template Browser
@@ -65,9 +76,9 @@ dependencies {
 
 - поле **Name**;
 - выпадающий список **Group**;
-- чекбокс для управления видимостью виджета;
 - поле **Widget Type**;
-- кнопка **Customize**.
+- кнопка **Customize**;
+- чекбокс для управления видимостью виджета.
 
 ![widget-editor](img/widget-editor.png)
 
@@ -76,6 +87,7 @@ dependencies {
 - поле **Caption**;
 - поле **Widget id**;
 - поле **Description**;
+- чекбокс **Show Widget Caption** для управления видимостью заголовка виджета;
 - в зависимости от выбранного **Widget Type**, будет отображено одно из двух полей: 
   - **Screen id** - для любого фрейма;
   - **Lookup id** - для фреймов, наследующихся от `com.haulmont.cuba.gui.components.AbstractLookup`. При выборе сущности на экране публикуется событие `WidgetEntitiesSelectedEvent`;
@@ -101,7 +113,6 @@ dependencies {
     DECIMAL("DECIMAL")
     BOOLEAN("BOOLEAN")
     LONG("LONG")
-    UNDEFINED("UNDEFINED")
 ```
 
 ![parameter-editor](img/parameter-editor.png)
@@ -155,7 +166,7 @@ dependencies {
 
 #### Layouts
 
-Содержит горизонтальную, вертикальную и сетчатую компоновки (layout).
+Содержит горизонтальную, вертикальную, сетчатую и css компоновки (layout).
 
 ![palette-layouts](img/palette-layouts.png)
 
@@ -180,8 +191,6 @@ dependencies {
 При перетаскивании grid layout на холст откроется диалог, в котором можно выбрать количество строк и столбцов в создаваемой компоновке.
 При перетаскивании виджета откроется диалог **Widget Editor**. Для добавления виджета нажмите ОК.
 
-![grid-dialog](img/grid-dialog.png)
-
 Пример дашборда с виджетами:
 
 ![canvas-with-widgets](img/canvas-with-widgets.png)
@@ -194,7 +203,13 @@ dependencies {
 
 ![gear](img/gear.png) - открыть **Widget Editor**;
 
-![arrows](img/arrows.png) - изменить вес (коэффициент расширения) контейнера в родительском контейнере.
+![arrows](img/arrows.png) - изменить вес (коэффициент расширения) контейнера в родительском контейнере;
+
+![brush](img/brush.png) - изменить стиль контейнера: указать имя стиля, изменить ширину и высоту контейнера:
+
+![style-editor](img/style-editor.png)
+
+Подробнее об использовании стилей см. в [документации платформы](https://doc.cuba-platform.com/manual-latest-ru/web_theme_extension.html#web_theme_extension_styles).
 
 ### Панель с кнопками
 

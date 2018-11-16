@@ -3,6 +3,7 @@
 # 1. Introduction 
 This component is designed to create and embed dashboards. Dashboard consists of widgets - individual elements based on a frame.
 The widgets can be positioned inside a dashboard using vertical, horizontal and grid layouts.
+You can try the dashboards in action in the [dashboard-addon-demo](https://git.haulmont.com/app-components/dashboard-addon-demo) sample application.
 
 # 1.1 Dashboard Structure
 
@@ -54,6 +55,10 @@ dependencies {
 </context-param>
 ```
 
+## 2.3. Extend the application theme
+
+For the correct rendering of the add-on UI controls, it is recommended to extend the `halo` theme in your application as described in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/web_theme_extension.html).
+
 # 3. Screens
 
 ## 3.1. Widget Template Browser
@@ -70,9 +75,9 @@ This screen allows editing a widget and consists of the following elements:
 
 - the **Name** field;
 - the **Group** drop-down;
-- the checkbox to set the widget visibility;
 - the **Widget Type** lookup field;
-- the **Customize** button.
+- the **Customize** button;
+- the checkbox to set the widget visibility.
 
 ![widget-editor](img/widget-editor.png)
 
@@ -81,6 +86,7 @@ When the user clicks the **Customize** button, the enhanced widget editor is ope
 - the **Caption** field;
 - the **Widget id** field;
 - the **Description** field;
+- the **Show Widget Caption** checkbox;
 - depending on the selected **Widget Type**, one of the following fields will be displayed: 
   - **Screen id**, for any frame;
   - **Lookup id**, for the frames inherited from the `com.haulmont.cuba.gui.components.AbstractLookup`. Widgets of this type fire `WidgetEntitiesSelectedEvent` which contains the selected entities;  
@@ -105,7 +111,6 @@ A value can have the following types:
     DECIMAL("DECIMAL")
     BOOLEAN("BOOLEAN")
     LONG("LONG")
-    UNDEFINED("UNDEFINED")
 ```
 
 ![parameter-editor](img/parameter-editor.png)
@@ -157,7 +162,7 @@ Contains **Lookup** and **Screen** widgets. Drag and drop an element from the pa
 
 #### 3.5.3.2. Layouts
 
-Contains horizontal, vertical, and grid layouts.
+Contains horizontal, vertical, grid, and css layouts.
 
 ![palette-layouts](img/palette-layouts.png)
 
@@ -181,8 +186,6 @@ It is a container in which you can place the widgets and layouts. Drag and drop 
 
 When dragging a grid layout to the canvas, a dialog opens where you can set the number of rows and columns. When dragging a widget, a **Widget Editor** dialog opens.
 
-![grid-dialog](img/grid-dialog.png)
-
 Example of the dashboard with widgets:
 
 ![canvas-with-widgets](img/canvas-with-widgets.png)
@@ -195,7 +198,13 @@ Click on a layout or a widget to select it. The selected element can contain but
 
 ![gear](img/gear.png) - open the **Widget Editor**; 
 
-![arrows](img/arrows.png) - change the weight (expand ratio) of a container in a parent container.
+![arrows](img/arrows.png) - change the weight (expand ratio) of a container in a parent container;
+
+![brush](img/brush.png) - change the style of a container: define the style name, modify the container's width and height:
+
+![style-editor](img/style-editor.png)
+
+For more information on using custom styles see [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/web_theme_extension.html#web_theme_extension_styles).
 
 ### 3.5.5. Buttons Panel
 
@@ -208,8 +217,8 @@ Click on a layout or a widget to select it. The selected element can contain but
 ## 3.6 Dashboard Groups и Dashboard Group Editor
 
 The screen **Dashboard Groups** allows creating, editing, and removing dashboard groups. The screen **Dashboard Group Editor** allows adding or excluding dashboards in a dashboard group from a database.
- 
- ![menu-dashboard-groups](img/menu-dashboard-groups.png) 
+
+To open the **Dashboard Groups** browser, click the **Groups** button in the **Dashboard browser** screen.
  
  ![dashboard-group-browser](img/dashboard-group-browser.png) 
  
