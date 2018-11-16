@@ -133,26 +133,30 @@ public class DashboardLayoutUtils {
 
     public static int availableColumns(GridLayout gridLayout, GridCellLayout gridCell) {
         int availableColumns = 0;
-        for (int column = gridCell.getColumn() + 1; column < gridLayout.getColumns(); column++) {
+        for (int column = gridCell.getColumn(); column < gridLayout.getColumns(); column++) {
             GridArea gridArea = gridLayout.getGridArea(column, gridCell.getRow());
-            if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
-                break;
+            if (!gridCell.equals(gridArea.getComponent())) {
+                if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
+                    break;
+                }
             }
             availableColumns++;
         }
-        return availableColumns + 1;
+        return availableColumns;
     }
 
     public static int availableRows(GridLayout gridLayout, GridCellLayout gridCell) {
         int availableRows = 0;
-        for (int row = gridCell.getRow() + 1; row < gridLayout.getRows(); row++) {
+        for (int row = gridCell.getRow(); row < gridLayout.getRows(); row++) {
             GridArea gridArea = gridLayout.getGridArea(gridCell.getColumn(), row);
-            if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
-                break;
+            if (!gridCell.equals(gridArea.getComponent())) {
+                if (!isEmptyGridArea(gridArea) || isGridExpanded(gridArea)) {
+                    break;
+                }
             }
             availableRows++;
         }
-        return availableRows + 1;
+        return availableRows;
     }
 
     public static boolean isEmptyGridArea(GridArea gridArea) {
