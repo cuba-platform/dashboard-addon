@@ -178,6 +178,17 @@ Displays the current dashboard structure as a tree. The **Root** element is avai
 
 ![palette-tree](img/palette-tree.png)
 
+The following actions are available for the tree elements from the context menu:
+
+- **Expand** - defines a component within the container that should be expanded to use all available space in the direction of component placement. For a container with vertical placement, this attribute sets 100% height to a component; for the containers with horizontal placement - 100% width. Additionally, resizing a container will resize the expanded component. 
+- **Style** - enables setting the style name and modifying the component's height and width.
+- **Remove** - removes the component from the tree.
+- **Weight** - changes the weight (expand ratio) of a container in a parent container.
+- **Edit** - opens the widget editor.
+- **Template** - opens the widget template editor.
+
+![tree-context-menu](img/tree-context-menu_1.png) ![tree-context-menu](img/tree-context-menu_2.png)
+
 ### 3.5.4. Canvas
 
 It is a container in which you can place the widgets and layouts. Drag and drop an element from the palette for adding it on the canvas.
