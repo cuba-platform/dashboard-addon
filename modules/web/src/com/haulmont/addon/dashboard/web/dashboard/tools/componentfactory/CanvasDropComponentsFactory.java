@@ -20,7 +20,6 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.model.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.cuba.core.global.Events;
@@ -29,7 +28,6 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import org.springframework.stereotype.Component;
@@ -38,7 +36,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
-import static com.haulmont.cuba.gui.icons.CubaIcon.*;
 
 @Component("dashboard_dropComponentsFactory")
 public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
