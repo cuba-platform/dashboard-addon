@@ -24,6 +24,7 @@ import com.haulmont.cuba.gui.components.*;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
@@ -68,7 +69,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case STRING:
                 return new StringParameterValue(textField.getValue());
             case UUID:
-                return new UuidParameterValue(textField.getValue());
+                return new UuidParameterValue(UUID.fromString(textField.getValue()));
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:

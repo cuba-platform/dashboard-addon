@@ -11,7 +11,7 @@
                     class="com.haulmont.addon.dashboard.model.Parameter"
                     view="_local"/>
     </dsContext>
-    <dialogMode height="350"
+    <dialogMode height="AUTO"
                 width="480"/>
     <layout expand="windowActions"
             spacing="true">
