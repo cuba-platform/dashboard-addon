@@ -128,7 +128,7 @@ This screen allows editing a dashboard.
 
 ![dashboard-editor-common](img/dashboard-editor-common.png)
 
-Dashboard Editor contains 5 areas:
+Dashboard Editor contains 6 areas:
 - the dashboard fields;
 - the dashboard parameters;
 - the palette with widgets and layouts;
