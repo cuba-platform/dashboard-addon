@@ -25,8 +25,7 @@ Select the add-on version compatible with the CUBA platform version used in your
 
 | Platform Version  | Component Version |
 |-------------------|-------------------|
-| 6.9.X             | 1.0.+             |
-| 6.10.X            | 2.0.+             |
+| 6.10.X            | 2.0.0             |
 
 3. Click **OK** in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
 
@@ -63,7 +62,7 @@ For the correct rendering of the add-on UI controls, it is recommended to extend
 
 ## 3.1. Widget Template Browser
 
-This screen allows creating, editing and removing widget templates. Widget templates are stored in a database. This screen is available from the application menu.
+This screen allows creating, editing and removing widget templates. Widget templates is a preconfigured widgets which can be reused. Widget templates are stored in a database. This screen is available from the application menu.
 
 ![menu-widget-templates](img/menu-widget-templates.png)
 
@@ -137,12 +136,14 @@ Dashboard Editor contains 5 areas:
 - the canvas  where the position of dashboard elements (widgets and layouts) is specified;
 - the buttons panel.
 
+Dashboard canvas and tree supports drag and drop actions from palette.
+
 ### 3.5.1. Dashboard Fields
 
 - **Title** - the name of the dashboard;
 - **Code** - the unique identifier for a more convenient search in a database;
 - **Refresh period** - the time period in seconds for refresh a dashboard UI;
-- **Assistant bean name** - an optional reference to a Spring bean class that should be used for customizing the dashboard. 
+- **Assistant bean name** - an optional reference to a Spring bean class that should be used for customizing the dashboard (assistance bean must have **prototype** bean scope). 
 - **Group** - the dashboard group;
 - **Is available for all users** - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
@@ -237,7 +238,7 @@ To open the **Dashboard Groups** browser, click the **Groups** button in the **D
 
 # 4. Integration of the Component Dashboard-UI
 
-To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen. Then add namespace like `dash` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
+To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen. Then add namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
 
 ### Usage Example
 
@@ -245,13 +246,13 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         class="com.haulmont.example.web.SomeController"
-        xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
+        xmlns:dashboard="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
-        <dash:dashboard id="dashboardId"
+        <dashboard:dashboard id="dashboardId"
                         code="usersDashboard"
                         timerDelay="60">
-             <dash:parameter name="role" value="Admin" type="string"/>           
-        </dash:dashboard> 
+             <dashboard:parameter name="role" value="Admin" type="string"/>           
+        </dashboard:dashboard> 
     ...
 ```
 
@@ -276,17 +277,26 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 
 To add an additional widget type, you need to do the following:
 
-- Create a not persistent entity class which extends the class `com.haulmont.addon.dashboard.model.Widget`, then add the annotation `com.haulmont.addon.dashboard.annotation.WidgetType`. Fill the fields: `name`, `editFrameId` in the annotation (see JavaDoc).
+- Create a frame (see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-6.10/screens.html)), then add the annotation `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Fill the fields: `name`, `editFrameId`(optional, leave absent if there is no parameter in widget) in the annotation (see JavaDoc).
+`widget`, `dashboard`, `dashboardFrame` can be included in widget via `@WindowParam` annotation. Widget parameters in widget editor and widget frames should have `@WidgetParam` and `@WindowParam` annotations.
 For example:
 
 ```java
-@MetaClass(name = "dashboard$LookupWidget")
-@WidgetType(name = CAPTION,
-        editFrameId = "lookupWidgetEdit")
-public class LookupWidget extends Widget {
+@DashboardWidget(name = CAPTION, editFrameId = "dashboard$LookupWidget.edit")
+public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     public static final String CAPTION = "Lookup";
 
-    @MetaProperty
+    @WindowParam
+    protected Widget widget;
+
+    @WindowParam
+    protected Dashboard dashboard;
+
+    @WindowParam
+    protected DashboardFrame dashboardFrame;
+
+    @WidgetParam
+    @WindowParam
     protected String lookupWindowId;
 
     public String getLookupWindowId() {
@@ -299,8 +309,7 @@ public class LookupWidget extends Widget {
 }
 ```
 
-- Add the not persistent entity class in `metadata.xml`;
-- Add the frame for entity editing in the web module and register it in `web-screens.xml`. For example:
+- Add the frame for editing widget in the web module and register it in `web-screens.xml`. For example:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -331,6 +340,10 @@ public class LookupWidgetEdit extends AbstractFrame {
     protected ScreenXmlLoader screenXmlLoader;
 
     protected Datasource<Widget> widgetDs;
+    
+    @WidgetParam
+    @WindowParam
+    protected String lookupWindowId;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -343,57 +356,10 @@ public class LookupWidgetEdit extends AbstractFrame {
         selectLookupId();
     }
     
-     protected void initWidgetDs(Map<String, Object> params) {
-            widgetDs = (Datasource<Widget>) params.get(ITEM_DS);
-            Widget widget = widgetDs.getItem();
-    
-            if (!(widget instanceof LookupWidget)) {
-                LookupWidget lookupWidget = metadata.create(LookupWidget.class);
-                BeanUtils.copyProperties(widget, lookupWidget);
-                widgetDs.setItem(lookupWidget);
-            }
-     }
-}
-```
-
-
-- Add the frame for displaying the dashboard in the web module and add it in `web-screens.xml`. The controller class must be inherited from 
-`com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse`. For example:
-
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetBrowse">
-    <layout spacing="true"
-            width="100%"
-            height="100%">
-    </layout>
-</window>
-```
-
-```java
-public class LookupWidgetBrowse extends AbstractWidgetBrowse {
-    @Inject
-    protected Events events;
-
-    protected AbstractLookup lookupFrame;
-
-    @Override
-    public void init(Map<String, Object> params) {
-        super.init(params);
-        refresh();
-    }
-
-    @Override
-    public void refresh() {
-        String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
-        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, getParamsForFrame());
-        lookupFrame.close("");
-        this.add(lookupFrame.getFrame());
-    }
-
-    protected Window.Lookup.Handler lookupHandler() {
-        return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetWithEntities(widget, items)));
+    protected void initWidgetDs(Map<String, Object> params) {
+        widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS); 
     }
 }
 ```
+
+If widget frame implement `RefreshableWidget` interface, then method `refresh` will be invoked automatically on each dashboard update event. 

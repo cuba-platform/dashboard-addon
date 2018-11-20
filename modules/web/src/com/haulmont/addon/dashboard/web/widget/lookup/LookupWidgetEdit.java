@@ -69,13 +69,6 @@ public class LookupWidgetEdit extends AbstractFrame {
 
     protected void initWidgetDs(Map<String, Object> params) {
         widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS);
-        /*Widget widget = widgetDs.getItem();
-
-        if (!(widget instanceof LookupWidget)) {
-            LookupWidget lookupWidget = metadata.create(LookupWidget.class);
-            BeanUtils.copyProperties(widget, lookupWidget);
-            widgetDs.setItem(lookupWidget);
-        }*/
     }
 
     protected void selectLookupId() {

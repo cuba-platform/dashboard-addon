@@ -25,8 +25,7 @@
 
 | Platform Version  | Component Version |
 |-------------------|-------------------|
-| 6.9.X             | 1.0.+             |
-| 6.10.X            | 2.0.+             |
+| 6.10.X            | 2.0.0            |
     
 3. Нажмите **OK** в диалоговом окне. Studio попытается найти бинарные артефакты аддона в репозитории, используемом в проекте в настоящий момент. Если они найдены, диалоговое окно закроется, и аддон появится в списке собственных компонентов.
 
@@ -63,7 +62,7 @@ dependencies {
 
 ## 3.1 Widget Template Browser
 
-Данный экран позволяет создавать, изменять и удалять шаблоны виджетов. Шаблоны виджетов хранятся в базе данных.
+Данный экран позволяет создавать, изменять и удалять шаблоны виджетов. Шаблоны виджетов позволяют повторно использовать уже настроенные виджеты. Шаблоны виджетов хранятся в базе данных.
 В данный экран можно попасть из меню приложения. 
 
 ![menu-widget-templates](img/menu-widget-templates.png)
@@ -139,12 +138,14 @@ dependencies {
 - холст, где задается размещение элементов дашборда;
 - панель с кнопками.
 
+Холст и дерево элементов поддерживают перетаскивание элементов из палитры доступных компонентов.
+
 ### Поля дашборда
 
 - **Title** - название дашборда;
 - **Code** - уникальный идетификатор для более удобного поиска в базе данных;
 - **Refresh period** - период времени в секундах, при котором дашборд будет обновляться;
-- **Assistant bean name** - имя класса вспомогательного Spring-бина, который можно создать для более тонкой настойки дашборда;
+- **Assistant bean name** - имя класса вспомогательного Spring-бина, который можно создать для более тонкой настойки дашборда (бин должен обязательно иметь скоуп **prototype**);
 - **Group** - группа дашборда;
 - **Is available for all users** - флаг, определяющий доступ пользователей к дашборду. Если установлено `false`, то просматривать и редактировать дашборд может только пользователь, его создавший. В противном случае, проматривать и редактировать дашборд могут все пользователи.
 
@@ -241,7 +242,7 @@ dependencies {
 # 4. Как добавить компонент Dashboard-UI
 
 Для использования компонентов в XML необходимо в дескриптор экрана подключить файл схемы `http://schemas.haulmont.com/cubadshb/ui-component.xsd`. При подключении необходимо указать название пространства имен, которое будет содержать теги компонентов, например, 
-`xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd`. В данном примере пространство имен задается словом `dash`.
+`xmlns:dash="http://schemas.haulmont.com/webdav/ui-component.xsd`. В данном примере пространство имен задается словом `dashboard`.
 
 Схема содержит информацию о теге `dashboard`, который может включать в себя теги `parameter`.
 
@@ -251,13 +252,13 @@ dependencies {
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         class="com.haulmont.example.web.SomeController"
-        xmlns:dash="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
+        xmlns:dashboard="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
     ...
-        <dash:dashboard id="dashboardId"
+        <dashboard:dashboard id="dashboardId"
                         code="usersDashboard"
                         timerDelay="60">
-             <dash:parameter name="role" value="Admin" type="string"/>           
-        </dash:dashboard> 
+             <dashboard:parameter name="role" value="Admin" type="string"/>           
+        </dashboard:dashboard> 
     ...
 ```
 
@@ -283,18 +284,27 @@ dependencies {
 
 Для добавления собственного типа виджета необходимо выполнить следующие шаги:
 
-- Добавить неперсистетную сущность, расширяющию класс `com.haulmont.addon.dashboard.model.Widget`, добавить к ней аннотацию `com.haulmont.addon.dashboard.annotation.WidgetType`. В аннотации заполнить поля `name`, `editFrameId` (см. JavaDoc).
+- Создать фрейм ([документации платформы CUBA](https://doc.cuba-platform.com/manual-6.10/screens.html)), затем к фрейму добавить аннотацию `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Заполнить поля: `name`, `editFrameId`(можно не заполнять, если не предполагается редактирование виджета) в аннотации (смотри JavaDoc).
+`widget`, `dashboard`, `dashboardFrame` могут быть дабавлены в фрейм виджета через `@WindowParam` аннотацию. Параметры виджета в виджет фрейме должны иметь `@WidgetParam` и `@WindowParam` аннотации.
 Пример:
 
 ```java
-@MetaClass(name = "dashboard$LookupWidget")
-@WidgetType(name = CAPTION,
-        editFrameId = "lookupWidgetEdit")
-public class LookupWidget extends Widget {
+@DashboardWidget(name = CAPTION, editFrameId = "dashboard$LookupWidget.edit")
+public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     public static final String CAPTION = "Lookup";
 
-    @MetaProperty
-    protected String lookupWindowId;
+    @WindowParam
+    protected Widget widget;
+
+    @WindowParam
+    protected Dashboard dashboard;
+
+    @WindowParam
+    protected DashboardFrame dashboardFrame;
+
+    @WidgetParam
+    @WindowParam
+    protected String lookupWindowId;    
 
     public String getLookupWindowId() {
         return lookupWindowId;
@@ -306,8 +316,7 @@ public class LookupWidget extends Widget {
 }
 ```
 
-- Добавить класс сущности в `metadata.xml`;
-- Добавить фрейм для редактирования полей сущности, зарегистрировать его в `web-screens.xml`. Пример:
+- Добавить фрейм для редактирования виджета, зарегистрировать его в `web-screens.xml`. Пример:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -339,6 +348,12 @@ public class LookupWidgetEdit extends AbstractFrame {
 
     protected Datasource<Widget> widgetDs;
 
+    protected Datasource<Widget> widgetDs;
+    
+    @WidgetParam
+    @WindowParam
+    protected String lookupWindowId;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -350,56 +365,10 @@ public class LookupWidgetEdit extends AbstractFrame {
         selectLookupId();
     }
     
-     protected void initWidgetDs(Map<String, Object> params) {
-            widgetDs = (Datasource<Widget>) params.get(ITEM_DS);
-            Widget widget = widgetDs.getItem();
-    
-            if (!(widget instanceof LookupWidget)) {
-                LookupWidget lookupWidget = metadata.create(LookupWidget.class);
-                BeanUtils.copyProperties(widget, lookupWidget);
-                widgetDs.setItem(lookupWidget);
-            }
-     }
-}
-```
-
-
-- Добавить фрейм для просмотра дашборда, зарегистрировать его в `web-screens.xml`. Контроллер должен наследоваться от `com.haulmont.addon.dashboard.web.widget_types.AbstractWidgetBrowse`. Пример:
-
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.widget.lookup.LookupWidgetBrowse">
-    <layout spacing="true"
-            width="100%"
-            height="100%">
-    </layout>
-</window>
-```
-
-```java
-public class LookupWidgetBrowse extends AbstractWidgetBrowse {
-    @Inject
-    protected Events events;
-
-    protected AbstractLookup lookupFrame;
-
-    @Override
-    public void init(Map<String, Object> params) {
-        super.init(params);
-        refresh();
-    }
-
-    @Override
-    public void refresh() {
-        String lookupWindowId = ((LookupWidget) widget).getLookupWindowId();
-        lookupFrame = openLookup(lookupWindowId, lookupHandler(), WindowManager.OpenType.DIALOG, getParamsForFrame());
-        lookupFrame.close("");
-        this.add(lookupFrame.getFrame());
-    }
-
-    protected Window.Lookup.Handler lookupHandler() {
-        return items -> events.publish(new WidgetEntitiesSelectedEvent(new WidgetWithEntities(widget, items)));
+    protected void initWidgetDs(Map<String, Object> params) {
+        widgetDs = (Datasource<Widget>) params.get(WidgetEdit.ITEM_DS); 
     }
 }
 ```
+
+Если фрейм виджета реализовывает интерфейс `RefreshableWidget`, то метод `refresh` будет вызываться автоматически при каждом обновленнии дашборда.
