@@ -19,7 +19,7 @@ The complete add-ons installation guide see in [CUBA Platform documentation](htt
 
 2. Paste the add-on coordinates in the coordinates field as follows: `group:name:version`. For example:
 	
-    com.audimex.dashboard:dashboard-global:2.0.0
+    com.haulmont.addon.dashboard:dashboard-global:2.0.0
 
 Select the add-on version compatible with the CUBA platform version used in your project:
 
@@ -39,7 +39,7 @@ Select the add-on version compatible with the CUBA platform version used in your
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     // your add-ons go here
-    appComponent("com.audimex.dashboard:dashboard-global:2.0.0")
+    appComponent("com.haulmont.addon.dashboard:dashboard-global:2.0.0")
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 ```xml
 <context-param>
     <param-name>appComponents</param-name>
-    <param-value>com.haulmont.cuba com.audimex.dashboard</param-value>
+    <param-value>com.haulmont.cuba com.haulmont.addon.dashboard</param-value>
 </context-param>
 ```
 
