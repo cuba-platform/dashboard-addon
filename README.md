@@ -210,7 +210,9 @@ Click on a layout or a widget to select it. The selected element can contain but
 
 ![gear](img/gear.png) - open the **Widget Editor**; 
 
-![arrows](img/arrows.png) - change the weight (expand ratio) of a container in a parent container;
+![arrows](img/arrows.png) - change the weight (expand ratio) of a container in a parent container, or define `colspan` and `rowspan` attributes for the grid layout cells:
+
+![colspan-rowspan](img/colspan-rowspan.png)
 
 ![brush](img/brush.png) - change the style of a container: define the style name, modify the container's width and height:
 
@@ -238,7 +240,7 @@ To open the **Dashboard Groups** browser, click the **Groups** button in the **D
 
 # 4. Integration of the Component Dashboard-UI
 
-To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen. Then add namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
+To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen. Then add a namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
 
 ### Usage Example
 
@@ -277,7 +279,7 @@ To use the `dashboard-ui` component in your screen, you need to add the special 
 
 To add an additional widget type, you need to do the following:
 
-- Create a frame (see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-6.10/screens.html)), then add the annotation `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Fill the fields: `name`, `editFrameId`(optional, leave absent if there is no parameter in widget) in the annotation (see JavaDoc).
+- Create a frame (see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-6.10/screens.html)), then add the annotation `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Fill the fields: `name`, `editFrameId`(optional, leave empty if there is no parameter in widget) in the annotation (see JavaDoc).
 `widget`, `dashboard`, `dashboardFrame` can be included in widget via `@WindowParam` annotation. Widget parameters in widget editor and widget frames should have `@WidgetParam` and `@WindowParam` annotations.
 For example:
 
@@ -362,4 +364,4 @@ public class LookupWidgetEdit extends AbstractFrame {
 }
 ```
 
-If widget frame implement `RefreshableWidget` interface, then method `refresh` will be invoked automatically on each dashboard update event. 
+If widget frame implements `RefreshableWidget` interface, then method `refresh()` will be invoked automatically on each dashboard update event. 

@@ -215,7 +215,9 @@ dependencies {
 
 ![gear](img/gear.png) - открыть **Widget Editor**;
 
-![arrows](img/arrows.png) - изменить вес (коэффициент расширения) контейнера в родительском контейнере;
+![arrows](img/arrows.png) - изменить вес (коэффициент расширения) контейнера в родительском контейнере, а также задать значения атрибутов `colspan` и `rowspan` для ячеек сетчатой компоновки :
+
+![colspan-rowspan](img/colspan-rowspan.png)
 
 ![brush](img/brush.png) - изменить стиль контейнера: указать имя стиля, изменить ширину и высоту контейнера:
 
@@ -285,7 +287,7 @@ dependencies {
 Для добавления собственного типа виджета необходимо выполнить следующие шаги:
 
 - Создать фрейм ([документации платформы CUBA](https://doc.cuba-platform.com/manual-6.10/screens.html)), затем к фрейму добавить аннотацию `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Заполнить поля: `name`, `editFrameId`(можно не заполнять, если не предполагается редактирование виджета) в аннотации (смотри JavaDoc).
-`widget`, `dashboard`, `dashboardFrame` могут быть дабавлены в фрейм виджета через `@WindowParam` аннотацию. Параметры виджета в виджет фрейме должны иметь `@WidgetParam` и `@WindowParam` аннотации.
+`widget`, `dashboard`, `dashboardFrame` могут быть добавлены во фрейм виджета через аннотацию `@WindowParam`. Параметры виджета в виджет-фрейме должны иметь аннотации `@WidgetParam` и `@WindowParam`.
 Пример:
 
 ```java
@@ -371,4 +373,4 @@ public class LookupWidgetEdit extends AbstractFrame {
 }
 ```
 
-Если фрейм виджета реализовывает интерфейс `RefreshableWidget`, то метод `refresh` будет вызываться автоматически при каждом обновленнии дашборда.
+Если фрейм виджета реализует интерфейс `RefreshableWidget`, то метод `refresh()` будет вызываться автоматически при каждом обновленнии дашборда.
