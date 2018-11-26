@@ -3,7 +3,7 @@
 # 1. Introduction 
 This component is designed to create and embed dashboards. Dashboard consists of widgets - individual elements based on a frame.
 The widgets can be positioned inside a dashboard using vertical, horizontal and grid layouts.
-You can try the dashboards in action in the [dashboard-addon-demo](https://https://github.com/cuba-platform/dashboard-addon-demo) sample application.
+You can try the dashboards in action in the [dashboard-addon-demo](https://github.com/cuba-platform/dashboard-addon-demo) sample application.
 
 # 1.1 Dashboard Structure
 
