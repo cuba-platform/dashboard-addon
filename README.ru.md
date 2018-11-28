@@ -19,7 +19,7 @@
 
 2. Вставьте координаты аддона в поле координат компонента в формате: `group:name:version`. Например:
 	
-    com.audimex.dashboard:dashboard-global:2.0.0
+    com.haulmont.addon.dashboard:dashboard-global:2.0.0
 
 Выберите версию дополнения, совместимую с версией платформы CUBA, используемой в проекте:
 
@@ -39,7 +39,7 @@
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     // your add-ons go here
-    appComponent("com.audimex.dashboard:dashboard-global:2.0.0")
+    appComponent("com.haulmont.addon.dashboard:dashboard-global:2.0.0")
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 ```xml
 <context-param>
     <param-name>appComponents</param-name>
-    <param-value>com.haulmont.cuba com.audimex.dashboard</param-value>
+    <param-value>com.haulmont.cuba com.haulmont.addon.dashboard</param-value>
 </context-param>
 ```
 
