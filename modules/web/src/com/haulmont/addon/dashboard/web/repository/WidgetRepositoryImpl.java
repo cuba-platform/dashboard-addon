@@ -119,18 +119,21 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                                 if (ann != null) {
                                     String editFrameId = ann.editFrameId();
                                     if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
-                                        throw new IllegalArgumentException(String.format("Unable to find %s edit screen in screen config for widget %s",
-                                                editFrameId, ann.name()));
+                                        throw new IllegalArgumentException(
+                                                String.format("Unable to find %s edit screen in screen config for widget %s",
+                                                        editFrameId, ann.name()));
                                     }
                                     widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
 
                                 }
                             } catch (ClassNotFoundException e) {
-                                log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s", windowInfo.getId(), windowInfo.getTemplate(), className));
+                                log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s",
+                                        windowInfo.getId(), windowInfo.getTemplate(), className));
                             }
                         }
                     } else {
-                        log.warn(String.format("Unable to load screen template for screen %s, template %s", windowInfo.getId(), windowInfo.getTemplate()));
+                        log.warn(String.format("Unable to load screen template for screen %s, template %s",
+                                windowInfo.getId(), windowInfo.getTemplate()));
                     }
                 }
             }
