@@ -107,36 +107,41 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             for (WindowInfo windowInfo : windowConfig.getWindows()) {
                 DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 if (StringUtils.isNoneEmpty(windowInfo.getTemplate())) {
-                    InputStream resource = resources.getResourceAsStream(windowInfo.getTemplate());
-                    if (resource != null) {
-                        Document document = documentBuilder.parse(resource);
-                        Element window = document.getDocumentElement();
-                        String className = window.getAttribute("class");
-                        if (StringUtils.isNoneEmpty(className)) {
-                            try {
-                                Class clazz = Class.forName(className);
-                                DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
-                                if (ann != null) {
-                                    String editFrameId = ann.editFrameId();
-                                    if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
-                                        throw new IllegalArgumentException(
-                                                String.format("Unable to find %s edit screen in screen config for widget %s",
-                                                        editFrameId, ann.name()));
-                                    }
-                                    widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
+                    try {
+                        InputStream resource = resources.getResourceAsStream(windowInfo.getTemplate());
+                        if (resource != null) {
+                            Document document = documentBuilder.parse(resource);
+                            Element window = document.getDocumentElement();
+                            String className = window.getAttribute("class");
+                            if (StringUtils.isNoneEmpty(className)) {
+                                try {
+                                    Class clazz = Class.forName(className);
+                                    DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
+                                    if (ann != null) {
+                                        String editFrameId = ann.editFrameId();
+                                        if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
+                                            throw new IllegalArgumentException(
+                                                    String.format("Unable to find %s edit screen in screen config for widget %s",
+                                                            editFrameId, ann.name()));
+                                        }
+                                        widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
 
+                                    }
+                                } catch (ClassNotFoundException e) {
+                                    log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s",
+                                            windowInfo.getId(), windowInfo.getTemplate(), className));
+                                } catch (Exception e) {
+                                    log.error(String.format("Unexpected error on initialization screen %s, template %s, class %s",
+                                            windowInfo.getId(), windowInfo.getTemplate(), className), e);
                                 }
-                            } catch (ClassNotFoundException e) {
-                                log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s",
-                                        windowInfo.getId(), windowInfo.getTemplate(), className));
-                            } catch (Exception e) {
-                                log.error(String.format("Unexpected error on initialization screen %s, template %s, class %s",
-                                        windowInfo.getId(), windowInfo.getTemplate(), className), e);
                             }
+                        } else {
+                            log.warn(String.format("Unable to load screen template for screen %s, template %s",
+                                    windowInfo.getId(), windowInfo.getTemplate()));
                         }
-                    } else {
-                        log.warn(String.format("Unable to load screen template for screen %s, template %s",
-                                windowInfo.getId(), windowInfo.getTemplate()));
+                    } catch (Exception e) {
+                        log.error(String.format("Unexpected error on initialization screen %s, template %s",
+                                windowInfo.getId(), windowInfo.getTemplate()), e);
                     }
                 }
             }
