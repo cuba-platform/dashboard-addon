@@ -38,11 +38,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LookupWidgetEdit extends AbstractFrame {
     @Inject
-    protected LookupField lookupIdLookup;
+    protected LookupField<String> lookupIdLookup;
     @Inject
     protected WindowConfig windowConfig;
     @Inject
@@ -61,7 +61,7 @@ public class LookupWidgetEdit extends AbstractFrame {
         super.init(params);
 
         lookupIdLookup.setOptionsList(getAllLookupIds());
-        lookupIdLookup.addValueChangeListener(e -> lookupIdSelected((String) e.getValue()));
+        lookupIdLookup.addValueChangeListener(e -> lookupIdSelected(e.getValue()));
 
         initWidgetDs(params);
         selectLookupId();
@@ -86,11 +86,12 @@ public class LookupWidgetEdit extends AbstractFrame {
         List<String> lookupIds = new ArrayList<>();
 
         for (WindowInfo winInfo : allWindows) {
-            if (isNotBlank(winInfo.getTemplate()) && isLookupWindow(winInfo)) {
-                lookupIds.add(winInfo.getId());
-            } else if (winInfo.getScreenClass() != null &&
-                    AbstractLookup.class.isAssignableFrom(winInfo.getScreenClass())) {
-                lookupIds.add(winInfo.getId());
+            if (WindowInfo.Type.FRAGMENT == winInfo.getType()) {
+                if (isNotBlank(winInfo.getTemplate()) && isLookupWindow(winInfo)) {
+                    lookupIds.add(winInfo.getId());
+                } else if (LookupFragment.class.isAssignableFrom(winInfo.getControllerClass())) {
+                    lookupIds.add(winInfo.getId());
+                }
             }
         }
 
@@ -105,7 +106,7 @@ public class LookupWidgetEdit extends AbstractFrame {
         try {
             Class<?> screenClass = Class.forName(screenClassName);
 
-            if (AbstractLookup.class.isAssignableFrom(screenClass)) {
+            if (LookupFragment.class.isAssignableFrom(screenClass)) {
                 return true;
             }
         } catch (NullPointerException | ClassNotFoundException e) {

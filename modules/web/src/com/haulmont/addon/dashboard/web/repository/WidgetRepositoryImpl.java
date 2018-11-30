@@ -38,6 +38,7 @@ import org.w3c.dom.Element;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -101,26 +102,29 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         try {
             for (WindowInfo windowInfo : windowConfig.getWindows()) {
                 DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                if (StringUtils.isNoneEmpty(windowInfo.getTemplate())) {
-                    Document document = documentBuilder.parse(resources.getResourceAsStream(windowInfo.getTemplate()));
-                    Element window = document.getDocumentElement();
-                    String className = window.getAttribute("class");
-                    if (StringUtils.isNoneEmpty(className)) {
-                        try {
-                            Class clazz = Class.forName(className);
-                            DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
-                            if (ann != null) {
-                                String editFrameId = ann.editFrameId();
-                                if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
-                                    throw new IllegalArgumentException(String.format("Unable to find %s edit screen in screen config for widget %s",
-                                            editFrameId, ann.name()));
+                if (StringUtils.isNoneEmpty(windowInfo.getTemplate()) && WindowInfo.Type.FRAGMENT == windowInfo.getType()) {
+                    InputStream inputStream = resources.getResourceAsStream(windowInfo.getTemplate());
+                    if (inputStream != null) {
+                        Document document = documentBuilder.parse(inputStream);
+                        Element window = document.getDocumentElement();
+                        String className = window.getAttribute("class");
+                        if (StringUtils.isNoneEmpty(className)) {
+                            try {
+                                Class clazz = Class.forName(className);
+                                DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
+                                if (ann != null) {
+                                    String editFrameId = ann.editFrameId();
+                                    if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
+                                        throw new IllegalArgumentException(String.format("Unable to find %s edit screen in screen config for widget %s",
+                                                editFrameId, ann.name()));
+                                    }
+                                    widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
+
                                 }
-                                widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
-
+                            } catch (ClassNotFoundException ignored) {
                             }
-                        } catch (ClassNotFoundException ignored) {
-                        }
 
+                        }
                     }
                 }
             }

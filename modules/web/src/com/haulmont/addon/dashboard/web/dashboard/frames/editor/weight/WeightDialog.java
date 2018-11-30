@@ -19,7 +19,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.vaadin.data.Property;
+import com.vaadin.data.HasValue;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
@@ -49,7 +49,7 @@ public class WeightDialog extends AbstractWindow {
         weightSlider.setWidth(100, Sizeable.Unit.PERCENTAGE);
         weightSlider.setCaptionAsHtml(true);
 
-        weightSlider.addValueChangeListener((Property.ValueChangeListener) event ->
+        weightSlider.addValueChangeListener(event ->
                 weightSlider.setCaption(formatMessage("dashboard.weight", weightSlider.getValue().intValue()))
         );
         weightSlider.focus();
@@ -63,9 +63,11 @@ public class WeightDialog extends AbstractWindow {
 
     public void apply() {
         layout.setWeight(weightSlider.getValue().intValue());
+        //TODO remove deprecaded code
         this.close(COMMIT_ACTION_ID);
     }
 
+    //TODO remove deprecaded code
     public void cancel() {
         this.close(CLOSE_ACTION_ID);
     }

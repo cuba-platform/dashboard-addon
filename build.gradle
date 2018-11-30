@@ -1,7 +1,7 @@
 buildscript {
-    ext.cubaVersion = '6.10.3'
+    ext.cubaVersion = '7.0-SNAPSHOT'
     repositories {
-
+        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -15,22 +15,22 @@ buildscript {
     }
 }
 
-def globalModule = project(':dashboard-global')
-def coreModule = project(':dashboard-core')
-def guiModule = project(':dashboard-gui')
-def webModule = project(':dashboard-web')
-def webThemesModule = project(':dashboard-web-themes')
+def modulePrefix = 'dashboard'
+
+def globalModule = project(":${modulePrefix}-global" )
+def coreModule = project(":${modulePrefix}-core" )
+def guiModule = project(":${modulePrefix}-gui" )
+def webModule = project(":${modulePrefix}-web" )
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
     artifact {
         group = 'com.haulmont.addon.dashboard'
-        version = '2.0'
+        version = '2.1'
         isSnapshot = true
     }
     tomcat {
@@ -56,7 +56,7 @@ limitations under the License.'''
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("com.haulmont.addon.dnd:cuba-dnd-global:1.4.0")
+    appComponent("com.haulmont.addon.dnd:cuba-dnd-global:1.5-SNAPSHOT")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -67,7 +67,6 @@ def dbTestNameParam = 'dashboard-test'
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
     apply(plugin: 'groovy')
     apply(plugin: 'checkstyle')
@@ -137,14 +136,14 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
 
     }
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/dashboard-core')
+        def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}-core" )
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -153,8 +152,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'dashboard-core'
-        appJars('dashboard-global', 'dashboard-core')
+        appName = "${modulePrefix}-core"
+        appJars(modulePrefix + '-global', modulePrefix + '-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -216,7 +215,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/dashboard/**"
-        into "$cuba.tomcat.dir/conf/dashboard"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 }
 
@@ -226,7 +225,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(guiModule)
 
     }
@@ -244,16 +243,16 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/dashboard/**"
-        into "$cuba.tomcat.dir/conf/dashboard"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'dashboard'
+        appName = "${modulePrefix}"
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/dashboard')
+        def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}" )
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -262,8 +261,8 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'dashboard'
-        appJars('dashboard-global', 'dashboard-gui', 'dashboard-web')
+        appName = "${modulePrefix}"
+        appJars(modulePrefix + '-global', modulePrefix + '-gui', modulePrefix + '-web')
     }
     task buildScssThemes(type: CubaWebScssThemeCreation)
     task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
@@ -271,37 +270,13 @@ configure(webModule) {
 }
 
 
-
-
-configure(webThemesModule) {
-    apply(plugin: 'java')
-    apply(plugin: 'maven')
-    apply(plugin: 'cuba')
-
-    appModuleType = 'web-themes'
-
-    buildDir = file('../build/scss-themes')
-
-    sourceSets {
-        main {
-            java {
-                srcDir '.'
-            }
-            resources {
-                srcDir '.'
-            }
-        }
-    }
-}
-
-
-task undeploy(type: Delete, dependsOn: ':dashboard-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf" ) {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/dashboard-core")
-    delete("$cuba.tomcat.dir/webapps/dashboard")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core" )
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}" )
 }
 
-task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePrefix}-web:deploy" ], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')
@@ -310,8 +285,5 @@ task restart(dependsOn: ['stop', ':dashboard-core:deploy', ':dashboard-web:deplo
     start.execute()
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
 
 apply from: 'extra.gradle'

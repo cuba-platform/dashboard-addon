@@ -25,10 +25,10 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasC
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.Component.Container;
+import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -36,9 +36,6 @@ import java.util.UUID;
 public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
-
-    @Inject
-    protected ComponentsFactory componentsFactory;
 
     protected CanvasComponentsFactory factory;
 
@@ -131,10 +128,10 @@ public class DashboardModelConverter {
             model.setWeight(((HasWeight) container).getWeight());
         }
 
-        for (Component childComponent : ((Container) container).getOwnComponents()) {
+        for (Component childComponent : ((ComponentContainer) container).getOwnComponents()) {
             DashboardLayout childModel = createDashboardLayout(childComponent);
 
-            if (childModel == null && childComponent instanceof Container) {
+            if (childModel == null && childComponent instanceof ComponentContainer) {
                 containerToModel(model, childComponent);
             } else if (childModel instanceof GridLayout) {
                 GridLayout gridModel = (GridLayout) childModel;

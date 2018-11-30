@@ -45,7 +45,7 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import com.haulmont.cuba.web.widgets.CubaTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -103,9 +103,10 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         Widget widget = event.getSource();
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
+        //TODO remove deprecaded code
         WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor(
                 "dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.DIALOG);
-        widgetEditor.addCloseWithCommitListener(() -> widgetTemplatesDs.refresh());
+        widgetEditor.addAfterCloseListener(e -> widgetTemplatesDs.refresh());
 
     }
 
@@ -140,8 +141,9 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         widgetTree.expandTree();
         widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
         CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
-        cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
-        cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
+        //TODO enable drag mode fo tree
+//        cubaTree.setDragMode(Tree.TreeDragMode.NODE);
+//        cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
     }
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {

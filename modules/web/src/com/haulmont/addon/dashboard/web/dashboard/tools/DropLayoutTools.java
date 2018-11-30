@@ -64,6 +64,7 @@ public class DropLayoutTools {
     public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
         DashboardLayout targetLayout = findLayout(getDashboard().getVisualModel(), targetLayoutUuid);
         if (layout instanceof CssLayout) {
+            //TODO remove deprecaded code
             CssLayoutCreationDialog dialog = (CssLayoutCreationDialog) frame.openWindow(CssLayoutCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if (Window.COMMIT_ACTION_ID.equals(actionId)) {
@@ -75,6 +76,7 @@ public class DropLayoutTools {
             });
         }
         if (layout instanceof GridLayout) {
+            //TODO remove deprecaded code
             GridCreationDialog dialog = (GridCreationDialog) frame.openWindow(GridCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
                 if (Window.COMMIT_ACTION_ID.equals(actionId)) {
@@ -198,7 +200,7 @@ public class DropLayoutTools {
     }
 
     public AbstractFrame getFrame() {
-        return frame;
+        return (AbstractFrame) frame.getFrame();
     }
 
     private boolean applyMoveAction(DashboardLayout layout, DashboardLayout target, DashboardLayout parent, DashboardLayout dashboardModel) {

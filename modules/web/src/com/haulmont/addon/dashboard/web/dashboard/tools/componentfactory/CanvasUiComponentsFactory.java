@@ -25,11 +25,11 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     protected WidgetRepository widgetRepository;
 
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents components;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
@@ -111,6 +111,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         ));
         params.putAll(widgetRepository.getWidgetParams(widget));
 
+        //TODO remove deprecaded code
         AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
 
         widgetFrame.setSizeFull();
@@ -118,12 +119,12 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         com.haulmont.cuba.gui.components.Component widgetComponent = widgetFrame;
 
         if (BooleanUtils.isTrue(widget.getShowWidgetCaption())) {
-            VBoxLayout vBoxLayout = componentsFactory.createComponent(VBoxLayout.class);
+            VBoxLayout vBoxLayout = components.create(VBoxLayout.class);
             vBoxLayout.setSpacing(true);
             vBoxLayout.setMargin(true);
             vBoxLayout.setSizeFull();
 
-            Label label = componentsFactory.createComponent(Label.class);
+            Label<String> label = components.create(Label.class);
             label.setValue(widget.getCaption());
             label.setStyleName("h2");
             vBoxLayout.add(label);

@@ -16,7 +16,7 @@ public class CssLayoutCreationDialog extends AbstractWindow {
     @Inject
     private CheckBox responsive;
     @Inject
-    private TextField styleName;
+    private TextField<String> styleName;
 
     @Override
     public void init(Map<String, Object> params) {

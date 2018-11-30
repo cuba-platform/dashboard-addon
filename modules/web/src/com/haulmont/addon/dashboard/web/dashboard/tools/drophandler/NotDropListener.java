@@ -12,22 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.haulmont.addon.dashboard.model.visualmodel;
+package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
-import com.haulmont.chile.core.annotations.MetaClass;
-import org.apache.commons.lang3.StringUtils;
 
-@MetaClass(name = "dashboard$WidgetTemplateLayout")
-public class WidgetTemplateLayout extends WidgetLayout {
+import com.vaadin.ui.dnd.event.DropEvent;
+import com.vaadin.ui.dnd.event.DropListener;
+
+public class NotDropListener implements DropListener {
 
     @Override
-    public String getCaption() {
-        if (widget != null) {
-            return widget.getCaption();
-        }
-        return StringUtils.EMPTY;
+    public void drop(DropEvent event) {
+
     }
 }

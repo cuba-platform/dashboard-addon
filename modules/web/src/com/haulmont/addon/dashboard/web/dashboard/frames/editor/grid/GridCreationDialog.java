@@ -18,7 +18,6 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.vaadin.data.Property;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
@@ -48,10 +47,10 @@ public class GridCreationDialog extends AbstractWindow {
         cols.setCaptionAsHtml(true);
         rows.setCaptionAsHtml(true);
 
-        cols.addValueChangeListener((Property.ValueChangeListener) event ->
+        cols.addValueChangeListener(event ->
                 cols.setCaption(formatMessage("dashboard.gridColumnCount", cols.getValue().intValue()))
         );
-        rows.addValueChangeListener((Property.ValueChangeListener) event ->
+        rows.addValueChangeListener(event ->
                 rows.setCaption(formatMessage("dashboard.gridRowCount", rows.getValue().intValue()))
         );
         cols.focus();
@@ -61,10 +60,12 @@ public class GridCreationDialog extends AbstractWindow {
         hbox.addComponent(rows);
     }
 
+    //TODO remove deprecaded code
     public void apply() {
         this.close(COMMIT_ACTION_ID);
     }
 
+    //TODO remove deprecaded code
     public void cancel() {
         this.close(CLOSE_ACTION_ID);
     }

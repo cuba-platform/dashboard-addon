@@ -28,10 +28,13 @@ import com.haulmont.addon.dnd.components.dragfilter.DragFilter;
 import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
 import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
 import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
+import com.haulmont.bali.events.Subscription;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.components.LayoutClickNotifier;
 import com.haulmont.cuba.web.gui.components.WebCssLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
@@ -39,17 +42,18 @@ import com.vaadin.ui.Layout;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public abstract class AbstractCanvasLayout extends WebCssLayout implements CanvasLayout {
-    protected Container delegate;
+    protected ComponentContainer delegate;
     protected HBoxLayout buttonsPanel;
     protected UUID uuid;
     protected DashboardLayout model;
 
-    public AbstractCanvasLayout(DashboardLayout model, Container delegate) {
+    public AbstractCanvasLayout(DashboardLayout model, ComponentContainer delegate) {
         this.delegate = delegate;
         this.model = model;
-        buttonsPanel = AppBeans.get(ComponentsFactory.class).createComponent(HBoxLayout.class);
+        buttonsPanel = AppBeans.get(UiComponents.class).create(HBoxLayout.class);
         this.delegate.setSizeFull();
         super.add(this.delegate);
         super.add(buttonsPanel);
@@ -57,7 +61,7 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     @Override
-    public Container getDelegate() {
+    public ComponentContainer getDelegate() {
         return delegate;
     }
 
@@ -95,33 +99,13 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     @Override
-    public void addLayoutClickListener(LayoutClickListener listener) {
-        ((LayoutClickNotifier) getDelegate()).addLayoutClickListener(listener);
+    public Subscription addLayoutClickListener(Consumer<LayoutClickEvent> listener) {
+        return ((LayoutClickNotifier) getDelegate()).addLayoutClickListener(listener);
     }
 
     @Override
-    public void removeLayoutClickListener(LayoutClickListener listener) {
+    public void removeLayoutClickListener(Consumer<LayoutClickEvent> listener) {
         ((LayoutClickNotifier) getDelegate()).removeLayoutClickListener(listener);
-    }
-
-    @Override
-    public DragFilter getDragFilter() {
-        return ((DragFilterSupport) getDelegate()).getDragFilter();
-    }
-
-    @Override
-    public void setDragFilter(DragFilter dragFilter) {
-        ((DragFilterSupport) getDelegate()).setDragFilter(dragFilter);
-    }
-
-    @Override
-    public TargetDetails convertTargetDetails(com.vaadin.event.dd.TargetDetails details) {
-        return ((TargetConverter) getDelegate()).convertTargetDetails(details);
-    }
-
-    @Override
-    public TargetDetails translateDropTargetDetails(Map<String, Object> clientVariables) {
-        return ((DropTarget) getDelegate()).translateDropTargetDetails(clientVariables);
     }
 
     @Override

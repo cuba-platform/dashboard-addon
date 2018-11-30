@@ -20,6 +20,7 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
 
 public class DropHandlerTools {
 
@@ -33,8 +34,8 @@ public class DropHandlerTools {
         if (component instanceof CanvasLayout) {
             addDropHandler((CanvasLayout) component);
         }
-        if (component instanceof Component.Container) {
-            for (Component child : ((Component.Container) component).getOwnComponents()) {
+        if (component instanceof ComponentContainer) {
+            for (Component child : ((ComponentContainer) component).getOwnComponents()) {
                 initDropHandler(child);
             }
         }

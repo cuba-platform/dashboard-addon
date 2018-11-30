@@ -54,10 +54,10 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected AccessConstraintsHelper accessHelper;
 
     @Named("fieldGroup.caption")
-    protected TextField widgetCaption;
+    protected TextField<String> widgetCaption;
 
     @Named("fieldGroup.widgetId")
-    protected TextField widgetId;
+    protected TextField<String> widgetId;
 
     protected List<WidgetTypeInfo> typesInfo;
     protected AbstractFrame widgetEditFrame;

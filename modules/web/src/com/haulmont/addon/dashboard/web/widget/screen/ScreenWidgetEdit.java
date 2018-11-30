@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.HasValue;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
@@ -30,11 +31,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ScreenWidgetEdit extends AbstractFrame {
     @Inject
-    protected LookupField screenIdLookup;
+    protected LookupField<String> screenIdLookup;
     @Inject
     protected WindowConfig windowConfig;
     @Inject
@@ -49,7 +50,7 @@ public class ScreenWidgetEdit extends AbstractFrame {
         super.init(params);
 
         screenIdLookup.setOptionsList(getAllScreensIds());
-        screenIdLookup.addValueChangeListener(e -> screenIdSelected((String) e.getValue()));
+        screenIdLookup.addValueChangeListener(e -> screenIdSelected(e.getValue()));
 
         selectScreenId();
     }
@@ -66,6 +67,7 @@ public class ScreenWidgetEdit extends AbstractFrame {
 
     protected List<String> getAllScreensIds() {
         return windowConfig.getWindows().stream()
+                .filter(e -> WindowInfo.Type.FRAGMENT == e.getType())
                 .map(WindowInfo::getId)
                 .collect(Collectors.toList());
     }

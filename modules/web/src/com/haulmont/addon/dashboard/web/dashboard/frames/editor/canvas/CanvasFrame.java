@@ -27,6 +27,8 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
+import com.haulmont.cuba.gui.components.OrderedContainer;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -84,7 +86,7 @@ public class CanvasFrame extends AbstractFrame {
         return result;
     }
 
-    protected void searchRefreshableWidgets(Container layout, List<RefreshableWidget> wbList) {
+    protected void searchRefreshableWidgets(ComponentContainer layout, List<RefreshableWidget> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
             Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
             if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
@@ -92,8 +94,8 @@ public class CanvasFrame extends AbstractFrame {
             }
         } else {
             for (Component child : layout.getOwnComponents()) {
-                if (child instanceof Container) {
-                    searchRefreshableWidgets((Container) child, wbList);
+                if (child instanceof ComponentContainer) {
+                    searchRefreshableWidgets((ComponentContainer) child, wbList);
                 }
             }
         }

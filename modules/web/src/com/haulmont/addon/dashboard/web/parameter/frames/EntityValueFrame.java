@@ -17,15 +17,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
-    protected LookupField metaClassLookup;
+    protected LookupField<MetaClass> metaClassLookup;
     @Inject
-    protected LookupField entitiesLookup;
+    protected LookupField<Entity> entitiesLookup;
     @Inject
-    protected LookupField viewLookup;
+    protected LookupField<String> viewLookup;
     @Inject
     protected Metadata metadata;
     @Inject
@@ -36,7 +36,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         super.init(params);
         loadAllPersistentClasses();
         selectIfExist((EntityParameterValue) params.get(VALUE));
-        metaClassLookup.addValueChangeListener(e -> metaClassValueChanged((MetaClass) e.getValue()));
+        metaClassLookup.addValueChangeListener(e -> metaClassValueChanged(e.getValue()));
     }
 
 

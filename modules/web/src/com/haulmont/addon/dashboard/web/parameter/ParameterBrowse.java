@@ -26,7 +26,7 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.*;

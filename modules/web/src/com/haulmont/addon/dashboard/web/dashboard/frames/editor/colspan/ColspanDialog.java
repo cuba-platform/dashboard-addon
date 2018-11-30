@@ -61,7 +61,6 @@ public class ColspanDialog extends AbstractWindow {
         parent = (GridLayout) layout.getParent();
 
         colSpanSlider = new Slider();
-        colSpanSlider.setImmediate(true);
         colSpanSlider.setWidth("100%");
         colSpanSlider.setMin(1);
         int maxColSpan = DashboardLayoutUtils.availableColumns(parent, layout);
@@ -88,7 +87,6 @@ public class ColspanDialog extends AbstractWindow {
         colSpanSlider.focus();
 
         rowSpanSlider = new Slider();
-        rowSpanSlider.setImmediate(true);
         rowSpanSlider.setWidth("100%");
         rowSpanSlider.setMin(1);
         rowSpanSlider.setMax(maxRowSpan);

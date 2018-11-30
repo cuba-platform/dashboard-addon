@@ -41,8 +41,6 @@
                   configuration="webcontent"
                   ext="zip"
                   name="dashboard-web"/>
-        <artifact configuration="themes"
-                  name="dashboard-web-themes"/>
         <property name="cuba.springContextConfig"
                   value="+com/haulmont/addon/dashboard/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
@@ -59,10 +57,5 @@
                   value="+com.haulmont.addon.dashboard.web.DashboardIcon"/>
         <property name="cuba.web.componentsConfig"
                   value="+com/haulmont/addon/dashboard/ui-component.xml"/>
-    </module>
-    <module name="web-themes">
-        <artifact name="dashboard-web-themes"/>
-        <property name="cuba.iconsConfig"
-                  value="+com.haulmont.addon.dashboard.web.DashboardIcon"/>
     </module>
 </app-component>

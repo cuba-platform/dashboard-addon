@@ -18,7 +18,7 @@ public class ExpandDialog extends AbstractWindow {
     public static final String EXPAND = "EXPAND";
 
     @Inject
-    private LookupField expandLookupField;
+    private LookupField<DashboardLayout> expandLookupField;
 
     @Inject
     private CollectionDatasource<DashboardLayout, UUID> layoutsDs;
@@ -31,6 +31,7 @@ public class ExpandDialog extends AbstractWindow {
         UUID expandedLayout = (UUID) params.get(EXPAND);
 
         if (layout == null) {
+            //TODO remove deprecaded code
             close(CLOSE_ACTION_ID);
             return;
         }

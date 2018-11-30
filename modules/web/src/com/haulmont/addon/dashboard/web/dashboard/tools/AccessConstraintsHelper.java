@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 public class AccessConstraintsHelper {

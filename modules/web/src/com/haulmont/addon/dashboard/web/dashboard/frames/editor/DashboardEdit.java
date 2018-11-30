@@ -57,7 +57,7 @@ import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.event.EventListener;
@@ -78,7 +78,7 @@ import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
@@ -221,7 +221,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                                 "dashboard$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
 
         FieldGroup.FieldConfig assistantBeanName = fieldGroup2.getField("assistantBeanName");
-        LookupField lookupField = (LookupField) assistantBeanName.getComponent();
+        LookupField<String> lookupField = (LookupField<String>) assistantBeanName.getComponent();
         String val = lookupField.getValue();
         dashboardDs.getItem().setAssistantBeanName(val);
 

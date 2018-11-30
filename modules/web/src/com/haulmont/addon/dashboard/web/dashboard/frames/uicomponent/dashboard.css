@@ -1,0 +1,8 @@
+.c-suggestionfield-item.rs-header-entry {
+    background-color: silver;
+    pointer-events: none;
+}
+
+.c-suggestionfield-item.rs-search-entry {
+    margin-left:30px;
+}

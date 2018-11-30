@@ -54,7 +54,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createVerticalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("verticalLayout"));
-        button.setIconFromSet(DashboardIcon.VERTICAL_LAYOUT_ICON);
+        //TODO fix icons
+//        button.setIconFromSet(DashboardIcon.VERTICAL_LAYOUT_ICON);
         button.setLayout(metadata.create(VerticalLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("verticalLayout"));
@@ -64,7 +65,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createHorizontalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("horizontalLayout"));
-        button.setIconFromSet(DashboardIcon.HORIZONTAL_LAYOUT_ICON);
+        //TODO fix icons
+//        button.setIconFromSet(DashboardIcon.HORIZONTAL_LAYOUT_ICON);
         button.setLayout(metadata.create(HorizontalLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("horizontalLayout"));
@@ -74,7 +76,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createGridLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("gridLayout"));
-        button.setIconFromSet(DashboardIcon.GRID_LAYOUT_ICON);
+        //TODO fix icons
+//        button.setIconFromSet(DashboardIcon.GRID_LAYOUT_ICON);
         button.setLayout(metadata.create(GridLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("gridLayout"));
@@ -85,7 +88,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createCssLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("cssLayout"));
-        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
+        //TODO fix icons
+//        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
         button.setLayout(metadata.create(CssLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("cssLayout"));

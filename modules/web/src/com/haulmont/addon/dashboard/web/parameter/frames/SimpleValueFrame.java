@@ -23,17 +23,20 @@ import com.haulmont.chile.core.datatypes.DatatypeRegistry;
 import com.haulmont.cuba.gui.components.*;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
+    //TODO check field value, create separate fields for int nad long values
     @Inject
-    protected TextField textField;
+    protected TextField<Object> textField;
     @Inject
-    protected DateField dateField;
+    protected DateField<Date> dateField;
     @Inject
-    protected TimeField timeField;
+    protected TimeField<Date> timeField;
     @Inject
     protected CheckBox checkBox;
     @Inject
@@ -61,15 +64,15 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case DATE:
                 return new DateParameterValue(dateField.getValue());
             case DECIMAL:
-                return new DecimalParameterValue(textField.getValue());
+                return new DecimalParameterValue((BigDecimal) textField.getValue());
             case INTEGER:
-                return new IntegerParameterValue(textField.getValue());
+                return new IntegerParameterValue((Integer) textField.getValue());
             case LONG:
-                return new LongParameterValue(textField.getValue());
+                return new LongParameterValue((Long) textField.getValue());
             case STRING:
-                return new StringParameterValue(textField.getValue());
+                return new StringParameterValue((String) textField.getValue());
             case UUID:
-                return new UuidParameterValue(UUID.fromString(textField.getValue()));
+                return new UuidParameterValue(UUID.fromString((String) textField.getValue()));
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:

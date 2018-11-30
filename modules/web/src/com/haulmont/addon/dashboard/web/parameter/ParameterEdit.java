@@ -35,7 +35,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
     protected Datasource<Parameter> parameterDs;
     @Inject
-    protected LookupField typeLookup;
+    protected LookupField<ParameterType> typeLookup;
     @Inject
     protected VBoxLayout valueBox;
 
@@ -46,7 +46,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected void postInit() {
         super.postInit();
         initParameter();
-        typeLookup.addValueChangeListener(e -> parameterTypeChanged((ParameterType) e.getValue()));
+        typeLookup.addValueChangeListener(e -> parameterTypeChanged(e.getValue()));
     }
 
     @Override

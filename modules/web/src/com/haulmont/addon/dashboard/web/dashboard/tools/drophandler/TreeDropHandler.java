@@ -10,19 +10,21 @@ import com.haulmont.addon.dnd.web.gui.components.DraggedComponentWrapper;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.web.toolkit.ui.CubaTree;
-import com.vaadin.event.DataBoundTransferable;
+import com.haulmont.cuba.web.widgets.CubaTree;
 import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
+import com.vaadin.v7.event.DataBoundTransferable;
+import com.vaadin.v7.ui.Tree;
 
 import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 
+//TODO remove deprecaded code, fix drop handler, remove v7 dependencies
 public class TreeDropHandler implements DropHandler {
 
     private Events events = AppBeans.get(Events.class);
@@ -36,8 +38,8 @@ public class TreeDropHandler implements DropHandler {
     @Override
     public void drop(DragAndDropEvent event) {
         Transferable vTransferable = event.getTransferable();
-        com.vaadin.ui.Tree.TreeTargetDetails targetDetails =
-                (com.vaadin.ui.Tree.TreeTargetDetails) event.getTargetDetails();
+        Tree.TreeTargetDetails targetDetails =
+                (Tree.TreeTargetDetails) event.getTargetDetails();
         com.vaadin.ui.Component sourceComponent = vTransferable.getSourceComponent();
         UUID targetLayoutUuid = (UUID) targetDetails.getItemIdOver();
 
@@ -69,7 +71,7 @@ public class TreeDropHandler implements DropHandler {
 
         if (sourceComponent instanceof CubaTree) {
             CubaTree cubaTree = (CubaTree) sourceComponent;
-            DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) cubaTree.getValue());
+            DashboardLayout dashboardLayout = findLayout(dashboardLayoutTreeReadOnlyDs.getVisualModel(), (UUID) cubaTree.getSelectedItems().iterator().next());
             events.publish(new WidgetMovedEvent(dashboardLayout, targetLayoutUuid, location.name()));
         }
     }

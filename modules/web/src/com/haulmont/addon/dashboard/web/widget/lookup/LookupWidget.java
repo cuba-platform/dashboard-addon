@@ -27,9 +27,14 @@ import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.core.global.Events;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Fragment;
+import com.haulmont.cuba.gui.components.ListComponent;
+import com.haulmont.cuba.gui.components.ScrollBoxLayout;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -59,7 +64,7 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     @WindowParam
     protected DashboardFrame dashboardFrame;
 
-    protected AbstractWindow lookupFrame;
+    protected LookupFragment lookupFragment;
 
     @WidgetParam
     @WindowParam
@@ -68,27 +73,26 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
     @Inject
     private ScrollBoxLayout scroll;
 
+    @Inject
+    private Fragments fragments;
+
     @Override
     public void init(Map<String, Object> params) {
-        lookupFrame = openWindow(lookupWindowId, WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
-        for (ListComponent c : findListComponents(lookupFrame)) {
-            c.getDatasource().addItemChangeListener(e -> events.publish(new ItemsSelectedEvent(widget, c.getSelected())));
+        ScreenFragment screenFragment = fragments.create(getFrameOwner(), lookupWindowId,
+                new MapScreenOptions(widgetRepository.getWidgetParams(widget)));
+        if (screenFragment != null) {
+            lookupFragment = (LookupFragment) screenFragment.getFragment();
+            ListComponent lookupComponent = lookupFragment.getLookupComponent();
+            lookupComponent.getDatasource().addItemChangeListener(e ->
+                    events.publish(new ItemsSelectedEvent(widget, lookupComponent.getSelected())));
+            scroll.add(lookupFragment);
         }
-        lookupFrame.close(Window.CLOSE_ACTION_ID, true);
-        lookupFrame.setSizeFull();
-        scroll.add(lookupFrame.getFrame());
-    }
 
-    protected List<ListComponent> findListComponents(AbstractFrame abstractFrame) {
-        return abstractFrame.getComponents().stream()
-                .filter(c -> c instanceof ListComponent)
-                .map(c -> (ListComponent) c)
-                .collect(Collectors.toList());
     }
 
     @Override
     public void refresh(DashboardEvent dashboardEvent) {
-        lookupFrame.getDsContext().refresh();
+        lookupFragment.getLookupComponent().getDatasource().refresh();
     }
 
 }

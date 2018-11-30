@@ -19,18 +19,17 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dnd.components.DDLayout;
-import com.haulmont.addon.dnd.components.dragevent.DropTarget;
-import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
-import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.LayoutClickNotifier;
 
 import java.util.UUID;
 
-public interface CanvasLayout extends Component, Component.Container, DDLayout, DragFilterSupport,
-        DropTarget, TargetConverter, Component.LayoutClickNotifier, HasWeight {
+public interface CanvasLayout extends Component, ComponentContainer, DDLayout,
+        LayoutClickNotifier, HasWeight {
 
-    Container getDelegate();
+    ComponentContainer getDelegate();
 
     void addComponent(Component component);
 

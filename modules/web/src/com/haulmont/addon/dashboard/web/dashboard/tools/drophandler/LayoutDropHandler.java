@@ -15,7 +15,8 @@ import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.web.widgets.CubaTree;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
@@ -53,7 +54,7 @@ public class LayoutDropHandler implements DropHandler {
 
         if (targetCanvasLayout == null) {
             TargetDetails details = event.getTargetDetails();
-            Component.OrderedContainer targetLayout = (Component.OrderedContainer) details.getTarget();
+            OrderedContainer targetLayout = (OrderedContainer) details.getTarget();
             targetCanvasLayout = findParentCanvas(targetLayout);
         }
 
@@ -64,8 +65,8 @@ public class LayoutDropHandler implements DropHandler {
             PaletteButton paletteButton = (PaletteButton) component;
             events.publish(new WidgetAddedEvent(paletteButton.getLayout(), targetCanvasLayout.getUuid(), location));
         }
-        if (component instanceof CanvasLayout && component.getParent() instanceof Component.OrderedContainer) {
-            Component.OrderedContainer parent = (Component.OrderedContainer) component.getParent();
+        if (component instanceof CanvasLayout && component.getParent() instanceof OrderedContainer) {
+            OrderedContainer parent = (OrderedContainer) component.getParent();
             if (parent != null) {
                 DashboardLayout dashboardLayout = findLayout(dashboard.getVisualModel(), ((CanvasLayout) component).getUuid());
                 events.publish(new WidgetMovedEvent(dashboardLayout, targetCanvasLayout.getUuid(), location));
@@ -78,11 +79,11 @@ public class LayoutDropHandler implements DropHandler {
 
     }
 
-    private CanvasLayout findParentCanvas(Component.OrderedContainer targetLayout) {
+    private CanvasLayout findParentCanvas(OrderedContainer targetLayout) {
         if (targetLayout.getParent() instanceof CanvasLayout) {
             return (CanvasLayout) targetLayout.getParent();
-        } else if (targetLayout.getParent() instanceof Component.OrderedContainer) {
-            return findParentCanvas((Component.OrderedContainer) targetLayout.getParent());
+        } else if (targetLayout.getParent() instanceof OrderedContainer) {
+            return findParentCanvas((OrderedContainer) targetLayout.getParent());
         }
         return null;
     }

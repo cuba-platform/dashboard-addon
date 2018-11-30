@@ -36,8 +36,9 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.vaadin.annotations.StyleSheet;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -60,8 +61,9 @@ import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.Ca
 import static com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView.CODE;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@StyleSheet("dashboard.css")
 public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public static final String SCREEN_NAME = "dashboard$DashboardComponent";

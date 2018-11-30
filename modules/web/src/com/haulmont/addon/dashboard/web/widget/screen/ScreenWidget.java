@@ -24,11 +24,15 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
+import com.haulmont.cuba.gui.Fragments;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Fragment;
 import com.haulmont.cuba.gui.components.ScrollBoxLayout;
 import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.screen.*;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -59,13 +63,18 @@ public class ScreenWidget extends AbstractFrame {
     @Inject
     private ScrollBoxLayout scroll;
 
-    protected Window screenFrame;
+    protected Fragment fragment;
+
+    @Inject
+    private Fragments fragments;
 
     @Override
     public void init(Map<String, Object> params) {
-        screenFrame = openWindow(screenId, WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
-        screenFrame.close(Window.CLOSE_ACTION_ID, true);
-        screenFrame.setSizeFull();
-        scroll.add(screenFrame.getFrame());
+        ScreenFragment screenFragment = fragments.create(getFrameOwner(), screenId,
+                new MapScreenOptions(widgetRepository.getWidgetParams(widget)));
+        if (screenFragment != null) {
+            fragment = screenFragment.getFragment();
+            scroll.add(fragment);
+        }
     }
 }

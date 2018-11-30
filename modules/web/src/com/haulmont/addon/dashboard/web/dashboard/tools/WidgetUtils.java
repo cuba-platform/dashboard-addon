@@ -3,7 +3,7 @@ package com.haulmont.addon.dashboard.web.dashboard.tools;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.cuba.core.global.Messages;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

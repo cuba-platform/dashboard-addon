@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class EnumValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
-    protected LookupField enumClassLookup;
+    protected LookupField<Class> enumClassLookup;
     @Inject
     protected Metadata metadata;
 
@@ -61,6 +61,7 @@ public class EnumValueFrame extends AbstractFrame implements ValueFrame {
 
         String className = enumValue.getValue();
 
+        //TODO remove deprecaded code
         ((List<Class>) enumClassLookup.getOptionsList())
                 .stream()
                 .filter(clazz -> className.equals(clazz.getName()))

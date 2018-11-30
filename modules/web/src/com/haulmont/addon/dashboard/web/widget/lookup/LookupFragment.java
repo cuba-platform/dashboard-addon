@@ -12,22 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.haulmont.addon.dashboard.model.visualmodel;
+package com.haulmont.addon.dashboard.web.widget.lookup;
 
-import com.haulmont.chile.core.annotations.MetaClass;
-import org.apache.commons.lang3.StringUtils;
+import com.haulmont.cuba.gui.components.Fragment;
+import com.haulmont.cuba.gui.components.ListComponent;
 
-@MetaClass(name = "dashboard$WidgetTemplateLayout")
-public class WidgetTemplateLayout extends WidgetLayout {
+public interface LookupFragment extends Fragment {
 
-    @Override
-    public String getCaption() {
-        if (widget != null) {
-            return widget.getCaption();
-        }
-        return StringUtils.EMPTY;
-    }
+    ListComponent getLookupComponent();
 }
