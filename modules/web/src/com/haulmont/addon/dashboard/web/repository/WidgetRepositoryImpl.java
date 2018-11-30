@@ -129,6 +129,9 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                             } catch (ClassNotFoundException e) {
                                 log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s",
                                         windowInfo.getId(), windowInfo.getTemplate(), className));
+                            } catch (Exception e) {
+                                log.error(String.format("Unexpected error on initialization screen %s, template %s, class %s",
+                                        windowInfo.getId(), windowInfo.getTemplate(), className), e);
                             }
                         }
                     } else {
