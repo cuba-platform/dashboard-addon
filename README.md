@@ -25,7 +25,7 @@ Select the add-on version compatible with the CUBA platform version used in your
 
 | Platform Version  | Component Version |
 |-------------------|-------------------|
-| 6.10.X            | 2.0.0             |
+| 6.10.X            | 2.0.1             |
 
 3. Click **OK** in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
 
