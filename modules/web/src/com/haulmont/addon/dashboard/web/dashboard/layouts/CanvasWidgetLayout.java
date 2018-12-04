@@ -19,22 +19,22 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
-import com.haulmont.addon.dnd.web.gui.components.WebDDVerticalLayout;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 
 public class CanvasWidgetLayout extends AbstractCanvasLayout {
-    protected WebDDVerticalLayout verticalLayout;
+    protected VBoxLayout verticalLayout;
     protected Widget widget = null;
     protected Component widgetComponent;
     protected Component innerLayout;
 
     public CanvasWidgetLayout(WidgetLayout model) {
-        super(model, new WebDDVerticalLayout());
-        verticalLayout = (WebDDVerticalLayout) delegate;
+        super(model, VBoxLayout.class);
+        verticalLayout = (VBoxLayout) delegate;
     }
 
     @Override
-    public WebDDVerticalLayout getDelegate() {
+    public VBoxLayout getDelegate() {
         return verticalLayout;
     }
 
@@ -62,31 +62,4 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
         this.innerLayout = innerLayout;
     }
 
-    @Override
-    public void setSizeFull() {
-        super.setSizeFull();
-//        innerLayout.setSizeFull();
-//        widgetComponent.setSizeFull();
-    }
-
-    @Override
-    public void setSizeAuto() {
-        super.setSizeAuto();
-//        innerLayout.setSizeAuto();
-//        widgetComponent.setSizeAuto();
-    }
-
-    @Override
-    public void setHeight(String height) {
-        super.setHeight(height);
-//        innerLayout.setHeight(height);
-//        widgetComponent.setHeight(height);
-    }
-
-    @Override
-    public void setWidth(String width) {
-        super.setWidth(width);
-//        innerLayout.setWidth(width);
-//        widgetComponent.setWidth(width);
-    }
 }

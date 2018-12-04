@@ -18,22 +18,21 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dnd.web.gui.components.WebDDGridLayout;
 import com.haulmont.cuba.gui.components.Component;
 
 public class CanvasGridLayout extends AbstractCanvasLayout {
-    protected WebDDGridLayout gridLayout;
+    protected com.haulmont.cuba.gui.components.GridLayout gridLayout;
 
     public CanvasGridLayout(GridLayout model) {
-        super(model, new WebDDGridLayout());
-        gridLayout = (WebDDGridLayout) delegate;
+        super(model, com.haulmont.cuba.gui.components.GridLayout.class);
+        gridLayout = (com.haulmont.cuba.gui.components.GridLayout) delegate;
 
         gridLayout.setColumns(model.getColumns());
         gridLayout.setRows(model.getRows());
     }
 
     @Override
-    public WebDDGridLayout getDelegate() {
+    public com.haulmont.cuba.gui.components.GridLayout getDelegate() {
         return gridLayout;
     }
 

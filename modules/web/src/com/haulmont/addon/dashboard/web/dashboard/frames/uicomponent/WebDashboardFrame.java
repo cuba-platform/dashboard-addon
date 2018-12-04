@@ -34,6 +34,7 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.vaadin.annotations.StyleSheet;
@@ -63,7 +64,6 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@StyleSheet("dashboard.css")
 public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public static final String SCREEN_NAME = "dashboard$DashboardComponent";
@@ -85,7 +85,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Inject
     protected Messages messages;
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents componentsFactory;
     @Inject
     protected Events events;
 
@@ -134,7 +134,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         Window parentWindow = findWindow(frame);
         int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
         if (timerDelay > 0 && parentWindow != null) {
-            Timer dashboardUpdatedTimer = componentsFactory.createTimer();
+            Timer dashboardUpdatedTimer = componentsFactory.create(Timer.class);
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
             dashboardUpdatedTimer.setRepeating(true);
@@ -173,6 +173,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null) {
+            //TODO remove obsolete code
             showNotification(messages.getMainMessage("notLoadedDashboard"), NotificationType.ERROR);
             return;
         }

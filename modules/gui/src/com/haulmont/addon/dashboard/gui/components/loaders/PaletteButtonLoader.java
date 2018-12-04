@@ -12,22 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.events;
+package com.haulmont.addon.dashboard.gui.components.loaders;
 
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.cuba.gui.xml.layout.loaders.ButtonLoader;
 
-import java.util.UUID;
+public class PaletteButtonLoader extends ButtonLoader {
 
-public class WidgetMovedEvent extends WidgetLayoutEvent {
-
-    public WidgetMovedEvent(DashboardLayout source, UUID targetLayoutUuid, String location) {
-        super(source, targetLayoutUuid, location);
-    }
-
-    public WidgetMovedEvent(DashboardLayout source, UUID targetLayoutUuid, WidgetDropLocation dropLocation) {
-        super(source, targetLayoutUuid, dropLocation);
-    }
 }

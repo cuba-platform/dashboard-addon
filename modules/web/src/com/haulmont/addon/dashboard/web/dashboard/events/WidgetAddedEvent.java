@@ -21,9 +21,13 @@ import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 
 import java.util.UUID;
 
-public class WidgetAddedEvent extends WidgetTreeEvent {
+public class WidgetAddedEvent extends WidgetLayoutEvent {
 
     public WidgetAddedEvent(DashboardLayout source, UUID parentLayoutUuid, String location) {
         super(source, parentLayoutUuid, location);
+    }
+
+    public WidgetAddedEvent(DashboardLayout source, UUID targetLayoutUuid, WidgetDropLocation dropLocation) {
+        super(source, targetLayoutUuid, dropLocation);
     }
 }

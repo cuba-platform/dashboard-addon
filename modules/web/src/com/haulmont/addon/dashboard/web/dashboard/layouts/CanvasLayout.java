@@ -26,8 +26,7 @@ import com.haulmont.cuba.gui.components.LayoutClickNotifier;
 
 import java.util.UUID;
 
-public interface CanvasLayout extends Component, ComponentContainer, DDLayout,
-        LayoutClickNotifier, HasWeight {
+public interface CanvasLayout extends Component, ComponentContainer, LayoutClickNotifier, HasWeight {
 
     ComponentContainer getDelegate();
 

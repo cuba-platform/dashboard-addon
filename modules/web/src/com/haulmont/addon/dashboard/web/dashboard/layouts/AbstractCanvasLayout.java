@@ -20,14 +20,6 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
-import com.haulmont.addon.dnd.components.DDLayout;
-import com.haulmont.addon.dnd.components.DropHandler;
-import com.haulmont.addon.dnd.components.dragevent.DropTarget;
-import com.haulmont.addon.dnd.components.dragevent.TargetDetails;
-import com.haulmont.addon.dnd.components.dragfilter.DragFilter;
-import com.haulmont.addon.dnd.components.dragfilter.DragFilterSupport;
-import com.haulmont.addon.dnd.components.enums.LayoutDragMode;
-import com.haulmont.addon.dnd.web.gui.components.TargetConverter;
 import com.haulmont.bali.events.Subscription;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.UiComponents;
@@ -36,11 +28,11 @@ import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.components.LayoutClickNotifier;
 import com.haulmont.cuba.web.gui.components.WebCssLayout;
+import com.haulmont.cuba.web.widgets.CubaCssActionsLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -50,14 +42,21 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     protected UUID uuid;
     protected DashboardLayout model;
 
+    protected static UiComponents components = AppBeans.get(UiComponents.class);
+
     public AbstractCanvasLayout(DashboardLayout model, ComponentContainer delegate) {
         this.delegate = delegate;
         this.model = model;
-        buttonsPanel = AppBeans.get(UiComponents.class).create(HBoxLayout.class);
+        buttonsPanel = components.create(HBoxLayout.class);
         this.delegate.setSizeFull();
         super.add(this.delegate);
         super.add(buttonsPanel);
         super.addStyleName(DashboardStyleConstants.DASHBOARD_WIDGET);
+        this.unwrap(CubaCssActionsLayout.class).setId(model.getId().toString());
+    }
+
+    public <T extends ComponentContainer> AbstractCanvasLayout(DashboardLayout model, Class<T> componentClass) {
+        this(model, components.create(componentClass));
     }
 
     @Override
@@ -79,32 +78,13 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     @Override
-    public void setDropHandler(DropHandler dropHandler) {
-        ((DDLayout) getDelegate()).setDropHandler(dropHandler);
-    }
-
-    @Override
-    public DropHandler getDropHandler() {
-        return ((DDLayout) getDelegate()).getDropHandler();
-    }
-
-    @Override
-    public LayoutDragMode getDragMode() {
-        return ((DDLayout) getDelegate()).getDragMode();
-    }
-
-    @Override
-    public void setDragMode(LayoutDragMode mode) {
-        ((DDLayout) getDelegate()).setDragMode(mode);
-    }
-
-    @Override
     public Subscription addLayoutClickListener(Consumer<LayoutClickEvent> listener) {
         return ((LayoutClickNotifier) getDelegate()).addLayoutClickListener(listener);
     }
 
     @Override
     public void removeLayoutClickListener(Consumer<LayoutClickEvent> listener) {
+        //TODO remove obsolete code
         ((LayoutClickNotifier) getDelegate()).removeLayoutClickListener(listener);
     }
 

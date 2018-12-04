@@ -42,19 +42,19 @@ public class DropHandlerTools {
     }
 
     public void addDropHandler(CanvasLayout layout) {
-        if (layout instanceof CanvasRootLayout) {
-            layout.setDropHandler(new LayoutDropHandler(dashboard));
-        } else if (layout instanceof CanvasVerticalLayout) {
-            layout.setDropHandler(new LayoutDropHandler(dashboard));
-        } else if (layout instanceof CanvasHorizontalLayout) {
-            layout.setDropHandler(new LayoutDropHandler(dashboard));
-        } else if (layout instanceof CanvasCssLayout) {
-            layout.setDropHandler(new LayoutDropHandler(dashboard));
-        }else if (layout instanceof CanvasGridLayout) {
-            layout.setDropHandler(new NotDropHandler());
-        } else if (layout instanceof CanvasWidgetLayout) {
-            layout.setDropHandler(new NotDropHandler());
-        }
+//        if (layout instanceof CanvasRootLayout) {
+//            layout.setDropHandler(new LayoutDropHandler(dashboard));
+//        } else if (layout instanceof CanvasVerticalLayout) {
+//            layout.setDropHandler(new LayoutDropHandler(dashboard));
+//        } else if (layout instanceof CanvasHorizontalLayout) {
+//            layout.setDropHandler(new LayoutDropHandler(dashboard));
+//        } else if (layout instanceof CanvasCssLayout) {
+//            layout.setDropHandler(new LayoutDropHandler(dashboard));
+//        }else if (layout instanceof CanvasGridLayout) {
+//            layout.setDropHandler(new NotDropHandler());
+//        } else if (layout instanceof CanvasWidgetLayout) {
+//            layout.setDropHandler(new NotDropHandler());
+//        }
     }
 
 }

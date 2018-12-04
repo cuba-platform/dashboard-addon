@@ -25,7 +25,6 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasC
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
@@ -135,7 +134,7 @@ public class DashboardModelConverter {
                 containerToModel(model, childComponent);
             } else if (childModel instanceof GridLayout) {
                 GridLayout gridModel = (GridLayout) childModel;
-                DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
+                com.haulmont.cuba.gui.components.GridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
                 model.addChild(gridModel);
                 childModel.setUuid((((CanvasGridLayout) childComponent).getUuid() == null ?
                         UUID.randomUUID() : ((CanvasGridLayout) childComponent).getUuid()));
@@ -178,7 +177,7 @@ public class DashboardModelConverter {
             return layout;
         } else if (component instanceof CanvasGridLayout) {
             GridLayout layout = metadata.create(GridLayout.class);
-            DDGridLayout gridLayout = ((CanvasGridLayout) component).getDelegate();
+            com.haulmont.cuba.gui.components.GridLayout gridLayout = ((CanvasGridLayout) component).getDelegate();
             layout.setRows(gridLayout.getRows());
             layout.setColumns(gridLayout.getColumns());
             return layout;

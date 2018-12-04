@@ -20,8 +20,10 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.components;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.cuba.web.gui.components.WebButton;
 
-//todo add to ui-components
 public class PaletteButton extends WebButton implements Draggable {
+
+    public static final String NAME = "paletteButton";
+
     protected DashboardLayout layout;
 
     public DashboardLayout getLayout() {

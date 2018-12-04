@@ -20,6 +20,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
+import com.haulmont.addon.dashboard.model.visualmodel.ContainerLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
@@ -32,20 +33,21 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutH
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.ActionProviderFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropListener;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit;
-import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.Tree;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.web.widgets.CubaTree;
+import com.haulmont.cuba.web.widgets.CubaTreeGrid;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.shared.ui.grid.DropMode;
+import com.vaadin.ui.components.grid.TreeGridDragSource;
+import com.vaadin.ui.components.grid.TreeGridDropTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -63,11 +65,11 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     private static Logger log = LoggerFactory.getLogger(PaletteFrame.class);
 
     @Inject
-    protected DDVerticalLayout ddWidgetBox;
+    protected BoxLayout ddWidgetBox;
     @Inject
-    protected DDVerticalLayout ddLayoutBox;
+    protected BoxLayout ddLayoutBox;
     @Inject
-    protected DDVerticalLayout ddWidgetTemplateBox;
+    protected BoxLayout ddWidgetTemplateBox;
     @Inject
     protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
     @Inject
@@ -111,8 +113,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     protected void initWidgetBox() {
-        ddWidgetBox.setDropHandler(new NotDropHandler());
-
         for (Widget widget : getSketchWidgets()) {
             PaletteButton widgetBtn = factory.createWidgetButton(widget);
             ddWidgetBox.add(widgetBtn);
@@ -120,8 +120,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     protected void initLayoutBox() {
-        ddLayoutBox.setDropHandler(new NotDropHandler());
-
         ddLayoutBox.add(factory.createVerticalLayoutButton());
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
@@ -140,10 +138,31 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         });
         widgetTree.expandTree();
         widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
-        CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
+
+        TreeGridDragSource<CubaTreeGrid> dropSource = new TreeGridDragSource<CubaTreeGrid>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
+        dropSource.setEffectAllowed(EffectAllowed.MOVE);
+        dropSource.addGridDragStartListener(e -> {
+            ContainerLayout containerLayout = (ContainerLayout) e.getDraggedItems().get(0);
+            dropSource.setDragData(containerLayout);
+        });
+        dropSource.addGridDragEndListener(e -> {
+            dropSource.setDragData(null);
+        });
+        TreeGridDropTarget<CubaTreeGrid> dropTarget = new TreeGridDropTarget<CubaTreeGrid>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
+        dropTarget.addTreeGridDropListener(new TreeDropListener());
+
+
+//        DragSourceExtension<CubaTree> treeDrag = new DragSourceExtension<>(widgetTree.unwrap(CubaTree.class));
+//        treeDrag.setEffectAllowed(EffectAllowed.MOVE);
+//        treeDrag.addDragEndListener(e->{});
+//        treeDrag.addDragStartListener(e->{});
+//        DropTargetExtension<CubaTree> treeDrop = new DropTargetExtension<>(widgetTree.unwrap(CubaTree.class));
+//        treeDrop.addDropListener(e->{
+//
+//        });
         //TODO enable drag mode fo tree
-//        cubaTree.setDragMode(Tree.TreeDragMode.NODE);
-//        cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
+//        treeDrag.setDragMode(Tree.TreeDragMode.NODE);
+//        treeDrag.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
     }
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
@@ -155,7 +174,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     protected void initWidgetTemplateBox() {
-        ddWidgetTemplateBox.setDropHandler(new NotDropHandler());
         widgetTemplatesDs.addCollectionChangeListener(e -> updateWidgetTemplates());
         widgetTemplatesDs.refresh();
     }

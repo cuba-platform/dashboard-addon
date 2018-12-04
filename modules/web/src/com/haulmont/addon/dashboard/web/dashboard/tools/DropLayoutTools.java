@@ -22,7 +22,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetLayoutEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
@@ -61,7 +61,7 @@ public class DropLayoutTools {
         return frame.getDashboard();
     }
 
-    public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
+    public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetLayoutEvent.WidgetDropLocation location) {
         DashboardLayout targetLayout = findLayout(getDashboard().getVisualModel(), targetLayoutUuid);
         if (layout instanceof CssLayout) {
             //TODO remove deprecaded code
@@ -131,7 +131,7 @@ public class DropLayoutTools {
         }
     }
 
-    private void reorderWidgetsAndPushEvents(DashboardLayout layout, DashboardLayout targetLayout, WidgetTreeEvent.DropLocation location) {
+    private void reorderWidgetsAndPushEvents(DashboardLayout layout, DashboardLayout targetLayout, WidgetLayoutEvent.WidgetDropLocation location) {
         DashboardLayout parentLayout = targetLayout instanceof WidgetLayout ?
                 findParentLayout(getDashboard().getVisualModel(), targetLayout) : targetLayout;
         parentLayout.addChild(layout);
@@ -141,7 +141,7 @@ public class DropLayoutTools {
         events.publish(new WidgetSelectedEvent(layout.getId(), WidgetSelectedEvent.Target.CANVAS));
     }
 
-    public void moveComponent(DashboardLayout layout, UUID targetLayoutId, WidgetTreeEvent.DropLocation location) {
+    public void moveComponent(DashboardLayout layout, UUID targetLayoutId, WidgetLayoutEvent.WidgetDropLocation location) {
         RootLayout dashboardModel = getDashboard().getVisualModel();
         DashboardLayout target = findLayout(dashboardModel, targetLayoutId);
         DashboardLayout parent = findParentLayout(dashboardModel, layout);

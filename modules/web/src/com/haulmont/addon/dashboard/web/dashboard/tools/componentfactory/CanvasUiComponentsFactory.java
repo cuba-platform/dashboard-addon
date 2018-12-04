@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.NONE;
 import static java.lang.String.format;
 
 @Component("dashboard_uiComponentsFactory")
@@ -58,7 +57,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
         CanvasVerticalLayout layout = new CanvasVerticalLayout(verticalLayout);
         layout.setUuid(UUID.randomUUID());
-        layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
     }
@@ -67,7 +65,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
         CanvasHorizontalLayout layout = new CanvasHorizontalLayout(horizontalLayout);
         layout.setUuid(UUID.randomUUID());
-        layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
     }
@@ -76,7 +73,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
         CanvasCssLayout layout = new CanvasCssLayout(cssLayoutModel);
         layout.setUuid(UUID.randomUUID());
-        layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
     }
@@ -85,7 +81,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
         CanvasGridLayout layout = new CanvasGridLayout(gridLayout);
         layout.setUuid(UUID.randomUUID());
-        layout.setDragMode(NONE);
         layout.setSizeFull();
         return layout;
     }
@@ -142,7 +137,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         layout.setWidgetComponent(widgetFrame);
         layout.setInnerLayout(widgetComponent);
         layout.setWidget(widget);
-        layout.setDragMode(NONE);
         layout.getDelegate().expand(widgetComponent);
         layout.setSizeFull();
         return layout;
@@ -152,7 +146,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
         CanvasRootLayout layout = new CanvasRootLayout(rootLayout);
         layout.setUuid(UUID.randomUUID());
-        layout.setDragMode(NONE);
 //        layout.setSizeFull();
         return layout;
     }

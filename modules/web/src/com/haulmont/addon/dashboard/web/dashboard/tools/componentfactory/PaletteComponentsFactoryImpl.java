@@ -29,7 +29,10 @@ import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.web.widgets.CubaButton;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.ui.dnd.DragSourceExtension;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -37,7 +40,7 @@ import javax.inject.Inject;
 @Component
 public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     @Inject
-    protected ComponentsFactory factory;
+    protected UiComponents factory;
     @Inject
     protected Events events;
     @Inject
@@ -54,8 +57,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createVerticalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("verticalLayout"));
-        //TODO fix icons
-//        button.setIconFromSet(DashboardIcon.VERTICAL_LAYOUT_ICON);
+        button.setIconFromSet(DashboardIcon.VERTICAL_LAYOUT_ICON);
         button.setLayout(metadata.create(VerticalLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("verticalLayout"));
@@ -65,8 +67,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createHorizontalLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("horizontalLayout"));
-        //TODO fix icons
-//        button.setIconFromSet(DashboardIcon.HORIZONTAL_LAYOUT_ICON);
+        button.setIconFromSet(DashboardIcon.HORIZONTAL_LAYOUT_ICON);
         button.setLayout(metadata.create(HorizontalLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("horizontalLayout"));
@@ -76,8 +77,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createGridLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("gridLayout"));
-        //TODO fix icons
-//        button.setIconFromSet(DashboardIcon.GRID_LAYOUT_ICON);
+        button.setIconFromSet(DashboardIcon.GRID_LAYOUT_ICON);
         button.setLayout(metadata.create(GridLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("gridLayout"));
@@ -88,8 +88,7 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     public PaletteButton createCssLayoutButton() {
         PaletteButton button = createCommonButton();
         button.setCaption(messages.getMainMessage("cssLayout"));
-        //TODO fix icons
-//        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
+        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
         button.setLayout(metadata.create(CssLayout.class));
         button.getLayout().setUuid(null);
         button.setDescription(messages.getMainMessage("cssLayout"));
@@ -123,10 +122,18 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     }
 
     protected PaletteButton createCommonButton() {
-        PaletteButton button = new PaletteButton();
+        PaletteButton button = factory.create(PaletteButton.class);
         button.setWidth("100%");
         button.setHeight("50px");
         button.setStyleName(DashboardStyleConstants.DASHBOARD_BUTTON);
+        DragSourceExtension<CubaButton> dragSourceExtension = new DragSourceExtension<>(button.unwrap(CubaButton.class));
+        dragSourceExtension.setEffectAllowed(EffectAllowed.COPY);
+        dragSourceExtension.addDragStartListener(e -> {
+            dragSourceExtension.setDragData(button.getLayout());
+        });
+        dragSourceExtension.addDragEndListener(e -> {
+            dragSourceExtension.setDragData(null);
+        });
         return button;
     }
 }
