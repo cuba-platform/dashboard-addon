@@ -80,6 +80,11 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
         super.postInit();
         if (PersistenceHelper.isNew(getItem())) {
             getItem().setCreatedBy(accessHelper.getCurrentSessionLogin());
+            if (getItem().getWidgetModel() != null) {
+                widgetTypeLookup.setEditable(false);
+            }
+        } else {
+            widgetTypeLookup.setEditable(false);
         }
 
         if (StringUtils.isNotEmpty(widgetTemplateDs.getItem().getWidgetModel())) {
