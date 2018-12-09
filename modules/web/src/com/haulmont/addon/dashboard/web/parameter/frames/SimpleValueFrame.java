@@ -163,4 +163,16 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
         checkBox.setValue(value == null ? null : value.getValue());
         checkBox.setVisible(true);
     }
+
+    public ParameterType getType() {
+        return type;
+    }
+
+    public String getTextFieldValue() {
+        return textField.getRawValue();
+    }
+
+    public TextField getTextField() {
+        return textField;
+    }
 }

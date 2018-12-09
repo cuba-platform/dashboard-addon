@@ -24,8 +24,10 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 
@@ -177,5 +179,19 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
                 "dashboard$EntitiesListValueFrame",
                 ParamsMap.of(ValueFrame.VALUE, value)
         );
+    }
+
+    @Override
+    protected void postValidate(ValidationErrors errors) {
+        if (valueFrame instanceof SimpleValueFrame) {
+            SimpleValueFrame svf = (SimpleValueFrame) valueFrame;
+            if (ParameterType.UUID == svf.getType() && StringUtils.isNotEmpty(svf.getTextFieldValue())) {
+                if (!svf.getTextFieldValue().matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+                    errors.add(svf.getTextField(), getMessage("invalidUUID"));
+                }
+            }
+        }
+
+        super.postValidate(errors);
     }
 }
