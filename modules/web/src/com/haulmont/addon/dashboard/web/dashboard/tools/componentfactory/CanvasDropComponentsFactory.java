@@ -31,6 +31,7 @@ import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import org.springframework.stereotype.Component;
+import org.strangeway.responsive.web.components.ResponsiveLayout;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -61,7 +62,11 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     private void initDropLayout(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
-        layout.setDragMode(CLONE);
+        if (layout instanceof CanvasResponsiveLayout) {
+            //layout.getDelegate().
+        } else {
+            layout.setDragMode(CLONE);
+        }
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(layoutModel.getCaption());
         createBaseLayoutActions(layout, layoutModel);
@@ -138,10 +143,27 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     protected void addLayoutClickListener(CanvasLayout layout) {
-        layout.addLayoutClickListener(e -> {
-            CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
-            events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+        if (layout instanceof CanvasResponsiveLayout) {
+            /*ResponsiveLayout rl = (ResponsiveLayout)((CanvasResponsiveLayout) layout).getDelegate().getDraggedComponent();
+            rl.(e -> {
+                CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+                events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
 
-        });
+            });*/
+        } else {
+            layout.addLayoutClickListener(e -> {
+                CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+                events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+
+            });
+        }
+    }
+
+    @Override
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(DashboardResponsiveLayout rootLayout) {
+        CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(rootLayout);
+        //layout.getDelegate().getComponent().setSpacing(true);
+        initDropLayout(rootLayout, layout);
+        return layout;
     }
 }

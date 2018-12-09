@@ -10,13 +10,21 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dnd.components.*;
 import com.haulmont.addon.dnd.components.acceptcriterion.AcceptCriterion;
 import com.haulmont.addon.dnd.components.dragevent.DragAndDropEvent;
+import com.haulmont.addon.dnd.components.dragevent.DropTarget;
 import com.haulmont.addon.dnd.components.dragevent.TargetDetails;
 import com.haulmont.addon.dnd.web.gui.components.AcceptCriterionWrapper;
+import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.web.gui.components.WebTextArea;
 import com.haulmont.cuba.web.toolkit.ui.CubaTree;
 import com.vaadin.event.dd.acceptcriteria.ServerSideCriterion;
+import org.strangeway.responsive.web.components.ResponsiveLayout;
+import org.strangeway.responsive.web.components.impl.WebResponsiveColumn;
+import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
+
+import java.util.Iterator;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 
@@ -49,6 +57,28 @@ public class LayoutDropHandler implements DropHandler {
                 location = cssLayoutTargetDetails.getVerticalDropLocation().name();
             }
             targetCanvasLayout = (CanvasLayout) cssLayoutTargetDetails.getOverComponent();
+        } else if (event.getTargetDetails() instanceof DragAndDropWrapperTargetDetails) {
+            DragAndDropWrapperTargetDetails wDetails = (DragAndDropWrapperTargetDetails) event.getTargetDetails();
+            WebDragAndDropWrapper dt = (WebDragAndDropWrapper) wDetails.getTarget();
+            ResponsiveLayout rl = (ResponsiveLayout)dt.getDraggedComponent();
+
+            Iterator it = rl.getOwnComponents().iterator();
+            WebResponsiveRow wrr = (WebResponsiveRow) it.next();
+
+            WebResponsiveColumn wrc = new WebResponsiveColumn();
+            wrc.add(new WebTextArea());
+            wrr.addColumn(wrc);
+
+            WebResponsiveColumn wrc2 = new WebResponsiveColumn();
+            wrc2.add(new WebTextArea());
+            wrr.addColumn(wrc2);
+
+            WebResponsiveColumn wrc3 = new WebResponsiveColumn();
+            wrc3.add(new WebTextArea());
+            wrr.addColumn(wrc3);
+
+            return;
+
         }
 
         if (targetCanvasLayout == null) {

@@ -82,6 +82,10 @@ public class DashboardModelConverter {
                 ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol(), area.getRow(), col2, row2);
             }
         }
+        else if (model instanceof DashboardResponsiveLayout) {
+            DashboardResponsiveLayout respLayoutModel = (DashboardResponsiveLayout) model;
+            canvasLayout = factory.createCanvasResponsiveLayout(respLayoutModel);
+        }
 
         if (canvasLayout == null) {
             throw new IllegalStateException("Unknown layout class: " + model.getClass());
