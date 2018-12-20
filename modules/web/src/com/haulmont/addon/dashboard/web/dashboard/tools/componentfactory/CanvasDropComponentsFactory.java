@@ -62,7 +62,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout(verticalLayout);
         layout.getDelegate().setSpacing(true);
         initLayout(verticalLayout, layout);
-        initDropExtension(verticalLayout, layout);
         return layout;
     }
 
@@ -72,6 +71,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         createBaseLayoutActions(layout, layoutModel);
         addLayoutClickListener(layout);
         initDragExtension(layoutModel, layout);
+        initDropExtension(layoutModel, layout);
     }
 
     private void initDragExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
@@ -104,7 +104,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout(horizontalLayout);
         layout.getDelegate().setSpacing(true);
         initLayout(horizontalLayout, layout);
-        initDropExtension(horizontalLayout, layout);
         return layout;
     }
 
@@ -112,7 +111,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
         CanvasCssLayout layout = super.createCssLayout(cssLayoutModel);
         initLayout(cssLayoutModel, layout);
-        initDropExtension(cssLayoutModel, layout);
         return layout;
     }
 
@@ -121,7 +119,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         CanvasGridLayout layout = super.createCanvasGridLayout(gridLayout);
         layout.getDelegate().setSpacing(true);
         initLayout(gridLayout, layout);
-        initDropExtension(gridLayout, layout);
         return layout;
     }
 
@@ -152,7 +149,6 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
         CanvasRootLayout layout = super.createCanvasRootLayout(rootLayout);
         layout.getDelegate().setSpacing(true);
         initLayout(rootLayout, layout);
-        initDropExtension(rootLayout, layout);
         return layout;
     }
 

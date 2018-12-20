@@ -9,7 +9,7 @@
         messagesPack="com.haulmont.addon.dashboard.web.dashboard">
     <dialogMode height="AUTO"
                 width="480"/>
-    <layout height="100%"
+    <layout expand="btnPanel"
             spacing="true"
             width="100%">
         <grid id="grid" spacing="true" width="100%">

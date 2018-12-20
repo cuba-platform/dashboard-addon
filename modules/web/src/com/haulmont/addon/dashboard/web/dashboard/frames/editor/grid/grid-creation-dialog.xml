@@ -9,8 +9,8 @@
         messagesPack="com.haulmont.addon.dashboard.web.dashboard">
     <dialogMode height="AUTO"
                 width="480"/>
-    <layout height="100%"
-            spacing="true"
+    <layout spacing="true"
+            expand="btnPanel"
             width="100%">
         <hbox id="slidersBox"
               height="100%"

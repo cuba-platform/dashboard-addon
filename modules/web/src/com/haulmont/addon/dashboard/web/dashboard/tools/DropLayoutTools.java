@@ -57,7 +57,7 @@ public class DropLayoutTools {
         this.dashboardDs = dashboardDs;
     }
 
-    public Dashboard getDashboard(){
+    public Dashboard getDashboard() {
         return frame.getDashboard();
     }
 
@@ -149,6 +149,21 @@ public class DropLayoutTools {
         if (!applyMoveAction(layout, target, parent, dashboardModel)) {
             return;
         }
+
+        if (location == null) {
+            if (target.equals(parent)) {
+                return;
+            }
+            location = WidgetLayoutEvent.WidgetDropLocation.MIDDLE;
+            if (target.getParent().equals(parent)) {
+                Integer targetIndex = parent.getChildren().indexOf(target);
+                Integer sourceIndex = parent.getChildren().indexOf(layout);
+                if (sourceIndex - targetIndex == 1) {
+                    location = WidgetLayoutEvent.WidgetDropLocation.LEFT;
+                }
+            }
+        }
+
         parent.removeOwnChild(layout);
 
         if (target instanceof ContainerLayout) {

@@ -64,7 +64,6 @@
                     <scrollBox
                             height="100%" scrollBars="vertical">
                         <tree id="widgetTree"
-                              height="100%"
                               width="100%">
                             <treechildren captionProperty="caption"
                                           datasource="dashboardLayoutTreeReadOnlyDs"/>

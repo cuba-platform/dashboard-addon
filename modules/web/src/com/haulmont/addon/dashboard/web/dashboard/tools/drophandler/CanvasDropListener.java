@@ -35,14 +35,16 @@ public class CanvasDropListener implements DropListener<CubaCssActionsLayout> {
 
     @Override
     public void drop(DropEvent e) {
-        DashboardLayout source = (DashboardLayout) e.getDragData().get();
-        AbstractComponent targetComponent = e.getComponent();
-        UUID targetLayoutId = targetComponent.getId() != null ? UUID.fromString(targetComponent.getId()) : null;
-        if (targetLayoutId != null) {
-            if (source.getId() == null) {
-                events.publish(new WidgetAddedEvent(source, targetLayoutId, WidgetLayoutEvent.WidgetDropLocation.MIDDLE));
-            } else {
-                events.publish(new WidgetMovedEvent(source, targetLayoutId, WidgetLayoutEvent.WidgetDropLocation.MIDDLE));
+        if (e.getDragData().isPresent()) {
+            DashboardLayout source = (DashboardLayout) e.getDragData().get();
+            AbstractComponent targetComponent = e.getComponent();
+            UUID targetLayoutId = targetComponent.getId() != null ? UUID.fromString(targetComponent.getId()) : null;
+            if (targetLayoutId != null) {
+                if (source.getId() == null) {
+                    events.publish(new WidgetAddedEvent(source, targetLayoutId, WidgetLayoutEvent.WidgetDropLocation.MIDDLE));
+                } else {
+                    events.publish(new WidgetMovedEvent(source, targetLayoutId, (WidgetLayoutEvent.WidgetDropLocation) null));
+                }
             }
         }
     }

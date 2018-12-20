@@ -32,13 +32,15 @@ public class TreeDropListener implements TreeGridDropListener<DashboardLayout> {
 
     @Override
     public void drop(TreeGridDropEvent e) {
-        DashboardLayout target = (DashboardLayout) e.getDropTargetRow().get();
-        DashboardLayout source = (DashboardLayout) e.getDragData().get();
-        WidgetLayoutEvent.WidgetDropLocation dropLocation = getDropLocation(e.getDropLocation());
-        if (source.getId() == null) {
-            events.publish(new WidgetAddedEvent(source, target.getUuid(), dropLocation));
-        } else {
-            events.publish(new WidgetMovedEvent(source, target.getUuid(), dropLocation));
+        if (e.getDropTargetRow().isPresent() && e.getDragData().isPresent()) {
+            DashboardLayout target = (DashboardLayout) e.getDropTargetRow().get();
+            DashboardLayout source = (DashboardLayout) e.getDragData().get();
+            WidgetLayoutEvent.WidgetDropLocation dropLocation = getDropLocation(e.getDropLocation());
+            if (source.getId() == null) {
+                events.publish(new WidgetAddedEvent(source, target.getUuid(), dropLocation));
+            } else {
+                events.publish(new WidgetMovedEvent(source, target.getUuid(), dropLocation));
+            }
         }
     }
 
