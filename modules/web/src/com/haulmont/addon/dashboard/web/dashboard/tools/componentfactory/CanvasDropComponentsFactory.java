@@ -86,8 +86,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     private void initDropExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
-        DropTargetExtension<CubaCssActionsLayout> dropTarget2 = new DropTargetExtension(layout.unwrap(CubaCssActionsLayout.class));
-        dropTarget2.addDropListener(new CanvasDropListener());
+        DropTargetExtension<CubaCssActionsLayout> dropTarget = new DropTargetExtension(layout.unwrap(CubaCssActionsLayout.class));
+        dropTarget.addDropListener(new CanvasDropListener());
     }
 
     protected Button createButton(Action action) {

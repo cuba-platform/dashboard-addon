@@ -18,7 +18,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dnd.components.DDLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.HBoxLayout;

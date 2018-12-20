@@ -22,7 +22,6 @@ import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
-import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;

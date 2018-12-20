@@ -30,7 +30,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
             GridLayout gridLayout = (GridLayout) item;
             al.addAll(gridLayout.getAreas().stream()
                     .sorted(Comparator.comparingInt(GridArea::getRow)
-                    .thenComparingInt(GridArea::getCol))
+                            .thenComparingInt(GridArea::getCol))
                     .map(GridArea::getComponent)
                     .map(DashboardLayout::getId)
                     .collect(Collectors.toList()));
@@ -88,7 +88,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
             GridLayout gridLayout = (GridLayout) item;
             return gridLayout.getAreas().size() > 0;
         } else {
-            return item.getChildren().size() > 0;
+            return item != null && item.getChildren().size() > 0;
         }
     }
 

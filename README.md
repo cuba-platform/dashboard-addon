@@ -19,13 +19,13 @@ The complete add-ons installation guide see in [CUBA Platform documentation](htt
 
 2. Paste the add-on coordinates in the coordinates field as follows: `group:name:version`. For example:
 	
-    com.audimex.dashboard:dashboard-global:2.0.0
+    com.haulmont.addon.dashboard:dashboard-global:2.0.0
 
 Select the add-on version compatible with the CUBA platform version used in your project:
 
 | Platform Version  | Component Version |
 |-------------------|-------------------|
-| 6.10.X            | 2.0.0             |
+| 6.10.X            | 2.0.1             |
 
 3. Click **OK** in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
 
@@ -39,7 +39,7 @@ Select the add-on version compatible with the CUBA platform version used in your
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     // your add-ons go here
-    appComponent("com.audimex.dashboard:dashboard-global:2.0.0")
+    appComponent("com.haulmont.addon.dashboard:dashboard-global:2.0.0")
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 ```xml
 <context-param>
     <param-name>appComponents</param-name>
-    <param-value>com.haulmont.cuba com.audimex.dashboard</param-value>
+    <param-value>com.haulmont.cuba com.haulmont.addon.dashboard</param-value>
 </context-param>
 ```
 

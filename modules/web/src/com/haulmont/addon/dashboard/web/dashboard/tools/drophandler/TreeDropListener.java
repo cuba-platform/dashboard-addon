@@ -26,7 +26,7 @@ import com.vaadin.shared.ui.grid.DropLocation;
 import com.vaadin.ui.components.grid.TreeGridDropEvent;
 import com.vaadin.ui.components.grid.TreeGridDropListener;
 
-public class TreeDropListener implements TreeGridDropListener {
+public class TreeDropListener implements TreeGridDropListener<DashboardLayout> {
 
     private Events events = AppBeans.get(Events.class);
 

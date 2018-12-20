@@ -139,30 +139,18 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         widgetTree.expandTree();
         widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
 
-        TreeGridDragSource<CubaTreeGrid> dropSource = new TreeGridDragSource<CubaTreeGrid>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
+        TreeGridDragSource<DashboardLayout> dropSource = new TreeGridDragSource<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
         dropSource.setEffectAllowed(EffectAllowed.MOVE);
         dropSource.addGridDragStartListener(e -> {
-            ContainerLayout containerLayout = (ContainerLayout) e.getDraggedItems().get(0);
+            DashboardLayout containerLayout = e.getDraggedItems().get(0);
             dropSource.setDragData(containerLayout);
         });
         dropSource.addGridDragEndListener(e -> {
             dropSource.setDragData(null);
         });
-        TreeGridDropTarget<CubaTreeGrid> dropTarget = new TreeGridDropTarget<CubaTreeGrid>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
+        TreeGridDropTarget<DashboardLayout> dropTarget = new TreeGridDropTarget<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
         dropTarget.addTreeGridDropListener(new TreeDropListener());
 
-
-//        DragSourceExtension<CubaTree> treeDrag = new DragSourceExtension<>(widgetTree.unwrap(CubaTree.class));
-//        treeDrag.setEffectAllowed(EffectAllowed.MOVE);
-//        treeDrag.addDragEndListener(e->{});
-//        treeDrag.addDragStartListener(e->{});
-//        DropTargetExtension<CubaTree> treeDrop = new DropTargetExtension<>(widgetTree.unwrap(CubaTree.class));
-//        treeDrop.addDropListener(e->{
-//
-//        });
-        //TODO enable drag mode fo tree
-//        treeDrag.setDragMode(Tree.TreeDragMode.NODE);
-//        treeDrag.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
     }
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {

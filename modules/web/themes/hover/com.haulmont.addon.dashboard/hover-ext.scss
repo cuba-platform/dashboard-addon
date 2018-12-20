@@ -1,5 +1,5 @@
 /* Define your theme modifications inside next mixin */
-@mixin com_haulmont_addon_dashboard-halo-ext {
+@mixin com_haulmont_addon_dashboard-hover-ext {
     .min-height{
         min-height:100%;
     }
@@ -187,10 +187,5 @@
 
     .dashboard-disabled .dashboard-tree-selected > .dashboard-layout-controls {
         display: none;
-    }
-
-    .v-csslayout.v-csslayout-drag-center {
-        border: 2px solid $v-selection-color;
-        border-radius: 3px;
     }
 }
