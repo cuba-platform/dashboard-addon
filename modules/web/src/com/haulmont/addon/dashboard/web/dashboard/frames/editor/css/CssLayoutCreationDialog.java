@@ -10,7 +10,7 @@ import com.haulmont.cuba.gui.components.TextField;
 import javax.inject.Inject;
 import java.util.Map;
 
-public class CssLayoutCreationDialog extends AbstractWindow {//
+public class CssLayoutCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$CssLayoutDialog";
 
     @Inject

@@ -35,5 +35,5 @@ public interface CanvasComponentsFactory {
 
     CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout);
 
-    CanvasResponsiveLayout createCanvasResponsiveLayout(DashboardResponsiveLayout rootLayout);
+    CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout);
 }

@@ -24,14 +24,21 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
 import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
+import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Component.Container;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
+import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
 
 import javax.inject.Inject;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DashboardModelConverter {
     @Inject
@@ -81,10 +88,17 @@ public class DashboardModelConverter {
                 Integer row2 = area.getRow() + cellLayout.getRowSpan();
                 ((CanvasGridLayout) canvasLayout).addComponent(childGridCanvas, area.getCol(), area.getRow(), col2, row2);
             }
-        }
-        else if (model instanceof DashboardResponsiveLayout) {
-            DashboardResponsiveLayout respLayoutModel = (DashboardResponsiveLayout) model;
+        } else if (model instanceof ResponsiveLayout) {
+            ResponsiveLayout respLayoutModel = (ResponsiveLayout) model;
             canvasLayout = factory.createCanvasResponsiveLayout(respLayoutModel);
+
+            List<ResponsiveArea> sortedAreas = respLayoutModel.getAreas().stream().sorted(Comparator.comparing(ResponsiveArea::getOrder)).collect(Collectors.toList());
+
+            for (ResponsiveArea area : sortedAreas) {
+                DashboardLayout cellLayout = area.getComponent();
+                CanvasLayout childGridCanvas = modelToContainer(frame, cellLayout);
+                canvasLayout.addComponent(childGridCanvas);
+            }
         }
 
         if (canvasLayout == null) {
@@ -159,6 +173,26 @@ public class DashboardModelConverter {
                     modelArea.setComponent((GridCellLayout) modelChildGridArea);
                     gridModel.addArea(modelArea);
                 }
+            } else if (childModel instanceof ResponsiveLayout) {
+                ResponsiveLayout responsiveModel = (ResponsiveLayout) childModel;
+                WebDragAndDropWrapper wrapper = ((CanvasResponsiveLayout) childComponent).getDelegate();
+                WebResponsiveLayout wrl = (WebResponsiveLayout) wrapper.getDraggedComponent();
+
+                model.addChild(responsiveModel);
+                childModel.setUuid((((CanvasResponsiveLayout) childComponent).getUuid() == null ?
+                        UUID.randomUUID() : ((CanvasResponsiveLayout) childComponent).getUuid()));
+
+                Iterator it = wrl.getOwnComponents().iterator();
+                WebResponsiveRow wrr = (WebResponsiveRow) it.next();
+
+                for (Component respChild : wrr.getComponents()) {
+                    ResponsiveArea modelArea = metadata.create(ResponsiveArea.class);
+                    DashboardLayout modelChildGridArea = createDashboardLayout(respChild);
+                    containerToModel(modelChildGridArea, respChild);
+                    modelArea.setComponent((VerticalLayout) modelChildGridArea);
+                    responsiveModel.getAreas().add(modelArea);
+                }
+
             } else if (childModel != null) {
                 model.addChild(childModel);
                 if (!(childModel instanceof WidgetLayout)) {
@@ -173,6 +207,8 @@ public class DashboardModelConverter {
             return metadata.create(RootLayout.class);
         } else if (component.getParent() instanceof CanvasGridLayout) {
             return metadata.create(GridCellLayout.class);
+        } else if (component.getParent() instanceof CanvasResponsiveLayout) {
+            return metadata.create(VerticalLayout.class);
         } else if (component instanceof CanvasVerticalLayout) {
             return metadata.create(VerticalLayout.class);
         } else if (component instanceof CanvasHorizontalLayout) {
@@ -189,6 +225,8 @@ public class DashboardModelConverter {
             layout.setRows(gridLayout.getRows());
             layout.setColumns(gridLayout.getColumns());
             return layout;
+        } else if (component instanceof CanvasResponsiveLayout) {
+            return metadata.create(ResponsiveLayout.class);
         }
         return null;
     }

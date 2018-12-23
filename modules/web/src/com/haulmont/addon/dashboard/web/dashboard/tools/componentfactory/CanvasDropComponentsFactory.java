@@ -22,6 +22,7 @@ import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
+import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -31,11 +32,11 @@ import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.icons.IconResolver;
 import org.springframework.stereotype.Component;
-import org.strangeway.responsive.web.components.ResponsiveLayout;
 
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.haulmont.addon.dnd.components.DragAndDropWrapper.DragStartMode.WRAPPER;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 
 @Component("dashboard_dropComponentsFactory")
@@ -63,7 +64,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
     private void initDropLayout(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
         if (layout instanceof CanvasResponsiveLayout) {
-            //layout.getDelegate().
+            ((WebDragAndDropWrapper) layout.getDelegate()).setDragStartMode(WRAPPER);
         } else {
             layout.setDragMode(CLONE);
         }
@@ -143,14 +144,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     protected void addLayoutClickListener(CanvasLayout layout) {
-        if (layout instanceof CanvasResponsiveLayout) {
-            /*ResponsiveLayout rl = (ResponsiveLayout)((CanvasResponsiveLayout) layout).getDelegate().getDraggedComponent();
-            rl.(e -> {
-                CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
-                events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
-
-            });*/
-        } else {
+        if (!(layout instanceof CanvasResponsiveLayout)) {
             layout.addLayoutClickListener(e -> {
                 CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
                 events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
@@ -160,7 +154,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     @Override
-    public CanvasResponsiveLayout createCanvasResponsiveLayout(DashboardResponsiveLayout rootLayout) {
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout) {
         CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(rootLayout);
         //layout.getDelegate().getComponent().setSpacing(true);
         initDropLayout(rootLayout, layout);

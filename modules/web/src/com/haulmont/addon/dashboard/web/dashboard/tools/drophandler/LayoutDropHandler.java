@@ -60,25 +60,8 @@ public class LayoutDropHandler implements DropHandler {
         } else if (event.getTargetDetails() instanceof DragAndDropWrapperTargetDetails) {
             DragAndDropWrapperTargetDetails wDetails = (DragAndDropWrapperTargetDetails) event.getTargetDetails();
             WebDragAndDropWrapper dt = (WebDragAndDropWrapper) wDetails.getTarget();
-            ResponsiveLayout rl = (ResponsiveLayout)dt.getDraggedComponent();
-
-            Iterator it = rl.getOwnComponents().iterator();
-            WebResponsiveRow wrr = (WebResponsiveRow) it.next();
-
-            WebResponsiveColumn wrc = new WebResponsiveColumn();
-            wrc.add(new WebTextArea());
-            wrr.addColumn(wrc);
-
-            WebResponsiveColumn wrc2 = new WebResponsiveColumn();
-            wrc2.add(new WebTextArea());
-            wrr.addColumn(wrc2);
-
-            WebResponsiveColumn wrc3 = new WebResponsiveColumn();
-            wrc3.add(new WebTextArea());
-            wrr.addColumn(wrc3);
-
-            return;
-
+            targetCanvasLayout = (CanvasLayout) dt.getParent();
+            location = "CENTER";
         }
 
         if (targetCanvasLayout == null) {
