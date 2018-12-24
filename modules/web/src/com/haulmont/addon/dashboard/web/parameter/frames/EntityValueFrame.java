@@ -9,6 +9,8 @@ import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$EntityValueFrame")
+@UiDescriptor("entity-value-frame.xml")
 public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
     protected LookupField<MetaClass> metaClassLookup;

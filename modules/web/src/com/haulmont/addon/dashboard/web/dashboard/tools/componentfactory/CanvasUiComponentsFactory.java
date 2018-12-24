@@ -106,7 +106,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         ));
         params.putAll(widgetRepository.getWidgetParams(widget));
 
-        //TODO remove deprecaded code
+        //TODO remove deprecated code
         AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
 
         widgetFrame.setSizeFull();

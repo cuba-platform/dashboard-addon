@@ -17,8 +17,11 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.view;
 
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 public class DashboardView extends AbstractWindow {
@@ -27,12 +30,15 @@ public class DashboardView extends AbstractWindow {
     public static final String CODE = "CODE";
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
 
+    @Inject
+    protected Fragments fragments;
+
     @Override
     public void init(Map<String, Object> params) {
         if (params.containsKey(DISPLAY_NAME)){
             setCaption((String) params.get(DISPLAY_NAME));
         }
-        openFrame(this, WebDashboardFrame.SCREEN_NAME, params);
+        fragments.create(this,WebDashboardFrame.SCREEN_NAME, new MapScreenOptions(params));
     }
 
 

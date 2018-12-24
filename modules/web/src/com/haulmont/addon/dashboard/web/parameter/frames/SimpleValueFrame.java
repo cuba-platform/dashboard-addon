@@ -21,6 +21,8 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.chile.core.datatypes.DatatypeRegistry;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -28,7 +30,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-
+@UiController("dashboard$SimpleValueFrame")
+@UiDescriptor("simple-value-frame.xml")
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     //TODO check field value, create separate fields for int nad long values
     @Inject

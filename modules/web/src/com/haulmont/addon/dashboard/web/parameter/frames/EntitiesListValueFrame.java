@@ -9,6 +9,8 @@ import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
+@UiController("dashboard$EntitiesListValueFrame")
+@UiDescriptor("entities-list-value-frame.xml")
 public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
     protected ValueCollectionDatasourceImpl entitiesDs;

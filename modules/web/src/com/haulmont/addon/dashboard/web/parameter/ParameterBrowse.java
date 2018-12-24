@@ -26,14 +26,21 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.cuba.gui.data.CollectionDatasource.Operation.REFRESH;
 
+@UiController("dashboard$ParameterBrowse")
+@UiDescriptor("parameter-browse.xml")
 public class ParameterBrowse extends AbstractFrame {
     public static final String PARAMETERS = "PARAMETERS";
     public static final String SCREEN_NAME = "dashboard$ParameterBrowse";

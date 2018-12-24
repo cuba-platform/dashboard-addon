@@ -21,11 +21,13 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
 
 import javax.inject.Inject;
 
@@ -38,6 +40,8 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected LookupField<ParameterType> typeLookup;
     @Inject
     protected VBoxLayout valueBox;
+    @Inject
+    protected Fragments fragments;
 
     protected ValueFrame valueFrame;
 
@@ -75,7 +79,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     protected void initParameter() {
         ParameterValue parameterValue = parameterDs.getItem().getParameterValue();
-
+        valueBox.removeAll();
         if (parameterValue instanceof EntityParameterValue) {
             typeLookup.setValue(ENTITY);
             valueFrame = openEntityValueFrame((EntityParameterValue) parameterValue);
@@ -148,34 +152,42 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     }
 
     protected SimpleValueFrame openSimpleValueFrame(ParameterType type, ParameterValue parameterValue) {
-        return (SimpleValueFrame) openFrame(
-                valueBox,
-                "dashboard$SimpleValueFrame",
-                ParamsMap.of(ValueFrame.VALUE_TYPE, type, ValueFrame.VALUE, parameterValue)
-        );
+        SimpleValueFrame frame = (SimpleValueFrame) fragments.create(
+                this,
+                SimpleValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE_TYPE, type, ValueFrame.VALUE, parameterValue))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EnumValueFrame openEnumValueFrame(EnumParameterValue value) {
-        return (EnumValueFrame) openFrame(
-                valueBox,
-                "dashboard$EnumValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
+        EnumValueFrame frame = (EnumValueFrame) fragments.create(
+                this,
+                EnumValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EntityValueFrame openEntityValueFrame(EntityParameterValue value) {
-        return (EntityValueFrame) openFrame(
-                valueBox,
-                "dashboard$EntityValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
+        EntityValueFrame frame = (EntityValueFrame) fragments.create(
+                this,
+                EntityValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesParameterValue value) {
-        return (EntitiesListValueFrame) openFrame(
-                valueBox,
-                "dashboard$EntitiesListValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
+        EntitiesListValueFrame frame = (EntitiesListValueFrame) fragments.create(
+                this,
+                EntitiesListValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 }

@@ -20,7 +20,6 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette;
 import com.haulmont.addon.dashboard.entity.WidgetTemplate;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.ContainerLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
@@ -40,10 +39,14 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.BoxLayout;
+import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.haulmont.cuba.web.widgets.CubaTree;
-import com.haulmont.cuba.web.widgets.CubaTreeGrid;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.shared.ui.grid.DropMode;
 import com.vaadin.ui.components.grid.TreeGridDragSource;
@@ -59,6 +62,8 @@ import java.util.stream.Collectors;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
+@UiController("dashboard$PaletteFrame")
+@UiDescriptor("palette-frame.xml")
 public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
 

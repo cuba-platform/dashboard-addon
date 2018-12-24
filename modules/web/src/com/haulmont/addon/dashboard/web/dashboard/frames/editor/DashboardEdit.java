@@ -50,12 +50,14 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.Fragments;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -105,10 +107,12 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @Inject
     protected Events events;
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents uiComponents;
+    @Inject
+    protected Fragments fragments;
 
     protected ParameterBrowse parametersFrame;
-    protected AbstractFrame paletteFrame;
+    protected PaletteFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
 
     @Named("dropModelConverter")
@@ -156,25 +160,33 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     }
 
     protected void initParametersFrame() {
-        parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
-                PARAMETERS, getDashboard().getParameters(), DASHBOARD, getDashboard()
-        ));
+        parametersFrame = (ParameterBrowse) fragments.create(this, ParameterBrowse.class,
+                new MapScreenOptions(ParamsMap.of(
+                        PARAMETERS, getDashboard().getParameters(), DASHBOARD, getDashboard()
+                ))
+        ).init();
+        paramsBox.removeAll();
+        paramsBox.add(parametersFrame.getFragment());
     }
 
     protected void initPaletteFrame() {
-        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, getDashboard()
-        ));
+        paletteFrame = (PaletteFrame) fragments.create(this, PaletteFrame.class,
+                new MapScreenOptions(ParamsMap.of(DASHBOARD, getDashboard()))
+        ).init();
+        paletteBox.removeAll();
+        paletteBox.add(paletteFrame.getFragment());
     }
 
     protected void initCanvasFrame() {
-        canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, getDashboard()
-        ));
-        canvasBox.expand(canvasFrame);
+        canvasFrame = (CanvasEditorFrame) fragments.create(this, CanvasEditorFrame.class,
+                new MapScreenOptions(ParamsMap.of(DASHBOARD, getDashboard()))
+        ).init();
+        canvasBox.removeAll();
+        canvasBox.add(canvasFrame.getFragment());
     }
 
     public void cancel() {
+
         close("close", false);
     }
 
@@ -249,7 +261,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         List<String> prototypeBeanNames = assistantBeanMap.keySet().stream()
                 .filter(bn -> bf.isPrototype(bn))
                 .collect(toList());
-        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        LookupField lookupField = uiComponents.create(LookupField.class);
         lookupField.setOptionsList(prototypeBeanNames);
         return lookupField;
     }

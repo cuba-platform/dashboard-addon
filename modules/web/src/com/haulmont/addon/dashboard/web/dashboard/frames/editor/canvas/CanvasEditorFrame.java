@@ -33,6 +33,8 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.MouseEventDetails;
 import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -40,6 +42,8 @@ import javax.inject.Named;
 import java.util.Map;
 import java.util.UUID;
 
+@UiController("dashboard$CanvasEditorFrame")
+@UiDescriptor("canvas-frame.xml")
 public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
