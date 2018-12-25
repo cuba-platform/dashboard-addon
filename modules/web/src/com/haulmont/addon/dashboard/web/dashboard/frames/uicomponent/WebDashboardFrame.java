@@ -34,10 +34,13 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.Fragments;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.vaadin.annotations.StyleSheet;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -64,6 +67,8 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$DashboardComponent")
+@UiDescriptor("web-dashboard-frame.xml")
 public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public static final String SCREEN_NAME = "dashboard$DashboardComponent";
@@ -88,6 +93,10 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected UiComponents componentsFactory;
     @Inject
     protected Events events;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected Fragments fragments;
 
     protected DashboardViewAssistant dashboardViewAssistant;
 
@@ -138,7 +147,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
             dashboardUpdatedTimer.setRepeating(true);
-            dashboardUpdatedTimer.addActionListener(timer -> events.publish(new DashboardUpdatedEvent(dashboard)));
+            dashboardUpdatedTimer.addTimerActionListener(timer -> events.publish(new DashboardUpdatedEvent(dashboard)));
             dashboardUpdatedTimer.start();
         }
     }
@@ -173,13 +182,16 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null) {
-            //TODO remove obsolete code
-            showNotification(messages.getMainMessage("notLoadedDashboard"), NotificationType.ERROR);
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption(messages.getMainMessage("notLoadedDashboard"))
+                    .show();
             return;
         }
 
         if (!accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
-            showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
+            notifications.create(Notifications.NotificationType.WARNING)
+                    .withCaption(messages.getMainMessage("notOpenBrowseDashboard"))
+                    .show();
             return;
         }
 
@@ -230,9 +242,12 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateCanvasFrame(Dashboard dashboard) {
         if (canvasFrame == null) {
-            canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
+            canvasFrame = fragments.create(this, CanvasFrame.class, new MapScreenOptions(ParamsMap.of(
                     CanvasFrame.DASHBOARD, dashboard, DASHBOARD_FRAME, this
-            ));
+            )));
+            canvasFrame.init();
+            canvasBox.removeAll();
+            canvasBox.add(canvasFrame.getFragment());
         } else {
             canvasFrame.updateLayout(dashboard);
         }

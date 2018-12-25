@@ -10,12 +10,16 @@ import com.haulmont.cuba.gui.components.VBoxLayout;
 import static com.haulmont.addon.dashboard.web.DashboardStyleConstants.DASHBOARD_ROOT_LAYOUT;
 
 public class CanvasRootLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasRootLayout";
+
     protected VBoxLayout verticalLayout;
 
-    public CanvasRootLayout(RootLayout model) {
-        super(model, VBoxLayout.class);
+    public CanvasRootLayout init(RootLayout model) {
+        init(model, VBoxLayout.class);
         verticalLayout = (VBoxLayout) delegate;
         delegate.setStyleName(DASHBOARD_ROOT_LAYOUT);
+        return this;
     }
 
     @Override

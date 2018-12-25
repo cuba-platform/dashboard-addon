@@ -65,9 +65,7 @@ public class EnumValueFrame extends AbstractFrame implements ValueFrame {
 
         String className = enumValue.getValue();
 
-        //TODO remove deprecaded code
-        ((List<Class>) enumClassLookup.getOptionsList())
-                .stream()
+        enumClassLookup.getOptions().getOptions()
                 .filter(clazz -> className.equals(clazz.getName()))
                 .findFirst()
                 .ifPresent(enumClass -> enumClassLookup.setValue(enumClass));

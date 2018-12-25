@@ -12,4 +12,40 @@
         <componentLoader>com.haulmont.addon.dashboard.gui.components.loaders.PaletteButtonLoader</componentLoader>
         <class>com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton</class>
     </component>
+    <component>
+        <tag>canvasRootLayout</tag>
+        <name>canvasRootLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout</class>
+    </component>
+    <component>
+        <tag>canvasVerticalLayout</tag>
+        <name>canvasVerticalLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout</class>
+    </component>
+    <component>
+        <tag>canvasHorizontalLayout</tag>
+        <name>canvasHorizontalLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasHorizontalLayout</class>
+    </component>
+    <component>
+        <tag>canvasCssLayout</tag>
+        <name>canvasCssLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasCssLayout</class>
+    </component>
+    <component>
+        <tag>canvasGridLayout</tag>
+        <name>canvasGridLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasGridLayout</class>
+    </component>
+    <component>
+        <tag>canvasWidgetLayout</tag>
+        <name>canvasWidgetLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout</class>
+    </component>
 </components>

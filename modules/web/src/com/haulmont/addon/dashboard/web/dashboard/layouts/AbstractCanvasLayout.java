@@ -21,7 +21,6 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.bali.events.Subscription;
-import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
@@ -33,6 +32,7 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
+import javax.inject.Inject;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -42,9 +42,10 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     protected UUID uuid;
     protected DashboardLayout model;
 
-    protected static UiComponents components = AppBeans.get(UiComponents.class);
+    @Inject
+    protected UiComponents components;
 
-    public AbstractCanvasLayout(DashboardLayout model, ComponentContainer delegate) {
+    public AbstractCanvasLayout init(DashboardLayout model, ComponentContainer delegate) {
         this.delegate = delegate;
         this.model = model;
         buttonsPanel = components.create(HBoxLayout.class);
@@ -53,10 +54,11 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
         super.add(buttonsPanel);
         super.addStyleName(DashboardStyleConstants.DASHBOARD_WIDGET);
         this.unwrap(CubaCssActionsLayout.class).setId(model.getId().toString());
+        return this;
     }
 
-    public <T extends ComponentContainer> AbstractCanvasLayout(DashboardLayout model, Class<T> componentClass) {
-        this(model, components.create(componentClass));
+    public <T extends ComponentContainer> AbstractCanvasLayout init(DashboardLayout model, Class<T> componentClass) {
+        return init(model, components.create(componentClass));
     }
 
     @Override

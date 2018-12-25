@@ -75,10 +75,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
                 .findFirst()
                 .map(DashboardLayout::getId)
                 .orElse(null);
-        if (itemId.equals(root)) {
-            return true;
-        }
-        return false;
+        return itemId.equals(root);
     }
 
     @Override

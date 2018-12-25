@@ -29,6 +29,8 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@UiController("dashboard$CanvasFrame")
+@UiDescriptor("canvas-frame.xml")
 public class CanvasFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "dashboard$CanvasFrame";
     public static final String DASHBOARD = "dashboard";

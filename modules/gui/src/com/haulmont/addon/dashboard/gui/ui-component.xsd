@@ -4,7 +4,7 @@
   -->
 
 <xs:schema xmlns="http://schemas.haulmont.com/cubadshb/ui-component.xsd"
-           xmlns:cuba="http://schemas.haulmont.com/cuba/window.xsd"
+           xmlns:cuba="http://schemas.haulmont.com/cuba/screen/layout.xsd"
            attributeFormDefault="unqualified"
            elementFormDefault="qualified"
            targetNamespace="http://schemas.haulmont.com/cubadshb/ui-component.xsd"
@@ -31,7 +31,7 @@
         <xs:attribute name="value" type="xs:string" use="required"/>
         <xs:attribute name="type" type="paramTypeEnum"/>
     </xs:complexType>
-    
+
     <xs:simpleType name="delay">
         <xs:restriction base="xs:int">
             <xs:minInclusive value="1"/>

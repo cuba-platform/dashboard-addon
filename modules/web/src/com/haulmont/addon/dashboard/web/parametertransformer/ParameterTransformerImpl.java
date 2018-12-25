@@ -152,8 +152,7 @@ public class ParameterTransformerImpl implements ParameterTransformer {
                 EnumClass<String> rawValue = (EnumClass) FieldUtils.readField(field, widgetFrame, true);
                 if (rawValue != null) {
                     String enumClassName = rawValue.getClass().toString();
-                    //parameterValue = new EnumParameterValue(Enum.valueOf(Class.forName(enumClassName),rawValue.getId()));
-                    parameterValue = new EnumParameterValue("");//TODO: fix
+                    parameterValue = new EnumParameterValue(enumClassName);
                 }
             } else if (parameterType == DATE) {
                 Date rawValue = (Date) FieldUtils.readField(field, widgetFrame, true);
@@ -202,7 +201,7 @@ public class ParameterTransformerImpl implements ParameterTransformer {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error on parameter init",e);
         }
         return parameterValue;
     }

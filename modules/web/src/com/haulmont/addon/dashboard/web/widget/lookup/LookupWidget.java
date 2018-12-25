@@ -30,16 +30,13 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.Fragment;
 import com.haulmont.cuba.gui.components.ListComponent;
 import com.haulmont.cuba.gui.components.ScrollBoxLayout;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.widget.lookup.LookupWidget.CAPTION;
 

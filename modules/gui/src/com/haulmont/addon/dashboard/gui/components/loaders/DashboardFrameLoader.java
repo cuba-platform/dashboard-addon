@@ -132,9 +132,9 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
     }
 
     protected void loadParams(DashboardFrame resultComponent, Element element) {
-        List<Parameter> parameters = (List<Parameter>) element.content().stream()
+        List<Parameter> parameters = element.content().stream()
                 .filter(child -> child instanceof DefaultElement &&
-                        "parameter".equals(((DefaultElement) child).getName()))
+                        "parameter".equals(child.getName()))
                 .map(xmlParam -> createParameter((DefaultElement) xmlParam))
                 .collect(Collectors.toList());
 

@@ -24,7 +24,6 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
-import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
@@ -116,6 +115,6 @@ public class LookupWidgetEdit extends AbstractFrame {
     }
 
     protected void filterLookupFields(List<String> lookupIds) {
-        lookupIds.removeIf(li -> "commonlookup".equalsIgnoreCase(li));
+        lookupIds.removeIf("commonlookup"::equalsIgnoreCase);
     }
 }

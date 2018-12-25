@@ -23,6 +23,9 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
 
@@ -31,24 +34,25 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@UiController("dashboard$ColspanDialog")
+@UiDescriptor("colspan-dialog.xml")
 public class ColspanDialog extends AbstractWindow {
-    public static final String SCREEN_NAME = "dashboard$ColspanDialog";
     public static final String WIDGET = "WIDGET";
 
     @Inject
     protected HBoxLayout sliderBox;
 
     @Inject
-    private Label leftLabel;
+    private Label<String> leftLabel;
 
     @Inject
-    private Label rightLabel;
+    private Label<String> rightLabel;
 
     @Inject
     private Metadata metadata;
 
-    protected Slider colSpanSlider = null;
-    protected Slider rowSpanSlider = null;
+    private Slider colSpanSlider = null;
+    private Slider rowSpanSlider = null;
     private GridCellLayout layout;
     private GridLayout parent;
 
@@ -114,7 +118,7 @@ public class ColspanDialog extends AbstractWindow {
         gridArea.setCol2(gridArea.getCol() + layout.getColSpan());
         gridArea.setRow2(gridArea.getRow() + layout.getRowSpan());
         reorderGridAreas();
-        this.close(COMMIT_ACTION_ID);
+        this.close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
     private void reorderGridAreas() {
@@ -141,6 +145,6 @@ public class ColspanDialog extends AbstractWindow {
     }
 
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 }

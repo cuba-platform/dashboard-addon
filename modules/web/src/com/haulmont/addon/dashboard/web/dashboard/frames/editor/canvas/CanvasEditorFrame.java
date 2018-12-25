@@ -26,7 +26,6 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.DropHandlerTools;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.Component;
@@ -43,7 +42,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @UiController("dashboard$CanvasEditorFrame")
-@UiDescriptor("canvas-frame.xml")
+@UiDescriptor("canvas-editor-frame.xml")
 public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
@@ -70,7 +69,6 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
         vLayout.addStyleName("dashboard-main-shadow-border");
-        new DropHandlerTools(dashboard).initDropHandler(vLayout);
     }
 
     @Override

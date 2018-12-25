@@ -19,7 +19,9 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight;
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.vaadin.data.HasValue;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
@@ -27,8 +29,9 @@ import com.vaadin.ui.Slider;
 import javax.inject.Inject;
 import java.util.Map;
 
+@UiController("dashboard$WeightDialog")
+@UiDescriptor("weight-dialog.xml")
 public class WeightDialog extends AbstractWindow {
-    public static final String SCREEN_NAME = "dashboard$WeightDialog";
     public static final String WIDGET = "WIDGET";
 
     @Inject
@@ -63,12 +66,10 @@ public class WeightDialog extends AbstractWindow {
 
     public void apply() {
         layout.setWeight(weightSlider.getValue().intValue());
-        //TODO remove deprecaded code
-        this.close(COMMIT_ACTION_ID);
+        this.close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
-    //TODO remove deprecaded code
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        this.close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 }

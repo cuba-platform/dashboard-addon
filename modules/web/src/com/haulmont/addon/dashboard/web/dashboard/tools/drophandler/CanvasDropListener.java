@@ -18,7 +18,7 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WidgetLayoutEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetDropLocation;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
@@ -41,9 +41,9 @@ public class CanvasDropListener implements DropListener<CubaCssActionsLayout> {
             UUID targetLayoutId = targetComponent.getId() != null ? UUID.fromString(targetComponent.getId()) : null;
             if (targetLayoutId != null) {
                 if (source.getId() == null) {
-                    events.publish(new WidgetAddedEvent(source, targetLayoutId, WidgetLayoutEvent.WidgetDropLocation.MIDDLE));
+                    events.publish(new WidgetAddedEvent(source, targetLayoutId, WidgetDropLocation.MIDDLE));
                 } else {
-                    events.publish(new WidgetMovedEvent(source, targetLayoutId, (WidgetLayoutEvent.WidgetDropLocation) null));
+                    events.publish(new WidgetMovedEvent(source, targetLayoutId, (WidgetDropLocation) null));
                 }
             }
         }

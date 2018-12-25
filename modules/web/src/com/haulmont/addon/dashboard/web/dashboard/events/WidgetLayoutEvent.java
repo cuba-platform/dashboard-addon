@@ -26,15 +26,6 @@ public class WidgetLayoutEvent extends AbstractDashboardEditEvent {
     private UUID parentLayoutUuid;
     private WidgetDropLocation location;
 
-    public enum WidgetDropLocation {
-        TOP,
-        BOTTOM,
-        MIDDLE,
-        LEFT,
-        CENTER,
-        RIGHT;
-    }
-
     public WidgetLayoutEvent(DashboardLayout source, UUID targetLayoutUuid, String location) {
         super(source);
         this.parentLayoutUuid = targetLayoutUuid;

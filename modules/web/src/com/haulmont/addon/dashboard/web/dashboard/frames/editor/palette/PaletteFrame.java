@@ -34,16 +34,16 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.ActionP
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropListener;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
-import com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.screen.OpenMode;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.haulmont.cuba.web.widgets.CubaTree;
@@ -95,6 +95,8 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     protected Dashboard dashboard;
     @Inject
     protected ActionProviderFactory actionProviderFactory;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -111,10 +113,12 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
         //TODO remove deprecaded code
-        WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor(
-                "dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.DIALOG);
-        widgetEditor.addAfterCloseListener(e -> widgetTemplatesDs.refresh());
-
+        screenBuilders.editor(WidgetTemplate.class, this)
+                .newEntity(widgetTemplate)
+                .withLaunchMode(OpenMode.DIALOG)
+                .build()
+                .show()
+                .addAfterCloseListener(e -> widgetTemplatesDs.refresh());
     }
 
     protected void initWidgetBox() {
@@ -150,9 +154,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
             DashboardLayout containerLayout = e.getDraggedItems().get(0);
             dropSource.setDragData(containerLayout);
         });
-        dropSource.addGridDragEndListener(e -> {
-            dropSource.setDragData(null);
-        });
+        dropSource.addGridDragEndListener(e -> dropSource.setDragData(null));
         TreeGridDropTarget<DashboardLayout> dropTarget = new TreeGridDropTarget<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
         dropTarget.addTreeGridDropListener(new TreeDropListener());
 
@@ -206,7 +208,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
             UUID layoutUuid = event.getSource();
             DashboardLayout layout = dashboardLayoutTreeReadOnlyDs.getVisualModel().findLayout(layoutUuid);
             widgetTree.setSelected(layout);
-            widgetTree.expand(layout.getUuid());
+            widgetTree.expand(layout);
         }
     }
 

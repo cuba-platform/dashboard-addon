@@ -128,12 +128,8 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         button.setStyleName(DashboardStyleConstants.DASHBOARD_BUTTON);
         DragSourceExtension<CubaButton> dragSourceExtension = new DragSourceExtension<>(button.unwrap(CubaButton.class));
         dragSourceExtension.setEffectAllowed(EffectAllowed.COPY);
-        dragSourceExtension.addDragStartListener(e -> {
-            dragSourceExtension.setDragData(button.getLayout());
-        });
-        dragSourceExtension.addDragEndListener(e -> {
-            dragSourceExtension.setDragData(null);
-        });
+        dragSourceExtension.addDragStartListener(e -> dragSourceExtension.setDragData(button.getLayout()));
+        dragSourceExtension.addDragEndListener(e -> dragSourceExtension.setDragData(null));
         return button;
     }
 }

@@ -18,7 +18,7 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetAddedEvent;
-import com.haulmont.addon.dashboard.web.dashboard.events.WidgetLayoutEvent;
+import com.haulmont.addon.dashboard.web.dashboard.events.WidgetDropLocation;
 import com.haulmont.addon.dashboard.web.dashboard.events.WidgetMovedEvent;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
@@ -35,7 +35,7 @@ public class TreeDropListener implements TreeGridDropListener<DashboardLayout> {
         if (e.getDropTargetRow().isPresent() && e.getDragData().isPresent()) {
             DashboardLayout target = (DashboardLayout) e.getDropTargetRow().get();
             DashboardLayout source = (DashboardLayout) e.getDragData().get();
-            WidgetLayoutEvent.WidgetDropLocation dropLocation = getDropLocation(e.getDropLocation());
+            WidgetDropLocation dropLocation = getDropLocation(e.getDropLocation());
             if (source.getId() == null) {
                 events.publish(new WidgetAddedEvent(source, target.getUuid(), dropLocation));
             } else {
@@ -44,16 +44,16 @@ public class TreeDropListener implements TreeGridDropListener<DashboardLayout> {
         }
     }
 
-    private WidgetLayoutEvent.WidgetDropLocation getDropLocation(DropLocation dropLocation) {
+    private WidgetDropLocation getDropLocation(DropLocation dropLocation) {
         switch (dropLocation) {
             case ABOVE:
-                return WidgetLayoutEvent.WidgetDropLocation.TOP;
+                return WidgetDropLocation.TOP;
             case ON_TOP:
-                return WidgetLayoutEvent.WidgetDropLocation.MIDDLE;
+                return WidgetDropLocation.MIDDLE;
             case BELOW:
-                return WidgetLayoutEvent.WidgetDropLocation.BOTTOM;
+                return WidgetDropLocation.BOTTOM;
         }
-        return WidgetLayoutEvent.WidgetDropLocation.MIDDLE;
+        return WidgetDropLocation.MIDDLE;
     }
 
 }

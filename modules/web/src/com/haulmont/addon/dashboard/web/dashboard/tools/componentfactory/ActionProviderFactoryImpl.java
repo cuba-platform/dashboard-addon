@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.isLinearLayout;
 import static com.haulmont.cuba.gui.icons.CubaIcon.*;
 
 @Component(ActionProviderFactory.NAME)
@@ -45,95 +44,122 @@ public class ActionProviderFactoryImpl implements ActionProviderFactory {
         List<Action> actions = new ArrayList<>();
         if (layout != null) {
             if (!isGridCellLayout(layout) && !isRootLayout(layout)) {
-                actions.add(new AbstractAction("remove") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new WidgetRemovedEvent(layout));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return DashboardIcon.TRASH_ICON.source();
-                    }
-                });
+                actions.add(createRemoveAction(layout));
             }
             if (layout instanceof WidgetLayout) {
                 WidgetLayout widgetLayout = (WidgetLayout) layout;
-                actions.add(new AbstractAction("edit") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new WidgetEditEvent(widgetLayout));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return DashboardIcon.GEAR_ICON.source();
-                    }
-                });
-
-                actions.add(new AbstractAction("template") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new CreateWidgetTemplateEvent(widgetLayout.getWidget()));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return DATABASE.source();
-                    }
-                });
+                actions.add(createEditAction(widgetLayout));
+                actions.add(createTemplateAction(widgetLayout));
             }
             if (!isRootLayout(layout) && !isGridCellLayout(layout) && !isParentCssLayout(layout) && !isParentHasExpand(layout)) {
-                actions.add(new AbstractAction("weight") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new WeightChangedEvent(layout));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return ARROWS.source();
-                    }
-                });
+                actions.add(createWeightAction(layout));
             }
             if (isGridCellLayout(layout)){
-                actions.add(new AbstractAction("weight") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new ColspanChangedEvent(layout));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return ARROWS.source();
-                    }
-                });
+                actions.add(createColspanAction(layout));
             }
             if (isLinearLayout(layout)) {
-                actions.add(new AbstractAction("expand") {
-                    @Override
-                    public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                        events.publish(new ExpandChangedEvent(layout));
-                    }
-
-                    @Override
-                    public String getIcon() {
-                        return EXPAND.source();
-                    }
-                });
+                actions.add(createExpandAction(layout));
             }
-            actions.add(new AbstractAction("style") {
-                @Override
-                public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
-                    events.publish(new StyleChangedEvent(layout));
-                }
-
-                @Override
-                public String getIcon() {
-                    return PAINT_BRUSH.source();
-                }
-            });
+            actions.add(createStyleAction(layout));
         }
         return actions;
+    }
+
+    private AbstractAction createStyleAction(DashboardLayout layout) {
+        return new AbstractAction("style") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new StyleChangedEvent(layout));
+            }
+
+            @Override
+            public String getIcon() {
+                return PAINT_BRUSH.source();
+            }
+        };
+    }
+
+    private AbstractAction createExpandAction(DashboardLayout layout) {
+        return new AbstractAction("expand") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new ExpandChangedEvent(layout));
+            }
+
+            @Override
+            public String getIcon() {
+                return EXPAND.source();
+            }
+        };
+    }
+
+    private AbstractAction createColspanAction(DashboardLayout layout) {
+        return new AbstractAction("weight") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new ColspanChangedEvent(layout));
+            }
+
+            @Override
+            public String getIcon() {
+                return ARROWS.source();
+            }
+        };
+    }
+
+    private AbstractAction createWeightAction(DashboardLayout layout) {
+        return new AbstractAction("weight") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new WeightChangedEvent(layout));
+            }
+
+            @Override
+            public String getIcon() {
+                return ARROWS.source();
+            }
+        };
+    }
+
+    private AbstractAction createTemplateAction(WidgetLayout widgetLayout) {
+        return new AbstractAction("template") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new CreateWidgetTemplateEvent(widgetLayout.getWidget()));
+            }
+
+            @Override
+            public String getIcon() {
+                return DATABASE.source();
+            }
+        };
+    }
+
+    private AbstractAction createEditAction(WidgetLayout widgetLayout) {
+        return new AbstractAction("edit") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new WidgetEditEvent(widgetLayout));
+            }
+
+            @Override
+            public String getIcon() {
+                return DashboardIcon.GEAR_ICON.source();
+            }
+        };
+    }
+
+    private AbstractAction createRemoveAction(DashboardLayout layout) {
+        return new AbstractAction("remove") {
+            @Override
+            public void actionPerform(com.haulmont.cuba.gui.components.Component component) {
+                events.publish(new WidgetRemovedEvent(layout));
+            }
+
+            @Override
+            public String getIcon() {
+                return DashboardIcon.TRASH_ICON.source();
+            }
+        };
     }
 }

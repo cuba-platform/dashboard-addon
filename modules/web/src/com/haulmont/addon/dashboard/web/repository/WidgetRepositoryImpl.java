@@ -164,7 +164,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                 try {
                     FieldUtils.writeField(parameterField, widgetFrame, rawValue, true);
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(String.format("Error on widget field %s initialization", p.getAlias()), e);
                 }
             }
 

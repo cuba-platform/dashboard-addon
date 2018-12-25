@@ -15,17 +15,19 @@ import java.util.function.Consumer;
 
 public class CanvasCssLayout extends AbstractCanvasLayout {
 
+    public static final String NAME = "canvasCssLayout";
+
     private static Logger log = LoggerFactory.getLogger(WebDashboardFrame.class);
 
     protected com.haulmont.cuba.gui.components.CssLayout cssLayout;
 
-    public CanvasCssLayout(CssLayout cssLayoutModel) {
-        super(cssLayoutModel, com.haulmont.cuba.gui.components.CssLayout.class);
+    public CanvasCssLayout init(CssLayout cssLayoutModel) {
+        init(cssLayoutModel, com.haulmont.cuba.gui.components.CssLayout.class);
         cssLayout = (com.haulmont.cuba.gui.components.CssLayout) delegate;
 
         cssLayout.setStyleName(cssLayoutModel.getStyleName());
         cssLayout.setResponsive(cssLayoutModel.getResponsive());
-
+        return this;
     }
 
     @Override

@@ -21,11 +21,15 @@ import com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 
 public class CanvasHorizontalLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasHorizontalLayout";
+
     protected HBoxLayout horizontalLayout;
 
-    public CanvasHorizontalLayout(HorizontalLayout model) {
-        super(model, HBoxLayout.class);
+    public CanvasHorizontalLayout init(HorizontalLayout model) {
+        init(model, HBoxLayout.class);
         horizontalLayout = (HBoxLayout) delegate;
+        return this;
     }
 
     @Override

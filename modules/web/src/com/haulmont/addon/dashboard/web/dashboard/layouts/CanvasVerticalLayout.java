@@ -21,11 +21,15 @@ import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 
 public class CanvasVerticalLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasVerticalLayout";
+
     protected VBoxLayout verticalLayout;
 
-    public CanvasVerticalLayout(VerticalLayout model) {
-        super(model, VBoxLayout.class);
+    public CanvasVerticalLayout init(VerticalLayout model) {
+        init(model, VBoxLayout.class);
         verticalLayout = (VBoxLayout) delegate;
+        return this;
     }
 
     @Override

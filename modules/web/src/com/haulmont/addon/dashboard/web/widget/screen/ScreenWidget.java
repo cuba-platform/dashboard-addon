@@ -25,14 +25,12 @@ import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.gui.Fragments;
-import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Fragment;
 import com.haulmont.cuba.gui.components.ScrollBoxLayout;
-import com.haulmont.cuba.gui.components.Window;
-import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import javax.inject.Inject;
 import java.util.Map;

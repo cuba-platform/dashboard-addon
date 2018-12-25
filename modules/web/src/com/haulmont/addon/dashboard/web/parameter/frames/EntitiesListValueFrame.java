@@ -6,24 +6,26 @@ import com.haulmont.addon.dashboard.model.paramtypes.ListEntitiesParameterValue;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Window;
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl;
-import com.haulmont.cuba.gui.screen.UiController;
-import com.haulmont.cuba.gui.screen.UiDescriptor;
+import com.haulmont.cuba.gui.screen.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
-
 @UiController("dashboard$EntitiesListValueFrame")
 @UiDescriptor("entities-list-value-frame.xml")
 public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
     protected ValueCollectionDatasourceImpl entitiesDs;
+
+    @Inject
+    protected Screens screens;
 
     protected Map<KeyValueEntity, EntityParameterValue> tableValues = new HashMap<>();
     protected KeyValueEntity oldValue;
@@ -76,14 +78,14 @@ public class EntitiesListValueFrame extends AbstractFrame implements ValueFrame 
     }
 
     protected void openEntityValueWindow(EntityParameterValue value) {
-        EntityValueWindow editValueWindow = (EntityValueWindow) openWindow("dashboard$EntityValueWindow", DIALOG,
-                ParamsMap.of(VALUE, value));
-
-        editValueWindow.addCloseListener(actionId -> {
-            if ("commit".equals(actionId)) {
-                saveWindowValue((EntityParameterValue) editValueWindow.getValue());
-            }
-        });
+        screens.create(EntityValueWindow.class, OpenMode.DIALOG, new MapScreenOptions(ParamsMap.of(VALUE, value)))
+                .show()
+                .addAfterCloseListener(e -> {
+                    StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                    if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                        saveWindowValue((EntityParameterValue) ((EntityValueWindow) e.getScreen()).getValue());
+                    }
+                });
     }
 
     protected void saveWindowValue(EntityParameterValue windowValue) {

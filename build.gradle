@@ -56,8 +56,7 @@ limitations under the License.'''
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("com.haulmont.addon.dnd:cuba-dnd-global:1.5-SNAPSHOT")
-}
+    }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 

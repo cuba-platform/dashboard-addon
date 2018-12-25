@@ -21,14 +21,18 @@ import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
 import com.haulmont.cuba.gui.components.Component;
 
 public class CanvasGridLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasGridLayout";
+
     protected com.haulmont.cuba.gui.components.GridLayout gridLayout;
 
-    public CanvasGridLayout(GridLayout model) {
-        super(model, com.haulmont.cuba.gui.components.GridLayout.class);
+    public CanvasGridLayout init(GridLayout model) {
+        init(model, com.haulmont.cuba.gui.components.GridLayout.class);
         gridLayout = (com.haulmont.cuba.gui.components.GridLayout) delegate;
 
         gridLayout.setColumns(model.getColumns());
         gridLayout.setRows(model.getRows());
+        return this;
     }
 
     @Override

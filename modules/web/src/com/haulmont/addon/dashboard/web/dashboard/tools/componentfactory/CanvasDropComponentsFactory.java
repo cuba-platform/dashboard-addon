@@ -24,16 +24,12 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFra
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.CanvasDropListener;
 import com.haulmont.cuba.core.global.Events;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.haulmont.cuba.web.gui.icons.IconResolver;
 import com.haulmont.cuba.web.widgets.CubaCssActionsLayout;
-import com.vaadin.shared.ui.dnd.DropEffect;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
@@ -47,13 +43,9 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Inject
     protected UiComponents factory;
     @Inject
-    protected IconResolver iconResolver;
-    @Inject
     protected Events events;
     @Inject
     protected Metadata metadata;
-    @Inject
-    protected Messages messages;
     @Inject
     protected ActionProviderFactory actionProviderFactory;
 
@@ -77,12 +69,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     private void initDragExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
         DragSourceExtension<com.vaadin.ui.CssLayout> dragSourceExtension = new DragSourceExtension<>(layout.unwrap(com.vaadin.ui.CssLayout.class));
         dragSourceExtension.setEffectAllowed(EffectAllowed.MOVE);
-        dragSourceExtension.addDragStartListener(e -> {
-            dragSourceExtension.setDragData(layoutModel);
-        });
-        dragSourceExtension.addDragEndListener(e -> {
-            dragSourceExtension.setDragData(null);
-        });
+        dragSourceExtension.addDragStartListener(e -> dragSourceExtension.setDragData(layoutModel));
+        dragSourceExtension.addDragEndListener(e -> dragSourceExtension.setDragData(null));
     }
 
     private void initDropExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {

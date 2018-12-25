@@ -22,10 +22,10 @@ import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
-import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
+import com.haulmont.cuba.gui.components.ExpandingLayout;
 import com.haulmont.cuba.gui.components.GridLayout.Area;
 
 import javax.inject.Inject;
@@ -82,6 +82,8 @@ public class DashboardModelConverter {
             throw new IllegalStateException("Unknown layout class: " + model.getClass());
         }
 
+        ComponentContainer delegate = canvasLayout.getDelegate();
+
         if (model.getStyleName() != null) {
             canvasLayout.addStyleName(model.getStyleName());
         }
@@ -91,17 +93,21 @@ public class DashboardModelConverter {
         if (!(canvasLayout instanceof CanvasGridLayout)) {
 
             boolean expanded = isExpanded(model);
-            for (DashboardLayout childModel : model.getChildren()) {
-                CanvasLayout childContainer = modelToContainer(frame, childModel);
-                canvasLayout.getDelegate().add(childContainer);
-                if (childModel.getId().equals(model.getExpand())) {
-                    if (canvasLayout.getDelegate() instanceof WebDDAbstractOrderedLayout) {
-                        ((WebDDAbstractOrderedLayout) canvasLayout.getDelegate()).expand(childContainer);
-                    }
-                }
+            if (!model.getChildren().isEmpty()) {
 
-                if (!expanded) {
-                    childContainer.setWeight(childModel.getWeight());
+                for (DashboardLayout childModel : model.getChildren()) {
+                    CanvasLayout childContainer = modelToContainer(frame, childModel);
+                    delegate.add(childContainer);
+
+                    if (childModel.getId().equals(model.getExpand())) {
+                        if (delegate instanceof ExpandingLayout) {
+                            ((ExpandingLayout) delegate).expand(childContainer);
+                        }
+                    }
+
+                    if (!expanded) {
+                        childContainer.setWeight(childModel.getWeight());
+                    }
                 }
             }
         }

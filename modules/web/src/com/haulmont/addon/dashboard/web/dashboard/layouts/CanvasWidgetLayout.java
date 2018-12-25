@@ -23,14 +23,18 @@ import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 
 public class CanvasWidgetLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasWidgetLayout";
+
     protected VBoxLayout verticalLayout;
     protected Widget widget = null;
     protected Component widgetComponent;
     protected Component innerLayout;
 
-    public CanvasWidgetLayout(WidgetLayout model) {
-        super(model, VBoxLayout.class);
+    public CanvasWidgetLayout init(WidgetLayout model) {
+        init(model, VBoxLayout.class);
         verticalLayout = (VBoxLayout) delegate;
+        return this;
     }
 
     @Override

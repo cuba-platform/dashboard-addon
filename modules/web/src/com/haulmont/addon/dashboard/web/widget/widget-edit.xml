@@ -12,7 +12,7 @@
     </dsContext>
     <layout expand="scroll"
             spacing="true">
-        <scrollBox id="scroll" height="100%" width="100%">
+        <scrollBox id="scroll" width="100%">
             <vbox width="100%" height="100%">
                 <fieldGroup id="fieldGroup"
                             datasource="widgetDs">

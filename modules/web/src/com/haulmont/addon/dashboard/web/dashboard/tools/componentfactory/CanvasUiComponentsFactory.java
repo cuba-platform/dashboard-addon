@@ -29,6 +29,8 @@ import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.web.AppUI;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
 
@@ -53,9 +55,12 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     @Inject
     protected UiComponents components;
 
+    @Inject
+    protected AppUI appUI;
+
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
-        CanvasVerticalLayout layout = new CanvasVerticalLayout(verticalLayout);
+        CanvasVerticalLayout layout = components.create(CanvasVerticalLayout.class).init(verticalLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setSizeFull();
         return layout;
@@ -63,7 +68,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
-        CanvasHorizontalLayout layout = new CanvasHorizontalLayout(horizontalLayout);
+        CanvasHorizontalLayout layout = components.create(CanvasHorizontalLayout.class).init(horizontalLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setSizeFull();
         return layout;
@@ -71,7 +76,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
-        CanvasCssLayout layout = new CanvasCssLayout(cssLayoutModel);
+        CanvasCssLayout layout = components.create(CanvasCssLayout.class).init(cssLayoutModel);
         layout.setUuid(UUID.randomUUID());
         layout.setSizeFull();
         return layout;
@@ -79,7 +84,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
-        CanvasGridLayout layout = new CanvasGridLayout(gridLayout);
+        CanvasGridLayout layout = components.create(CanvasGridLayout.class).init(gridLayout);
         layout.setUuid(UUID.randomUUID());
         layout.setSizeFull();
         return layout;
@@ -106,8 +111,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         ));
         params.putAll(widgetRepository.getWidgetParams(widget));
 
-        //TODO remove deprecated code
-        AbstractFrame widgetFrame = frame.openFrame(null, frameId, params);
+        AbstractFrame widgetFrame = (AbstractFrame) appUI.getFragments().create(frame, frameId, new MapScreenOptions(params)).init();
 
         widgetFrame.setSizeFull();
 
@@ -131,7 +135,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
             widgetFrame.setMargin(true);
         }
 
-        CanvasWidgetLayout layout = new CanvasWidgetLayout(widgetLayout);
+        CanvasWidgetLayout layout = components.create(CanvasWidgetLayout.class).init(widgetLayout);
         layout.setUuid(UUID.randomUUID());
         layout.addComponent(widgetComponent);
         layout.setWidgetComponent(widgetFrame);
@@ -144,7 +148,7 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Override
     public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
-        CanvasRootLayout layout = new CanvasRootLayout(rootLayout);
+        CanvasRootLayout layout = components.create(CanvasRootLayout.class).init(rootLayout);
         layout.setUuid(UUID.randomUUID());
 //        layout.setSizeFull();
         return layout;

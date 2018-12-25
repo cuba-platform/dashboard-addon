@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -71,7 +72,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         if (value != null && isNotBlank(value.getMetaClassName())) {
             String metaClassName = value.getMetaClassName();
 
-            Optional<MetaClass> classOpt = ((List<MetaClass>) metaClassLookup.getOptionsList())
+            Optional<MetaClass> classOpt = metaClassLookup.getOptions().getOptions().collect(Collectors.toList())
                     .stream()
                     .filter(clazz -> metaClassName.equals(clazz.getName()))
                     .findFirst();
@@ -84,7 +85,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
                 String entityId = value.getEntityId();
                 if (isNotBlank(entityId)) {
-                    ((List<Entity>) entitiesLookup.getOptionsList())
+                    ((List<Entity>) entitiesLookup.getOptions().getOptions().collect(Collectors.toList()))
                             .stream()
                             .filter(entity -> entityId.equals(entity.getId().toString()))
                             .findFirst()
@@ -92,7 +93,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
                 }
 
                 String viewName = value.getViewName();
-                if (isNotBlank(viewName) && viewLookup.getOptionsList().contains(viewName)) {
+                if (isNotBlank(viewName) && viewLookup.getOptions().getOptions().anyMatch(e -> e.equals(viewName))) {
                     viewLookup.setValue(viewName);
                 }
             }

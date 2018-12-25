@@ -6,10 +6,15 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.css;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.Map;
 
+@UiController("dashboard$CssLayoutDialog")
+@UiDescriptor("css-creation-dialog.xml")
 public class CssLayoutCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$CssLayoutDialog";
 
@@ -24,11 +29,11 @@ public class CssLayoutCreationDialog extends AbstractWindow {
     }
 
     public void apply() {
-        this.close(COMMIT_ACTION_ID);
+        close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 
     public String getCssStyleName() {

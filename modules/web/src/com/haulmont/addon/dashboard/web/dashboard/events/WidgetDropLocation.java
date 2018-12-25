@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.tools.drophandler;
+package com.haulmont.addon.dashboard.web.dashboard.events;
 
-
-import com.vaadin.ui.dnd.event.DropEvent;
-import com.vaadin.ui.dnd.event.DropListener;
-
-public class NotDropListener implements DropListener {
-
-    @Override
-    public void drop(DropEvent event) {
-
-    }
+public enum WidgetDropLocation {
+    TOP,
+    BOTTOM,
+    MIDDLE,
+    LEFT,
+    CENTER,
+    RIGHT
 }
