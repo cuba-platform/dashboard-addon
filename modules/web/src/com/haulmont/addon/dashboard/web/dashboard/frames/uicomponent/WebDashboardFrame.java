@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
@@ -30,6 +31,8 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
+import com.haulmont.addon.dashboard.web.widget.LookupWidget;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
@@ -116,6 +119,21 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         refresh();
         initAssistant(this);
         initTimer(this.getParent());
+        initLookupWidget();
+    }
+
+    private void initLookupWidget() {
+        List<LookupWidget> lookupWidgets = canvasFrame.getLookupWidgets();
+        for (LookupWidget widget : lookupWidgets) {
+            assignItemSelectedHandler(widget);
+        }
+    }
+
+    private void assignItemSelectedHandler(LookupWidget widget) {
+        ListComponent lookupComponent = widget.getLookupComponent();
+        lookupComponent.getItems().addStateChangeListener(e -> {
+            events.publish(new ItemsSelectedEvent((Widget) widget, lookupComponent.getSelected()));
+        });
     }
 
     @Override

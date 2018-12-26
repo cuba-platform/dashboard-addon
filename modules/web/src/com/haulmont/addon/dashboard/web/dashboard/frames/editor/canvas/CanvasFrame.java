@@ -23,6 +23,7 @@ import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.haulmont.addon.dashboard.web.widget.LookupWidget;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
@@ -86,20 +87,26 @@ public class CanvasFrame extends AbstractFrame {
 
     public List<RefreshableWidget> getRefreshableWidgets() {
         List<RefreshableWidget> result = new ArrayList<>();
-        searchRefreshableWidgets(vLayout, result);
+        searchWidgets(vLayout, RefreshableWidget.class, result);
         return result;
     }
 
-    protected void searchRefreshableWidgets(ComponentContainer layout, List<RefreshableWidget> wbList) {
+    public List<LookupWidget> getLookupWidgets() {
+        List<LookupWidget> result = new ArrayList<>();
+        searchWidgets(vLayout, LookupWidget.class, result);
+        return result;
+    }
+
+    protected <T> void searchWidgets(ComponentContainer layout, Class<T> widgetClass, List<T> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
             Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
-            if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
-                wbList.add((RefreshableWidget) wb);
+            if (wb != null && widgetClass.isAssignableFrom(wb.getClass())) {
+                wbList.add((T) wb);
             }
         } else {
             for (Component child : layout.getOwnComponents()) {
                 if (child instanceof ComponentContainer) {
-                    searchRefreshableWidgets((ComponentContainer) child, wbList);
+                    searchWidgets((ComponentContainer) child, widgetClass, wbList);
                 }
             }
         }

@@ -21,7 +21,6 @@ package com.haulmont.addon.dashboard.web.widget.screen;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.web.annotation.DashboardWidget;
 import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.gui.Fragments;
@@ -35,9 +34,7 @@ import com.haulmont.cuba.gui.screen.ScreenFragment;
 import javax.inject.Inject;
 import java.util.Map;
 
-import static com.haulmont.addon.dashboard.web.widget.screen.ScreenWidget.CAPTION;
-
-@DashboardWidget(name = CAPTION, editFrameId = "dashboard$ScreenWidget.edit")
+//@DashboardWidget(name = CAPTION, editFrameId = "dashboard$ScreenWidget.edit")
 public class ScreenWidget extends AbstractFrame {
 
     public static final String CAPTION = "Screen";

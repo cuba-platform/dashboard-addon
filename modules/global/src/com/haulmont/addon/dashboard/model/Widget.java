@@ -119,7 +119,6 @@ public class Widget extends BaseUuidEntity {
     }
 
     public String getName() {
-
         return name;
     }
 

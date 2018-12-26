@@ -28,11 +28,15 @@ import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 
 import static com.haulmont.addon.dashboard.model.ParameterType.*;
 
+@UiController("dashboard$Parameter.edit")
+@UiDescriptor("parameter-edit.xml")
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
     protected Datasource<Parameter> parameterDs;

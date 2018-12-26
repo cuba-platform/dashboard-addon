@@ -12,15 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package com.haulmont.addon.dashboard.web.widgettemplategroup;
 
-import com.haulmont.cuba.gui.components.AbstractLookup;
-import com.haulmont.cuba.gui.screen.UiController;
-import com.haulmont.cuba.gui.screen.UiDescriptor;
+package com.haulmont.addon.dashboard.web.widget;
 
-@UiController("dashboard$WidgetTemplateGroup.browse")
-@UiDescriptor("widget-template-group-browse.xml")
-public class WidgetTemplateGroupBrowse extends AbstractLookup {
+import com.haulmont.cuba.gui.components.ListComponent;
+
+public interface LookupWidget {
+    ListComponent getLookupComponent();
 }

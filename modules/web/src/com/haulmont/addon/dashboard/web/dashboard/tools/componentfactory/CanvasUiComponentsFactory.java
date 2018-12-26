@@ -19,12 +19,12 @@ package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
 
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
-import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
@@ -32,6 +32,8 @@ import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.web.AppUI;
 import org.apache.commons.lang3.BooleanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -40,8 +42,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.lang.String.format;
-
 @Component("dashboard_uiComponentsFactory")
 public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
@@ -49,11 +49,16 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
     public static final String DASHBOARD = "dashboard";
     public static final String DASHBOARD_FRAME = "dashboardFrame";
 
+    private static Logger log = LoggerFactory.getLogger(CanvasUiComponentsFactory.class);
+
     @Inject
     protected WidgetRepository widgetRepository;
 
     @Inject
     protected UiComponents components;
+
+    @Inject
+    protected Messages messages;
 
     @Inject
     protected AppUI appUI;
@@ -98,7 +103,13 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
                 .findFirst();
 
         if (!widgetTypeOpt.isPresent()) {
-            throw new DashboardException(format("There isn't found a screen for the widget %s", widget.getFrameId()));
+            CanvasWidgetLayout layout = components.create(CanvasWidgetLayout.class).init(widgetLayout);
+            Label<String> label = components.create(Label.class);
+            String message = messages.formatMessage(getClass(), "widgetNotFound", widget.getCaption(), widget.getName());
+            label.setValue(message);
+            layout.addComponent(label);
+            log.error(message);
+            return layout;
         }
 
         widget.setDashboard(frame.getDashboard());

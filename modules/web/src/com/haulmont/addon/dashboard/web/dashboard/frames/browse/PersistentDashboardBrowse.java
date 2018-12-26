@@ -9,10 +9,14 @@ import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.UUID;
 
+@UiController("dashboard$PersistentDashboard.browse")
+@UiDescriptor("persistent-dashboard-browse.xml")
 public class PersistentDashboardBrowse extends AbstractLookup {
 
     @Inject

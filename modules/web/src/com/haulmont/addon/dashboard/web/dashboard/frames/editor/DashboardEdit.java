@@ -57,9 +57,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.cuba.gui.screen.MapScreenOptions;
-import com.haulmont.cuba.gui.screen.OpenMode;
-import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -83,6 +81,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$PersistentDashboard.edit")
+@UiDescriptor("dashboard-edit.xml")
 public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @Inject

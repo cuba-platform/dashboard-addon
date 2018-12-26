@@ -80,8 +80,9 @@ public class LookupWidget extends AbstractFrame implements RefreshableWidget {
         if (screenFragment != null) {
             lookupFragment = (LookupFragment) screenFragment.getFragment();
             ListComponent lookupComponent = lookupFragment.getLookupComponent();
-            lookupComponent.getDatasource().addItemChangeListener(e ->
-                    events.publish(new ItemsSelectedEvent(widget, lookupComponent.getSelected())));
+            lookupComponent.getItems().addStateChangeListener(e -> {
+                events.publish(new ItemsSelectedEvent(widget, lookupComponent.getSelected()));
+            });
             scroll.add(lookupFragment);
         }
 

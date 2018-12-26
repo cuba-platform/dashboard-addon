@@ -23,9 +23,13 @@ import com.haulmont.addon.dashboard.web.parameter.ParameterBrowse;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -36,6 +40,8 @@ import java.util.Map;
 
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 
+@UiController("dashboard$Widget.edit")
+@UiDescriptor("widget-edit.xml")
 public class WidgetEdit extends AbstractEditor<Widget> {
     public static final String SCREEN_NAME = "dashboard$Widget.edit";
     public static final String ITEM_DS = "ITEM_DS";
@@ -52,6 +58,8 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected WidgetRepository widgetRepository;
     @Inject
     protected AccessConstraintsHelper accessHelper;
+    @Inject
+    protected Fragments fragments;
 
     @Named("fieldGroup.caption")
     protected TextField<String> widgetCaption;
@@ -94,7 +102,12 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         Map<String, Object> params = new HashMap<>(ParamsMap.of(ITEM_DS, widgetDs));
         params.putAll(widgetRepository.getWidgetParams(widgetDs.getItem()));
         if (StringUtils.isNotEmpty(widgetType.getEditFrameId())) {
-            widgetEditFrame = openFrame(widgetEditBox, widgetType.getEditFrameId(), params);
+            widgetEditFrame = (AbstractFrame) fragments.create(this,
+                    widgetType.getEditFrameId(),
+                    new MapScreenOptions(params))
+                    .init();
+            widgetEditBox.removeAll();
+            widgetEditBox.add(widgetEditFrame.getFragment());
         }
     }
 

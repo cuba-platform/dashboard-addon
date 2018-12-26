@@ -25,17 +25,9 @@
         <groupTable id="widgetTemplateTable"
                     width="100%">
             <actions>
-                <action id="create"
-                        caption="msg://create"
-                        icon="CREATE_ACTION"
-                        openType="DIALOG"/>
-                <action id="edit"
-                        caption="msg://edit"
-                        icon="EDIT_ACTION"
-                        openType="DIALOG"/>
-                <action id="remove"
-                        caption="msg://remove"
-                        icon="REMOVE_ACTION"/>
+                <action id="create" openType="DIALOG"/>
+                <action id="edit" openType="DIALOG"/>
+                <action id="remove"/>
             </actions>
             <columns>
                 <column id="name"/>
