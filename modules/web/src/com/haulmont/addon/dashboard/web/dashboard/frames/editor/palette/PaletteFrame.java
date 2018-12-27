@@ -148,14 +148,16 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         widgetTree.expandTree();
         widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
 
-        TreeGridDragSource<DashboardLayout> dropSource = new TreeGridDragSource<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
+        TreeGridDragSource<DashboardLayout> dropSource =
+                new TreeGridDragSource<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
         dropSource.setEffectAllowed(EffectAllowed.MOVE);
         dropSource.addGridDragStartListener(e -> {
             DashboardLayout containerLayout = e.getDraggedItems().get(0);
             dropSource.setDragData(containerLayout);
         });
         dropSource.addGridDragEndListener(e -> dropSource.setDragData(null));
-        TreeGridDropTarget<DashboardLayout> dropTarget = new TreeGridDropTarget<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
+        TreeGridDropTarget<DashboardLayout> dropTarget =
+                new TreeGridDropTarget<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
         dropTarget.addTreeGridDropListener(new TreeDropListener());
 
     }

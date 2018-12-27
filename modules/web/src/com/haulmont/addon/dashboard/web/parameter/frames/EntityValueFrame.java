@@ -85,7 +85,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
                 String entityId = value.getEntityId();
                 if (isNotBlank(entityId)) {
-                    ((List<Entity>) entitiesLookup.getOptions().getOptions().collect(Collectors.toList()))
+                    entitiesLookup.getOptions().getOptions().collect(Collectors.toList())
                             .stream()
                             .filter(entity -> entityId.equals(entity.getId().toString()))
                             .findFirst()

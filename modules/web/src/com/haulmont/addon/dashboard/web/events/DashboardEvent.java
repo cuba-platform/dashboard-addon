@@ -26,8 +26,4 @@ public abstract class DashboardEvent extends ApplicationEvent implements UiEvent
         super(source);
     }
 
-    @Override
-    public Object getSource() {
-        return super.getSource();
-    }
 }
