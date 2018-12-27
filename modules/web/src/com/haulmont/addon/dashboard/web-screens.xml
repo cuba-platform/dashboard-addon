@@ -54,15 +54,6 @@
             template="/com/haulmont/addon/dashboard/web/widgettemplate/widget-template-browse.xml"/>
     <screen id="dashboard$WidgetTemplate.edit"
             template="com/haulmont/addon/dashboard/web/widgettemplate/widget-template-edit.xml"/>
-    <!--widget types-->
-    <screen id="dashboard$ScreenWidget"
-            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget.xml"/>
-    <screen id="dashboard$ScreenWidget.edit"
-            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget-edit.xml"/>
-    <screen id="dashboard$LookupWidget"
-            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget.xml"/>
-    <screen id="dashboard$LookupWidget.edit"
-            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget-edit.xml"/>
     <!--dashboard groups-->
     <screen id="dashboard$DashboardGroup.browse"
             template="com/haulmont/addon/dashboard/web/dashboardgroup/dashboard-group-browse.xml"/>

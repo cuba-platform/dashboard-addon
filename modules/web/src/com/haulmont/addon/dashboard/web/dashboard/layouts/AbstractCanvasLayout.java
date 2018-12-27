@@ -86,7 +86,6 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
 
     @Override
     public void removeLayoutClickListener(Consumer<LayoutClickEvent> listener) {
-        //TODO remove obsolete code
         ((LayoutClickNotifier) getDelegate()).removeLayoutClickListener(listener);
     }
 

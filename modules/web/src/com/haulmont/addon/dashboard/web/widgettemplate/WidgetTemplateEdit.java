@@ -144,7 +144,6 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     protected void openWidgetEditor(Widget widget) {
         if (openWidgetEditor) {
-            //TODO remove deprecaded code
             screenBuilders.editor(Widget.class, this)
                     .withLaunchMode(OpenMode.THIS_TAB)
                     .editEntity(widget)

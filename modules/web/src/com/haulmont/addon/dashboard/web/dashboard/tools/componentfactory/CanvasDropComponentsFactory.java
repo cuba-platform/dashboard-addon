@@ -52,7 +52,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout(verticalLayout);
-        layout.getDelegate().setSpacing(true);
+//        layout.getDelegate().setSpacing(true);
         initLayout(verticalLayout, layout);
         return layout;
     }
@@ -90,7 +90,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
         CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout(horizontalLayout);
-        layout.getDelegate().setSpacing(true);
+//        layout.getDelegate().setSpacing(true);
         initLayout(horizontalLayout, layout);
         return layout;
     }
@@ -105,7 +105,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
         CanvasGridLayout layout = super.createCanvasGridLayout(gridLayout);
-        layout.getDelegate().setSpacing(true);
+//        layout.getDelegate().setSpacing(true);
         initLayout(gridLayout, layout);
         return layout;
     }
@@ -126,7 +126,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widgetLayout);
-        layout.getDelegate().setSpacing(true);
+//        layout.getDelegate().setSpacing(true);
         initLayout(widgetLayout, layout);
         return layout;
 
@@ -135,7 +135,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
         CanvasRootLayout layout = super.createCanvasRootLayout(rootLayout);
-        layout.getDelegate().setSpacing(true);
+//        layout.getDelegate().setSpacing(true);
         initLayout(rootLayout, layout);
         return layout;
     }

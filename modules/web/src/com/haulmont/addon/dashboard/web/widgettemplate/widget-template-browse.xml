@@ -4,7 +4,7 @@
         class="com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateBrowse"
         focusComponent="widgetTemplateTable"
         lookupComponent="widgetTemplateTable"
-        messagesPack="com.haulmont.addon.dashboard.web.widget">
+        messagesPack="com.haulmont.addon.dashboard.web.widgettemplate">
     <dsContext>
         <groupDatasource id="widgetTemplatesDs"
                          class="com.haulmont.addon.dashboard.entity.WidgetTemplate"

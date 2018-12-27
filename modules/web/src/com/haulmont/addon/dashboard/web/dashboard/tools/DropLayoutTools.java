@@ -175,7 +175,7 @@ public class DropLayoutTools {
                 return;
             }
             location = WidgetDropLocation.MIDDLE;
-            if (target.getParent().equals(parent)) {
+            if (parent.equals(target.getParent()) && target instanceof WidgetLayout) {
                 Integer targetIndex = parent.getChildren().indexOf(target);
                 Integer sourceIndex = parent.getChildren().indexOf(layout);
                 if (sourceIndex - targetIndex == 1) {

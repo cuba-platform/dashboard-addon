@@ -59,7 +59,7 @@ public class StyleDialog extends AbstractWindow {
         width.addTextChangeListener(e -> {
             String text = e.getText();
             checkFieldInput(text, width, widthUnits);
-            setSizeAutoVisible(autoWidth, height, heightUnits);
+            setSizeAutoVisible(autoWidth, width, widthUnits);
         });
 
         height.addTextChangeListener(e -> {
@@ -101,13 +101,12 @@ public class StyleDialog extends AbstractWindow {
         return field.getValue() != null && field.getValue().equals(-1) && SizeUnit.PIXELS == unitsField.getValue();
     }
 
-    //TODO fix text input
-    private void checkFieldInput(String text, TextField field, LookupField<SizeUnit> unitsField) {
+    private void checkFieldInput(String text, TextField<Integer> field, LookupField<SizeUnit> unitsField) {
         Matcher matcher = DIMENSION_PATTERN.matcher(text);
         if (matcher.matches()) {
             String value = matcher.group(1);
             SizeUnit sizeUnit = SizeUnit.fromId(matcher.group(2));
-            field.setValue(value);
+            field.setValue(Integer.parseInt(value));
             unitsField.setValue(sizeUnit);
         }
     }

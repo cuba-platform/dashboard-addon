@@ -33,9 +33,16 @@ import java.util.UUID;
 @UiController("dashboard$SimpleValueFrame")
 @UiDescriptor("simple-value-frame.xml")
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
-    //TODO check field value, create separate fields for int nad long values
     @Inject
-    protected TextField<Object> textField;
+    protected TextField<Integer> intField;
+    @Inject
+    protected TextField<BigDecimal> decimalField;
+    @Inject
+    protected TextField<Long> longField;
+    @Inject
+    protected TextField<UUID> uuidField;
+    @Inject
+    protected TextField<String> textField;
     @Inject
     protected DateField<Date> dateField;
     @Inject
@@ -67,15 +74,15 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case DATE:
                 return new DateParameterValue(dateField.getValue());
             case DECIMAL:
-                return new DecimalParameterValue((BigDecimal) textField.getValue());
+                return new DecimalParameterValue(decimalField.getValue());
             case INTEGER:
-                return new IntegerParameterValue((Integer) textField.getValue());
+                return new IntegerParameterValue(intField.getValue());
             case LONG:
-                return new LongParameterValue((Long) textField.getValue());
+                return new LongParameterValue(longField.getValue());
             case STRING:
-                return new StringParameterValue((String) textField.getValue());
+                return new StringParameterValue(textField.getValue());
             case UUID:
-                return new UuidParameterValue(UUID.fromString((String) textField.getValue()));
+                return new UuidParameterValue(uuidField.getValue());
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:
@@ -136,28 +143,28 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     }
 
     protected void setDecimal(DecimalParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("decimal");
+        decimalField.setValue(value == null ? null : value.getValue());
+        decimalField.setVisible(true);
     }
 
     protected void setInteger(IntegerParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("int");
+        intField.setValue(value == null ? null : value.getValue());
+        intField.setVisible(true);
     }
 
     protected void setLong(LongParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("long");
+        longField.setValue(value == null ? null : value.getValue());
+        longField.setVisible(true);
     }
 
     protected void setString(StringParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
-        initTextField(null);
+        textField.setVisible(true);
     }
 
     protected void setUUID(UuidParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField(null);
+        uuidField.setValue(value == null ? null : value.getValue());
+        uuidField.setVisible(true);
     }
 
     protected void initTextField(String dataType) {

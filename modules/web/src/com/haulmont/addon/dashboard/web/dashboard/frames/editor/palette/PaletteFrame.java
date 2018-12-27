@@ -112,7 +112,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         Widget widget = event.getSource();
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
-        //TODO remove deprecaded code
         screenBuilders.editor(WidgetTemplate.class, this)
                 .newEntity(widgetTemplate)
                 .withLaunchMode(OpenMode.DIALOG)
