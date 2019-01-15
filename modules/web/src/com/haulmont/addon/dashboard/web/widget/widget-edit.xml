@@ -14,21 +14,24 @@
             spacing="true">
         <scrollBox id="scroll" width="100%">
             <vbox width="100%" height="100%">
-                <fieldGroup id="fieldGroup"
-                            datasource="widgetDs">
-                    <column width="300px">
-                        <field caption="msg://widgetCaption"
-                               property="caption"
-                               required="true"/>
-                        <field caption="msg://widgetId"
-                               property="widgetId"
-                               required="true"/>
-                        <field caption="msg://widgetDescription"
-                               property="description"/>
-                        <field property="showWidgetCaption"/>
-                    </column>
-                </fieldGroup>
-                <vbox id="widgetEditBox"/>
+                <groupBox caption="msg://general">
+                    <fieldGroup id="fieldGroup"
+                                datasource="widgetDs">
+                        <column width="300px">
+                            <field caption="msg://widgetCaption"
+                                   property="caption"
+                                   required="true"/>
+                            <field caption="msg://widgetId"
+                                   property="widgetId"
+                                   required="true"/>
+                            <field caption="msg://widgetDescription"
+                                   property="description"/>
+                            <field property="showWidgetCaption"/>
+                        </column>
+                    </fieldGroup>
+                </groupBox>
+                <groupBox id="widgetEditBox"
+                          caption="msg://widgetSettings"/>
                 <groupBox id="paramsBox"
                           caption="msg://widgetParameters"
                           collapsable="true">

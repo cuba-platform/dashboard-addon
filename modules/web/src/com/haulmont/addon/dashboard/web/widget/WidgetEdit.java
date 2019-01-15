@@ -51,7 +51,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     @Inject
     protected FieldGroup fieldGroup;
     @Inject
-    protected VBoxLayout widgetEditBox;
+    protected OrderedContainer widgetEditBox;
     @Inject
     protected ParameterBrowse paramsFrame;
     @Inject
