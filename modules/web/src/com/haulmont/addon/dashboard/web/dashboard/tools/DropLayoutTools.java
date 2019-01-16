@@ -57,12 +57,13 @@ public class DropLayoutTools {
         this.dashboardDs = dashboardDs;
     }
 
-    public Dashboard getDashboard(){
+    public Dashboard getDashboard() {
         return frame.getDashboard();
     }
 
     public void addComponent(DashboardLayout layout, UUID targetLayoutUuid, WidgetTreeEvent.DropLocation location) {
         DashboardLayout targetLayout = findLayout(getDashboard().getVisualModel(), targetLayoutUuid);
+
         if (layout instanceof CssLayout) {
             CssLayoutCreationDialog dialog = (CssLayoutCreationDialog) frame.openWindow(CssLayoutCreationDialog.SCREEN_NAME, DIALOG);
             dialog.addCloseListener(actionId -> {
@@ -126,6 +127,8 @@ public class DropLayoutTools {
             reorderWidgetsAndPushEvents(metadata.create(VerticalLayout.class), targetLayout, location);
         } else if (layout instanceof HorizontalLayout) {
             reorderWidgetsAndPushEvents(metadata.create(HorizontalLayout.class), targetLayout, location);
+        } else if (layout instanceof ResponsiveLayout) {
+            reorderWidgetsAndPushEvents(metadata.create(ResponsiveLayout.class), targetLayout, location);
         }
     }
 

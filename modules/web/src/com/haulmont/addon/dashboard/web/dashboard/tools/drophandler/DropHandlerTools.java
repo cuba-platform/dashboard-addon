@@ -49,10 +49,13 @@ public class DropHandlerTools {
             layout.setDropHandler(new LayoutDropHandler(dashboard));
         } else if (layout instanceof CanvasCssLayout) {
             layout.setDropHandler(new LayoutDropHandler(dashboard));
-        }else if (layout instanceof CanvasGridLayout) {
+        } else if (layout instanceof CanvasGridLayout) {
             layout.setDropHandler(new NotDropHandler());
         } else if (layout instanceof CanvasWidgetLayout) {
             layout.setDropHandler(new NotDropHandler());
+        } else if (layout instanceof CanvasResponsiveLayout) {
+            CanvasResponsiveLayout crl = (CanvasResponsiveLayout) layout;
+            crl.getDelegate().setDropHandler(new LayoutDropHandler(dashboard));
         }
     }
 

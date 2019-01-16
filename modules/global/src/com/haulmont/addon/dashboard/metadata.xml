@@ -18,5 +18,7 @@
         <class>com.haulmont.addon.dashboard.model.visualmodel.CssLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.GridCellLayout</class>
         <class>com.haulmont.addon.dashboard.model.visualmodel.GridArea</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.ResponsiveLayout</class>
+        <class>com.haulmont.addon.dashboard.model.visualmodel.ResponsiveArea</class>
     </metadata-model>
 </metadata>

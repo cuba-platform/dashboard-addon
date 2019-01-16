@@ -69,7 +69,7 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case STRING:
                 return new StringParameterValue(textField.getValue());
             case UUID:
-                return new UuidParameterValue(UUID.fromString(textField.getValue()));
+                return new UuidParameterValue(textField.getValue() == null ? null : UUID.fromString(textField.getValue()));
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:
@@ -162,5 +162,17 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     protected void setBoolean(BooleanParameterValue value) {
         checkBox.setValue(value == null ? null : value.getValue());
         checkBox.setVisible(true);
+    }
+
+    public ParameterType getType() {
+        return type;
+    }
+
+    public String getTextFieldValue() {
+        return textField.getRawValue();
+    }
+
+    public TextField getTextField() {
+        return textField;
     }
 }

@@ -34,4 +34,6 @@ public interface PaletteComponentsFactory {
     PaletteButton createWidgetButton(Widget widget);
 
     PaletteButton createWidgetTemplateButton(WidgetTemplate widgetTemplate);
+
+    PaletteButton createResponsiveLayoutButton();
 }

@@ -15,7 +15,7 @@
  *
  */
 
-package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;
+package com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory;//
 
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
@@ -34,4 +34,6 @@ public interface CanvasComponentsFactory {
     CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout);
 
     CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout);
+
+    CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout);
 }

@@ -155,4 +155,13 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 //        layout.setSizeFull();
         return layout;
     }
+
+    @Override
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout) {
+        CanvasResponsiveLayout layout = new CanvasResponsiveLayout(rootLayout);
+        layout.setUuid(UUID.randomUUID());
+       //layout.setDragMode(NONE);
+       layout.setSizeFull();
+        return layout;
+    }
 }

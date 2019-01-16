@@ -22,6 +22,7 @@ import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
+import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.haulmont.addon.dnd.components.DragAndDropWrapper.DragStartMode.WRAPPER;
 import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
 
 @Component("dashboard_dropComponentsFactory")
@@ -61,7 +63,11 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     private void initDropLayout(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
-        layout.setDragMode(CLONE);
+        if (layout instanceof CanvasResponsiveLayout) {
+            ((WebDragAndDropWrapper) layout.getDelegate()).setDragStartMode(WRAPPER);
+        } else {
+            layout.setDragMode(CLONE);
+        }
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(layoutModel.getCaption());
         createBaseLayoutActions(layout, layoutModel);
@@ -138,10 +144,20 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     protected void addLayoutClickListener(CanvasLayout layout) {
-        layout.addLayoutClickListener(e -> {
-            CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
-            events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+        if (!(layout instanceof CanvasResponsiveLayout)) {
+            layout.addLayoutClickListener(e -> {
+                CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+                events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
 
-        });
+            });
+        }
+    }
+
+    @Override
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout) {
+        CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(rootLayout);
+        //layout.getDelegate().getComponent().setSpacing(true);
+        initDropLayout(rootLayout, layout);
+        return layout;
     }
 }
