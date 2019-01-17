@@ -11,7 +11,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 @MetaClass(name = "dashboard$ResponsiveLayout")
-public class ResponsiveLayout extends DashboardLayout {
+public class ResponsiveLayout extends DashboardLayout implements ContainerLayout {
+
+    @MetaProperty
+    protected Integer xs = 12;
+
+    @MetaProperty
+    protected Integer sm = 6;
+
+    @MetaProperty
+    protected Integer md = 6;
+
+    @MetaProperty
+    protected Integer lg = 3;
 
     @MetaProperty
     protected Set<ResponsiveArea> areas = new HashSet<>();
@@ -40,5 +52,47 @@ public class ResponsiveLayout extends DashboardLayout {
         getAreas().add(ra);
     }
 
+    @Override
+    public void removeOwnChild(DashboardLayout child) {
+        ResponsiveArea target = null;
+        for (ResponsiveArea area : areas) {
+            if (area.getComponent().equals(child)) {
+                target = area;
+                break;
+            }
+        }
+        areas.remove(target);
+    }
 
+    public Integer getXs() {
+        return xs;
+    }
+
+    public void setXs(Integer xs) {
+        this.xs = xs;
+    }
+
+    public Integer getSm() {
+        return sm;
+    }
+
+    public void setSm(Integer sm) {
+        this.sm = sm;
+    }
+
+    public Integer getMd() {
+        return md;
+    }
+
+    public void setMd(Integer md) {
+        this.md = md;
+    }
+
+    public Integer getLg() {
+        return lg;
+    }
+
+    public void setLg(Integer lg) {
+        this.lg = lg;
+    }
 }

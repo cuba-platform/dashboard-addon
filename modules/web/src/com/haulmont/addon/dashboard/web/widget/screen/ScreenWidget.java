@@ -65,7 +65,7 @@ public class ScreenWidget extends AbstractFrame {
     public void init(Map<String, Object> params) {
         screenFrame = openWindow(screenId, WindowManager.OpenType.DIALOG, widgetRepository.getWidgetParams(widget));
         screenFrame.close(Window.CLOSE_ACTION_ID, true);
-        screenFrame.setSizeFull();
+//        screenFrame.setSizeFull();
         scroll.add(screenFrame.getFrame());
     }
 }

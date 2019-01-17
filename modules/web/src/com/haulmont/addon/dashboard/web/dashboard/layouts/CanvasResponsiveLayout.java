@@ -29,6 +29,8 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
         });
         wrapper.setSizeFull();
         responsiveLayout.setSizeFull();
+        responsiveLayout.setSpacing(true);
+        responsiveLayout.setFlexible(true);
         wrr.setSizeFull();
 
         responsiveLayout.addRow(wrr);
@@ -46,10 +48,14 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
         Iterator it = wrl.getOwnComponents().iterator();
         WebResponsiveRow wrr = (WebResponsiveRow) it.next();
 
+        ResponsiveLayout rl = (ResponsiveLayout) model;
+
         WebResponsiveColumn wrc = new WebResponsiveColumn();
+        wrc.setDisplayRules(rl.getXs(), rl.getSm(), rl.getMd(), rl.getLg());
         component.setSizeFull();
         wrc.setContent(component);
         wrr.addColumn(wrc);
+
 
     }
 }

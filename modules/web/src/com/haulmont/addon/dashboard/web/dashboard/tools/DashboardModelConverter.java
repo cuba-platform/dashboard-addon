@@ -189,7 +189,7 @@ public class DashboardModelConverter {
                     ResponsiveArea modelArea = metadata.create(ResponsiveArea.class);
                     DashboardLayout modelChildGridArea = createDashboardLayout(respChild);
                     containerToModel(modelChildGridArea, respChild);
-                    modelArea.setComponent((VerticalLayout) modelChildGridArea);
+                    modelArea.setComponent(modelChildGridArea);
                     responsiveModel.getAreas().add(modelArea);
                 }
 
@@ -226,7 +226,9 @@ public class DashboardModelConverter {
             layout.setColumns(gridLayout.getColumns());
             return layout;
         } else if (component instanceof CanvasResponsiveLayout) {
-            return metadata.create(ResponsiveLayout.class);
+            ResponsiveLayout layout = metadata.create(ResponsiveLayout.class);
+
+            return layout;
         }
         return null;
     }
