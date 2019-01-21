@@ -92,7 +92,9 @@ public class DashboardModelConverter {
             ResponsiveLayout respLayoutModel = (ResponsiveLayout) model;
             canvasLayout = factory.createCanvasResponsiveLayout(respLayoutModel);
 
-            List<ResponsiveArea> sortedAreas = respLayoutModel.getAreas().stream().sorted(Comparator.comparing(ResponsiveArea::getOrder)).collect(Collectors.toList());
+            List<ResponsiveArea> sortedAreas = respLayoutModel.getAreas().stream()
+                    .sorted(Comparator.comparing(ResponsiveArea::getOrder))
+                    .collect(Collectors.toList());
 
             for (ResponsiveArea area : sortedAreas) {
                 DashboardLayout cellLayout = area.getComponent();
