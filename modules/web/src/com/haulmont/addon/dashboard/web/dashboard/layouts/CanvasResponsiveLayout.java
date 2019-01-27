@@ -55,7 +55,5 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
         component.setSizeFull();
         wrc.setContent(component);
         wrr.addColumn(wrc);
-
-
     }
 }

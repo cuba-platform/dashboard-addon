@@ -26,6 +26,7 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetTreeEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive.ResponsiveCreationDialog;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
@@ -128,7 +129,23 @@ public class DropLayoutTools {
         } else if (layout instanceof HorizontalLayout) {
             reorderWidgetsAndPushEvents(metadata.create(HorizontalLayout.class), targetLayout, location);
         } else if (layout instanceof ResponsiveLayout) {
-            reorderWidgetsAndPushEvents(metadata.create(ResponsiveLayout.class), targetLayout, location);
+            ResponsiveCreationDialog dialog = (ResponsiveCreationDialog) frame.openWindow(ResponsiveCreationDialog.SCREEN_NAME, DIALOG);
+            dialog.addCloseListener(actionId -> {
+                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                    int xs = dialog.getXs();
+                    int sm = dialog.getSm();
+                    int md = dialog.getMd();
+                    int lg = dialog.getLg();
+
+                    ResponsiveLayout responsiveLayout = metadata.create(ResponsiveLayout.class);
+                    responsiveLayout.setXs(xs);
+                    responsiveLayout.setSm(sm);
+                    responsiveLayout.setMd(md);
+                    responsiveLayout.setLg(lg);
+
+                    reorderWidgetsAndPushEvents(responsiveLayout, targetLayout, location);
+                }
+            });
         }
     }
 
