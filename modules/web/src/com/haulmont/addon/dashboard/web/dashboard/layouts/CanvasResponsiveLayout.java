@@ -1,5 +1,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
+import com.haulmont.addon.dashboard.model.visualmodel.ResponsiveArea;
 import com.haulmont.addon.dashboard.model.visualmodel.ResponsiveLayout;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
@@ -9,8 +10,8 @@ import com.haulmont.cuba.gui.components.Component;
 import org.strangeway.responsive.web.components.impl.WebResponsiveColumn;
 import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
 import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
-
 import java.util.Iterator;
+import java.util.UUID;
 
 public class CanvasResponsiveLayout extends AbstractCanvasLayout {
     protected WebDragAndDropWrapper wrapper;
@@ -50,8 +51,17 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
 
         ResponsiveLayout rl = (ResponsiveLayout) model;
 
+        ResponsiveLayout responsiveLayout = (ResponsiveLayout) (((AbstractCanvasLayout) component).getModel()).getParent();
+        UUID componentUuid = ((AbstractCanvasLayout) component).getUuid();
+        ResponsiveArea responsiveArea = responsiveLayout.getAreas().stream().
+                filter(ra -> componentUuid.equals(ra.getComponent().getUuid())).
+                findFirst().orElseThrow(() -> new RuntimeException("Can't find layout with uuid " + componentUuid));
+
         WebResponsiveColumn wrc = new WebResponsiveColumn();
-        wrc.setDisplayRules(rl.getXs(), rl.getSm(), rl.getMd(), rl.getLg());
+        wrc.setDisplayRules(responsiveArea.getXs() == null ? rl.getXs() : responsiveArea.getXs(),
+                            responsiveArea.getSm() == null ? rl.getSm() : responsiveArea.getSm(),
+                            responsiveArea.getMd() == null ? rl.getMd() : responsiveArea.getMd(),
+                            responsiveArea.getLg() == null ? rl.getLg() : responsiveArea.getLg());
         component.setSizeFull();
         wrc.setContent(component);
         wrr.addColumn(wrc);

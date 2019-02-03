@@ -20,9 +20,7 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor;
 import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
@@ -35,6 +33,7 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasEdi
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.colspan.ColspanDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.expand.ExpandDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive.ResponsiveCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
@@ -58,6 +57,7 @@ import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.cookie.SM;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.event.EventListener;
@@ -66,12 +66,10 @@ import org.springframework.context.support.AbstractApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
 import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
@@ -79,6 +77,7 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.*;
 
 public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
@@ -268,13 +267,36 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public void onWeightChanged(WeightChangedEvent event) {
         DashboardLayout source = event.getSource();
 
-        WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                WeightDialog.WIDGET, source));
-        weightDialog.addCloseListener(actionId -> {
-            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
-            }
-        });
+        if (isParentResponsiveLayout(source)) {
+            ResponsiveLayout parentLayout = (ResponsiveLayout) findParentLayout(getDashboard().getVisualModel(), source.getUuid());
+            ResponsiveArea responsiveArea = parentLayout.getAreas().stream().
+                    filter(ra -> source.getUuid().equals(ra.getComponent().getUuid())).
+                    findFirst().orElseThrow(() -> new RuntimeException("Can't find layout with uuid " + source.getUuid()));
+
+            ResponsiveCreationDialog dialog = (ResponsiveCreationDialog) frame.openWindow(ResponsiveCreationDialog.SCREEN_NAME, DIALOG, getDisplaySizeMap(responsiveArea));
+            dialog.addCloseListener(actionId -> {
+                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                    int xs = dialog.getXs();
+                    int sm = dialog.getSm();
+                    int md = dialog.getMd();
+                    int lg = dialog.getLg();
+
+                    responsiveArea.setXs(xs);
+                    responsiveArea.setSm(sm);
+                    responsiveArea.setMd(md);
+                    responsiveArea.setLg(lg);
+                    events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                }
+            });
+        } else {
+            WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
+                    WeightDialog.WIDGET, source));
+            weightDialog.addCloseListener(actionId -> {
+                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
+                    events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                }
+            });
+        }
         ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
@@ -391,6 +413,15 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         if (nonUniqueIds.size() > 0) {
             errors.add(null, formatMessage("uniqueWidgetId", String.join(",", nonUniqueIds)));
         }
+    }
+
+    private Map<String, Object> getDisplaySizeMap(ResponsiveArea responsiveArea) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(XS.name(), responsiveArea.getXs() == null ? null : new Double(responsiveArea.getXs()));
+        map.put(SM.name(), responsiveArea.getSm() == null ? null : new Double(responsiveArea.getSm()));
+        map.put(MD.name(), responsiveArea.getMd() == null ? null : new Double(responsiveArea.getMd()));
+        map.put(LG.name(), responsiveArea.getLg() == null ? null : new Double(responsiveArea.getLg()));
+        return map;
     }
 
 }

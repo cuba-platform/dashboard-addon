@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2008-2019 Haulmont.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,8 @@ import com.vaadin.ui.Slider;
 import javax.inject.Inject;
 import java.util.Map;
 
+import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.*;
+
 public class ResponsiveCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$ResponsiveDialog";
 
@@ -40,15 +42,20 @@ public class ResponsiveCreationDialog extends AbstractWindow {
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        xs.setCaption(formatMessage("dashboard.responsive.xs", 12));
-        sm.setCaption(formatMessage("dashboard.responsive.sm", 6));
-        md.setCaption(formatMessage("dashboard.responsive.md", 6));
-        lg.setCaption(formatMessage("dashboard.responsive.lg", 3));
+        double xsd = params.get(XS.name()) == null ? (double) 12 : (double) params.get(XS.name());
+        double smd = params.get(SM.name()) == null ? (double) 6 : (double) params.get(SM.name());
+        double mdd = params.get(MD.name()) == null ? (double) 6 : (double) params.get(MD.name());
+        double lgd = params.get(LG.name()) == null ? (double) 3 : (double) params.get(LG.name());
 
-        xs.setValue((double) 12);
-        sm.setValue((double) 6);
-        md.setValue((double) 6);
-        lg.setValue((double) 3);
+        xs.setCaption(formatMessage("dashboard.responsive.xs", (int) xsd));
+        sm.setCaption(formatMessage("dashboard.responsive.sm", (int) smd));
+        md.setCaption(formatMessage("dashboard.responsive.md", (int) mdd));
+        lg.setCaption(formatMessage("dashboard.responsive.lg", (int) lgd));
+
+        xs.setValue(xsd);
+        sm.setValue(smd);
+        md.setValue(mdd);
+        lg.setValue(lgd);
 
         xs.setWidth(100, Sizeable.Unit.PERCENTAGE);
         sm.setWidth(100, Sizeable.Unit.PERCENTAGE);

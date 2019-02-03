@@ -197,5 +197,8 @@ public class DashboardLayoutUtils {
         return !(col1.equals(col2) && row1.equals(row2));
     }
 
+    public static boolean isParentResponsiveLayout(DashboardLayout layout) {
+        return layout.getParent() instanceof ResponsiveLayout;
+    }
 
 }

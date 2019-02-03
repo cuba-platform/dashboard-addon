@@ -17,35 +17,21 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
-import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
-import com.haulmont.addon.dnd.components.DDGridLayout;
 import com.haulmont.addon.dnd.web.gui.components.WebDDAbstractOrderedLayout;
-import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.Component.Container;
-import com.haulmont.cuba.gui.components.GridLayout.Area;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
-import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
 
 import javax.inject.Inject;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DashboardModelConverter {
     @Inject
     protected Metadata metadata;
-
-    @Inject
-    protected ComponentsFactory componentsFactory;
 
     protected CanvasComponentsFactory factory;
 
@@ -56,12 +42,6 @@ public class DashboardModelConverter {
     @Inject
     public void setFactory(CanvasComponentsFactory factory) {
         this.factory = factory;
-    }
-
-    public RootLayout containerToModel(CanvasVerticalLayout container) {
-        RootLayout model = metadata.create(RootLayout.class);
-        containerToModel(model, container);
-        return model;
     }
 
     public CanvasLayout modelToContainer(CanvasFrame frame, DashboardLayout model) {
@@ -99,6 +79,7 @@ public class DashboardModelConverter {
             for (ResponsiveArea area : sortedAreas) {
                 DashboardLayout cellLayout = area.getComponent();
                 CanvasLayout childGridCanvas = modelToContainer(frame, cellLayout);
+                childGridCanvas.getModel().setParent(respLayoutModel);
                 canvasLayout.addComponent(childGridCanvas);
             }
         }
@@ -140,98 +121,5 @@ public class DashboardModelConverter {
     private boolean isExpanded(DashboardLayout model) {
         return model.getExpand() != null && model.getChildren().stream()
                 .anyMatch(e -> model.getExpand().equals(e.getId()));
-    }
-
-    protected void containerToModel(DashboardLayout model, Component container) {
-        if (container instanceof CanvasLayout) {
-            CanvasLayout canvasLayout = (CanvasLayout) container;
-            model.setUuid(canvasLayout.getUuid() == null ? UUID.randomUUID() : canvasLayout.getUuid());
-        }
-        if (container instanceof HasWeight) {
-            model.setWeight(((HasWeight) container).getWeight());
-        }
-
-        for (Component childComponent : ((Container) container).getOwnComponents()) {
-            DashboardLayout childModel = createDashboardLayout(childComponent);
-
-            if (childModel == null && childComponent instanceof Container) {
-                containerToModel(model, childComponent);
-            } else if (childModel instanceof GridLayout) {
-                GridLayout gridModel = (GridLayout) childModel;
-                DDGridLayout gridComponent = ((CanvasGridLayout) childComponent).getDelegate();
-                model.addChild(gridModel);
-                childModel.setUuid((((CanvasGridLayout) childComponent).getUuid() == null ?
-                        UUID.randomUUID() : ((CanvasGridLayout) childComponent).getUuid()));
-
-                for (Component gridChild : gridComponent.getOwnComponents()) {
-                    GridArea modelArea = metadata.create(GridArea.class);
-                    Area area = gridComponent.getComponentArea(gridChild);
-
-                    DashboardLayout modelChildGridArea = createDashboardLayout(gridChild);
-                    containerToModel(modelChildGridArea, gridChild);
-
-                    modelArea.setCol(area.getColumn1());
-                    modelArea.setRow(area.getRow1());
-                    modelArea.setComponent((GridCellLayout) modelChildGridArea);
-                    gridModel.addArea(modelArea);
-                }
-            } else if (childModel instanceof ResponsiveLayout) {
-                ResponsiveLayout responsiveModel = (ResponsiveLayout) childModel;
-                WebDragAndDropWrapper wrapper = ((CanvasResponsiveLayout) childComponent).getDelegate();
-                WebResponsiveLayout wrl = (WebResponsiveLayout) wrapper.getDraggedComponent();
-
-                model.addChild(responsiveModel);
-                childModel.setUuid((((CanvasResponsiveLayout) childComponent).getUuid() == null ?
-                        UUID.randomUUID() : ((CanvasResponsiveLayout) childComponent).getUuid()));
-
-                Iterator it = wrl.getOwnComponents().iterator();
-                WebResponsiveRow wrr = (WebResponsiveRow) it.next();
-
-                for (Component respChild : wrr.getComponents()) {
-                    ResponsiveArea modelArea = metadata.create(ResponsiveArea.class);
-                    DashboardLayout modelChildGridArea = createDashboardLayout(respChild);
-                    containerToModel(modelChildGridArea, respChild);
-                    modelArea.setComponent(modelChildGridArea);
-                    responsiveModel.getAreas().add(modelArea);
-                }
-
-            } else if (childModel != null) {
-                model.addChild(childModel);
-                if (!(childModel instanceof WidgetLayout)) {
-                    containerToModel(childModel, childComponent);
-                }
-            }
-        }
-    }
-
-    protected DashboardLayout createDashboardLayout(Component component) {
-        if (component.getParent() == null) {
-            return metadata.create(RootLayout.class);
-        } else if (component.getParent() instanceof CanvasGridLayout) {
-            return metadata.create(GridCellLayout.class);
-        } else if (component.getParent() instanceof CanvasResponsiveLayout) {
-            return metadata.create(VerticalLayout.class);
-        } else if (component instanceof CanvasVerticalLayout) {
-            return metadata.create(VerticalLayout.class);
-        } else if (component instanceof CanvasHorizontalLayout) {
-            return metadata.create(HorizontalLayout.class);
-        } else if (component instanceof CanvasWidgetLayout) {
-            WidgetLayout layout = metadata.create(WidgetLayout.class);
-            Widget widget = ((CanvasWidgetLayout) component).getWidget();
-            layout.setWidget(widget);
-            layout.setUuid(((CanvasWidgetLayout) component).getUuid() == null ? UUID.randomUUID() : ((CanvasWidgetLayout) component).getUuid());
-            return layout;
-        } else if (component instanceof CanvasGridLayout) {
-            GridLayout layout = metadata.create(GridLayout.class);
-            DDGridLayout gridLayout = ((CanvasGridLayout) component).getDelegate();
-            layout.setRows(gridLayout.getRows());
-            layout.setColumns(gridLayout.getColumns());
-            return layout;
-        } else if (component instanceof CanvasResponsiveLayout) {
-            ResponsiveLayout layout = metadata.create(ResponsiveLayout.class);
-
-            return layout;
-        }
-        return null;
     }
 }

@@ -33,6 +33,18 @@ public class ResponsiveArea extends BaseUuidEntity {
     @MetaProperty(mandatory = true)
     protected Integer order;
 
+    @MetaProperty
+    protected Integer xs;
+
+    @MetaProperty
+    protected Integer sm;
+
+    @MetaProperty
+    protected Integer md;
+
+    @MetaProperty
+    protected Integer lg;
+
     public Integer getOrder() {
         return order;
     }
@@ -47,5 +59,37 @@ public class ResponsiveArea extends BaseUuidEntity {
 
     public void setComponent(DashboardLayout component) {
         this.component = component;
+    }
+
+    public Integer getXs() {
+        return xs;
+    }
+
+    public void setXs(Integer xs) {
+        this.xs = xs;
+    }
+
+    public Integer getSm() {
+        return sm;
+    }
+
+    public void setSm(Integer sm) {
+        this.sm = sm;
+    }
+
+    public Integer getMd() {
+        return md;
+    }
+
+    public void setMd(Integer md) {
+        this.md = md;
+    }
+
+    public Integer getLg() {
+        return lg;
+    }
+
+    public void setLg(Integer lg) {
+        this.lg = lg;
     }
 }
