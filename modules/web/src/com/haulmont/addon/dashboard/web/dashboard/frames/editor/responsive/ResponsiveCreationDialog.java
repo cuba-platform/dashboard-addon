@@ -16,7 +16,7 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.screen.StandardCloseAction;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
@@ -35,7 +35,11 @@ public class ResponsiveCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$ResponsiveDialog";
 
     @Inject
-    protected HBoxLayout slidersBox;
+    protected BoxLayout slidersBox;
+    @Inject
+    private BoxLayout desktopBox;
+    @Inject
+    private BoxLayout mobileBox;
 
     protected Slider xs = new Slider(1, 12);
     protected Slider sm = new Slider(1, 12);
@@ -86,11 +90,12 @@ public class ResponsiveCreationDialog extends AbstractWindow {
 
         xs.focus();
 
-        Layout hbox = slidersBox.unwrap(Layout.class);
-        hbox.addComponent(xs);
-        hbox.addComponent(sm);
-        hbox.addComponent(md);
-        hbox.addComponent(lg);
+        Layout dbox = desktopBox.unwrap(Layout.class);
+        Layout mbox = mobileBox.unwrap(Layout.class);
+        mbox.addComponent(xs);
+        mbox.addComponent(md);
+        dbox.addComponent(sm);
+        dbox.addComponent(lg);
     }
 
     public void apply() {
