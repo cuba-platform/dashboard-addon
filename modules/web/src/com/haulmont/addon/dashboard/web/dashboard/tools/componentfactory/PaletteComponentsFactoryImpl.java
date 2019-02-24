@@ -132,4 +132,15 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
         dragSourceExtension.addDragEndListener(e -> dragSourceExtension.setDragData(null));
         return button;
     }
+
+    @Override
+    public PaletteButton createResponsiveLayoutButton() {
+        PaletteButton button = createCommonButton();
+        button.setCaption(messages.getMainMessage("responsiveLayout"));
+        button.setIconFromSet(DashboardIcon.CSS_LAYOUT_ICON);
+        button.setLayout(metadata.create(ResponsiveLayout.class));
+        button.getLayout().setUuid(null);
+        button.setDescription(messages.getMainMessage("responsiveLayout"));
+        return button;
+    }
 }

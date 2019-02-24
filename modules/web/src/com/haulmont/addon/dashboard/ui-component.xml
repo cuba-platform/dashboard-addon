@@ -48,4 +48,10 @@
         <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
         <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout</class>
     </component>
+    <component>
+        <tag>canvasResponsiveLayout</tag>
+        <name>canvasResponsiveLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasResponsiveLayout</class>
+    </component>
 </components>

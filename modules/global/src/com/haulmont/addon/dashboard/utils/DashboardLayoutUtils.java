@@ -43,6 +43,19 @@ public class DashboardLayoutUtils {
                     return findParentLayout(gridArea.getComponent(), childId);
                 }
             }
+        } else if (root instanceof ResponsiveLayout) {
+            ResponsiveLayout responsiveLayout = (ResponsiveLayout) root;
+            for (ResponsiveArea responsiveArea : responsiveLayout.getAreas()) {
+                if (responsiveArea.getComponent().getId().equals(childId)) {
+                    return root;
+                } else {
+                    DashboardLayout tmp = findParentLayout(responsiveArea.getComponent(), childId);
+                    if (tmp == null) {
+                        continue;
+                    }
+                    return findParentLayout(responsiveArea.getComponent(), childId);
+                }
+            }
         } else {
             for (DashboardLayout dashboardLayout : root.getChildren()) {
                 if (dashboardLayout.getId().equals(childId)) {
@@ -75,6 +88,19 @@ public class DashboardLayoutUtils {
                             continue;
                         }
                         return findLayout(gridArea.getComponent(), uuid);
+                    }
+                }
+            } else if (root instanceof ResponsiveLayout) {
+                ResponsiveLayout responsiveLayout = (ResponsiveLayout) root;
+                for (ResponsiveArea responsiveArea : responsiveLayout.getAreas()) {
+                    if (responsiveArea.getComponent().getId().equals(uuid)) {
+                        return responsiveArea.getComponent();
+                    } else {
+                        DashboardLayout tmp = findLayout(responsiveArea.getComponent(), uuid);
+                        if (tmp == null) {
+                            continue;
+                        }
+                        return findLayout(responsiveArea.getComponent(), uuid);
                     }
                 }
             } else {
@@ -169,6 +195,10 @@ public class DashboardLayoutUtils {
         Integer row1 = gridArea.getRow();
         Integer row2 = gridArea.getRow2() != null ? gridArea.getRow2() : gridArea.getRow();
         return !(col1.equals(col2) && row1.equals(row2));
+    }
+
+    public static boolean isParentResponsiveLayout(DashboardLayout layout) {
+        return layout.getParent() instanceof ResponsiveLayout;
     }
 
 

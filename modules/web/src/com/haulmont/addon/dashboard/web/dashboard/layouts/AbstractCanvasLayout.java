@@ -19,6 +19,7 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 
 import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.ResponsiveLayout;
 import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.bali.events.Subscription;
 import com.haulmont.cuba.gui.UiComponents;
@@ -31,6 +32,7 @@ import com.haulmont.cuba.web.widgets.CubaCssActionsLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
+import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -58,7 +60,11 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     public <T extends ComponentContainer> AbstractCanvasLayout init(DashboardLayout model, Class<T> componentClass) {
-        return init(model, components.create(componentClass));
+        if (model instanceof ResponsiveLayout) {
+            return init(model, new WebResponsiveLayout());//todo:refactor??
+        } else {
+            return init(model, components.create(componentClass));
+        }
     }
 
     @Override

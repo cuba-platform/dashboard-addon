@@ -1,8 +1,6 @@
 package com.haulmont.addon.dashboard.web.dashboard.datasources;
 
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.cuba.gui.data.impl.CustomHierarchicalDatasource;
 
 import java.util.*;
@@ -32,6 +30,13 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
                     .sorted(Comparator.comparingInt(GridArea::getRow)
                             .thenComparingInt(GridArea::getCol))
                     .map(GridArea::getComponent)
+                    .map(DashboardLayout::getId)
+                    .collect(Collectors.toList()));
+        } else if (item instanceof ResponsiveLayout) {
+            ResponsiveLayout dashboardResponsiveLayout = (ResponsiveLayout) item;
+            al.addAll(dashboardResponsiveLayout.getAreas().stream()
+                    .sorted(Comparator.comparingInt(ResponsiveArea::getOrder))
+                    .map(ResponsiveArea::getComponent)
                     .map(DashboardLayout::getId)
                     .collect(Collectors.toList()));
         } else {
@@ -84,6 +89,9 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
         if (item instanceof GridLayout) {
             GridLayout gridLayout = (GridLayout) item;
             return gridLayout.getAreas().size() > 0;
+        } else if (item instanceof ResponsiveLayout) {
+            ResponsiveLayout dashboardResponsiveLayout = (ResponsiveLayout) item;
+            return dashboardResponsiveLayout.getAreas().size() > 0;
         } else {
             return item != null && item.getChildren().size() > 0;
         }

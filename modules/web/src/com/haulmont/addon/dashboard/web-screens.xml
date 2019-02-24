@@ -64,5 +64,7 @@
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-browse.xml"/>
     <screen id="dashboard$WidgetTemplateGroup.edit"
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-edit.xml"/>
+    <screen id="dashboard$ResponsiveDialog"
+            template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/responsive/responsive-creation-dialog.xml"/>
 
 </screen-config>

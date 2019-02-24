@@ -154,4 +154,11 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
 
         });
     }
+
+    @Override
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout responsiveLayout) {
+        CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(responsiveLayout);
+        initLayout(responsiveLayout, layout);
+        return layout;
+    }
 }

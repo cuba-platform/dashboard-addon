@@ -26,6 +26,7 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardEdit;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.css.CssLayoutCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog;
+import com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive.ResponsiveCreationDialog;
 import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Events;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
+import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;
@@ -148,7 +150,32 @@ public class DropLayoutTools {
             reorderWidgetsAndPushEvents(metadata.create(VerticalLayout.class), targetLayout, location);
         } else if (layout instanceof HorizontalLayout) {
             reorderWidgetsAndPushEvents(metadata.create(HorizontalLayout.class), targetLayout, location);
+        } else if (layout instanceof ResponsiveLayout) {
+            screenBuilders.screen(frame)
+                    .withScreenClass(ResponsiveCreationDialog.class)
+                    .withLaunchMode(OpenMode.DIALOG)
+                    .build()
+                    .show()
+                    .addAfterCloseListener(e -> {
+                        StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                        ResponsiveCreationDialog dialog = (ResponsiveCreationDialog) e.getSource();
+                        if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                            int xs = dialog.getXs();
+                            int sm = dialog.getSm();
+                            int md = dialog.getMd();
+                            int lg = dialog.getLg();
+
+                            ResponsiveLayout responsiveLayout = metadata.create(ResponsiveLayout.class);
+                            responsiveLayout.setXs(xs);
+                            responsiveLayout.setSm(sm);
+                            responsiveLayout.setMd(md);
+                            responsiveLayout.setLg(lg);
+
+                            reorderWidgetsAndPushEvents(responsiveLayout, targetLayout, location);
+                        }
+                    });
         }
+
     }
 
     private void reorderWidgetsAndPushEvents(DashboardLayout layout, DashboardLayout targetLayout, WidgetDropLocation location) {

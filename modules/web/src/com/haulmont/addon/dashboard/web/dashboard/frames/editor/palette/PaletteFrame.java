@@ -132,7 +132,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
         ddLayoutBox.add(factory.createCssLayoutButton());
-
+        ddLayoutBox.add(factory.createResponsiveLayoutButton());
     }
 
     protected void initWidgetTreeBox() {
