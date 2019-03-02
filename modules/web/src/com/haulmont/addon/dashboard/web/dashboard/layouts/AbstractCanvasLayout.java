@@ -60,11 +60,7 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     }
 
     public <T extends ComponentContainer> AbstractCanvasLayout init(DashboardLayout model, Class<T> componentClass) {
-        if (model instanceof ResponsiveLayout) {
-            return init(model, new WebResponsiveLayout());//todo:refactor??
-        } else {
-            return init(model, components.create(componentClass));
-        }
+        return init(model, components.create(componentClass));
     }
 
     @Override
