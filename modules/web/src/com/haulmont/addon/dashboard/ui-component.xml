@@ -54,4 +54,10 @@
         <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
         <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasResponsiveLayout</class>
     </component>
+    <component>
+        <tag>c10m_responsiveLayout</tag>
+        <name>c10m_responsiveLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>org.strangeway.responsive.web.components.impl.WebResponsiveLayout</class>
+    </component>
 </components>
