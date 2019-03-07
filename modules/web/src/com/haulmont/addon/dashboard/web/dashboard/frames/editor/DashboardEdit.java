@@ -74,13 +74,11 @@ import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParent
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.isParentResponsiveLayout;
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
-import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.*;
-import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.LG;
 
 @UiController("dashboard$PersistentDashboard.edit")
 @UiDescriptor("dashboard-edit.xml")

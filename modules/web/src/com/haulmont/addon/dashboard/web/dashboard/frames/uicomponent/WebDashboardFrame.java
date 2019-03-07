@@ -42,6 +42,7 @@ import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.io.IOUtils;
@@ -291,21 +292,21 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         return null;
     }
 
-    public AbstractFrame getWidget(String widgetId) {
+    public ScreenFragment getWidget(String widgetId) {
         return searchWidgetFrame(canvasFrame.getvLayout(), widgetId);
     }
 
-    protected AbstractFrame searchWidgetFrame(CanvasLayout layout, String widgetId) {
+    protected ScreenFragment searchWidgetFrame(CanvasLayout layout, String widgetId) {
         if (CanvasWidgetLayout.class.isAssignableFrom(layout.getClass())) {
             CanvasWidgetLayout canvasWidgetLayout = (CanvasWidgetLayout) layout;
             if (widgetId.equals(canvasWidgetLayout.getWidget().getWidgetId())) {
-                return (AbstractFrame) canvasWidgetLayout.getWidgetComponent();
+                return (ScreenFragment) canvasWidgetLayout.getWidgetComponent();
             }
             return null;
         }
 
         for (Component child : layout.getDelegate().getOwnComponents()) {
-            AbstractFrame result = searchWidgetFrame((CanvasLayout) child, widgetId);
+            ScreenFragment result = searchWidgetFrame((CanvasLayout) child, widgetId);
             if (result != null) {
                 return result;
             }

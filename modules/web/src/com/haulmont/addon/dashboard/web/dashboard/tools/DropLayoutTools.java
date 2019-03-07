@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
-import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 
 public class DropLayoutTools {
     protected DashboardModelConverter modelConverter;

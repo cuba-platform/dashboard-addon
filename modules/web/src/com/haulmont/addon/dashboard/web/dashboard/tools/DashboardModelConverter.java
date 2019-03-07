@@ -17,24 +17,18 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
 
-import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasGridLayout;
+import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.CanvasComponentsFactory;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.ExpandingLayout;
-import com.haulmont.cuba.gui.components.GridLayout.Area;
-import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
-import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
 
 import javax.inject.Inject;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DashboardModelConverter {
@@ -80,7 +74,9 @@ public class DashboardModelConverter {
             ResponsiveLayout respLayoutModel = (ResponsiveLayout) model;
             canvasLayout = factory.createCanvasResponsiveLayout(respLayoutModel);
 
-            List<ResponsiveArea> sortedAreas = respLayoutModel.getAreas().stream().sorted(Comparator.comparing(ResponsiveArea::getOrder)).collect(Collectors.toList());
+            List<ResponsiveArea> sortedAreas = respLayoutModel.getAreas().stream()
+                    .sorted(Comparator.comparing(ResponsiveArea::getOrder))
+                    .collect(Collectors.toList());
 
             for (ResponsiveArea area : sortedAreas) {
                 DashboardLayout cellLayout = area.getComponent();
