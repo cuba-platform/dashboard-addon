@@ -21,19 +21,32 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.chile.core.datatypes.DatatypeRegistry;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-
+@UiController("dashboard$SimpleValueFrame")
+@UiDescriptor("simple-value-frame.xml")
 public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
-    protected TextField textField;
+    protected TextField<Integer> intField;
     @Inject
-    protected DateField dateField;
+    protected TextField<BigDecimal> decimalField;
     @Inject
-    protected TimeField timeField;
+    protected TextField<Long> longField;
+    @Inject
+    protected TextField<UUID> uuidField;
+    @Inject
+    protected TextField<String> textField;
+    @Inject
+    protected DateField<Date> dateField;
+    @Inject
+    protected TimeField<Date> timeField;
     @Inject
     protected CheckBox checkBox;
     @Inject
@@ -61,15 +74,15 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
             case DATE:
                 return new DateParameterValue(dateField.getValue());
             case DECIMAL:
-                return new DecimalParameterValue(textField.getValue());
+                return new DecimalParameterValue(decimalField.getValue());
             case INTEGER:
-                return new IntegerParameterValue(textField.getValue());
+                return new IntegerParameterValue(intField.getValue());
             case LONG:
-                return new LongParameterValue(textField.getValue());
+                return new LongParameterValue(longField.getValue());
             case STRING:
                 return new StringParameterValue(textField.getValue());
             case UUID:
-                return new UuidParameterValue(textField.getValue() == null ? null : UUID.fromString(textField.getValue()));
+                return new UuidParameterValue(uuidField.getValue());
             case BOOLEAN:
                 return new BooleanParameterValue(checkBox.getValue());
             default:
@@ -130,28 +143,28 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     }
 
     protected void setDecimal(DecimalParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("decimal");
+        decimalField.setValue(value == null ? null : value.getValue());
+        decimalField.setVisible(true);
     }
 
     protected void setInteger(IntegerParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("int");
+        intField.setValue(value == null ? null : value.getValue());
+        intField.setVisible(true);
     }
 
     protected void setLong(LongParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField("long");
+        longField.setValue(value == null ? null : value.getValue());
+        longField.setVisible(true);
     }
 
     protected void setString(StringParameterValue value) {
         textField.setValue(value == null ? null : value.getValue());
-        initTextField(null);
+        textField.setVisible(true);
     }
 
     protected void setUUID(UuidParameterValue value) {
-        textField.setValue(value == null ? null : value.getValue());
-        initTextField(null);
+        uuidField.setValue(value == null ? null : value.getValue());
+        uuidField.setVisible(true);
     }
 
     protected void initTextField(String dataType) {
@@ -162,17 +175,5 @@ public class SimpleValueFrame extends AbstractFrame implements ValueFrame {
     protected void setBoolean(BooleanParameterValue value) {
         checkBox.setValue(value == null ? null : value.getValue());
         checkBox.setVisible(true);
-    }
-
-    public ParameterType getType() {
-        return type;
-    }
-
-    public String getTextFieldValue() {
-        return textField.getRawValue();
-    }
-
-    public TextField getTextField() {
-        return textField;
     }
 }

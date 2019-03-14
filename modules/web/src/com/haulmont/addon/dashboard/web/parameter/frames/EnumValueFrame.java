@@ -22,17 +22,21 @@ import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@UiController("dashboard$EnumValueFrame")
+@UiDescriptor("enum-value-frame.xml")
 public class EnumValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
-    protected LookupField enumClassLookup;
+    protected LookupField<Class> enumClassLookup;
     @Inject
     protected Metadata metadata;
 
@@ -61,8 +65,7 @@ public class EnumValueFrame extends AbstractFrame implements ValueFrame {
 
         String className = enumValue.getValue();
 
-        ((List<Class>) enumClassLookup.getOptionsList())
-                .stream()
+        enumClassLookup.getOptions().getOptions()
                 .filter(clazz -> className.equals(clazz.getName()))
                 .findFirst()
                 .ifPresent(enumClass -> enumClassLookup.setValue(enumClass));

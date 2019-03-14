@@ -32,20 +32,25 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutH
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.ActionProviderFactory;
 import com.haulmont.addon.dashboard.web.dashboard.tools.componentfactory.PaletteComponentsFactory;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.NotDropHandler;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropHandler;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.TreeDropListener;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
-import com.haulmont.addon.dashboard.web.widgettemplate.WidgetTemplateEdit;
-import com.haulmont.addon.dnd.components.DDVerticalLayout;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.BoxLayout;
 import com.haulmont.cuba.gui.components.Tree;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.web.toolkit.ui.CubaTree;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
+import com.haulmont.cuba.web.widgets.CubaTree;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.shared.ui.grid.DropMode;
+import com.vaadin.ui.components.grid.TreeGridDragSource;
+import com.vaadin.ui.components.grid.TreeGridDropTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -57,17 +62,19 @@ import java.util.stream.Collectors;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findLayout;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
 
+@UiController("dashboard$PaletteFrame")
+@UiDescriptor("palette-frame.xml")
 public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$PaletteFrame";
 
     private static Logger log = LoggerFactory.getLogger(PaletteFrame.class);
 
     @Inject
-    protected DDVerticalLayout ddWidgetBox;
+    protected BoxLayout ddWidgetBox;
     @Inject
-    protected DDVerticalLayout ddLayoutBox;
+    protected BoxLayout ddLayoutBox;
     @Inject
-    protected DDVerticalLayout ddWidgetTemplateBox;
+    protected BoxLayout ddWidgetTemplateBox;
     @Inject
     protected CollectionDatasource<WidgetTemplate, UUID> widgetTemplatesDs;
     @Inject
@@ -88,6 +95,8 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     protected Dashboard dashboard;
     @Inject
     protected ActionProviderFactory actionProviderFactory;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -103,15 +112,15 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         Widget widget = event.getSource();
         WidgetTemplate widgetTemplate = metadata.create(WidgetTemplate.class);
         widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
-        WidgetTemplateEdit widgetEditor = (WidgetTemplateEdit) openEditor(
-                "dashboard$WidgetTemplate.edit", widgetTemplate, WindowManager.OpenType.DIALOG);
-        widgetEditor.addCloseWithCommitListener(() -> widgetTemplatesDs.refresh());
-
+        screenBuilders.editor(WidgetTemplate.class, this)
+                .newEntity(widgetTemplate)
+                .withLaunchMode(OpenMode.DIALOG)
+                .build()
+                .show()
+                .addAfterCloseListener(e -> widgetTemplatesDs.refresh());
     }
 
     protected void initWidgetBox() {
-        ddWidgetBox.setDropHandler(new NotDropHandler());
-
         for (Widget widget : getSketchWidgets()) {
             PaletteButton widgetBtn = factory.createWidgetButton(widget);
             ddWidgetBox.add(widgetBtn);
@@ -119,14 +128,11 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     protected void initLayoutBox() {
-        ddLayoutBox.setDropHandler(new NotDropHandler());
-
         ddLayoutBox.add(factory.createVerticalLayoutButton());
         ddLayoutBox.add(factory.createHorizontalLayoutButton());
         ddLayoutBox.add(factory.createGridLayoutButton());
         ddLayoutBox.add(factory.createCssLayoutButton());
         ddLayoutBox.add(factory.createResponsiveLayoutButton());
-
     }
 
     protected void initWidgetTreeBox() {
@@ -140,9 +146,19 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
         });
         widgetTree.expandTree();
         widgetTree.setStyleName(DashboardStyleConstants.DASHBOARD_TREE);
-        CubaTree cubaTree = widgetTree.unwrap(CubaTree.class);
-        cubaTree.setDragMode(com.vaadin.ui.Tree.TreeDragMode.NODE);
-        cubaTree.setDropHandler(new TreeDropHandler(dashboardLayoutTreeReadOnlyDs));
+
+        TreeGridDragSource<DashboardLayout> dropSource =
+                new TreeGridDragSource<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot());
+        dropSource.setEffectAllowed(EffectAllowed.MOVE);
+        dropSource.addGridDragStartListener(e -> {
+            DashboardLayout containerLayout = e.getDraggedItems().get(0);
+            dropSource.setDragData(containerLayout);
+        });
+        dropSource.addGridDragEndListener(e -> dropSource.setDragData(null));
+        TreeGridDropTarget<DashboardLayout> dropTarget =
+                new TreeGridDropTarget<DashboardLayout>(widgetTree.unwrap(CubaTree.class).getCompositionRoot(), DropMode.ON_TOP_OR_BETWEEN);
+        dropTarget.addTreeGridDropListener(new TreeDropListener());
+
     }
 
     private void createActions(Tree<DashboardLayout> widgetTree, DashboardLayout layout) {
@@ -154,7 +170,6 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
     }
 
     protected void initWidgetTemplateBox() {
-        ddWidgetTemplateBox.setDropHandler(new NotDropHandler());
         widgetTemplatesDs.addCollectionChangeListener(e -> updateWidgetTemplates());
         widgetTemplatesDs.refresh();
     }
@@ -194,7 +209,7 @@ public class PaletteFrame extends AbstractFrame implements DashboardLayoutHolder
             UUID layoutUuid = event.getSource();
             DashboardLayout layout = dashboardLayoutTreeReadOnlyDs.getVisualModel().findLayout(layoutUuid);
             widgetTree.setSelected(layout);
-            widgetTree.expand(layout.getUuid());
+            widgetTree.expand(layout);
         }
     }
 

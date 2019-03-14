@@ -26,9 +26,11 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ComponentsHelper;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
-import com.haulmont.cuba.gui.xml.layout.*;
+import com.haulmont.cuba.gui.xml.layout.ComponentLoader;
+import com.haulmont.cuba.gui.xml.layout.LayoutLoader;
+import com.haulmont.cuba.gui.xml.layout.ScreenXmlLoader;
 import com.haulmont.cuba.gui.xml.layout.loaders.ContainerLoader;
-import com.haulmont.cuba.gui.xml.layout.loaders.FrameLoader;
+import com.haulmont.cuba.gui.xml.layout.loaders.FragmentLoader;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -39,7 +41,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
@@ -58,7 +60,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
         String template = windowInfo.getTemplate();
 
 
-        DashboardLayoutLoader layoutLoader = new DashboardLayoutLoader(context, factory, LayoutLoaderConfig.getFrameLoaders());
+        DashboardLayoutLoader layoutLoader = new DashboardLayoutLoader(context);
         layoutLoader.setLocale(getLocale());
         layoutLoader.setMessagesPack(getMessagesPack());
 
@@ -75,10 +77,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
     @Override
     public void loadComponent() {
-        if (resultComponent.getMessagesPack() == null) {
-            resultComponent.setMessagesPack(messagesPack);
-        }
-
         assignXmlDescriptor(resultComponent, element);
         loadVisible(resultComponent, element);
 
@@ -87,7 +85,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
         loadAlign(resultComponent, element);
 
-        loadHeight(resultComponent, element, ComponentsHelper.getComponentHeigth(resultComponent));
+        loadHeight(resultComponent, element, ComponentsHelper.getComponentHeight(resultComponent));
         loadWidth(resultComponent, element, ComponentsHelper.getComponentWidth(resultComponent));
 
         loadIcon(resultComponent, element);
@@ -134,9 +132,9 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
     }
 
     protected void loadParams(DashboardFrame resultComponent, Element element) {
-        List<Parameter> parameters = (List<Parameter>) element.content().stream()
+        List<Parameter> parameters = element.content().stream()
                 .filter(child -> child instanceof DefaultElement &&
-                        "parameter".equals(((DefaultElement) child).getName()))
+                        "parameter".equals(child.getName()))
                 .map(xmlParam -> createParameter((DefaultElement) xmlParam))
                 .collect(Collectors.toList());
 
@@ -187,8 +185,8 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
     protected class DashboardLayoutLoader extends LayoutLoader {
 
-        protected DashboardLayoutLoader(ComponentLoader.Context context, ComponentsFactory factory, LayoutLoaderConfig config) {
-            super(context, factory, config);
+        protected DashboardLayoutLoader(ComponentLoader.Context context) {
+            super(context);
         }
 
         public Pair<ComponentLoader, Element> createFrameComponent(String resourcePath, String id, Map<String, Object> params) {
@@ -196,7 +194,7 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
             Element element = screenXmlLoader.load(resourcePath, id, params);
 
             ComponentLoader loader = getLoader(element);
-            FrameLoader frameLoader = (FrameLoader) loader;
+            FragmentLoader frameLoader = (FragmentLoader) loader;
             frameLoader.setFrameId(id);
 
             loader.createComponent();

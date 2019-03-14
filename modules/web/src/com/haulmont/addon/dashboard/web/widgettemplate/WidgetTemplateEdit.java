@@ -23,24 +23,29 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.WidgetUtils;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
-import com.haulmont.addon.dashboard.web.widget.WidgetEdit;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.apache.commons.lang.StringUtils;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Optional;
 
-import static com.haulmont.cuba.gui.WindowManager.OpenType.THIS_TAB;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$WidgetTemplate.edit")
+@UiDescriptor("widget-template-edit.xml")
 public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     @Named("fieldGroup")
@@ -50,7 +55,7 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
     protected WidgetRepository widgetRepository;
 
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents components;
 
     @Inject
     protected Datasource<WidgetTemplate> widgetTemplateDs;
@@ -69,6 +74,9 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     @Inject
     protected AccessConstraintsHelper accessHelper;
+
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     protected LookupField widgetTypeLookup;
     protected Button editWidgetButton;
@@ -109,21 +117,21 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
     }
 
     public Component generateWidgetTypeField(Datasource datasource, String fieldId) {
-        HBoxLayout hBoxLayout = componentsFactory.createComponent(HBoxLayout.class);
+        HBoxLayout hBoxLayout = components.create(HBoxLayout.class);
         hBoxLayout.setSpacing(true);
-        LookupField widgetTypeLookup = componentsFactory.createComponent(LookupField.class);
+        LookupField<String> widgetTypeLookup = components.create(LookupField.class);
         widgetTypeLookup.setWidth("100%");
-        Button editWidgetButton = componentsFactory.createComponent(Button.class);
+        Button editWidgetButton = components.create(Button.class);
         editWidgetButton.setWidth("100%");
         editWidgetButton.setCaption(messages.getMessage(WidgetTemplateEdit.class, "customize"));
         editWidgetButton.setIcon("icons/gear.png");
         widgetTypeLookup.setOptionsMap(widgetUtils.getWidgetCaptions());
         widgetTypeLookup.addValueChangeListener(e -> {
-            String browserFrameId = (String) e.getValue();
+            String browserFrameId = e.getValue();
             if (browserFrameId != null) {
                 Widget widget = metadata.create(Widget.class);
                 widget.setFrameId(browserFrameId);
-                widget.setName(widgetUtils.getWidgetType((String) e.getValue()));
+                widget.setName(widgetUtils.getWidgetType(e.getValue()));
                 openWidgetEditor(widget);
             }
         });
@@ -136,23 +144,27 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     protected void openWidgetEditor(Widget widget) {
         if (openWidgetEditor) {
-            WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, THIS_TAB);
-            editor.addCloseListener((action) -> {
-                if (Window.COMMIT_ACTION_ID.equals(action)) {
-                    WidgetTemplate widgetTemplate = widgetTemplateDs.getItem();
-                    widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
-                } else {
-                    Widget prevWidget = converter.widgetFromJson(widgetTemplateDs.getItem().getWidgetModel());
-                    openWidgetEditor = false;
-                    setWidgetTypeLookupValue(prevWidget, widgetTypeLookup);
-                    openWidgetEditor = true;
-                }
-            });
-
+            screenBuilders.editor(Widget.class, this)
+                    .withLaunchMode(OpenMode.THIS_TAB)
+                    .editEntity(widget)
+                    .build()
+                    .show()
+                    .addAfterCloseListener(e -> {
+                        StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                        if (COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                            WidgetTemplate widgetTemplate = widgetTemplateDs.getItem();
+                            widgetTemplate.setWidgetModel(converter.widgetToJson(widget));
+                        } else {
+                            Widget prevWidget = converter.widgetFromJson(widgetTemplateDs.getItem().getWidgetModel());
+                            openWidgetEditor = false;
+                            setWidgetTypeLookupValue(prevWidget, widgetTypeLookup);
+                            openWidgetEditor = true;
+                        }
+                    });
         }
     }
 
-    protected void setWidgetTypeLookupValue(Widget widget, LookupField lookupField) {
+    protected void setWidgetTypeLookupValue(Widget widget, LookupField<String> lookupField) {
         if (widget == null) {
             lookupField.setValue(null);
             return;

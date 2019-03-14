@@ -23,10 +23,15 @@ import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
+import com.haulmont.addon.dashboard.web.widget.LookupWidget;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
+import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@UiController("dashboard$CanvasFrame")
+@UiDescriptor("canvas-frame.xml")
 public class CanvasFrame extends AbstractFrame {
     public static final String SCREEN_NAME = "dashboard$CanvasFrame";
     public static final String DASHBOARD = "dashboard";
@@ -80,20 +87,26 @@ public class CanvasFrame extends AbstractFrame {
 
     public List<RefreshableWidget> getRefreshableWidgets() {
         List<RefreshableWidget> result = new ArrayList<>();
-        searchRefreshableWidgets(vLayout, result);
+        searchWidgets(vLayout, RefreshableWidget.class, result);
         return result;
     }
 
-    protected void searchRefreshableWidgets(Container layout, List<RefreshableWidget> wbList) {
+    public List<LookupWidget> getLookupWidgets() {
+        List<LookupWidget> result = new ArrayList<>();
+        searchWidgets(vLayout, LookupWidget.class, result);
+        return result;
+    }
+
+    protected <T> void searchWidgets(ComponentContainer layout, Class<T> widgetClass, List<T> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
             Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
-            if (RefreshableWidget.class.isAssignableFrom(wb.getClass())) {
-                wbList.add((RefreshableWidget) wb);
+            if (wb != null && widgetClass.isAssignableFrom(wb.getClass())) {
+                wbList.add((T) wb);
             }
         } else {
             for (Component child : layout.getOwnComponents()) {
-                if (child instanceof Container) {
-                    searchRefreshableWidgets((Container) child, wbList);
+                if (child instanceof ComponentContainer) {
+                    searchWidgets((ComponentContainer) child, widgetClass, wbList);
                 }
             }
         }

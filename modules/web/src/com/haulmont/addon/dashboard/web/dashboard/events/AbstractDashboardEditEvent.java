@@ -26,9 +26,4 @@ public abstract class AbstractDashboardEditEvent extends ApplicationEvent implem
         super(source);
     }
 
-    @Override
-    public Object getSource() {
-        return super.getSource();
-    }
-
 }

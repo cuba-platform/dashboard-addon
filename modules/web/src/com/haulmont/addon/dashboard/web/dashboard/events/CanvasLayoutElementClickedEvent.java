@@ -17,7 +17,7 @@
 
 package com.haulmont.addon.dashboard.web.dashboard.events;
 
-import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.MouseEventDetails;
 import com.haulmont.cuba.gui.events.UiEvent;
 import org.springframework.context.ApplicationEvent;
 
@@ -27,9 +27,9 @@ public class CanvasLayoutElementClickedEvent extends ApplicationEvent implements
 
     private UUID layoutUuid;
 
-    private Component.MouseEventDetails mouseEventDetails;
+    private MouseEventDetails mouseEventDetails;
 
-    public CanvasLayoutElementClickedEvent(UUID source, Component.MouseEventDetails mouseEventDetails) {
+    public CanvasLayoutElementClickedEvent(UUID source, MouseEventDetails mouseEventDetails) {
         super(source);
         layoutUuid = source;
         this.mouseEventDetails = mouseEventDetails;
@@ -40,7 +40,7 @@ public class CanvasLayoutElementClickedEvent extends ApplicationEvent implements
         return layoutUuid;
     }
 
-    public Component.MouseEventDetails getMouseEventDetails() {
+    public MouseEventDetails getMouseEventDetails() {
         return mouseEventDetails;
     }
 }

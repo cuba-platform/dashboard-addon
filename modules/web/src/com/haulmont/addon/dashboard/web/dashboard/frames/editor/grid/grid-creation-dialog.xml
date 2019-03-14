@@ -3,28 +3,15 @@
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
 
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://gridSettings"
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd" caption="msg://gridSettings"
         class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid.GridCreationDialog"
         messagesPack="com.haulmont.addon.dashboard.web.dashboard">
-    <dialogMode height="AUTO"
-                width="480"/>
-    <layout height="100%"
-            spacing="true"
-            width="100%">
-        <hbox id="slidersBox"
-              height="100%"
-              spacing="true"
-              width="100%"/>
+    <dialogMode height="AUTO" width="480"/>
+    <layout spacing="true" expand="btnPanel" width="100%">
+        <hbox id="slidersBox" spacing="true" width="100%"/>
         <buttonsPanel id="btnPanel">
-            <button id="okBtn"
-                    caption="msg://ok"
-                    icon="OK"
-                    invoke="apply"/>
-            <button id="cancelBtn"
-                    caption="msg://cancel"
-                    icon="CANCEL"
-                    invoke="cancel"/>
+            <button id="okBtn" caption="msg://ok" icon="OK" invoke="apply"/>
+            <button id="cancelBtn" caption="msg://cancel" icon="CANCEL" invoke="cancel"/>
         </buttonsPanel>
     </layout>
 </window>

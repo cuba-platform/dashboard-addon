@@ -18,6 +18,10 @@ package com.haulmont.addon.dashboard.web.dashboardgroup;
 
 import com.haulmont.addon.dashboard.entity.DashboardGroup;
 import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
+@UiController("dashboard$DashboardGroup.edit")
+@UiDescriptor("dashboard-group-edit.xml")
 public class DashboardGroupEdit extends AbstractEditor<DashboardGroup> {
 }

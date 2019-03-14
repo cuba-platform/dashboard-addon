@@ -18,18 +18,22 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.VerticalLayout;
-import com.haulmont.addon.dnd.web.gui.components.WebDDVerticalLayout;
+import com.haulmont.cuba.gui.components.VBoxLayout;
 
 public class CanvasVerticalLayout extends AbstractCanvasLayout {
-    protected WebDDVerticalLayout verticalLayout;
 
-    public CanvasVerticalLayout(VerticalLayout model) {
-        super(model, new WebDDVerticalLayout());
-        verticalLayout = (WebDDVerticalLayout) delegate;
+    public static final String NAME = "canvasVerticalLayout";
+
+    protected VBoxLayout verticalLayout;
+
+    public CanvasVerticalLayout init(VerticalLayout model) {
+        init(model, VBoxLayout.class);
+        verticalLayout = (VBoxLayout) delegate;
+        return this;
     }
 
     @Override
-    public WebDDVerticalLayout getDelegate() {
+    public VBoxLayout getDelegate() {
         return verticalLayout;
     }
 }

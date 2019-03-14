@@ -22,60 +22,64 @@ import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.*;
-import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
+import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.CanvasDropListener;
 import com.haulmont.cuba.core.global.Events;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import com.haulmont.cuba.web.gui.icons.IconResolver;
+import com.haulmont.cuba.web.widgets.CubaCssActionsLayout;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.ui.dnd.DragSourceExtension;
+import com.vaadin.ui.dnd.DropTargetExtension;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.List;
 
-import static com.haulmont.addon.dnd.components.DragAndDropWrapper.DragStartMode.WRAPPER;
-import static com.haulmont.addon.dnd.components.enums.LayoutDragMode.CLONE;
-
 @Component("dashboard_dropComponentsFactory")
 public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Inject
-    protected ComponentsFactory factory;
-    @Inject
-    protected IconResolver iconResolver;
+    protected UiComponents factory;
     @Inject
     protected Events events;
     @Inject
     protected Metadata metadata;
-    @Inject
-    protected Messages messages;
     @Inject
     protected ActionProviderFactory actionProviderFactory;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
         CanvasVerticalLayout layout = super.createCanvasVerticalLayout(verticalLayout);
-        layout.getDelegate().setSpacing(true);
-        initDropLayout(verticalLayout, layout);
+//        layout.getDelegate().setSpacing(true);
+        initLayout(verticalLayout, layout);
         return layout;
     }
 
-    private void initDropLayout(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
-        if (layout instanceof CanvasResponsiveLayout) {
-            ((WebDragAndDropWrapper) layout.getDelegate()).setDragStartMode(WRAPPER);
-        } else {
-            layout.setDragMode(CLONE);
-        }
+    private void initLayout(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
         layout.addStyleName(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER);
         layout.setDescription(layoutModel.getCaption());
         createBaseLayoutActions(layout, layoutModel);
         addLayoutClickListener(layout);
+        initDragExtension(layoutModel, layout);
+        initDropExtension(layoutModel, layout);
+    }
+
+    private void initDragExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
+        DragSourceExtension<com.vaadin.ui.CssLayout> dragSourceExtension = new DragSourceExtension<>(layout.unwrap(com.vaadin.ui.CssLayout.class));
+        dragSourceExtension.setEffectAllowed(EffectAllowed.MOVE);
+        dragSourceExtension.addDragStartListener(e -> dragSourceExtension.setDragData(layoutModel));
+        dragSourceExtension.addDragEndListener(e -> dragSourceExtension.setDragData(null));
+    }
+
+    private void initDropExtension(DashboardLayout layoutModel, AbstractCanvasLayout layout) {
+        DropTargetExtension<CubaCssActionsLayout> dropTarget = new DropTargetExtension(layout.unwrap(CubaCssActionsLayout.class));
+        dropTarget.addDropListener(new CanvasDropListener());
     }
 
     protected Button createButton(Action action) {
-        Button removeButton = factory.createComponent(Button.class);
+        Button removeButton = factory.create(Button.class);
         removeButton.setAction(action);
         removeButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         removeButton.setIcon(action.getIcon());
@@ -86,23 +90,23 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasHorizontalLayout createCanvasHorizontalLayout(HorizontalLayout horizontalLayout) {
         CanvasHorizontalLayout layout = super.createCanvasHorizontalLayout(horizontalLayout);
-        layout.getDelegate().setSpacing(true);
-        initDropLayout(horizontalLayout, layout);
+//        layout.getDelegate().setSpacing(true);
+        initLayout(horizontalLayout, layout);
         return layout;
     }
 
     @Override
     public CanvasCssLayout createCssLayout(CssLayout cssLayoutModel) {
         CanvasCssLayout layout = super.createCssLayout(cssLayoutModel);
-        initDropLayout(cssLayoutModel, layout);
+        initLayout(cssLayoutModel, layout);
         return layout;
     }
 
     @Override
     public CanvasGridLayout createCanvasGridLayout(GridLayout gridLayout) {
         CanvasGridLayout layout = super.createCanvasGridLayout(gridLayout);
-        layout.getDelegate().setSpacing(true);
-        initDropLayout(gridLayout, layout);
+//        layout.getDelegate().setSpacing(true);
+        initLayout(gridLayout, layout);
         return layout;
     }
 
@@ -122,8 +126,8 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasWidgetLayout createCanvasWidgetLayout(CanvasFrame frame, WidgetLayout widgetLayout) {
         CanvasWidgetLayout layout = super.createCanvasWidgetLayout(frame, widgetLayout);
-        layout.getDelegate().setSpacing(true);
-        initDropLayout(widgetLayout, layout);
+//        layout.getDelegate().setSpacing(true);
+        initLayout(widgetLayout, layout);
         return layout;
 
     }
@@ -131,33 +135,30 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     @Override
     public CanvasRootLayout createCanvasRootLayout(RootLayout rootLayout) {
         CanvasRootLayout layout = super.createCanvasRootLayout(rootLayout);
-        layout.getDelegate().setSpacing(true);
-        initDropLayout(rootLayout, layout);
+//        layout.getDelegate().setSpacing(true);
+        initLayout(rootLayout, layout);
         return layout;
     }
 
     protected Button createCaptionButton(DashboardLayout layout) {
-        Button captionButton = factory.createComponent(Button.class);
+        Button captionButton = factory.create(Button.class);
         captionButton.addStyleName(DashboardStyleConstants.DASHBOARD_EDIT_BUTTON);
         captionButton.setCaption(layout.getCaption());
         return captionButton;
     }
 
     protected void addLayoutClickListener(CanvasLayout layout) {
-        if (!(layout instanceof CanvasResponsiveLayout)) {
-            layout.addLayoutClickListener(e -> {
-                CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
-                events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
+        layout.addLayoutClickListener(e -> {
+            CanvasLayout selectedLayout = (CanvasLayout) e.getSource().getParent();
+            events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
 
-            });
-        }
+        });
     }
 
     @Override
-    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout rootLayout) {
-        CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(rootLayout);
-        //layout.getDelegate().getComponent().setSpacing(true);
-        initDropLayout(rootLayout, layout);
+    public CanvasResponsiveLayout createCanvasResponsiveLayout(ResponsiveLayout responsiveLayout) {
+        CanvasResponsiveLayout layout = super.createCanvasResponsiveLayout(responsiveLayout);
+        initLayout(responsiveLayout, layout);
         return layout;
     }
 }

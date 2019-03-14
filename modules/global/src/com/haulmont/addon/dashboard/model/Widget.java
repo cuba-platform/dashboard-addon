@@ -45,9 +45,6 @@ public class Widget extends BaseUuidEntity {
     @MetaProperty
     protected String frameId;
     @MetaProperty
-    @Deprecated
-    protected String browseFrameId;
-    @MetaProperty
     @Exclude
     protected Dashboard dashboard;
 
@@ -106,9 +103,6 @@ public class Widget extends BaseUuidEntity {
     }
 
     public String getFrameId() {
-        if (frameId == null) {
-            frameId = browseFrameId;
-        }
         return frameId;
     }
 
@@ -125,7 +119,6 @@ public class Widget extends BaseUuidEntity {
     }
 
     public String getName() {
-
         return name;
     }
 

@@ -17,22 +17,33 @@
 package com.haulmont.addon.dashboard.web.dashboard.frames.view;
 
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
+import javax.inject.Inject;
 import java.util.Map;
 
+@UiController("dashboard$PersistentDashboard.view")
+@UiDescriptor("dashboard-view.xml")
 public class DashboardView extends AbstractWindow {
 
-    public static final String SCREEN_NAME = "dashboard$DashboardView";
     public static final String CODE = "CODE";
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
 
+    @Inject
+    protected Fragments fragments;
+
     @Override
     public void init(Map<String, Object> params) {
-        if (params.containsKey(DISPLAY_NAME)){
+        if (params.containsKey(DISPLAY_NAME)) {
             setCaption((String) params.get(DISPLAY_NAME));
         }
-        openFrame(this, WebDashboardFrame.SCREEN_NAME, params);
+        add(fragments.create(this, WebDashboardFrame.class, new MapScreenOptions(params))
+                .init()
+                .getFragment());
     }
 
 

@@ -9,23 +9,28 @@ import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$EntityValueFrame")
+@UiDescriptor("entity-value-frame.xml")
 public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     @Inject
-    protected LookupField metaClassLookup;
+    protected LookupField<MetaClass> metaClassLookup;
     @Inject
-    protected LookupField entitiesLookup;
+    protected LookupField<Entity> entitiesLookup;
     @Inject
-    protected LookupField viewLookup;
+    protected LookupField<String> viewLookup;
     @Inject
     protected Metadata metadata;
     @Inject
@@ -36,7 +41,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         super.init(params);
         loadAllPersistentClasses();
         selectIfExist((EntityParameterValue) params.get(VALUE));
-        metaClassLookup.addValueChangeListener(e -> metaClassValueChanged((MetaClass) e.getValue()));
+        metaClassLookup.addValueChangeListener(e -> metaClassValueChanged(e.getValue()));
     }
 
 
@@ -67,7 +72,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         if (value != null && isNotBlank(value.getMetaClassName())) {
             String metaClassName = value.getMetaClassName();
 
-            Optional<MetaClass> classOpt = ((List<MetaClass>) metaClassLookup.getOptionsList())
+            Optional<MetaClass> classOpt = metaClassLookup.getOptions().getOptions().collect(Collectors.toList())
                     .stream()
                     .filter(clazz -> metaClassName.equals(clazz.getName()))
                     .findFirst();
@@ -80,7 +85,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
                 String entityId = value.getEntityId();
                 if (isNotBlank(entityId)) {
-                    ((List<Entity>) entitiesLookup.getOptionsList())
+                    entitiesLookup.getOptions().getOptions().collect(Collectors.toList())
                             .stream()
                             .filter(entity -> entityId.equals(entity.getId().toString()))
                             .findFirst()
@@ -88,7 +93,7 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
                 }
 
                 String viewName = value.getViewName();
-                if (isNotBlank(viewName) && viewLookup.getOptionsList().contains(viewName)) {
+                if (isNotBlank(viewName) && viewLookup.getOptions().getOptions().anyMatch(e -> e.equals(viewName))) {
                     viewLookup.setValue(viewName);
                 }
             }

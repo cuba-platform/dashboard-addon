@@ -29,6 +29,7 @@
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/expand/expand-dialog.xml"/>
     <screen id="dashboard$ColspanDialog"
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/colspan/colspan-dialog.xml"/>
+
     <!--parameters-->
     <screen id="dashboard$ParameterBrowse"
             template="com/haulmont/addon/dashboard/web/parameter/parameter-browse.xml"/>
@@ -53,15 +54,6 @@
             template="/com/haulmont/addon/dashboard/web/widgettemplate/widget-template-browse.xml"/>
     <screen id="dashboard$WidgetTemplate.edit"
             template="com/haulmont/addon/dashboard/web/widgettemplate/widget-template-edit.xml"/>
-    <!--widget types-->
-    <screen id="dashboard$ScreenWidget"
-            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget.xml"/>
-    <screen id="dashboard$ScreenWidget.edit"
-            template="/com/haulmont/addon/dashboard/web/widget/screen/screen-widget-edit.xml"/>
-    <screen id="dashboard$LookupWidget"
-            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget.xml"/>
-    <screen id="dashboard$LookupWidget.edit"
-            template="/com/haulmont/addon/dashboard/web/widget/lookup/lookup-widget-edit.xml"/>
     <!--dashboard groups-->
     <screen id="dashboard$DashboardGroup.browse"
             template="com/haulmont/addon/dashboard/web/dashboardgroup/dashboard-group-browse.xml"/>
@@ -74,4 +66,5 @@
             template="com/haulmont/addon/dashboard/web/widgettemplategroup/widget-template-group-edit.xml"/>
     <screen id="dashboard$ResponsiveDialog"
             template="com/haulmont/addon/dashboard/web/dashboard/frames/editor/responsive/responsive-creation-dialog.xml"/>
+
 </screen-config>

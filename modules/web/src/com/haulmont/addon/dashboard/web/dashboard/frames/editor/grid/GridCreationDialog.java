@@ -18,7 +18,9 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.grid;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.vaadin.data.Property;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
@@ -26,6 +28,8 @@ import com.vaadin.ui.Slider;
 import javax.inject.Inject;
 import java.util.Map;
 
+@UiController("dashboard$GridDialog")
+@UiDescriptor("grid-creation-dialog.xml")
 public class GridCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$GridDialog";
 
@@ -48,10 +52,10 @@ public class GridCreationDialog extends AbstractWindow {
         cols.setCaptionAsHtml(true);
         rows.setCaptionAsHtml(true);
 
-        cols.addValueChangeListener((Property.ValueChangeListener) event ->
+        cols.addValueChangeListener(event ->
                 cols.setCaption(formatMessage("dashboard.gridColumnCount", cols.getValue().intValue()))
         );
-        rows.addValueChangeListener((Property.ValueChangeListener) event ->
+        rows.addValueChangeListener(event ->
                 rows.setCaption(formatMessage("dashboard.gridRowCount", rows.getValue().intValue()))
         );
         cols.focus();
@@ -62,11 +66,11 @@ public class GridCreationDialog extends AbstractWindow {
     }
 
     public void apply() {
-        this.close(COMMIT_ACTION_ID);
+        this.close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        this.close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 
     public int getRows() {

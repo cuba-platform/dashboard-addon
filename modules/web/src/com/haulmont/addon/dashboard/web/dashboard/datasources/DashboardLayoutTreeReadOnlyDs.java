@@ -80,10 +80,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
                 .findFirst()
                 .map(DashboardLayout::getId)
                 .orElse(null);
-        if (itemId.equals(root)) {
-            return true;
-        }
-        return false;
+        return itemId.equals(root);
     }
 
     @Override
@@ -96,7 +93,7 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
             ResponsiveLayout dashboardResponsiveLayout = (ResponsiveLayout) item;
             return dashboardResponsiveLayout.getAreas().size() > 0;
         } else {
-            return item.getChildren().size() > 0;
+            return item != null && item.getChildren().size() > 0;
         }
     }
 

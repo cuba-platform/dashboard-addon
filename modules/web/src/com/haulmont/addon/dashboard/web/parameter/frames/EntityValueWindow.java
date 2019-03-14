@@ -4,10 +4,15 @@ import com.haulmont.addon.dashboard.model.paramtypes.EntityParameterValue;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 import java.util.Map;
 
+@UiController("dashboard$EntityValueWindow")
+@UiDescriptor("entity-value-window.xml")
 public class EntityValueWindow extends AbstractWindow implements ValueFrame, Window.Committable {
 
     @Inject
@@ -28,11 +33,11 @@ public class EntityValueWindow extends AbstractWindow implements ValueFrame, Win
     }
 
     public void commitAndClose() {
-        close(Window.COMMIT_ACTION_ID, true);
+        close(new StandardCloseAction(COMMIT_ACTION_ID, false));
     }
 
     public void cancelAndClose() {
-        close(Window.CLOSE_ACTION_ID);
+        close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
     @Override

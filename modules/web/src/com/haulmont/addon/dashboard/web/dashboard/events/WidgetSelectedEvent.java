@@ -23,7 +23,7 @@ public class WidgetSelectedEvent extends AbstractDashboardEditEvent {
 
     public enum Target {
         CANVAS,
-        TREE;
+        TREE
     }
 
     private Target target;

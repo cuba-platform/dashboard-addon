@@ -22,7 +22,6 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.*;
 import com.haulmont.addon.dashboard.web.DashboardException;
-import com.haulmont.addon.dashboard.web.DashboardStyleConstants;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
 import com.haulmont.addon.dashboard.web.dashboard.events.DashboardRefreshEvent;
@@ -36,7 +35,6 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteF
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive.ResponsiveCreationDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.style.StyleDialog;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.weight.WeightDialog;
-import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DropLayoutTools;
@@ -49,15 +47,18 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.Fragments;
+import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.Screens;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
 import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.screen.*;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.cookie.SM;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.event.EventListener;
@@ -69,16 +70,18 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.findParentLayout;
+import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.isParentResponsiveLayout;
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD;
 import static com.haulmont.addon.dashboard.web.parameter.ParameterBrowse.PARAMETERS;
-import static com.haulmont.cuba.gui.WindowManager.OpenType.DIALOG;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.*;
 
+@UiController("dashboard$PersistentDashboard.edit")
+@UiDescriptor("dashboard-edit.xml")
 public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
 
     @Inject
@@ -104,10 +107,16 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @Inject
     protected Events events;
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents uiComponents;
+    @Inject
+    protected Fragments fragments;
+    @Inject
+    protected Screens screens;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     protected ParameterBrowse parametersFrame;
-    protected AbstractFrame paletteFrame;
+    protected PaletteFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
 
     @Named("dropModelConverter")
@@ -155,26 +164,31 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     }
 
     protected void initParametersFrame() {
-        parametersFrame = (ParameterBrowse) openFrame(paramsBox, ParameterBrowse.SCREEN_NAME, ParamsMap.of(
-                PARAMETERS, getDashboard().getParameters(), DASHBOARD, getDashboard()
-        ));
+        paramsBox.removeAll();
+        paramsBox.add(fragments.create(this, ParameterBrowse.class,
+                new MapScreenOptions(ParamsMap.of(
+                        PARAMETERS, getDashboard().getParameters(), DASHBOARD, getDashboard()
+                ))
+        ).init().getFragment());
     }
 
     protected void initPaletteFrame() {
-        paletteFrame = openFrame(paletteBox, PaletteFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, getDashboard()
-        ));
+        paletteBox.removeAll();
+        paletteBox.add(fragments.create(this, PaletteFrame.class,
+                new MapScreenOptions(ParamsMap.of(DASHBOARD, getDashboard()))
+        ).init().getFragment());
     }
 
     protected void initCanvasFrame() {
-        canvasFrame = (CanvasEditorFrame) openFrame(canvasBox, CanvasEditorFrame.SCREEN_NAME, ParamsMap.of(
-                DASHBOARD, getDashboard()
-        ));
-        canvasBox.expand(canvasFrame);
+        canvasBox.removeAll();
+        canvasFrame = (CanvasEditorFrame) fragments.create(this, CanvasEditorFrame.class,
+                new MapScreenOptions(ParamsMap.of(DASHBOARD, getDashboard()))
+        ).init();
+        canvasBox.add(canvasFrame.getFragment());
     }
 
     public void cancel() {
-        close("close", false);
+        close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 
     public void onExportJsonBtnClick() {
@@ -220,7 +234,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                                 "dashboard$WidgetTemplate".equals(dsContext.get("widgetTemplatesDs").getMetaClass().getName())));
 
         FieldGroup.FieldConfig assistantBeanName = fieldGroup2.getField("assistantBeanName");
-        LookupField lookupField = (LookupField) assistantBeanName.getComponent();
+        LookupField<String> lookupField = (LookupField<String>) assistantBeanName.getComponent();
         String val = lookupField.getValue();
         dashboardDs.getItem().setAssistantBeanName(val);
 
@@ -246,9 +260,9 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
         Map<String, DashboardViewAssistant> assistantBeanMap = AppBeans.getAll(DashboardViewAssistant.class);
         BeanFactory bf = ((AbstractApplicationContext) AppContext.getApplicationContext()).getBeanFactory();
         List<String> prototypeBeanNames = assistantBeanMap.keySet().stream()
-                .filter(bn -> bf.isPrototype(bn))
+                .filter(bf::isPrototype)
                 .collect(toList());
-        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+        LookupField lookupField = uiComponents.create(LookupField.class);
         lookupField.setOptionsList(prototypeBeanNames);
         return lookupField;
     }
@@ -273,29 +287,35 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
                     filter(ra -> source.getUuid().equals(ra.getComponent().getUuid())).
                     findFirst().orElseThrow(() -> new RuntimeException("Can't find layout with uuid " + source.getUuid()));
 
-            ResponsiveCreationDialog dialog = (ResponsiveCreationDialog) frame.openWindow(ResponsiveCreationDialog.SCREEN_NAME, DIALOG, getDisplaySizeMap(responsiveArea));
-            dialog.addCloseListener(actionId -> {
-                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                    int xs = dialog.getXs();
-                    int sm = dialog.getSm();
-                    int md = dialog.getMd();
-                    int lg = dialog.getLg();
+            screens.create(ResponsiveCreationDialog.class, OpenMode.DIALOG, new MapScreenOptions(getDisplaySizeMap(responsiveArea)))
+                    .show()
+                    .addAfterCloseListener(e -> {
+                        StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                        ResponsiveCreationDialog dialog = (ResponsiveCreationDialog) e.getSource();//todo
+                        if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                            int xs = dialog.getXs();
+                            int sm = dialog.getSm();
+                            int md = dialog.getMd();
+                            int lg = dialog.getLg();
 
-                    responsiveArea.setXs(xs);
-                    responsiveArea.setSm(sm);
-                    responsiveArea.setMd(md);
-                    responsiveArea.setLg(lg);
-                    events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
-                }
-            });
+                            responsiveArea.setXs(xs);
+                            responsiveArea.setSm(sm);
+                            responsiveArea.setMd(md);
+                            responsiveArea.setLg(lg);
+                            events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                        }
+                    });
         } else {
-            WeightDialog weightDialog = (WeightDialog) openWindow(WeightDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                    WeightDialog.WIDGET, source));
-            weightDialog.addCloseListener(actionId -> {
-                if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                    events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
-                }
-            });
+            screens.create(WeightDialog.class, OpenMode.DIALOG, new MapScreenOptions(ParamsMap.of(
+                    WeightDialog.WIDGET, source)
+            ))
+                    .show()
+                    .addAfterCloseListener(e -> {
+                        StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                        if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                            events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                        }
+                    });
         }
         ((AbstractDatasource) dashboardDs).setModified(true);
     }
@@ -304,13 +324,17 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public void onColspanChanged(ColspanChangedEvent event) {
         DashboardLayout source = event.getSource();
 
-        ColspanDialog weightDialog = (ColspanDialog) openWindow(ColspanDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                ColspanDialog.WIDGET, source));
-        weightDialog.addCloseListener(actionId -> {
-            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
-            }
-        });
+        screens.create(ColspanDialog.class, OpenMode.DIALOG, new MapScreenOptions(ParamsMap.of(
+                WeightDialog.WIDGET, source)
+        ))
+                .show()
+                .addAfterCloseListener(e -> {
+                    StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                    if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                        events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                    }
+                });
+
         ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
@@ -318,20 +342,23 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public void onExpandChanged(ExpandChangedEvent event) {
         DashboardLayout source = event.getSource();
 
-        ExpandDialog expandDialog = (ExpandDialog) openWindow(ExpandDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                ExpandDialog.EXPAND, source.getExpand(),
-                ExpandDialog.LAYOUT, source));
-        expandDialog.addCloseListener(actionId -> {
-            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                DashboardLayout expandLayout = expandDialog.getExpand();
-                if (expandLayout != null) {
-                    source.setExpand(expandLayout.getId());
-                } else {
-                    source.setExpand(null);
-                }
-                events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
-            }
-        });
+        screens.create(ExpandDialog.class, OpenMode.DIALOG, new MapScreenOptions(ParamsMap.of(
+                ExpandDialog.WIDGET, source)
+        ))
+                .show()
+                .addAfterCloseListener(e -> {
+                    StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                    if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                        DashboardLayout expandLayout = ((ExpandDialog) e.getScreen()).getExpand();
+                        if (expandLayout != null) {
+                            source.setExpand(expandLayout.getId());
+                        } else {
+                            source.setExpand(null);
+                        }
+                        events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), source.getUuid()));
+                    }
+                });
+
         ((AbstractDatasource) dashboardDs).setModified(true);
     }
 
@@ -339,35 +366,25 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     public void onStyleChanged(StyleChangedEvent event) {
         DashboardLayout source = event.getSource();
 
-        StyleDialog weightDialog = (StyleDialog) openWindow(StyleDialog.SCREEN_NAME, DIALOG, ParamsMap.of(
-                StyleDialog.STYLENAME, source.getStyleName(),
-                StyleDialog.WIDTH, source.getWidth(),
-                StyleDialog.WIDTH_UNITS, source.getWidthUnit(),
-                StyleDialog.HEIGHT, source.getHeight(),
-                StyleDialog.HEIGHT_UNITS, source.getHeightUnit()));
-        weightDialog.addCloseListener(actionId -> {
-            if (Window.COMMIT_ACTION_ID.equals(actionId)) {
-                Dashboard dashboard = getDashboard();
-                DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
-                layout.setStyleName(weightDialog.getLayoutStyleName());
-                layout.setHeight(weightDialog.getLayoutHeight());
-                layout.setHeightUnit(weightDialog.getLayoutHeightUnit());
-                layout.setWidth(weightDialog.getLayoutWidth());
-                layout.setWidthUnit(weightDialog.getLayoutWidthUnit());
-                events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
-            }
-        });
+        screens.create(StyleDialog.class, OpenMode.DIALOG, new MapScreenOptions(ParamsMap.of(
+                StyleDialog.WIDGET, source)
+        ))
+                .show()
+                .addAfterCloseListener(e -> {
+                    StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                    if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                        Dashboard dashboard = getDashboard();
+                        StyleDialog styleDialog = (StyleDialog) e.getScreen();
+                        DashboardLayout layout = dashboard.getVisualModel().findLayout(source.getUuid());
+                        layout.setStyleName(styleDialog.getLayoutStyleName());
+                        layout.setHeight(styleDialog.getLayoutHeight());
+                        layout.setHeightUnit(styleDialog.getLayoutHeightUnit());
+                        layout.setWidth(styleDialog.getLayoutWidth());
+                        layout.setWidthUnit(styleDialog.getLayoutWidthUnit());
+                        events.publish(new DashboardRefreshEvent(dashboard.getVisualModel(), source.getUuid()));
+                    }
+                });
         ((AbstractDatasource) dashboardDs).setModified(true);
-    }
-
-    private String getAdditionalStyleName(CanvasLayout source) {
-        String styleName = source.getStyleName();
-        if (styleName != null) {
-            styleName = styleName.replace(DashboardStyleConstants.DASHBOARD_SHADOW_BORDER, "");
-            styleName = styleName.replace(DashboardStyleConstants.DASHBOARD_TREE_SELECTED, "");
-            return styleName.trim();
-        }
-        return null;
     }
 
     @EventListener
@@ -387,13 +404,20 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @EventListener
     public void onOpenWidgetEditor(WidgetEditEvent event) {
         Widget widget = event.getSource().getWidget();
-        WidgetEdit editor = (WidgetEdit) openEditor(WidgetEdit.SCREEN_NAME, widget, DIALOG);
-        editor.addCloseWithCommitListener(() -> {
-            WidgetLayout widgetLayout = getDashboard().getWidgetLayout(widget.getId());
-            widgetLayout.setWidget(editor.getItem());
-            ((AbstractDatasource) dashboardDs).setModified(true);
-            events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
-        });
+        screenBuilders.editor(Widget.class, this)
+                .editEntity(widget)
+                .withLaunchMode(OpenMode.DIALOG)
+                .build()
+                .show()
+                .addAfterCloseListener(e -> {
+                    StandardCloseAction closeAction = (StandardCloseAction) e.getCloseAction();
+                    if (Window.COMMIT_ACTION_ID.equals(closeAction.getActionId())) {
+                        WidgetLayout widgetLayout = getDashboard().getWidgetLayout(widget.getId());
+                        widgetLayout.setWidget(((WidgetEdit) e.getScreen()).getItem());
+                        ((AbstractDatasource) dashboardDs).setModified(true);
+                        events.publish(new DashboardRefreshEvent(getDashboard().getVisualModel(), widget.getId()));
+                    }
+                });
     }
 
     @Override

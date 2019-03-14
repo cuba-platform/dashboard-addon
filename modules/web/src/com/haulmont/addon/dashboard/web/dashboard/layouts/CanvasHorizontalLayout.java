@@ -18,18 +18,22 @@
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.HorizontalLayout;
-import com.haulmont.addon.dnd.web.gui.components.WebDDHorizontalLayout;
+import com.haulmont.cuba.gui.components.HBoxLayout;
 
 public class CanvasHorizontalLayout extends AbstractCanvasLayout {
-    protected WebDDHorizontalLayout horizontalLayout;
 
-    public CanvasHorizontalLayout(HorizontalLayout model) {
-        super(model, new WebDDHorizontalLayout());
-        horizontalLayout = (WebDDHorizontalLayout) delegate;
+    public static final String NAME = "canvasHorizontalLayout";
+
+    protected HBoxLayout horizontalLayout;
+
+    public CanvasHorizontalLayout init(HorizontalLayout model) {
+        init(model, HBoxLayout.class);
+        horizontalLayout = (HBoxLayout) delegate;
+        return this;
     }
 
     @Override
-    public WebDDHorizontalLayout getDelegate() {
+    public HBoxLayout getDelegate() {
         return horizontalLayout;
     }
 }

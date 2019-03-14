@@ -1,50 +1,59 @@
+/*
+ * Copyright (c) 2008-2019 Haulmont.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.ResponsiveArea;
 import com.haulmont.addon.dashboard.model.visualmodel.ResponsiveLayout;
-import com.haulmont.addon.dashboard.web.dashboard.events.CanvasLayoutElementClickedEvent;
-import com.haulmont.addon.dnd.web.gui.components.WebDragAndDropWrapper;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.components.Component;
 import org.strangeway.responsive.web.components.impl.WebResponsiveColumn;
 import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
 import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
+
 import java.util.Iterator;
 import java.util.UUID;
 
 public class CanvasResponsiveLayout extends AbstractCanvasLayout {
-    protected WebDragAndDropWrapper wrapper;
 
-    public CanvasResponsiveLayout(ResponsiveLayout model) {
-        super(model, new WebDragAndDropWrapper());
-        wrapper = (WebDragAndDropWrapper) delegate;
-        org.strangeway.responsive.web.components.ResponsiveLayout responsiveLayout = new WebResponsiveLayout();
 
+    public static final String NAME = "canvasResponsiveLayout";
+
+    protected org.strangeway.responsive.web.components.ResponsiveLayout responsiveLayout;
+
+    public CanvasResponsiveLayout init(ResponsiveLayout model) {
+        init(model, org.strangeway.responsive.web.components.ResponsiveLayout.class);
+        responsiveLayout = (org.strangeway.responsive.web.components.ResponsiveLayout) delegate;
         WebResponsiveRow wrr = new WebResponsiveRow();
-        Events events = AppBeans.get(Events.class);
-        wrr.addLayoutClickListener(e -> {
-            CanvasLayout selectedLayout = this;
-            events.publish(new CanvasLayoutElementClickedEvent(selectedLayout.getUuid(), e.getMouseEventDetails()));
 
-        });
-        wrapper.setSizeFull();
         responsiveLayout.setSizeFull();
         responsiveLayout.setSpacing(true);
         responsiveLayout.setFlexible(true);
         wrr.setSizeFull();
 
         responsiveLayout.addRow(wrr);
-        wrapper.add(responsiveLayout);
+        return this;
     }
 
     @Override
-    public WebDragAndDropWrapper getDelegate() {
-        return wrapper;
+    public org.strangeway.responsive.web.components.ResponsiveLayout getDelegate() {
+        return responsiveLayout;
     }
 
     public void addComponent(Component component) {
-        WebResponsiveLayout wrl = (WebResponsiveLayout) wrapper.getDraggedComponent();
+        WebResponsiveLayout wrl = (WebResponsiveLayout) responsiveLayout;
 
         Iterator it = wrl.getOwnComponents().iterator();
         WebResponsiveRow wrr = (WebResponsiveRow) it.next();
@@ -59,11 +68,12 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
 
         WebResponsiveColumn wrc = new WebResponsiveColumn();
         wrc.setDisplayRules(responsiveArea.getXs() == null ? rl.getXs() : responsiveArea.getXs(),
-                            responsiveArea.getSm() == null ? rl.getSm() : responsiveArea.getSm(),
-                            responsiveArea.getMd() == null ? rl.getMd() : responsiveArea.getMd(),
-                            responsiveArea.getLg() == null ? rl.getLg() : responsiveArea.getLg());
+                responsiveArea.getSm() == null ? rl.getSm() : responsiveArea.getSm(),
+                responsiveArea.getMd() == null ? rl.getMd() : responsiveArea.getMd(),
+                responsiveArea.getLg() == null ? rl.getLg() : responsiveArea.getLg());
         component.setSizeFull();
         wrc.setContent(component);
         wrr.addColumn(wrc);
     }
+
 }

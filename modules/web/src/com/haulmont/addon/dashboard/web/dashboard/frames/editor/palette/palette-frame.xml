@@ -3,8 +3,7 @@
   ~ Copyright (c) 2016-2018 Haulmont. All rights reserved.
   -->
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame"
-        xmlns:dnd="http://schemas.haulmont.com/dnd/0.1/drag-and-drop.xsd">
+        class="com.haulmont.addon.dashboard.web.dashboard.frames.editor.palette.PaletteFrame">
     <dsContext>
         <collectionDatasource id="widgetTemplatesDs"
                               allowCommit="false"
@@ -30,33 +29,30 @@
                          caption="msg://widgets">
                         <scrollBox id="widgetBox"
                                    height="100%">
-                            <dnd:dndVBoxLayout id="ddWidgetBox"
-                                               dragMode="CLONE"
-                                               height="100%"
-                                               margin="true"
-                                               width="100%"/>
+                            <vbox id="ddWidgetBox"
+                                  height="100%"
+                                  margin="true"
+                                  width="100%"/>
                         </scrollBox>
                     </tab>
                     <tab id="widgetLayoutsTab"
                          caption="msg://layouts">
                         <scrollBox id="layoutBox"
                                    height="100%">
-                            <dnd:dndVBoxLayout id="ddLayoutBox"
-                                               dragMode="CLONE"
-                                               height="100%"
-                                               margin="true"
-                                               width="100%"/>
+                            <vbox id="ddLayoutBox"
+                                  height="100%"
+                                  width="100%"
+                                  margin="true"/>
                         </scrollBox>
                     </tab>
                     <tab id="widgetTemplateTab"
                          caption="msg://widgetTemplates">
                         <scrollBox id="widgetTemplateBox"
                                    height="100%">
-                            <dnd:dndVBoxLayout id="ddWidgetTemplateBox"
-                                               dragMode="CLONE"
-                                               height="100%"
-                                               margin="true"
-                                               width="100%"/>
+                            <vbox id="ddWidgetTemplateBox"
+                                  height="100%"
+                                  margin="true"
+                                  width="100%"/>
                         </scrollBox>
                     </tab>
                 </accordion>
@@ -65,9 +61,8 @@
                   margin="true,false,false,false">
                 <groupBox id="widgetTreeBox">
                     <scrollBox
-                               height="100%" scrollBars="vertical">
+                            height="100%" scrollBars="vertical">
                         <tree id="widgetTree"
-                              height="100%"
                               width="100%">
                             <treechildren captionProperty="caption"
                                           datasource="dashboardLayoutTreeReadOnlyDs"/>

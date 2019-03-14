@@ -21,6 +21,7 @@ import com.haulmont.addon.dashboard.entity.PersistentDashboard;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
+import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.web.DashboardException;
 import com.haulmont.addon.dashboard.web.dashboard.assistant.DashboardViewAssistant;
 import com.haulmont.addon.dashboard.web.dashboard.converter.JsonConverter;
@@ -30,14 +31,22 @@ import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
+import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
+import com.haulmont.addon.dashboard.web.widget.LookupWidget;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.Fragments;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -60,8 +69,10 @@ import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.Ca
 import static com.haulmont.addon.dashboard.web.dashboard.frames.view.DashboardView.CODE;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@UiController("dashboard$DashboardComponent")
+@UiDescriptor("web-dashboard-frame.xml")
 public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     public static final String SCREEN_NAME = "dashboard$DashboardComponent";
@@ -83,9 +94,13 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Inject
     protected Messages messages;
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents componentsFactory;
     @Inject
     protected Events events;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected Fragments fragments;
 
     protected DashboardViewAssistant dashboardViewAssistant;
 
@@ -105,6 +120,21 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         refresh();
         initAssistant(this);
         initTimer(this.getParent());
+        initLookupWidget();
+    }
+
+    private void initLookupWidget() {
+        List<LookupWidget> lookupWidgets = canvasFrame.getLookupWidgets();
+        for (LookupWidget widget : lookupWidgets) {
+            assignItemSelectedHandler(widget);
+        }
+    }
+
+    private void assignItemSelectedHandler(LookupWidget widget) {
+        ListComponent lookupComponent = widget.getLookupComponent();
+        lookupComponent.getItems().addStateChangeListener(e -> {
+            events.publish(new ItemsSelectedEvent((Widget) widget, lookupComponent.getSelected()));
+        });
     }
 
     @Override
@@ -132,11 +162,11 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         Window parentWindow = findWindow(frame);
         int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
         if (timerDelay > 0 && parentWindow != null) {
-            Timer dashboardUpdatedTimer = componentsFactory.createTimer();
+            Timer dashboardUpdatedTimer = componentsFactory.create(Timer.class);
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
             dashboardUpdatedTimer.setRepeating(true);
-            dashboardUpdatedTimer.addActionListener(timer -> events.publish(new DashboardUpdatedEvent(dashboard)));
+            dashboardUpdatedTimer.addTimerActionListener(timer -> events.publish(new DashboardUpdatedEvent(dashboard)));
             dashboardUpdatedTimer.start();
         }
     }
@@ -171,12 +201,16 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null) {
-            showNotification(messages.getMainMessage("notLoadedDashboard"), NotificationType.ERROR);
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption(messages.getMainMessage("notLoadedDashboard"))
+                    .show();
             return;
         }
 
         if (!accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
-            showNotification(messages.getMainMessage("notOpenBrowseDashboard"), NotificationType.WARNING);
+            notifications.create(Notifications.NotificationType.WARNING)
+                    .withCaption(messages.getMainMessage("notOpenBrowseDashboard"))
+                    .show();
             return;
         }
 
@@ -227,9 +261,12 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     protected void updateCanvasFrame(Dashboard dashboard) {
         if (canvasFrame == null) {
-            canvasFrame = (CanvasFrame) openFrame(canvasBox, CanvasFrame.SCREEN_NAME, ParamsMap.of(
+            canvasFrame = fragments.create(this, CanvasFrame.class, new MapScreenOptions(ParamsMap.of(
                     CanvasFrame.DASHBOARD, dashboard, DASHBOARD_FRAME, this
-            ));
+            )));
+            canvasFrame.init();
+            canvasBox.removeAll();
+            canvasBox.add(canvasFrame.getFragment());
         } else {
             canvasFrame.updateLayout(dashboard);
         }
@@ -255,21 +292,21 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         return null;
     }
 
-    public AbstractFrame getWidget(String widgetId) {
+    public ScreenFragment getWidget(String widgetId) {
         return searchWidgetFrame(canvasFrame.getvLayout(), widgetId);
     }
 
-    protected AbstractFrame searchWidgetFrame(CanvasLayout layout, String widgetId) {
+    protected ScreenFragment searchWidgetFrame(CanvasLayout layout, String widgetId) {
         if (CanvasWidgetLayout.class.isAssignableFrom(layout.getClass())) {
             CanvasWidgetLayout canvasWidgetLayout = (CanvasWidgetLayout) layout;
             if (widgetId.equals(canvasWidgetLayout.getWidget().getWidgetId())) {
-                return (AbstractFrame) canvasWidgetLayout.getWidgetComponent();
+                return (ScreenFragment) canvasWidgetLayout.getWidgetComponent();
             }
             return null;
         }
 
         for (Component child : layout.getDelegate().getOwnComponents()) {
-            AbstractFrame result = searchWidgetFrame((CanvasLayout) child, widgetId);
+            ScreenFragment result = searchWidgetFrame((CanvasLayout) child, widgetId);
             if (result != null) {
                 return result;
             }

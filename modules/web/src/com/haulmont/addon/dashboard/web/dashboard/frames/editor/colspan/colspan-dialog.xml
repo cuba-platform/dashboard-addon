@@ -21,7 +21,7 @@
         messagesPack="com.haulmont.addon.dashboard.web.dashboard.frames.editor.colspan">
     <dialogMode height="AUTO"
                 width="480"/>
-    <layout height="100%"
+    <layout expand="btnPanel"
             spacing="true"
             width="100%">
         <hbox width="480px" spacing="true">

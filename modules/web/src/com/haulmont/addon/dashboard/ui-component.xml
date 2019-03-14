@@ -2,8 +2,62 @@
 <components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
     <component>
         <tag>dashboard</tag>
-        <name>dashboardComponent</name>
+        <name>dashboard</name>
         <componentLoader>com.haulmont.addon.dashboard.gui.components.loaders.DashboardFrameLoader</componentLoader>
         <class>com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame</class>
+    </component>
+    <component>
+        <tag>paletteButton</tag>
+        <name>paletteButton</name>
+        <componentLoader>com.haulmont.addon.dashboard.gui.components.loaders.PaletteButtonLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.frames.editor.components.PaletteButton</class>
+    </component>
+    <component>
+        <tag>canvasRootLayout</tag>
+        <name>canvasRootLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasRootLayout</class>
+    </component>
+    <component>
+        <tag>canvasVerticalLayout</tag>
+        <name>canvasVerticalLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasVerticalLayout</class>
+    </component>
+    <component>
+        <tag>canvasHorizontalLayout</tag>
+        <name>canvasHorizontalLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasHorizontalLayout</class>
+    </component>
+    <component>
+        <tag>canvasCssLayout</tag>
+        <name>canvasCssLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasCssLayout</class>
+    </component>
+    <component>
+        <tag>canvasGridLayout</tag>
+        <name>canvasGridLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasGridLayout</class>
+    </component>
+    <component>
+        <tag>canvasWidgetLayout</tag>
+        <name>canvasWidgetLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasWidgetLayout</class>
+    </component>
+    <component>
+        <tag>canvasResponsiveLayout</tag>
+        <name>canvasResponsiveLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasResponsiveLayout</class>
+    </component>
+    <component>
+        <tag>c10m_responsiveLayout</tag>
+        <name>c10m_responsiveLayout</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.CssLayoutLoader</componentLoader>
+        <class>org.strangeway.responsive.web.components.impl.WebResponsiveLayout</class>
     </component>
 </components>

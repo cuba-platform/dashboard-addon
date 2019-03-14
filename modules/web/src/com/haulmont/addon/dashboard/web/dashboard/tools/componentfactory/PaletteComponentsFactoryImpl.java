@@ -29,7 +29,10 @@ import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.web.widgets.CubaButton;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.ui.dnd.DragSourceExtension;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -37,7 +40,7 @@ import javax.inject.Inject;
 @Component
 public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     @Inject
-    protected ComponentsFactory factory;
+    protected UiComponents factory;
     @Inject
     protected Events events;
     @Inject
@@ -119,10 +122,14 @@ public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
     }
 
     protected PaletteButton createCommonButton() {
-        PaletteButton button = new PaletteButton();
+        PaletteButton button = factory.create(PaletteButton.class);
         button.setWidth("100%");
         button.setHeight("50px");
         button.setStyleName(DashboardStyleConstants.DASHBOARD_BUTTON);
+        DragSourceExtension<CubaButton> dragSourceExtension = new DragSourceExtension<>(button.unwrap(CubaButton.class));
+        dragSourceExtension.setEffectAllowed(EffectAllowed.COPY);
+        dragSourceExtension.addDragStartListener(e -> dragSourceExtension.setDragData(button.getLayout()));
+        dragSourceExtension.addDragEndListener(e -> dragSourceExtension.setDragData(null));
         return button;
     }
 

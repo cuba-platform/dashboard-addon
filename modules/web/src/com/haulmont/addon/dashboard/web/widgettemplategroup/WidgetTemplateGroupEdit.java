@@ -19,10 +19,14 @@ package com.haulmont.addon.dashboard.web.widgettemplategroup;
 import com.haulmont.addon.dashboard.entity.WidgetTemplateGroup;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.actions.AddAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Named;
 import java.util.Map;
 
+@UiController("dashboard$WidgetTemplateGroup.edit")
+@UiDescriptor("widget-template-group-edit.xml")
 public class WidgetTemplateGroupEdit extends AbstractEditor<WidgetTemplateGroup> {
     @Named("widgetTemplatesTable.add")
     protected AddAction add;

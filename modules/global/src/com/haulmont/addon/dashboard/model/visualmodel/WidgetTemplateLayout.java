@@ -18,7 +18,7 @@
 package com.haulmont.addon.dashboard.model.visualmodel;
 
 import com.haulmont.chile.core.annotations.MetaClass;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @MetaClass(name = "dashboard$WidgetTemplateLayout")
 public class WidgetTemplateLayout extends WidgetLayout {

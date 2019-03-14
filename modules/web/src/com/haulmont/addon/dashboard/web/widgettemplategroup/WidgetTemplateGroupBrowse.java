@@ -17,6 +17,10 @@
 package com.haulmont.addon.dashboard.web.widgettemplategroup;
 
 import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
+@UiController("dashboard$WidgetTemplateGroup.browse")
+@UiDescriptor("widget-template-group-browse.xml")
 public class WidgetTemplateGroupBrowse extends AbstractLookup {
 }

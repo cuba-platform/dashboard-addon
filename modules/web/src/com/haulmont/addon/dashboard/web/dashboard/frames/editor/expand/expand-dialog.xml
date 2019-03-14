@@ -19,7 +19,7 @@
             expand="btnPanel">
         <hbox width="100%" spacing="true" expand="expandLookupField">
             <label value="msg://expand"/>
-            <lookupField id="expandLookupField" width="100%" optionsDatasource="layoutsDs"/>
+            <lookupField id="expandLookupField" optionsDatasource="layoutsDs"/>
         </hbox>
         <buttonsPanel id="btnPanel">
             <button id="okBtn"

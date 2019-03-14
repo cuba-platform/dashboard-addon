@@ -21,25 +21,31 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
 import com.haulmont.addon.dashboard.web.parameter.frames.*;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.VBoxLayout;
-import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
-import org.apache.commons.lang3.StringUtils;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
 
 import static com.haulmont.addon.dashboard.model.ParameterType.*;
 
+@UiController("dashboard$Parameter.edit")
+@UiDescriptor("parameter-edit.xml")
 public class ParameterEdit extends AbstractEditor<Parameter> {
     @Inject
     protected Datasource<Parameter> parameterDs;
     @Inject
-    protected LookupField typeLookup;
+    protected LookupField<ParameterType> typeLookup;
     @Inject
     protected VBoxLayout valueBox;
+    @Inject
+    protected Fragments fragments;
 
     protected ValueFrame valueFrame;
 
@@ -48,7 +54,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     protected void postInit() {
         super.postInit();
         initParameter();
-        typeLookup.addValueChangeListener(e -> parameterTypeChanged((ParameterType) e.getValue()));
+        typeLookup.addValueChangeListener(e -> parameterTypeChanged(e.getValue()));
     }
 
     @Override
@@ -77,7 +83,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
 
     protected void initParameter() {
         ParameterValue parameterValue = parameterDs.getItem().getParameterValue();
-
+        valueBox.removeAll();
         if (parameterValue instanceof EntityParameterValue) {
             typeLookup.setValue(ENTITY);
             valueFrame = openEntityValueFrame((EntityParameterValue) parameterValue);
@@ -150,48 +156,42 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     }
 
     protected SimpleValueFrame openSimpleValueFrame(ParameterType type, ParameterValue parameterValue) {
-        return (SimpleValueFrame) openFrame(
-                valueBox,
-                "dashboard$SimpleValueFrame",
-                ParamsMap.of(ValueFrame.VALUE_TYPE, type, ValueFrame.VALUE, parameterValue)
-        );
+        SimpleValueFrame frame = (SimpleValueFrame) fragments.create(
+                this,
+                SimpleValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE_TYPE, type, ValueFrame.VALUE, parameterValue))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EnumValueFrame openEnumValueFrame(EnumParameterValue value) {
-        return (EnumValueFrame) openFrame(
-                valueBox,
-                "dashboard$EnumValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
+        EnumValueFrame frame = (EnumValueFrame) fragments.create(
+                this,
+                EnumValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EntityValueFrame openEntityValueFrame(EntityParameterValue value) {
-        return (EntityValueFrame) openFrame(
-                valueBox,
-                "dashboard$EntityValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
+        EntityValueFrame frame = (EntityValueFrame) fragments.create(
+                this,
+                EntityValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 
     protected EntitiesListValueFrame openEntitiesListValueFrame(ListEntitiesParameterValue value) {
-        return (EntitiesListValueFrame) openFrame(
-                valueBox,
-                "dashboard$EntitiesListValueFrame",
-                ParamsMap.of(ValueFrame.VALUE, value)
-        );
-    }
-
-    @Override
-    protected void postValidate(ValidationErrors errors) {
-        if (valueFrame instanceof SimpleValueFrame) {
-            SimpleValueFrame svf = (SimpleValueFrame) valueFrame;
-            if (ParameterType.UUID == svf.getType() && StringUtils.isNotEmpty(svf.getTextFieldValue())) {
-                if (!svf.getTextFieldValue().matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
-                    errors.add(svf.getTextField(), getMessage("invalidUUID"));
-                }
-            }
-        }
-
-        super.postValidate(errors);
+        EntitiesListValueFrame frame = (EntitiesListValueFrame) fragments.create(
+                this,
+                EntitiesListValueFrame.class,
+                new MapScreenOptions(ParamsMap.of(ValueFrame.VALUE, value))
+        ).init();
+        valueBox.add(frame.getFragment());
+        return frame;
     }
 }

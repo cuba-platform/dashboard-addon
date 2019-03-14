@@ -3,8 +3,16 @@
  */
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor.style;
 
+import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
 import com.haulmont.addon.dashboard.model.visualmodel.SizeUnit;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.CheckBox;
+import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
+import org.apache.commons.lang3.BooleanUtils;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -12,28 +20,25 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@UiController("dashboard$StyleDialog")
+@UiDescriptor("style-dialog.xml")
 public class StyleDialog extends AbstractWindow {
 
     private static final Pattern DIMENSION_PATTERN = Pattern.compile("^(\\d+)(px|%)$");
 
-    public static final String SCREEN_NAME = "dashboard$StyleDialog";
-    public static final String STYLENAME = "STYLENAME";
-    public static final String HEIGHT = "HEIGHT";
-    public static final String WIDTH = "WIDTH";
-    public static final String HEIGHT_UNITS = "HEIGHT_UNITS";
-    public static final String WIDTH_UNITS = "WIDTH_UNITS";
+    public static final String WIDGET = "WIDGET";
 
     @Inject
-    private TextField styleName;
+    private TextField<String> styleName;
 
     @Inject
-    private TextField height;
+    private TextField<Integer> height;
     @Inject
-    private TextField width;
+    private TextField<Integer> width;
     @Inject
-    private LookupField widthUnits;
+    private LookupField<SizeUnit> widthUnits;
     @Inject
-    private LookupField heightUnits;
+    private LookupField<SizeUnit> heightUnits;
     @Inject
     private CheckBox autoHeight;
     @Inject
@@ -42,18 +47,19 @@ public class StyleDialog extends AbstractWindow {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        styleName.setValue(params.get(STYLENAME));
-        width.setValue(params.get(WIDTH));
+        DashboardLayout dashboardLayout = (DashboardLayout) params.get(WIDGET);
+        styleName.setValue(dashboardLayout.getStyleName());
+        width.setValue(dashboardLayout.getWidth());
         widthUnits.setOptionsMap(getSizeUnitsValues());
-        widthUnits.setValue(params.get(WIDTH_UNITS));
-        height.setValue(params.get(HEIGHT));
+        widthUnits.setValue(dashboardLayout.getWidthUnit());
+        height.setValue(dashboardLayout.getHeight());
         heightUnits.setOptionsMap(getSizeUnitsValues());
-        heightUnits.setValue(params.get(HEIGHT_UNITS));
+        heightUnits.setValue(dashboardLayout.getHeightUnit());
 
         width.addTextChangeListener(e -> {
             String text = e.getText();
             checkFieldInput(text, width, widthUnits);
-            setSizeAutoVisible(autoWidth, height, heightUnits);
+            setSizeAutoVisible(autoWidth, width, widthUnits);
         });
 
         height.addTextChangeListener(e -> {
@@ -69,10 +75,10 @@ public class StyleDialog extends AbstractWindow {
         addSizeAutoFieldListener(autoHeight, height, heightUnits);
     }
 
-    private void addSizeAutoFieldListener(CheckBox sizeAutoCheckbox, TextField field, LookupField unitsField) {
+    private void addSizeAutoFieldListener(CheckBox sizeAutoCheckbox, TextField<Integer> field, LookupField<SizeUnit> unitsField) {
         sizeAutoCheckbox.addValueChangeListener(e -> {
-            Boolean value = (Boolean) e.getValue();
-            if (value) {
+            Boolean value = e.getValue();
+            if (BooleanUtils.isTrue(value)) {
                 field.setValue(-1);
                 unitsField.setValue(SizeUnit.PIXELS);
             } else {
@@ -95,18 +101,18 @@ public class StyleDialog extends AbstractWindow {
         return field.getValue() != null && field.getValue().equals(-1) && SizeUnit.PIXELS == unitsField.getValue();
     }
 
-    private void checkFieldInput(String text, TextField field, LookupField unitsField) {
+    private void checkFieldInput(String text, TextField<Integer> field, LookupField<SizeUnit> unitsField) {
         Matcher matcher = DIMENSION_PATTERN.matcher(text);
         if (matcher.matches()) {
             String value = matcher.group(1);
             SizeUnit sizeUnit = SizeUnit.fromId(matcher.group(2));
-            field.setValue(value);
+            field.setValue(Integer.parseInt(value));
             unitsField.setValue(sizeUnit);
         }
     }
 
-    protected Map<String, Object> getSizeUnitsValues() {
-        Map<String, Object> sizeUnitsMap = new HashMap<>();
+    protected Map<String, SizeUnit> getSizeUnitsValues() {
+        Map<String, SizeUnit> sizeUnitsMap = new HashMap<>();
         for (SizeUnit sizeUnit : SizeUnit.values()) {
             sizeUnitsMap.put(messages.getMessage(sizeUnit), sizeUnit);
         }
@@ -135,11 +141,11 @@ public class StyleDialog extends AbstractWindow {
 
     public void apply() {
         if (validateAll()) {
-            this.close(COMMIT_ACTION_ID);
+            this.close(new StandardCloseAction(COMMIT_ACTION_ID));
         }
     }
 
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        this.close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 }

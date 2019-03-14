@@ -26,10 +26,14 @@ import com.haulmont.addon.dashboard.web.dashboard.events.WidgetSelectedEvent;
 import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutHolderComponent;
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
-import com.haulmont.addon.dashboard.web.dashboard.tools.drophandler.DropHandlerTools;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.ComponentContainer;
+import com.haulmont.cuba.gui.components.MouseEventDetails;
+import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
@@ -37,10 +41,12 @@ import javax.inject.Named;
 import java.util.Map;
 import java.util.UUID;
 
+@UiController("dashboard$CanvasEditorFrame")
+@UiDescriptor("canvas-editor-frame.xml")
 public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHolderComponent {
     public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
-    private Component.MouseEventDetails mouseEventDetails;
+    private MouseEventDetails mouseEventDetails;
 
     @Inject
     protected OrderedContainer canvas;
@@ -63,7 +69,6 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
     public void updateLayout(Dashboard dashboard) {
         super.updateLayout(dashboard);
         vLayout.addStyleName("dashboard-main-shadow-border");
-        new DropHandlerTools(dashboard).initDropHandler(vLayout);
     }
 
     @Override
@@ -71,7 +76,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
         return converter;
     }
 
-    protected void selectLayout(Container layout, UUID layoutUuid, boolean needSelect) {
+    protected void selectLayout(ComponentContainer layout, UUID layoutUuid, boolean needSelect) {
         if (layout instanceof CanvasLayout) {
             if (((CanvasLayout) layout).getUuid().equals(layoutUuid) && needSelect) {
                 layout.addStyleName(DashboardStyleConstants.DASHBOARD_TREE_SELECTED);
@@ -81,8 +86,8 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
         }
 
         for (Component child : layout.getComponents()) {
-            if (child instanceof Container) {
-                selectLayout((Container) child, layoutUuid, needSelect);
+            if (child instanceof ComponentContainer) {
+                selectLayout((ComponentContainer) child, layoutUuid, needSelect);
             }
         }
     }
@@ -103,7 +108,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
     @EventListener
     public void canvasLayoutElementClickedEventListener(CanvasLayoutElementClickedEvent event) {
         UUID layoutUuid = event.getSource();
-        Component.MouseEventDetails md = event.getMouseEventDetails();
+        MouseEventDetails md = event.getMouseEventDetails();
         //TODO: refactor, problem with addLayoutClickListener in every layout prod a lot of events, in root can't get clicked comp
         if (mouseEventDetails == null) {
             mouseEventDetails = md;

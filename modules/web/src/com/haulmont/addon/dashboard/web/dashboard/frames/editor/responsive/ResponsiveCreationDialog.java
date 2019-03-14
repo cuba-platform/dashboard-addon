@@ -17,7 +17,9 @@ package com.haulmont.addon.dashboard.web.dashboard.frames.editor.responsive;
 
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.BoxLayout;
-import com.vaadin.data.Property;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
@@ -27,6 +29,8 @@ import java.util.Map;
 
 import static org.strangeway.responsive.web.components.ResponsiveLayout.DisplaySize.*;
 
+@UiController("dashboard$ResponsiveDialog")
+@UiDescriptor("responsive-creation-dialog.xml")
 public class ResponsiveCreationDialog extends AbstractWindow {
     public static final String SCREEN_NAME = "dashboard$ResponsiveDialog";
 
@@ -71,16 +75,16 @@ public class ResponsiveCreationDialog extends AbstractWindow {
         md.setCaptionAsHtml(true);
         lg.setCaptionAsHtml(true);
 
-        xs.addValueChangeListener((Property.ValueChangeListener) event ->
+        xs.addValueChangeListener(event ->
                 xs.setCaption(formatMessage("dashboard.responsive.xs", xs.getValue().intValue()))
         );
-        sm.addValueChangeListener((Property.ValueChangeListener) event ->
+        sm.addValueChangeListener(event ->
                 sm.setCaption(formatMessage("dashboard.responsive.sm", sm.getValue().intValue()))
         );
-        md.addValueChangeListener((Property.ValueChangeListener) event ->
+        md.addValueChangeListener(event ->
                 md.setCaption(formatMessage("dashboard.responsive.md", md.getValue().intValue()))
         );
-        lg.addValueChangeListener((Property.ValueChangeListener) event ->
+        lg.addValueChangeListener(event ->
                 lg.setCaption(formatMessage("dashboard.responsive.lg", lg.getValue().intValue()))
         );
 
@@ -95,11 +99,11 @@ public class ResponsiveCreationDialog extends AbstractWindow {
     }
 
     public void apply() {
-        this.close(COMMIT_ACTION_ID);
+        this.close(new StandardCloseAction(COMMIT_ACTION_ID));
     }
 
     public void cancel() {
-        this.close(CLOSE_ACTION_ID);
+        this.close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 
     public int getXs() {

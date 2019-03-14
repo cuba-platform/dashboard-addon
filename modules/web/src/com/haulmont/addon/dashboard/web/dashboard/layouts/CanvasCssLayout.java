@@ -6,28 +6,32 @@ package com.haulmont.addon.dashboard.web.dashboard.layouts;
 
 import com.haulmont.addon.dashboard.model.visualmodel.CssLayout;
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
-import com.haulmont.addon.dnd.web.gui.components.WebDDCssLayout;
+import com.haulmont.bali.events.Subscription;
 import com.haulmont.cuba.gui.components.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Consumer;
+
 public class CanvasCssLayout extends AbstractCanvasLayout {
+
+    public static final String NAME = "canvasCssLayout";
 
     private static Logger log = LoggerFactory.getLogger(WebDashboardFrame.class);
 
-    protected WebDDCssLayout cssLayout;
+    protected com.haulmont.cuba.gui.components.CssLayout cssLayout;
 
-    public CanvasCssLayout(CssLayout cssLayoutModel) {
-        super(cssLayoutModel, new WebDDCssLayout());
-        cssLayout = (WebDDCssLayout) delegate;
+    public CanvasCssLayout init(CssLayout cssLayoutModel) {
+        init(cssLayoutModel, com.haulmont.cuba.gui.components.CssLayout.class);
+        cssLayout = (com.haulmont.cuba.gui.components.CssLayout) delegate;
 
         cssLayout.setStyleName(cssLayoutModel.getStyleName());
         cssLayout.setResponsive(cssLayoutModel.getResponsive());
-
+        return this;
     }
 
     @Override
-    public WebDDCssLayout getDelegate() {
+    public com.haulmont.cuba.gui.components.CssLayout getDelegate() {
         return cssLayout;
     }
 
@@ -36,14 +40,15 @@ public class CanvasCssLayout extends AbstractCanvasLayout {
     }
 
     @Override
-    public void addLayoutClickListener(LayoutClickListener clickListener) {
+    public Subscription addLayoutClickListener(Consumer<LayoutClickEvent> listener) {
         log.info("Click listener is not supported yet in Css layout");
+        return () -> {
+        };
     }
 
     @Override
-    public void removeLayoutClickListener(LayoutClickListener listener) {
+    public void removeLayoutClickListener(Consumer<LayoutClickEvent> listener) {
         log.info("Click listener is not supported yet in Css layout");
     }
-
 
 }
