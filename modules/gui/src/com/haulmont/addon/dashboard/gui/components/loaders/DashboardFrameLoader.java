@@ -20,35 +20,52 @@ package com.haulmont.addon.dashboard.gui.components.loaders;
 import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.paramtypes.*;
-import com.haulmont.bali.datastruct.Pair;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DevelopmentException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ComponentsHelper;
+import com.haulmont.cuba.gui.FrameContext;
+import com.haulmont.cuba.gui.components.Fragment;
+import com.haulmont.cuba.gui.components.sys.FragmentImplementation;
+import com.haulmont.cuba.gui.components.sys.FrameImplementation;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.model.impl.ScreenDataImpl;
+import com.haulmont.cuba.gui.screen.FrameOwner;
+import com.haulmont.cuba.gui.screen.ScreenContext;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
+import com.haulmont.cuba.gui.sys.FrameContextImpl;
+import com.haulmont.cuba.gui.sys.ScreenContextImpl;
 import com.haulmont.cuba.gui.xml.layout.ComponentLoader;
 import com.haulmont.cuba.gui.xml.layout.LayoutLoader;
 import com.haulmont.cuba.gui.xml.layout.ScreenXmlLoader;
+import com.haulmont.cuba.gui.xml.layout.loaders.ComponentLoaderContext;
 import com.haulmont.cuba.gui.xml.layout.loaders.ContainerLoader;
-import com.haulmont.cuba.gui.xml.layout.loaders.FragmentLoader;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.haulmont.cuba.gui.screen.UiControllerUtils.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
+public class DashboardFrameLoader extends ContainerLoader<Fragment> {
 
     protected String frameId;
-    protected ComponentLoader frameLoader;
+
+    protected ComponentLoader fragmentLoader;
+    protected ComponentLoaderContext innerContext;
+
+    protected DashboardFrame dashboardFrame;
 
     protected Metadata metadata;
+
 
     @Override
     public void createComponent() {
@@ -57,26 +74,74 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
 
         WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
         WindowInfo windowInfo = windowConfig.getWindowInfo("dashboard$DashboardComponent");
-        String template = windowInfo.getTemplate();
 
+        Fragment fragment = factory.create(Fragment.NAME);
+        ScreenFragment controller = createController(windowInfo, fragment, windowInfo.asFragment());
+        dashboardFrame = (DashboardFrame) controller;
 
-        DashboardLayoutLoader layoutLoader = new DashboardLayoutLoader(context);
-        layoutLoader.setLocale(getLocale());
-        layoutLoader.setMessagesPack(getMessagesPack());
+        // setup screen and controller
+        ComponentLoaderContext parentContext = (ComponentLoaderContext) getContext();
 
-        String currentFrameId = context.getCurrentFrameId();
-        context.setCurrentFrameId(frameId);
-        try {
-            Pair<ComponentLoader, Element> loaderElementPair = layoutLoader.createFrameComponent(template, frameId, context.getParams());
-            frameLoader = loaderElementPair.getFirst();
-            resultComponent = (DashboardFrame) frameLoader.getResultComponent();
-        } finally {
-            context.setCurrentFrameId(currentFrameId);
+        FrameOwner hostController = parentContext.getFrame().getFrameOwner();
+
+        ScreenContext hostScreenContext = getScreenContext(hostController);
+
+        setHostController(controller, hostController);
+        setWindowId(controller, windowInfo.getId());
+        setFrame(controller, fragment);
+        setScreenContext(controller,
+                new ScreenContextImpl(windowInfo, parentContext.getOptions(),
+                        hostScreenContext.getScreens(),
+                        hostScreenContext.getDialogs(),
+                        hostScreenContext.getNotifications(),
+                        hostScreenContext.getFragments(),
+                        hostScreenContext.getUrlRouting())
+        );
+        setScreenData(controller, new ScreenDataImpl());
+
+        FragmentImplementation fragmentImpl = (FragmentImplementation) fragment;
+        fragmentImpl.setFrameOwner(controller);
+        fragmentImpl.setId(frameId);
+
+        FrameContext frameContext = new FrameContextImpl(fragment);
+        ((FrameImplementation) fragment).setContext(frameContext);
+
+        // load from XML if needed
+
+        if (windowInfo.getTemplate() != null) {
+            if (parentContext.getFullFrameId() != null) {
+                frameId = parentContext.getFullFrameId() + "." + frameId;
+            }
+
+            innerContext = new ComponentLoaderContext(context.getOptions());
+            innerContext.setCurrentFrameId(frameId);
+            innerContext.setFullFrameId(frameId);
+            innerContext.setFrame(fragment);
+            innerContext.setParent(parentContext);
+
+            LayoutLoader layoutLoader = beanLocator.getPrototype(LayoutLoader.NAME, innerContext);
+            layoutLoader.setLocale(getLocale());
+            layoutLoader.setMessagesPack(getMessagesPack());
+
+            ScreenXmlLoader screenXmlLoader = beanLocator.get(ScreenXmlLoader.NAME);
+
+            Element windowElement = screenXmlLoader.load(windowInfo.getTemplate(), windowInfo.getId(),
+                    getContext().getParams());
+
+            this.fragmentLoader = layoutLoader.createFragmentContent(fragment, windowElement, frameId);
         }
+
+        this.resultComponent = fragment;
     }
 
     @Override
     public void loadComponent() {
+
+        if (context.getFrame() != null) {
+            resultComponent.setFrame(context.getFrame());
+            dashboardFrame.setFrame(context.getFrame());
+        }
+
         assignXmlDescriptor(resultComponent, element);
         loadVisible(resultComponent, element);
 
@@ -92,22 +157,52 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
         loadCaption(resultComponent, element);
         loadDescription(resultComponent, element);
 
-        loadReferenceName(resultComponent, element);
-        loadJsonPath(resultComponent, element);
-        loadParams(resultComponent, element);
-        loadTimerDelay(resultComponent, element);
-        loadAssistanceBeanName(resultComponent, element);
+        loadReferenceName(dashboardFrame, element);
+        loadJsonPath(dashboardFrame, element);
+        loadParams(dashboardFrame, element);
+        loadTimerDelay(dashboardFrame, element);
+        loadAssistanceBeanName(dashboardFrame, element);
 
         if (context.getFrame() != null) {
             resultComponent.setFrame(context.getFrame());
+        }
+
+        // propagate init phases
+
+        if (innerContext != null) {
+            ComponentLoaderContext parentContext = (ComponentLoaderContext) getContext();
+
+            parentContext.getInjectTasks().addAll(innerContext.getInjectTasks());
+            parentContext.getInitTasks().addAll(innerContext.getInitTasks());
+            parentContext.getPostInitTasks().addAll(innerContext.getPostInitTasks());
         }
 
         String currentFrameId = context.getCurrentFrameId();
         context.setCurrentFrameId(frameId);
 
 
-        frameLoader.loadComponent();
+        fragmentLoader.loadComponent();
         context.setCurrentFrameId(currentFrameId);
+    }
+
+    protected <T extends ScreenFragment> T createController(@SuppressWarnings("unused") WindowInfo windowInfo,
+                                                            @SuppressWarnings("unused") Fragment fragment,
+                                                            Class<T> screenClass) {
+        Constructor<T> constructor;
+        try {
+            constructor = screenClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new DevelopmentException("No accessible constructor for screen class " + screenClass);
+        }
+
+        T controller;
+        try {
+            controller = constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Unable to create instance of screen class " + screenClass);
+        }
+
+        return controller;
     }
 
     protected void loadReferenceName(DashboardFrame resultComponent, Element element) {
@@ -180,26 +275,6 @@ public class DashboardFrameLoader extends ContainerLoader<DashboardFrame> {
         String assistantBeanName = element.attributeValue("assistantBeanName");
         if (isNotBlank(assistantBeanName)) {
             resultComponent.setAssistantBeanName(assistantBeanName);
-        }
-    }
-
-    protected class DashboardLayoutLoader extends LayoutLoader {
-
-        protected DashboardLayoutLoader(ComponentLoader.Context context) {
-            super(context);
-        }
-
-        public Pair<ComponentLoader, Element> createFrameComponent(String resourcePath, String id, Map<String, Object> params) {
-            ScreenXmlLoader screenXmlLoader = AppBeans.get(ScreenXmlLoader.class);
-            Element element = screenXmlLoader.load(resourcePath, id, params);
-
-            ComponentLoader loader = getLoader(element);
-            FragmentLoader frameLoader = (FragmentLoader) loader;
-            frameLoader.setFrameId(id);
-
-            loader.createComponent();
-
-            return new Pair<>(loader, element);
         }
     }
 

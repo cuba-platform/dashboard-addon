@@ -119,7 +119,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         setCode(StringUtils.isEmpty(code) ? (String) params.getOrDefault(CODE, "") : code);
         refresh();
         initAssistant(this);
-        initTimer(this.getParent());
+        initTimer(getFrame());
         initLookupWidget();
     }
 

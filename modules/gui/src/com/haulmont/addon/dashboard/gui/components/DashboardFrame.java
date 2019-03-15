@@ -31,7 +31,7 @@ import java.util.List;
  */
 public interface DashboardFrame extends Frame {
 
-    String NAME = "dashboardComponent";
+    String NAME = "dashboard";
 
     void setCode(String code);
 
