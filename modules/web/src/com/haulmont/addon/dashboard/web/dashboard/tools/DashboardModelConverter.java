@@ -50,13 +50,17 @@ public class DashboardModelConverter {
         CanvasLayout canvasLayout = null;
         if (model instanceof RootLayout) {
             canvasLayout = factory.createCanvasRootLayout((RootLayout) model);
+            initChilds(frame, model, canvasLayout.getDelegate());
         } else if (model instanceof VerticalLayout) {
             canvasLayout = factory.createCanvasVerticalLayout((VerticalLayout) model);
+            initChilds(frame, model, canvasLayout.getDelegate());
         } else if (model instanceof HorizontalLayout) {
             canvasLayout = factory.createCanvasHorizontalLayout((HorizontalLayout) model);
+            initChilds(frame, model, canvasLayout.getDelegate());
         } else if (model instanceof CssLayout) {
             CssLayout cssLayoutModel = (CssLayout) model;
             canvasLayout = factory.createCssLayout(cssLayoutModel);
+            initChilds(frame, model, canvasLayout.getDelegate());
         } else if (model instanceof WidgetLayout) {
             canvasLayout = factory.createCanvasWidgetLayout(frame, ((WidgetLayout) model));
         } else if (model instanceof GridLayout) {
@@ -90,40 +94,37 @@ public class DashboardModelConverter {
             throw new IllegalStateException("Unknown layout class: " + model.getClass());
         }
 
-        ComponentContainer delegate = canvasLayout.getDelegate();
-
         if (model.getStyleName() != null) {
             canvasLayout.addStyleName(model.getStyleName());
         }
         canvasLayout.setWidth(model.getWidthWithUnits());
         canvasLayout.setHeight(model.getHeightWithUnits());
 
-        if (!(canvasLayout instanceof CanvasGridLayout)) {
-
-            boolean expanded = isExpanded(model);
-            if (!model.getChildren().isEmpty()) {
-
-                for (DashboardLayout childModel : model.getChildren()) {
-                    CanvasLayout childContainer = modelToContainer(frame, childModel);
-                    delegate.add(childContainer);
-
-                    if (childModel.getId().equals(model.getExpand())) {
-                        if (delegate instanceof ExpandingLayout) {
-                            ((ExpandingLayout) delegate).expand(childContainer);
-                        }
-                    }
-
-                    if (!expanded) {
-                        childContainer.setWeight(childModel.getWeight());
-                    }
-                }
-            }
-        }
-
         if (model.getUuid() != null) {
             canvasLayout.setUuid(model.getUuid());
         }
         return canvasLayout;
+    }
+
+    private void initChilds(CanvasFrame frame, DashboardLayout model, ComponentContainer delegate) {
+        boolean expanded = isExpanded(model);
+        if (!model.getChildren().isEmpty()) {
+
+            for (DashboardLayout childModel : model.getChildren()) {
+                CanvasLayout childContainer = modelToContainer(frame, childModel);
+                delegate.add(childContainer);
+
+                if (childModel.getId().equals(model.getExpand())) {
+                    if (delegate instanceof ExpandingLayout) {
+                        ((ExpandingLayout) delegate).expand(childContainer);
+                    }
+                }
+
+                if (!expanded) {
+                    childContainer.setWeight(childModel.getWeight());
+                }
+            }
+        }
     }
 
     private boolean isExpanded(DashboardLayout model) {

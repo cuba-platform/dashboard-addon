@@ -26,10 +26,7 @@ import com.haulmont.addon.dashboard.model.Dashboard;
 import com.haulmont.addon.dashboard.model.Parameter;
 import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
-import com.haulmont.addon.dashboard.model.visualmodel.DashboardLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.GridArea;
-import com.haulmont.addon.dashboard.model.visualmodel.GridLayout;
-import com.haulmont.addon.dashboard.model.visualmodel.RootLayout;
+import com.haulmont.addon.dashboard.model.visualmodel.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
@@ -93,6 +90,14 @@ public class JsonConverter {
             Set<GridArea> gridAreas = gridLayout.getAreas();
             for (GridArea gridArea : gridAreas) {
                 DashboardLayout dashboardLayout = gridArea.getComponent();
+                dashboardLayout.setParent(rootLayout);
+                initLayoutParents(dashboardLayout);
+            }
+        } if (rootLayout instanceof ResponsiveLayout) {
+            ResponsiveLayout gridLayout = (ResponsiveLayout) rootLayout;
+            Set<ResponsiveArea> areas = gridLayout.getAreas();
+            for (ResponsiveArea area : areas) {
+                DashboardLayout dashboardLayout = area.getComponent();
                 dashboardLayout.setParent(rootLayout);
                 initLayoutParents(dashboardLayout);
             }

@@ -71,7 +71,6 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
                 responsiveArea.getSm() == null ? rl.getSm() : responsiveArea.getSm(),
                 responsiveArea.getMd() == null ? rl.getMd() : responsiveArea.getMd(),
                 responsiveArea.getLg() == null ? rl.getLg() : responsiveArea.getLg());
-        component.setSizeFull();
         wrc.setContent(component);
         wrr.addColumn(wrc);
     }

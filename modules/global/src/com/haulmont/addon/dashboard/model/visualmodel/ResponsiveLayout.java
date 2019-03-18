@@ -8,7 +8,9 @@ import com.haulmont.cuba.core.global.Metadata;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @MetaClass(name = "dashboard$ResponsiveLayout")
 public class ResponsiveLayout extends DashboardLayout implements ContainerLayout {
@@ -44,12 +46,19 @@ public class ResponsiveLayout extends DashboardLayout implements ContainerLayout
 
     @Override
     public void addChild(DashboardLayout child) {
-        Integer order = getAreas().stream().map(ResponsiveArea::getOrder).max(Comparator.naturalOrder()).orElse(0) + 1;
+        Integer order = getAreas().stream()
+                .map(ResponsiveArea::getOrder)
+                .max(Comparator.naturalOrder()).orElse(0) + 1;
+        ResponsiveArea ra = createArea(child, order);
+        getAreas().add(ra);
+    }
+
+    private ResponsiveArea createArea(DashboardLayout child, Integer order) {
         Metadata metadata = AppBeans.get(Metadata.class);
         ResponsiveArea ra = metadata.create(ResponsiveArea.class);
         ra.setOrder(order);
         ra.setComponent(child);
-        getAreas().add(ra);
+        return ra;
     }
 
     @Override
@@ -62,6 +71,39 @@ public class ResponsiveLayout extends DashboardLayout implements ContainerLayout
             }
         }
         areas.remove(target);
+    }
+
+    @Override
+    public List<DashboardLayout> getChildren() {
+        return getAreas().stream()
+                .sorted(Comparator.comparingInt(ResponsiveArea::getOrder))
+                .map(ResponsiveArea::getComponent)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setChildren(List<DashboardLayout> children) {
+        int order = 1;
+        Set<ResponsiveArea> newAreas = new HashSet<>();
+        for (DashboardLayout layout : children) {
+            ResponsiveArea area = findArea(layout);
+            if (area != null) {
+                area.setOrder(order);
+
+            } else {
+                area = createArea(layout, order);
+            }
+            newAreas.add(area);
+            order++;
+        }
+        areas = newAreas;
+    }
+
+    private ResponsiveArea findArea(DashboardLayout layout) {
+        return getAreas().stream()
+                .filter(e -> e.getComponent().getId().equals(layout.getId()))
+                .findAny()
+                .orElse(null);
     }
 
     public Integer getXs() {
