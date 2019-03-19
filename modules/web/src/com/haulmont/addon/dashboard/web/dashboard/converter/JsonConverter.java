@@ -93,7 +93,7 @@ public class JsonConverter {
                 dashboardLayout.setParent(rootLayout);
                 initLayoutParents(dashboardLayout);
             }
-        } if (rootLayout instanceof ResponsiveLayout) {
+        } else if (rootLayout instanceof ResponsiveLayout) {
             ResponsiveLayout gridLayout = (ResponsiveLayout) rootLayout;
             Set<ResponsiveArea> areas = gridLayout.getAreas();
             for (ResponsiveArea area : areas) {
