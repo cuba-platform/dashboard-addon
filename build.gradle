@@ -2,6 +2,17 @@ buildscript {
     ext.cubaVersion = '7.0.2'
     repositories {
         mavenLocal()
+
+        if (System.getenv('HAULMONT_REPOSITORY_URL')) {
+            maven {
+                credentials {
+                    username System.getenv('HAULMONT_REPOSITORY_USER')
+                    password System.getenv('HAULMONT_REPOSITORY_PASSWORD')
+                }
+                url System.getenv('HAULMONT_REPOSITORY_URL')
+            }
+        }
+        
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
