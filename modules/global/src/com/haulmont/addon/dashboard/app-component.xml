@@ -22,7 +22,7 @@
     <module name="web" dependsOn="gui" blocks="web">
         <artifact name="dashboard-web" appJar="true"/>
         <artifact name="dashboard-web" classifier="web" ext="zip" configuration="webcontent"/>
-        <artifact name="dashboard-web" ext="jar" configuration="themes"/>
+        <artifact name="dashboard-web" ext="jar" classifier="themes" configuration="themes"/>
 
         <property name="cuba.springContextConfig" value="+com/haulmont/addon/dashboard/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
