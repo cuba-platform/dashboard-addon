@@ -201,4 +201,17 @@
     .v-csslayout.v-csslayout-drag-center > .dashboard-layout-controls .dashboard-edit-button {
         display: inline-block;
     }
+
+    .dashboard-layout.rl-container-flexible.spacing {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 100% !important;
+    }
+
+    .rl-container-dashboard-layout .rl-container-flexible.spacing > .rl-row > .rl-col {
+        padding: 0px !important;
+    }
 }

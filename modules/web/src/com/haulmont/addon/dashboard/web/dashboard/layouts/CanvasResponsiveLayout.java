@@ -36,6 +36,7 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
     public CanvasResponsiveLayout init(ResponsiveLayout model) {
         init(model, org.strangeway.responsive.web.components.ResponsiveLayout.class);
         responsiveLayout = (org.strangeway.responsive.web.components.ResponsiveLayout) delegate;
+        responsiveLayout.setStyleName("dashboard-layout");
         WebResponsiveRow wrr = new WebResponsiveRow();
 
         responsiveLayout.setSizeFull();
