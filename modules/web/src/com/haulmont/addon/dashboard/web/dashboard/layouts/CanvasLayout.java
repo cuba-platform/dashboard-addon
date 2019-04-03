@@ -31,6 +31,8 @@ public interface CanvasLayout extends Component, ComponentContainer, LayoutClick
 
     void addComponent(Component component);
 
+    HBoxLayout createButtonsPanel();
+
     HBoxLayout getButtonsPanel();
 
     void setButtonsPanel(HBoxLayout buttonsPanel);

@@ -111,7 +111,7 @@ public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
     }
 
     private void createBaseLayoutActions(CanvasLayout canvasLayout, DashboardLayout layout) {
-        HBoxLayout buttonsPanel = canvasLayout.getButtonsPanel();
+        HBoxLayout buttonsPanel = canvasLayout.createButtonsPanel();
         buttonsPanel.addStyleName(DashboardStyleConstants.DASHBOARD_LAYOUT_CONTROLS);
 
         List<Action> actions = actionProviderFactory.getLayoutActions(layout);

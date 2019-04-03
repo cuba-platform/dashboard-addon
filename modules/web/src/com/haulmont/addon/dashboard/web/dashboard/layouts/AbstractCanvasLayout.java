@@ -48,10 +48,8 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
     public AbstractCanvasLayout init(DashboardLayout model, ComponentContainer delegate) {
         this.delegate = delegate;
         this.model = model;
-        buttonsPanel = components.create(HBoxLayout.class);
         this.delegate.setSizeFull();
         super.add(this.delegate);
-        super.add(buttonsPanel);
         super.addStyleName(DashboardStyleConstants.DASHBOARD_WIDGET);
         this.unwrap(CubaCssActionsLayout.class).setId(model.getId().toString());
         return this;
@@ -68,6 +66,13 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
 
     public void addComponent(Component component) {
         delegate.add(component);
+    }
+
+    @Override
+    public HBoxLayout createButtonsPanel() {
+        buttonsPanel = components.create(HBoxLayout.class);
+        super.add(buttonsPanel);
+        return buttonsPanel;
     }
 
     @Override
