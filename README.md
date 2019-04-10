@@ -28,7 +28,7 @@
 
 # 1. Introduction <a name="introduction"></a>
 
-This component enables creating and embedding dashboards into your application screens. Dashboards allow visualizing summarized information, data sets, charts and can be set as invisible for some users.
+This component enables creating and embedding dashboards into your application screens. Dashboards allow visualizing summarized information, data sets, charts and can be accessible only by authorized users.
 
 A dashboard consists of widgets — individual elements based on a frame.  An integrated set of layouts allows positioning widgets on a dashboard according to your needs. Use responsive layouts to adapt your dashboards to different displays.
 
@@ -95,7 +95,7 @@ For the correct rendering of the add-on UI controls, it is recommended to extend
 
 By default, the add-on does not have preset widgets. To add an additional widget type, you need to do the following:
 
-1. Create a frame as described in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-6.10/screens.html).
+1. Create a fragment as described in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/using_screen_fragments.html).
 2. Add the annotation `com.haulmont.addon.dashboard.web.annotation.DashboardWidget`. Fill in the fields: `name`, `editFrameId`(optional, leave empty if there is no parameter in widget) in the annotation (see JavaDoc).
 3. `widget`, `dashboard`, `dashboardFrame` can be included in widget via `@WindowParam` annotation. Widget parameters in widget editor and widget frames should have `@WidgetParam` and `@WindowParam` annotations.
 For example:
@@ -214,12 +214,12 @@ Dashboard canvas and tree support drag-and-drop operation from the palette.
 ### 4.2.1. Dashboard Fields <a name='dashboard-fields'></a>
 
 The following fields are available to set:
-- *Title* -  name of the dashboard;
-- *Code* - unique identifier for a more convenient search in a database;
-- *Refresh period (sec)* - time period in seconds for refresh a dashboard UI;
-- *Assistant bean name* - optional reference to a Spring bean class that should be used for customizing the dashboard (assistance bean must have `prototype` bean scope).
-- *Group* - dashboard group;
-- *Available for all users* - flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
+- *Title* - a name of the dashboard;
+- *Code* - a unique identifier for a more convenient search in a database;
+- *Refresh period (sec)* - a time period in seconds for refresh a dashboard UI;
+- *Assistant bean name* - an optional reference to a Spring bean class that should be used for customizing the dashboard (assistance bean must have `prototype` bean scope).
+- *Group* - a dashboard group;
+- *Available for all users* - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
 ### 4.2.2. Dashboard Parameters <a name='dashboards-parameters'></a>
 
@@ -243,7 +243,7 @@ Contains the following layouts:
 - **vertical** - widgets are placed vertically one after another;
 - **horizontal** -  widgets are placed horizontally one after another;
 - **grid** - widgets are placed inside a grid with a specified number of rows and columns;
-- **css** - based on css;
+- **css** - enables full control over placement and styling of enclosed components using CSS;
 - **responsive** - depending on the screen width, the number of columns with widgets changes.
 After adding this layout on the canvas setting form will appear. You can set which part of the screen each widget will occupy.
 
@@ -251,7 +251,7 @@ After adding this layout on the canvas setting form will appear. You can set whi
 
 #### 4.2.3.3. Widget Templates <a name='widget-templates'></a>
 
-Contains widget templates from a database. Templates can be created from the widgets added on the canvas using corresponding button, or by using [Widget Template Browser](#widget-template-browser).
+Contains widget templates from a database. Templates can be created from the widgets added on the canvas using the corresponding button, or by using [Widget Template Browser](#widget-template-browser).
 
 ![palette-widget-templates](img/palette-widget-templates.png)
 
