@@ -27,11 +27,9 @@ import com.haulmont.addon.dashboard.web.dashboard.frames.editor.DashboardLayoutH
 import com.haulmont.addon.dashboard.web.dashboard.layouts.CanvasLayout;
 import com.haulmont.addon.dashboard.web.dashboard.tools.DashboardModelConverter;
 import com.haulmont.cuba.core.global.Events;
-import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.MouseEventDetails;
-import com.haulmont.cuba.gui.components.OrderedContainer;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.springframework.context.event.EventListener;
@@ -44,21 +42,14 @@ import java.util.UUID;
 @UiController("dashboard$CanvasEditorFrame")
 @UiDescriptor("canvas-editor-frame.xml")
 public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHolderComponent {
-    public static final String SCREEN_NAME = "dashboard$CanvasEditorFrame";
 
     private MouseEventDetails mouseEventDetails;
-
-    @Inject
-    protected OrderedContainer canvas;
 
     @Named("dropModelConverter")
     protected DashboardModelConverter converter;
 
     @Inject
     protected Events events;
-
-    @WindowParam(name = DASHBOARD)
-    protected Dashboard dashboard;
 
     @Override
     public void init(Map<String, Object> params) {

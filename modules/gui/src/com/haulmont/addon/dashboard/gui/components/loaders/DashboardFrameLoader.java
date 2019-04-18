@@ -258,9 +258,9 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
             case "decimal":
                 return new DecimalParameterValue(new BigDecimal(value));
             case "int":
-                return new IntegerParameterValue(new Integer(value));
+                return new IntegerParameterValue(Integer.valueOf(value));
             case "long":
-                return new LongParameterValue(new Long(value));
+                return new LongParameterValue(Long.valueOf(value));
             case "time":
                 return new TimeParameterValue(Date.valueOf(value));
             case "uuid":

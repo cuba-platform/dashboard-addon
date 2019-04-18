@@ -92,8 +92,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     @Inject
     protected AccessConstraintsHelper accessHelper;
     @Inject
-    protected Messages messages;
-    @Inject
     protected UiComponents componentsFactory;
     @Inject
     protected Events events;

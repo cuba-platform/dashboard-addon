@@ -115,8 +115,6 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @Inject
     protected ScreenBuilders screenBuilders;
 
-    protected ParameterBrowse parametersFrame;
-    protected PaletteFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
 
     @Named("dropModelConverter")
@@ -151,7 +149,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
             availableCheckBox.setVisible(false);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        dropLayoutTools = new DropLayoutTools(this, modelConverter, dashboardDs);
+        dropLayoutTools = new DropLayoutTools(this, dashboardDs);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();

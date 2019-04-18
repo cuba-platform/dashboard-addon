@@ -107,10 +107,10 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
             entitiesLookup.setOptionsList(null);
             viewLookup.setValue(null);
             viewLookup.setOptionsList(null);
+        } else {
+            loadEntities(metaClass);
+            loadViewNames(metaClass);
         }
-
-        loadEntities(metaClass);
-        loadViewNames(metaClass);
     }
 
     protected void loadEntities(MetaClass metaClass) {

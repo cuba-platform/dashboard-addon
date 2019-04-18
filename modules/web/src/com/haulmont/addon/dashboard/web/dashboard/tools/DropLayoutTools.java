@@ -47,7 +47,6 @@ import java.util.UUID;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
 
 public class DropLayoutTools {
-    protected DashboardModelConverter modelConverter;
     protected DashboardEdit frame;
     protected Datasource<Dashboard> dashboardDs;
     private Metadata metadata = AppBeans.get(Metadata.class);
@@ -55,8 +54,7 @@ public class DropLayoutTools {
     private MetadataTools metadataTools = AppBeans.get(MetadataTools.class);
     private ScreenBuilders screenBuilders = AppBeans.get(ScreenBuilders.class);
 
-    public DropLayoutTools(DashboardEdit frame, DashboardModelConverter modelConverter, Datasource<Dashboard> dashboardDs) {
-        this.modelConverter = modelConverter;
+    public DropLayoutTools(DashboardEdit frame, Datasource<Dashboard> dashboardDs) {
         this.frame = frame;
         this.dashboardDs = dashboardDs;
     }

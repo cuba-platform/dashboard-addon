@@ -23,7 +23,6 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.dashboard.tools.WidgetUtils;
 import com.haulmont.addon.dashboard.web.repository.WidgetRepository;
 import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
-import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.ScreenBuilders;
@@ -65,9 +64,6 @@ public class WidgetTemplateEdit extends AbstractEditor<WidgetTemplate> {
 
     @Inject
     protected Metadata metadata;
-
-    @Inject
-    protected Messages messages;
 
     @Inject
     protected WidgetUtils widgetUtils;
