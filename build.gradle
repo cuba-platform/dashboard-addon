@@ -72,7 +72,7 @@ dependencies {
     appComponent("org.strangeway.responsive:sw-responsive-global:1.3.0")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 def dbNameParam = 'dashboard'
 def dbTestNameParam = 'dashboard-test'
