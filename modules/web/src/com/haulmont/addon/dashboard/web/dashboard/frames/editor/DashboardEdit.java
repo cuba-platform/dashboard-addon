@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2018 Haulmont.
+ * Copyright (c) 2008-2019 Haulmont.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.haulmont.addon.dashboard.web.dashboard.frames.editor;
@@ -115,8 +114,6 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
     @Inject
     protected ScreenBuilders screenBuilders;
 
-    protected ParameterBrowse parametersFrame;
-    protected PaletteFrame paletteFrame;
     protected CanvasEditorFrame canvasFrame;
 
     @Named("dropModelConverter")
@@ -151,7 +148,7 @@ public class DashboardEdit extends AbstractEditor<PersistentDashboard> {
             availableCheckBox.setVisible(false);
         }
         importJsonField.addFileUploadSucceedListener(e -> uploadJson());
-        dropLayoutTools = new DropLayoutTools(this, modelConverter, dashboardDs);
+        dropLayoutTools = new DropLayoutTools(this, dashboardDs);
         initParametersFrame();
         initPaletteFrame();
         initCanvasFrame();

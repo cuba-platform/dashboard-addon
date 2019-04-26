@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2018 Haulmont.
+ * Copyright (c) 2008-2019 Haulmont.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.haulmont.addon.dashboard.web.dashboard.tools;
@@ -47,7 +46,6 @@ import java.util.UUID;
 import static com.haulmont.addon.dashboard.utils.DashboardLayoutUtils.*;
 
 public class DropLayoutTools {
-    protected DashboardModelConverter modelConverter;
     protected DashboardEdit frame;
     protected Datasource<Dashboard> dashboardDs;
     private Metadata metadata = AppBeans.get(Metadata.class);
@@ -55,8 +53,7 @@ public class DropLayoutTools {
     private MetadataTools metadataTools = AppBeans.get(MetadataTools.class);
     private ScreenBuilders screenBuilders = AppBeans.get(ScreenBuilders.class);
 
-    public DropLayoutTools(DashboardEdit frame, DashboardModelConverter modelConverter, Datasource<Dashboard> dashboardDs) {
-        this.modelConverter = modelConverter;
+    public DropLayoutTools(DashboardEdit frame, Datasource<Dashboard> dashboardDs) {
         this.frame = frame;
         this.dashboardDs = dashboardDs;
     }

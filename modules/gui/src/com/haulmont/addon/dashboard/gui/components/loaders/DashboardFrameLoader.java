@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2018 Haulmont.
+ * Copyright (c) 2008-2019 Haulmont.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.haulmont.addon.dashboard.gui.components.loaders;
@@ -258,9 +257,9 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
             case "decimal":
                 return new DecimalParameterValue(new BigDecimal(value));
             case "int":
-                return new IntegerParameterValue(new Integer(value));
+                return new IntegerParameterValue(Integer.valueOf(value));
             case "long":
-                return new LongParameterValue(new Long(value));
+                return new LongParameterValue(Long.valueOf(value));
             case "time":
                 return new TimeParameterValue(Date.valueOf(value));
             case "uuid":
