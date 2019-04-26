@@ -250,7 +250,7 @@ Contains the following layouts:
 - **responsive** - depending on the screen width, the number of columns with widgets changes.
 After adding this layout on the canvas setting form will appear. You can set which part of the screen each widget will occupy.
 
-![palette-widget-templates](img/responsive-settings.png)
+![responsive-settings](img/responsive-settings.png)
 
 #### 4.2.3.3. Widget Templates <a name='widget-templates'></a>
 
@@ -295,7 +295,7 @@ Click on a layout or a widget to select it. The selected element contains the pa
 
 ![gear](img/gear.png) - opens the *Widget Editor*;
 
-![trash](img/template.png) - opens the *Template Weidget Editor*
+![template](img/template.png) - opens the *Template Weidget Editor*
 
 ![arrows](img/arrows.png) - changes the weight (expand ratio) of a container in a parent container, or define `colspan` and `rowspan` attributes for the grid layout cells:
 
@@ -305,7 +305,7 @@ Click on a layout or a widget to select it. The selected element contains the pa
 
 ![style-editor](img/style-editor.png)
 
-![trash](img/name.png) - displays the element name specified by user.
+![name](img/name.png) - displays the element name specified by user.
 
 For more information on using custom styles see [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/web_theme_extension.html#web_theme_extension_styles).
 
