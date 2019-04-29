@@ -17,8 +17,8 @@ create table DASHBOARD_WIDGET_TEMPLATE (
     primary key (ID)
 )^
 -- end DASHBOARD_WIDGET_TEMPLATE
--- begin DASHBOARD_WIDGET_TEMPLATE_GROUP
-create table DASHBOARD_WIDGET_TEMPLATE_GROUP (
+-- begin DASHBOARD_TEMPLATE_GROUP
+create table DASHBOARD_TEMPLATE_GROUP (
     ID varchar2(32),
     VERSION number(10) not null,
     CREATE_TS timestamp,
@@ -32,7 +32,7 @@ create table DASHBOARD_WIDGET_TEMPLATE_GROUP (
     --
     primary key (ID)
 )^
--- end DASHBOARD_WIDGET_TEMPLATE_GROUP
+-- end DASHBOARD_TEMPLATE_GROUP
 -- begin DASHBOARD_DASHBOARD_GROUP
 create table DASHBOARD_DASHBOARD_GROUP (
     ID varchar2(32),

@@ -17,22 +17,7 @@ create table DASHBOARD_WIDGET_TEMPLATE (
     primary key (ID)
 )^
 -- end DASHBOARD_WIDGET_TEMPLATE
--- begin DASHBOARD_WIDGET_TEMPLATE_GROUP
-create table DASHBOARD_WIDGET_TEMPLATE_GROUP (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    --
-    NAME varchar(255) not null,
-    --
-    primary key (ID)
-)^
--- end DASHBOARD_WIDGET_TEMPLATE_GROUP
+
 -- begin DASHBOARD_DASHBOARD_GROUP
 create table DASHBOARD_DASHBOARD_GROUP (
     ID varchar(32),
@@ -69,3 +54,19 @@ create table DASHBOARD_PERSISTENT_DASHBOARD (
     primary key (ID)
 )^
 -- end DASHBOARD_PERSISTENT_DASHBOARD
+-- begin DASHBOARD_TEMPLATE_GROUP
+create table DASHBOARD_TEMPLATE_GROUP (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255) not null,
+    --
+    primary key (ID)
+)^
+-- end DASHBOARD_TEMPLATE_GROUP
