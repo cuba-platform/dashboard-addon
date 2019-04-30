@@ -115,9 +115,22 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         super.init(params);
         setCode(StringUtils.isEmpty(code) ? (String) params.getOrDefault(CODE, "") : code);
         refresh();
-        initAssistant(this);
-        initTimer(getFrame());
-        initLookupWidget();
+        if (dashboard != null) {
+            initAssistant(this);
+            initTimer(getFrame());
+            initLookupWidget();
+        } else {
+            Label<String> errorMessageLabel = componentsFactory.create(Label.class);
+            String errorMessage = getMessage("dashboardNotFound");
+            if (isNotBlank(jsonPath)) {
+                errorMessage = formatMessage("dashboardWithJsonNotFound", jsonPath);
+            } else if (isNotBlank(code)) {
+                errorMessage = formatMessage("dashboardWithCodeNotFound", code);
+            }
+            errorMessageLabel.setValue(errorMessage);
+            canvasBox.add(errorMessageLabel);
+            log.error(errorMessage);
+        }
     }
 
     private void initLookupWidget() {
@@ -199,14 +212,14 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected void updateDashboard(Dashboard dashboard) {
         if (dashboard == null) {
             notifications.create(Notifications.NotificationType.ERROR)
-                    .withCaption(messages.getMainMessage("notLoadedDashboard"))
+                    .withCaption(getMessage("notLoadedDashboard"))
                     .show();
             return;
         }
 
         if (!accessHelper.isDashboardAllowedCurrentUser(dashboard)) {
             notifications.create(Notifications.NotificationType.WARNING)
-                    .withCaption(messages.getMainMessage("notOpenBrowseDashboard"))
+                    .withCaption(getMessage("notOpenBrowseDashboard"))
                     .show();
             return;
         }

@@ -17,10 +17,9 @@
         class="com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame">
     <layout spacing="true"
             width="100%"
-            height="100%">
+            height="100%" expand="canvasBox">
         <vbox id="canvasBox"
               spacing="true"
-              width="100%"
-              height="100%"/>
+              width="100%"/>
     </layout>
 </window>
