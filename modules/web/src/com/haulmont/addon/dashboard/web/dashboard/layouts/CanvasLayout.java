@@ -22,6 +22,7 @@ import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.HBoxLayout;
 import com.haulmont.cuba.gui.components.LayoutClickNotifier;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface CanvasLayout extends Component, ComponentContainer, LayoutClickNotifier, HasWeight {
@@ -29,6 +30,8 @@ public interface CanvasLayout extends Component, ComponentContainer, LayoutClick
     ComponentContainer getDelegate();
 
     void addComponent(Component component);
+
+    Collection<Component> getLayoutComponents();
 
     HBoxLayout createButtonsPanel();
 

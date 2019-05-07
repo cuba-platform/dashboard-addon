@@ -32,6 +32,7 @@ import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.Layout;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -65,6 +66,10 @@ public abstract class AbstractCanvasLayout extends WebCssLayout implements Canva
 
     public void addComponent(Component component) {
         delegate.add(component);
+    }
+
+    public Collection<Component> getLayoutComponents() {
+        return delegate.getOwnComponents();
     }
 
     @Override

@@ -23,8 +23,10 @@ import org.strangeway.responsive.web.components.impl.WebResponsiveColumn;
 import org.strangeway.responsive.web.components.impl.WebResponsiveLayout;
 import org.strangeway.responsive.web.components.impl.WebResponsiveRow;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CanvasResponsiveLayout extends AbstractCanvasLayout {
 
@@ -76,4 +78,15 @@ public class CanvasResponsiveLayout extends AbstractCanvasLayout {
         wrr.addColumn(wrc);
     }
 
+    @Override
+    public Collection<Component> getLayoutComponents() {
+        return responsiveLayout.getOwnComponents().stream()
+                .filter(e -> e instanceof WebResponsiveRow)
+                .map(r -> (WebResponsiveRow) r)
+                .flatMap(r -> r.getComponents().stream())
+                .filter(c -> c instanceof WebResponsiveColumn)
+                .map(c -> (WebResponsiveColumn) c)
+                .flatMap(c -> c.getComponents().stream())
+                .collect(Collectors.toList());
+    }
 }

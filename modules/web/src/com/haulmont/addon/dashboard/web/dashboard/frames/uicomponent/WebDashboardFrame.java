@@ -315,7 +315,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             return null;
         }
 
-        for (Component child : layout.getDelegate().getOwnComponents()) {
+        for (Component child : layout.getLayoutComponents()) {
             ScreenFragment result = searchWidgetFrame((CanvasLayout) child, widgetId);
             if (result != null) {
                 return result;
