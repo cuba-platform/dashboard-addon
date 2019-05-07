@@ -91,7 +91,6 @@ dependencies {
 def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 def dbNameParam = 'dashboard'
-def dbTestNameParam = 'dashboard-test'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
