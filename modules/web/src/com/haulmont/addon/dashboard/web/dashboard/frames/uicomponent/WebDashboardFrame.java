@@ -39,6 +39,7 @@ import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.components.Timer;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
@@ -58,10 +59,7 @@ import org.springframework.util.ReflectionUtils;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD_FRAME;
@@ -306,7 +304,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         return searchWidgetFrame(canvasFrame.getvLayout(), widgetId);
     }
 
-    protected ScreenFragment searchWidgetFrame(CanvasLayout layout, String widgetId) {
+    protected ScreenFragment searchWidgetFrame(Component layout, String widgetId) {
         if (CanvasWidgetLayout.class.isAssignableFrom(layout.getClass())) {
             CanvasWidgetLayout canvasWidgetLayout = (CanvasWidgetLayout) layout;
             if (widgetId.equals(canvasWidgetLayout.getWidget().getWidgetId())) {
@@ -315,8 +313,15 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             return null;
         }
 
-        for (Component child : layout.getLayoutComponents()) {
-            ScreenFragment result = searchWidgetFrame((CanvasLayout) child, widgetId);
+        Collection<Component> components = Collections.EMPTY_LIST;
+        if (layout instanceof CanvasLayout){
+            components = ((CanvasLayout) layout).getLayoutComponents();
+        } else if (layout instanceof ComponentContainer){
+            components = ((ComponentContainer) layout).getOwnComponents();
+        }
+
+        for (Component child : components) {
+            ScreenFragment result = searchWidgetFrame(child, widgetId);
             if (result != null) {
                 return result;
             }
