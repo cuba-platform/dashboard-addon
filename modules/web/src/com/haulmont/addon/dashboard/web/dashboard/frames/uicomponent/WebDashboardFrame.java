@@ -263,7 +263,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected List<Parameter> getDuplicatesParams(Dashboard dashboard) {
         return dashboard.getParameters().stream()
                 .filter(param -> xmlParameters.stream()
-                        .anyMatch(xmlParameter -> param.getName().equals(xmlParameter.getName())))
+                        .anyMatch(xmlParameter -> param.getAlias().equals(xmlParameter.getAlias())))
                 .collect(Collectors.toList());
     }
 

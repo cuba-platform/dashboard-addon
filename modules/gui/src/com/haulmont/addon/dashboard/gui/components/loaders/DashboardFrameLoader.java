@@ -242,6 +242,7 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
 
         Parameter parameter = metadata.create(Parameter.class);
         parameter.setName(name);
+        parameter.setAlias(name);
         parameter.setParameterValue(createParameterValue(type, value));
         return parameter;
     }
