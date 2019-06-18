@@ -18,7 +18,7 @@ package com.haulmont.addon.dashboard.web.parametertransformer;
 
 import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import java.lang.reflect.Field;
 
@@ -29,5 +29,5 @@ public interface ParameterTransformer {
 
     boolean compareParameterTypes(ParameterType parameterType, Field field);
 
-    ParameterValue createParameterValue(Field field, AbstractFrame widgetFrame);
+    ParameterValue createParameterValue(Field field, ScreenFragment widgetFrame);
 }

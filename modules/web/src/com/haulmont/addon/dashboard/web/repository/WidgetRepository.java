@@ -18,7 +18,7 @@ package com.haulmont.addon.dashboard.web.repository;
 
 
 import com.haulmont.addon.dashboard.model.Widget;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import java.util.List;
 import java.util.Map;
@@ -32,9 +32,9 @@ public interface WidgetRepository {
 
     List<WidgetTypeInfo> getWidgetTypesInfo();
 
-    void initializeWidgetFields(AbstractFrame widgetFrame, Widget widget);
+    void initializeWidgetFields(ScreenFragment widgetFrame, Widget widget);
 
-    void serializeWidgetFields(AbstractFrame widgetFrame, Widget widget);
+    void serializeWidgetFields(ScreenFragment widgetFrame, Widget widget);
 
     Map<String, Object> getWidgetParams(Widget widget);
 

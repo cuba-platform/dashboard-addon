@@ -32,7 +32,7 @@ import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.components.Window;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
@@ -257,8 +257,8 @@ public class DropLayoutTools {
         }
     }
 
-    public AbstractFrame getFrame() {
-        return (AbstractFrame) frame.getFrame();
+    public Frame getFrame() {
+        return frame.getFrame();
     }
 
     private boolean applyMoveAction(DashboardLayout layout, DashboardLayout target, DashboardLayout parent, DashboardLayout dashboardModel) {

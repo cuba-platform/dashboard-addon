@@ -25,9 +25,9 @@ import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransforme
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.Resources;
-import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
@@ -150,7 +150,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     }
 
     @Override
-    public void initializeWidgetFields(AbstractFrame widgetFrame, Widget widget) {
+    public void initializeWidgetFields(ScreenFragment widgetFrame, Widget widget) {
         List<Parameter> widgetFieldValues = widget.getWidgetFields();
         List<Field> parameterFields = FieldUtils.getFieldsListWithAnnotation(widgetFrame.getClass(), WidgetParam.class);
         for (Field parameterField : parameterFields) {
@@ -198,7 +198,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     }
 
     @Override
-    public void serializeWidgetFields(AbstractFrame widgetFrame, Widget widget) {
+    public void serializeWidgetFields(ScreenFragment widgetFrame, Widget widget) {
         widget.getWidgetFields().clear();
         List<Field> parameterFields = FieldUtils.getFieldsListWithAnnotation(widgetFrame.getClass(), WidgetParam.class);
         for (Field parameterField : parameterFields) {

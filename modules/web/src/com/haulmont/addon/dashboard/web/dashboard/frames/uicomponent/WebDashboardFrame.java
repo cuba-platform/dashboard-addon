@@ -308,7 +308,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         if (CanvasWidgetLayout.class.isAssignableFrom(layout.getClass())) {
             CanvasWidgetLayout canvasWidgetLayout = (CanvasWidgetLayout) layout;
             if (widgetId.equals(canvasWidgetLayout.getWidget().getWidgetId())) {
-                return (ScreenFragment) canvasWidgetLayout.getWidgetComponent();
+                return canvasWidgetLayout.getWidgetComponent();
             }
             return null;
         }

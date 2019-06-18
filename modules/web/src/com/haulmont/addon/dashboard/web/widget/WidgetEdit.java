@@ -27,6 +27,7 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +68,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
     protected TextField<String> widgetId;
 
     protected List<WidgetTypeInfo> typesInfo;
-    protected AbstractFrame widgetEditFrame;
+    protected ScreenFragment widgetEditFrame;
 
     @Override
     public void postInit() {
@@ -101,7 +102,7 @@ public class WidgetEdit extends AbstractEditor<Widget> {
         Map<String, Object> params = new HashMap<>(ParamsMap.of(ITEM_DS, widgetDs));
         params.putAll(widgetRepository.getWidgetParams(widgetDs.getItem()));
         if (StringUtils.isNotEmpty(widgetType.getEditFrameId())) {
-            widgetEditFrame = (AbstractFrame) fragments.create(this,
+            widgetEditFrame = fragments.create(this,
                     widgetType.getEditFrameId(),
                     new MapScreenOptions(params))
                     .init();

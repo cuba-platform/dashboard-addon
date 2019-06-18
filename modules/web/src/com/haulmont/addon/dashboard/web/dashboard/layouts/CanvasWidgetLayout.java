@@ -20,6 +20,7 @@ import com.haulmont.addon.dashboard.model.Widget;
 import com.haulmont.addon.dashboard.model.visualmodel.WidgetLayout;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.VBoxLayout;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 public class CanvasWidgetLayout extends AbstractCanvasLayout {
 
@@ -27,7 +28,7 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
 
     protected VBoxLayout verticalLayout;
     protected Widget widget = null;
-    protected Component widgetComponent;
+    protected ScreenFragment widgetComponent;
     protected Component innerLayout;
 
     public CanvasWidgetLayout init(WidgetLayout model) {
@@ -49,11 +50,11 @@ public class CanvasWidgetLayout extends AbstractCanvasLayout {
         this.widget = widget;
     }
 
-    public Component getWidgetComponent() {
+    public ScreenFragment getWidgetComponent() {
         return widgetComponent;
     }
 
-    public void setWidgetComponent(Component widgetComponent) {
+    public void setWidgetComponent(ScreenFragment widgetComponent) {
         this.widgetComponent = widgetComponent;
     }
 

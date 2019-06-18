@@ -29,6 +29,7 @@ import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentContainer;
 import com.haulmont.cuba.gui.components.OrderedContainer;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 
@@ -99,7 +100,7 @@ public class CanvasFrame extends AbstractFrame {
 
     protected <T> void searchWidgets(ComponentContainer layout, Class<T> widgetClass, List<T> wbList) {
         if (layout instanceof CanvasWidgetLayout) {
-            Component wb = getWidgetFrame((CanvasWidgetLayout) layout);
+            ScreenFragment wb = getWidgetFrame((CanvasWidgetLayout) layout);
             if (wb != null && widgetClass.isAssignableFrom(wb.getClass())) {
                 wbList.add((T) wb);
             }
@@ -112,7 +113,7 @@ public class CanvasFrame extends AbstractFrame {
         }
     }
 
-    private Component getWidgetFrame(CanvasWidgetLayout layout) {
+    private ScreenFragment getWidgetFrame(CanvasWidgetLayout layout) {
         return layout.getWidgetComponent();
     }
 

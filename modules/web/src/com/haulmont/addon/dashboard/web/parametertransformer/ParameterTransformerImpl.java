@@ -24,7 +24,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.stereotype.Service;
 
@@ -128,7 +128,7 @@ public class ParameterTransformerImpl implements ParameterTransformer {
     }
 
     @Override
-    public ParameterValue createParameterValue(Field field, AbstractFrame widgetFrame) {
+    public ParameterValue createParameterValue(Field field, ScreenFragment widgetFrame) {
         ParameterValue parameterValue = null;
         ParameterType parameterType = getParameterType(field);
         try {

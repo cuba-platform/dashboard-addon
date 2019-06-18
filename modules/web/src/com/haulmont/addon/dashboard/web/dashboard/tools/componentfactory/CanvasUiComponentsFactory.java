@@ -25,15 +25,16 @@ import com.haulmont.addon.dashboard.web.repository.WidgetTypeInfo;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Fragment;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.VBoxLayout;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.web.AppUI;
 import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component("dashboard_uiComponentsFactory")
+@org.springframework.stereotype.Component("dashboard_uiComponentsFactory")
 public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     public static final String WIDGET = "widget";
@@ -58,9 +59,6 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
 
     @Inject
     protected Messages messages;
-
-    @Inject
-    protected AppUI appUI;
 
     @Override
     public CanvasVerticalLayout createCanvasVerticalLayout(VerticalLayout verticalLayout) {
@@ -121,11 +119,15 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
         ));
         params.putAll(widgetRepository.getWidgetParams(widget));
 
-        AbstractFrame widgetFrame = (AbstractFrame) appUI.getFragments().create(frame, frameId, new MapScreenOptions(params)).init();
+        ScreenFragment screenFragment = AppUI.getCurrent().getFragments()
+                .create(frame, frameId, new MapScreenOptions(params))
+                .init();
+        Fragment fragment = screenFragment
+                .getFragment();
 
-        widgetFrame.setSizeFull();
+        fragment.setSizeFull();
 
-        com.haulmont.cuba.gui.components.Component widgetComponent = widgetFrame;
+        Component widgetComponent = fragment;
 
         if (BooleanUtils.isTrue(widget.getShowWidgetCaption())) {
             VBoxLayout vBoxLayout = components.create(VBoxLayout.class);
@@ -138,17 +140,17 @@ public class CanvasUiComponentsFactory implements CanvasComponentsFactory {
             label.setStyleName("h2");
             vBoxLayout.add(label);
 
-            vBoxLayout.add(widgetFrame);
-            vBoxLayout.expand(widgetFrame);
+            vBoxLayout.add(fragment);
+            vBoxLayout.expand(fragment);
             widgetComponent = vBoxLayout;
         } else {
-            widgetFrame.setMargin(true);
+            fragment.setMargin(true);
         }
 
         CanvasWidgetLayout layout = components.create(CanvasWidgetLayout.class).init(widgetLayout);
         layout.setUuid(UUID.randomUUID());
         layout.addComponent(widgetComponent);
-        layout.setWidgetComponent(widgetFrame);
+        layout.setWidgetComponent(screenFragment);
         layout.setInnerLayout(widgetComponent);
         layout.setWidget(widget);
         layout.getDelegate().expand(widgetComponent);
