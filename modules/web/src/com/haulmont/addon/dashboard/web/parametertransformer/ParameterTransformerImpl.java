@@ -48,6 +48,9 @@ public class ParameterTransformerImpl implements ParameterTransformer {
 
     @Override
     public Object transform(ParameterValue parameterValue) {
+        if (parameterValue == null) {
+            return null;
+        }
         if (parameterValue instanceof ListEntitiesParameterValue) {
             return loadEntities((ListEntitiesParameterValue) parameterValue);
         } else if (parameterValue instanceof EntityParameterValue) {
@@ -200,7 +203,7 @@ public class ParameterTransformerImpl implements ParameterTransformer {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error on parameter init",e);
+            throw new RuntimeException("Error on parameter init", e);
         }
         return parameterValue;
     }
