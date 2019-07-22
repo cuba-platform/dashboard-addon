@@ -28,6 +28,7 @@ import java.util.Map;
  * provides information {@link WidgetTypeInfo} about these classes
  */
 public interface WidgetRepository {
+
     String NAME = "dashboard_WidgetRepository";
 
     List<WidgetTypeInfo> getWidgetTypesInfo();
