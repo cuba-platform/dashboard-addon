@@ -24,34 +24,22 @@ import com.haulmont.addon.dashboard.web.annotation.WidgetParam;
 import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static com.haulmont.addon.dashboard.web.repository.WidgetRepository.NAME;
-import static java.lang.String.format;
-
-@Service(NAME)
+@Component(WidgetRepository.NAME)
 public class WidgetRepositoryImpl implements WidgetRepository {
-
-    private static Logger log = LoggerFactory.getLogger(WidgetRepositoryImpl.class);
 
     @Inject
     private WindowConfig windowConfig;
@@ -66,9 +54,10 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     private Messages messages;
 
     @Inject
-    private Resources resources;
+    private Logger log;
 
     protected volatile boolean initialized;
+
     protected ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private List<WidgetTypeInfo> widgetTypeInfos;
@@ -90,7 +79,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
             lock.writeLock().lock();
             try {
                 if (!initialized) {
-                    init();
+                    initializeWidgets();
                     initialized = true;
                 }
             } finally {
@@ -100,52 +89,23 @@ public class WidgetRepositoryImpl implements WidgetRepository {
         }
     }
 
-    protected void init() {
+    protected void initializeWidgets() {
         widgetTypeInfos = new ArrayList<>();
-        try {
-            for (WindowInfo windowInfo : windowConfig.getWindows()) {
-                DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                if (StringUtils.isNoneEmpty(windowInfo.getTemplate())) {
-                    try {
-                        InputStream resource = resources.getResourceAsStream(windowInfo.getTemplate());
-                        if (resource != null) {
-                            Document document = documentBuilder.parse(resource);
-                            Element window = document.getDocumentElement();
-                            String className = window.getAttribute("class");
-                            if (StringUtils.isNoneEmpty(className)) {
-                                try {
-                                    Class clazz = Class.forName(className);
-                                    DashboardWidget ann = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
-                                    if (ann != null) {
-                                        String editFrameId = ann.editFrameId();
-                                        if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
-                                            throw new IllegalArgumentException(
-                                                    String.format("Unable to find %s edit screen in screen config for widget %s",
-                                                            editFrameId, ann.name()));
-                                        }
-                                        widgetTypeInfos.add(new WidgetTypeInfo(ann.name(), windowInfo.getId(), editFrameId));
-
-                                    }
-                                } catch (ClassNotFoundException e) {
-                                    log.warn(String.format("Unable to load screen controller class for screen %s, template %s, class %s",
-                                            windowInfo.getId(), windowInfo.getTemplate(), className));
-                                } catch (Exception e) {
-                                    log.error(String.format("Unexpected error on initialization screen %s, template %s, class %s",
-                                            windowInfo.getId(), windowInfo.getTemplate(), className), e);
-                                }
-                            }
-                        } else {
-                            log.warn(String.format("Unable to load screen template for screen %s, template %s",
-                                    windowInfo.getId(), windowInfo.getTemplate()));
-                        }
-                    } catch (Exception e) {
-                        log.error(String.format("Unexpected error on initialization screen %s, template %s",
-                                windowInfo.getId(), windowInfo.getTemplate()), e);
+        for (WindowInfo windowInfo : windowConfig.getWindows()) {
+            if (StringUtils.isNotBlank(windowInfo.getTemplate())) {
+                Class clazz = windowInfo.getControllerClass();
+                if (clazz.isAnnotationPresent(DashboardWidget.class)) {
+                    DashboardWidget widgetAnnotation = (DashboardWidget) clazz.getAnnotation(DashboardWidget.class);
+                    String editFrameId = widgetAnnotation.editFrameId();
+                    if (StringUtils.isNotBlank(editFrameId) && !windowConfig.hasWindow(editFrameId)) {
+                        log.error("Unable to find {} edit screen in screen config for widget {}", editFrameId, widgetAnnotation.name());
+                        throw new IllegalArgumentException(
+                                String.format("Unable to find %s edit screen in screen config for widget %s",
+                                        editFrameId, widgetAnnotation.name()));
                     }
+                    widgetTypeInfos.add(new WidgetTypeInfo(widgetAnnotation.name(), windowInfo.getId(), editFrameId));
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to initialize widget types", e);
         }
     }
 
@@ -166,7 +126,6 @@ public class WidgetRepositoryImpl implements WidgetRepository {
                     throw new RuntimeException(String.format("Error on widget field %s initialization", p.getAlias()), e);
                 }
             }
-
         }
     }
 
@@ -212,7 +171,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     }
 
     public String getLocalizedWidgetName(Widget widget) {
-        String property = format("dashboard-widget.%s", widget.getName());
+        String property = String.format("dashboard-widget.%s", widget.getName());
         String mainMessage = messages.getMainMessage(property);
         return (mainMessage.equals(property) ? widget.getName() : mainMessage);
     }
