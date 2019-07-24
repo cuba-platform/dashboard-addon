@@ -12,21 +12,21 @@
   - [Adding Widget Types](#adding-widget-types)
 - [Usage](#usage)
  - [Dashboards](#dashboards)
- - [Dashboard Editor](#dashboard-editor)
    - [Dashboard Fields](#dashboard-fields)
    - [Dashboard Parameters](#dashboards-parameters)
-	- [Palette](#palette)
-	  - [Widgets](#widgets)
-	  - [Layouts](#layouts)
-	  - [Widget Templates](#widget-templates)
-	- [Dashboard Layout Structure](#dashboard-layout-structure)
-	- [Canvas](#canvas)
-	- [Buttons Panel](#buttons-panel)
- - [Dashboard Groups and Dashboard Group Editor](#groups)
- - [Widget Template Browser](#widget-template-browser)
+   - [Palette](#palette)
+     - [Widgets](#widgets)
+     - [Layouts](#layouts)
+     - [Templates](#templates)
+   - [Canvas](#canvas)
+   - [Dashboard Layout Structure](#dashboard-layout-structure)
+   - [Buttons Panel](#buttons-panel)
+  - [Dashboard Groups](#dashboard-groups)
+  - [Widget Templates](#widget-templates)
    - [Widget Template Editor](#widget-template-editor)
    - [Parameter Editor](#parameter-editor)
- - [Integration of the Component Dashboard-UI](#integration)
+ - [Export and Import JSON file](#export-and-import-json-file)
+ - [Integration of the Component Dashboard-UI](#integration-of-the-dashboard-ui-component)
 
 
 # 1. Introduction <a name="introduction"></a>
@@ -67,7 +67,9 @@ Specify the add-on version compatible with the used version of the CUBA platform
 
 ## 2.2. Add the Repository and the Component in build.gradle <a name="adding-build"></a>
 
-1. Edit `build.gradle` and specify the add-on coordinates in the root `dependencies` section:
+Another way to install the add-on is to edit `build.gradle` file:
+
+1. Open `build.gradle` and specify the add-on coordinates in the root `dependencies` section:
 
 ```groovy
 dependencies {
@@ -89,6 +91,8 @@ dependencies {
 ```
 
 # 3.Configuration <a name="configuration"></a>
+
+Before starting working with dashboard editor in your application you should do some configuration setting: extend application theme and add widgets.
 
 ## 3.1. Extending Application Theme <a name="extending-application-theme"></a>
 
@@ -194,13 +198,11 @@ After installation the add-on in your project the *Dashboard* menu will appear c
 
 ## 4.1. Dashboards <a name='dashboards'></a>
 
-This screen allows creating, editing and removing dashboards in a database.
+*Dashboard browser* contains the list of dashboards and buttons for creating, editing and removing dashboards in a database.
 
 ![persistent-dashboard](img/persistent-dashboards.png)
 
-## 4.2. Dashboard Editor <a name='dashboard-editor'></a>
-
-This screen appears after clicking the *Create* button on the *Dashboards* screen and allows editing a dashboard.
+*Dashboard editor* screen appears after clicking the *Create* button on the *Dashboards* screen and allows editing a dashboard.
 
 ![dashboard-editor-common](img/dashboard-editor-common.png)
 
@@ -208,74 +210,60 @@ This screen appears after clicking the *Create* button on the *Dashboards* scree
 - the dashboard fields;
 - the dashboard parameters;
 - the palette with widgets and layouts;
-- the tree representation of the edited dashboard structure;
 - the canvas  where the position of dashboard elements (widgets and layouts) is specified;
+- the tree representation of the edited dashboard structure;
 - the buttons panel.
 
-Dashboard canvas and tree support drag-and-drop operation from the palette.
+### 4.1.1 Dashboard Fields <a name='dashboard-fields'></a>
 
-### 4.2.1. Dashboard Fields <a name='dashboard-fields'></a>
-
-The following fields are available to set:
+To save the created dashboard it is necessary to fill in at least the required fields:
 - *Title* - a name of the dashboard;
 - *Code* - a unique identifier for a more convenient search in a database;
+
+The following fields are available to set:
 - *Refresh period (sec)* - a time period in seconds for refresh a dashboard UI;
 - *Assistant bean name* - an optional reference to a Spring bean class that should be used for customizing the dashboard (assistance bean must have `prototype` bean scope).
 - *Group* - a dashboard group;
 - *Available for all users* - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
-### 4.2.2. Dashboard Parameters <a name='dashboards-parameters'></a>
+### 4.1.2 Dashboard Parameters <a name='dashboards-parameters'></a>
 
 The frame with dashboard parameters which allows adding, editing and removing dashboard parameters. These parameters are passed as input parameters for the widgets in this dashboard. For more information on adding and editing parameters, see [Parameter Editor](#parameter-editor).
 
-### 4.2.3. Palette <a name='palette'></a>
+### 4.1.3 Palette <a name='palette'></a>
 
 It is a container with 3 collapsible tabs. Each tab contains a container with components. When a component is dragged to the canvas, the corresponding element will be added to the canvas.
 
-#### 4.2.3.1 Widgets <a name='widgets'></a>
+#### 4.1.3.1 Widgets <a name='widgets'></a>
 
 By default, there are no widgets in this tab. You can add widgets as described in [Adding Widget Types](#adding-widget-types) section. Drag an element from the palette for adding it on the canvas, and the widget editor will be opened in a dialog window. It is possible to make the widget a template (in this case, it is added to the tab *Widget Templates*).
 
 ![palette-widgets](img/palette-widgets.png)
 
-#### 4.2.3.2. Layouts <a name='layouts'></a>
+#### 4.1.3.2 Layouts <a name='layouts'></a>
+
+Layouts help to place widgets in the specific way. Add the required layout before adding widgets on the canvas.
 
 ![palette-layouts](img/palette-layouts.png)
 
-Contains the following layouts:
+The following layouts are available:
 - **vertical** - widgets are placed vertically one after another;
 - **horizontal** -  widgets are placed horizontally one after another;
 - **grid** - widgets are placed inside a grid with a specified number of rows and columns;
 - **css** - enables full control over placement and styling of enclosed components using CSS;
-- **responsive** - depending on the screen width, the number of columns with widgets changes.
-After adding this layout on the canvas setting form will appear. You can set which part of the screen each widget will occupy.
+- **responsive** - widgets are placed vertically, but depending on the screen width, the number of columns with widgets changes.
+After adding this layout on the canvas the setting form will appear. The slider shows which part of the screen will be occupied by one widget when opening the dashboard on a particular device.
 
 ![responsive-settings](img/responsive-settings.png)
 
-#### 4.2.3.3. Widget Templates <a name='widget-templates'></a>
+#### 4.1.3.3. Templates <a name='templates'></a>
 
 Contains widget templates from a database. Templates can be created from the widgets added on the canvas using the corresponding button, or by using [Widget Template Browser](#widget-template-browser).
 
 ![palette-widget-templates](img/palette-widget-templates.png)
 
-### 4.2.4. Dashboard Layout Structure <a name='dashboard-layout-structure'></a>
 
-Displays the current dashboard structure as a tree. The *Root* element is available by default and cannot be removed.
-
-![palette-tree](img/palette-tree.png)
-
-The following actions are available for the tree elements from the context menu:
-
-- **Expand** - defines a component within a container that should be expanded to use all available space in the direction of component placement. For a container with vertical placement, this attribute sets 100% height to a component; for the containers with horizontal placement - 100% width. Additionally, resizing a container will resize the expanded component.
-- **Style** - enables setting a style name and modifying the component's height and width.
-- **Remove** - removes a component from the tree.
-- **Weight** - changes the weight (expand ratio) of a container in a parent container.
-- **Edit** - opens the widget editor.
-- **Template** - opens the widget template editor.
-
-![tree-context-menu](img/tree-context-menu_1.png) ![tree-context-menu](img/tree-context-menu_2.png)
-
-### 4.2.5. Canvas <a name='canvas'></a>
+### 4.1.4 Canvas <a name='canvas'></a>
 
 It is a container in which you can place widgets and layouts. Drag an element from the palette for adding it on the canvas.
 
@@ -309,7 +297,25 @@ Click on a layout or a widget to select it. The selected element contains the pa
 
 For more information on using custom styles see [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/web_theme_extension.html#web_theme_extension_styles).
 
-### 4.2.6. Buttons Panel <a name='buttons-panel'></a>
+### 4.1.5. Dashboard Layout Structure <a name='dashboard-layout-structure'></a>
+
+Displays the current dashboard structure as a tree. The *Root* element is available by default and cannot be removed.
+
+![palette-tree](img/palette-tree.png)
+
+The following actions are available for the tree elements from the context menu:
+
+- **Expand** - defines a component within a container that should be expanded to use all available space in the direction of component placement. For a container with vertical placement, this attribute sets 100% height to a component; for the containers with horizontal placement - 100% width. Additionally, resizing a container will resize the expanded component.
+- **Style** - enables setting a style name and modifying the component's height and width.
+- **Remove** - removes a component from the tree.
+- **Weight** - changes the weight (expand ratio) of a container in a parent container.
+- **Edit** - opens the widget editor.
+- **Template** - opens the widget template editor.
+
+![tree-context-menu](img/tree-context-menu_1.png) ![tree-context-menu](img/tree-context-menu_2.png)
+
+
+### 4.1.6. Buttons Panel <a name='buttons-panel'></a>
 
 This panel contains the following buttons:
 
@@ -319,7 +325,7 @@ This panel contains the following buttons:
 - *Export Json* - export the dashboard to a JSON file;
 - *Import Json* - import the dashboard from a JSON file and refresh the editor.
 
-## 4.3 Dashboard Groups and Dashboard Group Editor <a name='groups'></a>
+## 4.2 Dashboard Groups <a name='dashboard-groups'></a>
 
 The screen *Dashboard Groups* allows creating, editing, and removing dashboard groups. The screen *Dashboard Group Editor* allows adding or excluding dashboards in a dashboard group from a database.
 
@@ -329,7 +335,7 @@ To open the *Dashboard Groups* browser, click the *Groups* button in the *Dashbo
 
  ![dashboard-group-editor](img/dashboard-group-editor.png)
 
-## 4.4. Widget Template Browser <a name="widget-template-browser"></a>
+## 4.3. Widget Templates <a name="widget-templates"></a>
 
  This screen allows creating, editing and removing widget templates. Widget templates are  preconfigured widgets which can be reused. Widget templates are stored in a database. This screen is available from the application menu.
 
@@ -337,7 +343,7 @@ To open the *Dashboard Groups* browser, click the *Groups* button in the *Dashbo
 
  ![widget-template-browser](img/widget-template-browser.png)
 
-## 4.4.1 Widget Template Editor <a name="widget-template-editor"></a>
+## 4.3.1 Widget Template Editor <a name="widget-template-editor"></a>
 
 This screen allows editing a widget and consists of the following elements:
 
@@ -360,7 +366,7 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![widget-editor-customize](img/widget-editor-customize.png)
 
-## 4.4.2 Parameter Editor <a name='parameter-editor'></a>
+## 4.3.2 Parameter Editor <a name='parameter-editor'></a>
 
  This screen allows editing parameters. A parameter is a key-value pair, where the *Name* field is the key and the *Value* field is a value.
  The following types of values are available:
@@ -379,7 +385,13 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![parameter-editor](img/parameter-editor.png)
 
-## 4.5. Integration of the Component Dashboard-UI <a name='integration'></a>
+## 4.4 Export and Import JSON file <a name='export-and-import-json-file'></a>
+
+You are able to export the created dashboard into JSON file, just click the *Export json* button in the *Dashboard Editor* screen and specify the path to the file.
+
+To import a dashboard from the file click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
+
+## 4.5. Integration of the Dashboard-UI Component <a name='integration-of-the-dashboard-ui-component'></a>
 
 To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen.    
 Then add a namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
