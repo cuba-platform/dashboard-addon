@@ -22,6 +22,7 @@ import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents in a frame  a dashboard {@link Dashboard}
@@ -45,6 +46,8 @@ public interface DashboardFrame extends Frame {
     Dashboard getDashboard();
 
     void refresh();
+
+    void refresh(Map<String, Object> params);
 
     String getAssistantBeanName();
 

@@ -23,6 +23,7 @@ import com.haulmont.cuba.gui.screen.ScreenFragment;
 import java.lang.reflect.Field;
 
 public interface ParameterTransformer {
+
     String NAME = "dashboard_ParameterTransformer";
 
     Object transform(ParameterValue parameterValue);
@@ -30,4 +31,6 @@ public interface ParameterTransformer {
     boolean compareParameterTypes(ParameterType parameterType, Field field);
 
     ParameterValue createParameterValue(Field field, ScreenFragment widgetFrame);
+
+    ParameterValue createParameterValue(Object obj);
 }
