@@ -169,6 +169,13 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
+    /**
+     * Refreshes widget with passed parameters.
+     * Dashboard will be refreshed with merged existed and new parameters.
+     * If existed parameter has the same name as one of the param from passed map, it will be overwritten by param from map.
+     *
+     * @param params map with new dashboard parameters
+     */
     @Override
     public void refresh(Map<String, Object> params) {
         Dashboard dashboard = null;
