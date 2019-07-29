@@ -31,6 +31,7 @@ import com.haulmont.addon.dashboard.web.dashboard.tools.AccessConstraintsHelper;
 import com.haulmont.addon.dashboard.web.events.DashboardEvent;
 import com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent;
 import com.haulmont.addon.dashboard.web.events.ItemsSelectedEvent;
+import com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer;
 import com.haulmont.addon.dashboard.web.widget.LookupWidget;
 import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
@@ -45,6 +46,7 @@ import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -60,6 +62,7 @@ import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.haulmont.addon.dashboard.web.dashboard.frames.editor.canvas.CanvasFrame.DASHBOARD_FRAME;
@@ -78,24 +81,36 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
     @Inject
     protected VBoxLayout canvasBox;
+
     @Inject
     protected DataManager dataManager;
+
     @Inject
     protected JsonConverter jsonConverter;
+
     @Inject
     protected ResourceLoader resourceLoader;
+
     @Inject
     protected Metadata metadata;
+
     @Inject
     protected AccessConstraintsHelper accessHelper;
+
     @Inject
     protected UiComponents componentsFactory;
+
     @Inject
     protected Events events;
+
     @Inject
     protected Notifications notifications;
+
     @Inject
     protected Fragments fragments;
+
+    @Inject
+    protected ParameterTransformer parameterTransformer;
 
     protected DashboardViewAssistant dashboardViewAssistant;
 
@@ -152,6 +167,42 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         } else if (isNotBlank(code)) {
             updateDashboard(loadDashboardByCode(code));
         }
+    }
+
+    /**
+     * Refreshes widget with passed parameters.
+     * Dashboard will be refreshed with merged existed and new parameters.
+     * If existed parameter has the same name as one of the param from passed map, it will be overwritten by param from map.
+     *
+     * @param params map with new dashboard parameters
+     */
+    @Override
+    public void refresh(Map<String, Object> params) {
+        Dashboard dashboard = null;
+
+        if (isNotBlank(jsonPath)) {
+            dashboard = loadDashboardByJson(jsonPath);
+        } else if (isNotBlank(code)) {
+            dashboard = loadDashboardByJson(code);
+        }
+
+        if (MapUtils.isNotEmpty(params) && Objects.nonNull(dashboard)) {
+            Map<String, Parameter> newParams = params.keySet().stream()
+                    .map(key -> {
+                        Parameter parameter = metadata.create(Parameter.class);
+                        parameter.setName(key);
+                        parameter.setAlias(key);
+                        parameter.setParameterValue(parameterTransformer.createParameterValue(params.get(key)));
+                        return parameter;
+                    })
+                    .collect(Collectors.toMap(Parameter::getName, Function.identity()));
+
+            Map<String, Parameter> paramMap = dashboard.getParameters().stream().collect(Collectors.toMap(Parameter::getName, Function.identity()));
+            paramMap.putAll(newParams);
+            dashboard.setParameters(new ArrayList<>(paramMap.values()));
+        }
+
+        updateDashboard(dashboard);
     }
 
     private void initAssistant(WebDashboardFrame frame) {
@@ -314,9 +365,9 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
 
         Collection<Component> components = Collections.EMPTY_LIST;
-        if (layout instanceof CanvasLayout){
+        if (layout instanceof CanvasLayout) {
             components = ((CanvasLayout) layout).getLayoutComponents();
-        } else if (layout instanceof ComponentContainer){
+        } else if (layout instanceof ComponentContainer) {
             components = ((ComponentContainer) layout).getOwnComponents();
         }
 

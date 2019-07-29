@@ -20,9 +20,11 @@ import com.haulmont.addon.dashboard.model.ParameterType;
 import com.haulmont.addon.dashboard.model.paramtypes.ParameterValue;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 public interface ParameterTransformer {
+
     String NAME = "dashboard_ParameterTransformer";
 
     Object transform(ParameterValue parameterValue);
@@ -30,4 +32,13 @@ public interface ParameterTransformer {
     boolean compareParameterTypes(ParameterType parameterType, Field field);
 
     ParameterValue createParameterValue(Field field, ScreenFragment widgetFrame);
+
+    /**
+     * Returns ParameterValue object according passed parameter class
+     *
+     * @param obj parameter
+     * @return wrapped object which implements ParameterValue interface
+     */
+    @Nullable
+    ParameterValue createParameterValue(Object obj);
 }

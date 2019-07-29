@@ -26,8 +26,9 @@ import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -39,10 +40,12 @@ import java.util.stream.Collectors;
 import static com.haulmont.addon.dashboard.model.ParameterType.*;
 import static com.haulmont.addon.dashboard.web.parametertransformer.ParameterTransformer.NAME;
 
-@Service(NAME)
+@Component(NAME)
 public class ParameterTransformerImpl implements ParameterTransformer {
+
     @Inject
     protected DataManager dataManager;
+
     @Inject
     protected Metadata metadata;
 
@@ -207,4 +210,37 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         }
         return parameterValue;
     }
+
+    @Override
+    @Nullable
+    public ParameterValue createParameterValue(Object obj) {
+        if (obj instanceof Boolean) {
+            return new BooleanParameterValue((Boolean) obj);
+        } else if (obj instanceof Date) {
+            return new DateParameterValue((Date) obj);
+        } else if (obj instanceof BigDecimal) {
+            return new DecimalParameterValue((BigDecimal) obj);
+        } else if (obj instanceof Long) {
+            return new LongParameterValue((Long) obj);
+        } else if (obj instanceof Integer) {
+            return new IntegerParameterValue((Integer) obj);
+        } else if (obj instanceof String) {
+            return new StringParameterValue((String) obj);
+        } else if (obj instanceof UUID) {
+            return new UuidParameterValue((UUID) obj);
+        } else if (obj instanceof EnumClass) {
+            return new EnumParameterValue(obj.getClass().toString());
+        } else if (obj instanceof Entity) {
+            return new EntityParameterValue(obj.getClass().toString(), ((Entity) obj).getId().toString(), null);
+        } else if (obj instanceof List) {
+            List<Object> list = (List) obj;
+            List<EntityParameterValue> entityList = list.stream()
+                    .filter(t -> t instanceof Entity)
+                    .map(entity -> new EntityParameterValue(entity.getClass().toString(), ((Entity) entity).getId().toString(), null))
+                    .collect(Collectors.toList());
+            return new ListEntitiesParameterValue(entityList);
+        }
+        return null;
+    }
+
 }
