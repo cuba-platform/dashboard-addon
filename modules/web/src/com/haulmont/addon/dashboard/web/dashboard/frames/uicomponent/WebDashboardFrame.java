@@ -133,7 +133,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             initTimer(getFrame());
             initLookupWidget();
         } else {
-            Label<String> errorMessageLabel = componentsFactory.create(Label.class);
+            Label<String> errorMessageLabel = componentsFactory.create(Label.NAME);
             String errorMessage = getMessage("dashboardNotFound");
             if (isNotBlank(jsonPath)) {
                 errorMessage = formatMessage("dashboardWithJsonNotFound", jsonPath);
@@ -169,13 +169,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         }
     }
 
-    /**
-     * Refreshes widget with passed parameters.
-     * Dashboard will be refreshed with merged existed and new parameters.
-     * If existed parameter has the same name as one of the param from passed map, it will be overwritten by param from map.
-     *
-     * @param params map with new dashboard parameters
-     */
     @Override
     public void refresh(Map<String, Object> params) {
         Dashboard dashboard = null;
@@ -254,8 +247,6 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
 
             }
         }
-
-
     }
 
     protected void updateDashboard(Dashboard dashboard) {

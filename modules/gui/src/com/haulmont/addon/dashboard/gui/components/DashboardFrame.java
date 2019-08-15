@@ -33,26 +33,85 @@ public interface DashboardFrame extends Frame {
 
     String NAME = "dashboard";
 
-    void setCode(String code);
-
-    void setJsonPath(String jsonPath);
-
-    void setXmlParameters(List<Parameter> parameters);
-
-    void setTimerDelay(int delay);
-
-    int getTimerDelay();
+    /**
+     * Initialize dashboard with passed parameters, timer and assistant.
+     *
+     * @param params map of dashboard params
+     */
+    void init(Map<String, Object> params);
 
     Dashboard getDashboard();
 
-    void refresh();
-
-    void refresh(Map<String, Object> params);
-
-    String getAssistantBeanName();
-
-    void setAssistantBeanName(String assistantBeanName);
-
+    /**
+     * Returns widget by passed id
+     *
+     * @param widgetId widget identifier
+     */
     ScreenFragment getWidget(String widgetId);
 
+    /**
+     * Refreshes dashboard.
+     * Dashboard will be refreshed .
+     * If existed parameter has the same name as one of the param from passed map, it will be overwritten by param from map.
+     */
+    void refresh();
+
+    /**
+     * Refreshes dashboard with passed parameters.
+     * Dashboard will be refreshed with merged existed and new parameters.
+     * If existed parameter has the same name as one of the param from passed map, it will be overwritten by param from map.
+     *
+     * @param params map with new dashboard parameters
+     */
+    void refresh(Map<String, Object> params);
+
+    /**
+     * Dashboard can be configured by setting code of existing dashboard
+     *
+     * @param code another dashboard code
+     */
+    void setCode(String code);
+
+    /**
+     * Dashboard can be configured from json file
+     *
+     * @param jsonPath path to json configuration file
+     */
+    void setJsonPath(String jsonPath);
+
+    /**
+     * Sets passed parameters to dashboard frame
+     *
+     * @param parameters list of parameters to be set
+     */
+    void setXmlParameters(List<Parameter> parameters);
+
+    /**
+     * Set delay for dashboard timer
+     *
+     * @param delay delay time in seconds
+     */
+    void setTimerDelay(int delay);
+
+    /**
+     * Returns delay for timer
+     *
+     * @return delay time in seconds
+     */
+    int getTimerDelay();
+
+    /**
+     * Returns assistant bean name
+     *
+     * @return name of assistant bean
+     *
+     */
+    String getAssistantBeanName();
+
+    /**
+     * Set assistant bean name
+     *
+     * @param assistantBeanName name of the assistant bean
+     */
+    void setAssistantBeanName(String assistantBeanName);
 }
