@@ -37,6 +37,7 @@ import com.haulmont.addon.dashboard.web.widget.RefreshableWidget;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
+import com.haulmont.cuba.gui.Facets;
 import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
@@ -101,6 +102,9 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     protected UiComponents componentsFactory;
 
     @Inject
+    protected Facets facets;
+
+    @Inject
     protected Events events;
 
     @Inject
@@ -133,7 +137,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
             initTimer(getFrame());
             initLookupWidget();
         } else {
-            Label<String> errorMessageLabel = componentsFactory.create(Label.class);
+            Label<String> errorMessageLabel = componentsFactory.create(Label.TYPE_STRING);
             String errorMessage = getMessage("dashboardNotFound");
             if (isNotBlank(jsonPath)) {
                 errorMessage = formatMessage("dashboardWithJsonNotFound", jsonPath);
@@ -221,7 +225,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         Window parentWindow = findWindow(frame);
         int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
         if (timerDelay > 0 && parentWindow != null) {
-            Timer dashboardUpdatedTimer = componentsFactory.create(Timer.NAME);
+            Timer dashboardUpdatedTimer = facets.create(Timer.class);
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
             dashboardUpdatedTimer.setRepeating(true);

@@ -39,12 +39,16 @@ import java.util.List;
 
 @Component("dashboard_dropComponentsFactory")
 public class CanvasDropComponentsFactory extends CanvasUiComponentsFactory {
+
     @Inject
     protected UiComponents factory;
+
     @Inject
     protected Events events;
+
     @Inject
     protected Metadata metadata;
+
     @Inject
     protected ActionProviderFactory actionProviderFactory;
 

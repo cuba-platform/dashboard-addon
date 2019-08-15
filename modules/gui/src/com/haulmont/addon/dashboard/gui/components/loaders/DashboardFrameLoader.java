@@ -68,7 +68,6 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
 
     protected Metadata metadata;
 
-
     @Override
     public void createComponent() {
         metadata = AppBeans.get(Metadata.class);
@@ -102,7 +101,6 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
         fragmentImpl.setFrameOwner(controller);
         fragmentImpl.setId(frameId);
 
-//        FrameContext frameContext = new FrameContextImpl(fragment);
         FrameContext frameContext = new FragmentContextImpl(fragment, innerContext);
         ((FrameImplementation) fragment).setContext(frameContext);
 
@@ -121,15 +119,12 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
             innerContext.setParent(parentContext);
 
             LayoutLoader layoutLoader = beanLocator.getPrototype(LayoutLoader.NAME, innerContext);
-//            layoutLoader.setLocale(getLocale());
-//            layoutLoader.setMessagesPack(getMessagesPack());
 
             ScreenXmlLoader screenXmlLoader = beanLocator.get(ScreenXmlLoader.NAME);
 
             Element windowElement = screenXmlLoader.load(windowInfo.getTemplate(), windowInfo.getId(),
                     getComponentContext().getParams());
 
-//            this.fragmentLoader = layoutLoader.createFragmentContent(fragment, windowElement, frameId);
             this.fragmentLoader = layoutLoader.createFragmentContent(fragment, windowElement);
         }
 
@@ -179,12 +174,10 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
 
         ComponentLoaderContext parentContext = (ComponentLoaderContext) getContext();
         if (innerContext != null) {
-
             parentContext.getInjectTasks().addAll(innerContext.getInjectTasks());
             parentContext.getInitTasks().addAll(innerContext.getInitTasks());
             parentContext.getPostInitTasks().addAll(innerContext.getPostInitTasks());
         }
-
 
         ScreenOptions options = parentContext.getOptions();
         parentContext.addInjectTask(new FragmentHelper.FragmentLoaderInjectTask(resultComponent, options, beanLocator));

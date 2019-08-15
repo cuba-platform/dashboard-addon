@@ -38,18 +38,25 @@ import javax.inject.Inject;
 
 @Component
 public class PaletteComponentsFactoryImpl implements PaletteComponentsFactory {
+
     @Inject
     protected UiComponents factory;
+
     @Inject
     protected Events events;
+
     @Inject
     protected Metadata metadata;
+
     @Inject
     protected Messages messages;
+
     @Inject
     protected JsonConverter converter;
+
     @Inject
     protected WidgetUtils widgetUtils;
+
     @Inject
     protected WidgetRepository widgetRepository;
 
