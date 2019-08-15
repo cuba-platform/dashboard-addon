@@ -40,6 +40,11 @@ public interface DashboardFrame extends Frame {
      */
     void init(Map<String, Object> params);
 
+    /**
+     * Returns dashboard entity
+     *
+     * @return dashboard entity
+     */
     Dashboard getDashboard();
 
     /**
@@ -104,7 +109,6 @@ public interface DashboardFrame extends Frame {
      * Returns assistant bean name
      *
      * @return name of assistant bean
-     *
      */
     String getAssistantBeanName();
 
