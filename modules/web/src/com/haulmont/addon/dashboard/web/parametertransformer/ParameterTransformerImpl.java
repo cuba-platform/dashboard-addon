@@ -233,7 +233,7 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         } else if (obj instanceof Entity) {
             return new EntityParameterValue(obj.getClass().toString(), ((Entity) obj).getId().toString(), null);
         } else if (obj instanceof List) {
-            List<Object> list = (List) obj;
+            List<?> list = (List) obj;
             List<EntityParameterValue> entityList = list.stream()
                     .filter(t -> t instanceof Entity)
                     .map(entity -> new EntityParameterValue(entity.getClass().toString(), ((Entity) entity).getId().toString(), null))
