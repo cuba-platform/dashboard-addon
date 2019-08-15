@@ -72,6 +72,7 @@ public interface DashboardFrame extends Frame {
 
     /**
      * Dashboard can be configured by setting code of existing dashboard
+     * To apply new changes the {@link DashboardFrame#init(Map)} method required to be invoked
      *
      * @param code another dashboard code
      */
