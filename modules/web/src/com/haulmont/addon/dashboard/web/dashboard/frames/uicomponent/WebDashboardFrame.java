@@ -221,7 +221,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         Window parentWindow = findWindow(frame);
         int timerDelay = getTimerDelay() == 0 ? dashboard.getTimerDelay() : getTimerDelay();
         if (timerDelay > 0 && parentWindow != null) {
-            Timer dashboardUpdatedTimer = componentsFactory.create(Timer.class);
+            Timer dashboardUpdatedTimer = componentsFactory.create(Timer.NAME);
             parentWindow.addTimer(dashboardUpdatedTimer);
             dashboardUpdatedTimer.setDelay(timerDelay * 1000);
             dashboardUpdatedTimer.setRepeating(true);
