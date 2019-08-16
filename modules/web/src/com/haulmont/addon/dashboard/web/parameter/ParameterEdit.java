@@ -125,6 +125,7 @@ public class ParameterEdit extends AbstractEditor<Parameter> {
     }
 
     protected void parameterTypeChanged(ParameterType type) {
+        valueBox.removeAll();
         switch (type) {
             case LIST_ENTITY:
                 valueFrame = openEntitiesListValueFrame(new ListEntitiesParameterValue());
