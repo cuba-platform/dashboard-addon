@@ -23,6 +23,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.screen.UiController;
@@ -41,14 +42,19 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @UiController("dashboard$EntityValueFrame")
 @UiDescriptor("entity-value-frame.xml")
 public class EntityValueFrame extends AbstractFrame implements ValueFrame {
+
     @Inject
     protected LookupField<MetaClass> metaClassLookup;
+
     @Inject
     protected LookupField<Entity> entitiesLookup;
+
     @Inject
     protected LookupField<String> viewLookup;
+
     @Inject
     protected Metadata metadata;
+
     @Inject
     protected DataManager dataManager;
 
@@ -59,7 +65,6 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         selectIfExist((EntityParameterValue) params.get(VALUE));
         metaClassLookup.addValueChangeListener(e -> metaClassValueChanged(e.getValue()));
     }
-
 
     @Override
     public ParameterValue getValue() {
@@ -116,7 +121,6 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
         }
     }
 
-
     protected void metaClassValueChanged(MetaClass metaClass) {
         if (metaClass == null) {
             entitiesLookup.setValue(null);
@@ -138,7 +142,9 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
 
     protected void loadViewNames(MetaClass metaClass) {
         List<String> viewNames = new ArrayList<>(metadata.getViewRepository().getViewNames(metaClass));
+        viewNames.add(0, View.LOCAL);
+        viewNames.add(1, View.MINIMAL);
+        viewNames.add(2, View.BASE);
         viewLookup.setOptionsList(viewNames);
     }
-
 }
