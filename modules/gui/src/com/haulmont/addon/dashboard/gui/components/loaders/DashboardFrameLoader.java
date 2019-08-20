@@ -31,7 +31,6 @@ import com.haulmont.cuba.gui.config.WindowConfig;
 import com.haulmont.cuba.gui.config.WindowInfo;
 import com.haulmont.cuba.gui.model.impl.ScreenDataImpl;
 import com.haulmont.cuba.gui.screen.FrameOwner;
-import com.haulmont.cuba.gui.screen.ScreenContext;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.ScreenOptions;
 import com.haulmont.cuba.gui.sys.FragmentContextImpl;
@@ -86,8 +85,6 @@ public class DashboardFrameLoader extends ContainerLoader<Fragment> {
         ComponentLoaderContext parentContext = (ComponentLoaderContext) getContext();
 
         FrameOwner hostController = parentContext.getFrame().getFrameOwner();
-
-        ScreenContext hostScreenContext = getScreenContext(hostController);
 
         setHostController(controller, hostController);
         setWindowId(controller, windowInfo.getId());
