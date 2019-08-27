@@ -21,7 +21,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.xml.layout.ComponentLoader;
 import com.haulmont.cuba.gui.xml.layout.LayoutLoader;
 import com.haulmont.cuba.gui.xml.layout.ScreenXmlLoader;
-import com.haulmont.cuba.gui.xml.layout.loaders.FragmentLoader;
+import com.haulmont.cuba.gui.xml.layout.loaders.ComponentLoaderContext;
 import org.dom4j.Element;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -44,8 +44,9 @@ public class DashboardLayoutLoader extends LayoutLoader {
         Element element = screenXmlLoader.load(resourcePath, id, params);
 
         ComponentLoader loader = getLoader(element);
-        FragmentLoader frameLoader = (FragmentLoader) loader;
-        frameLoader.setFrameId(id);
+
+        ComponentLoaderContext ctx = (ComponentLoaderContext) loader.getContext();
+        ctx.setCurrentFrameId(id);
 
         loader.createComponent();
 

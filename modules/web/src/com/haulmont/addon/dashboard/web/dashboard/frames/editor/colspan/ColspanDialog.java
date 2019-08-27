@@ -37,6 +37,7 @@ import java.util.Set;
 @UiController("dashboard$ColspanDialog")
 @UiDescriptor("colspan-dialog.xml")
 public class ColspanDialog extends AbstractWindow {
+
     public static final String WIDGET = "WIDGET";
 
     @Inject
