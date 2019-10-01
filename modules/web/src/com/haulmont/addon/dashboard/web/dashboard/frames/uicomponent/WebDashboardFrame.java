@@ -187,7 +187,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
         if (isNotBlank(jsonPath)) {
             dashboard = loadDashboardByJson(jsonPath);
         } else if (isNotBlank(code)) {
-            dashboard = loadDashboardByJson(code);
+            dashboard = loadDashboardByCode(code);
         }
 
         if (MapUtils.isNotEmpty(params) && Objects.nonNull(dashboard)) {

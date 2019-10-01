@@ -58,7 +58,7 @@ Specify the add-on version compatible with the used version of the CUBA platform
 
 | Platform Version  | Component Version |
 |-------------------|-------------------|
-| 7.1.X             | 3.1.0             |
+| 7.1.X             | 3.1.1             |
 | 7.0.X             | 3.0.4             |
 | 6.10.X            | 2.0.1             |
 
