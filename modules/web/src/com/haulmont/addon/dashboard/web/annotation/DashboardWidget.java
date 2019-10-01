@@ -16,6 +16,8 @@
 
 package com.haulmont.addon.dashboard.web.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 /**
@@ -31,7 +33,14 @@ public @interface DashboardWidget {
      * The name for widget-edit screen, can be localized in main message.properties by pattern:
      * dashboard-widget.{name} = {localization message}
      */
-    String name();
+    @AliasFor("value")
+    String name() default "";
+
+    /**
+     * Alias for {@link #name}.
+     */
+    @AliasFor("name")
+    String value() default "";
 
     /**
      *  Contains frame ID for editing a widget. This frame is embedded in the "widget-edit" screen
