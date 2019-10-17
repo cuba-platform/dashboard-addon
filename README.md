@@ -25,8 +25,8 @@
   - [Widget Templates](#widget-templates)
    - [Widget Template Editor](#widget-template-editor)
    - [Parameter Editor](#parameter-editor)
- - [Export and Import JSON file](#export-and-import-json-file)
  - [Integration of the Component Dashboard-UI](#integration-of-the-dashboard-ui-component)
+   - [Loading a dashboard from JSON file](#loading-a-dashboard-from-json-file)
 
 
 # 1. Introduction <a name="introduction"></a>
@@ -38,6 +38,8 @@ A dashboard consists of widgets — individual elements based on a frame.  An in
 You can add your own widgets or use  [Dashboard Chart Add-on](https://github.com/cuba-platform/dashboard-chart-addon) that provides additional chart widgets for dashboard add-on.
 
 See [sample application](https://github.com/cuba-platform/dashboard-addon-demo) using this add-on.
+
+See [webinar](https://www.youtube.com/watch?v=nl-wsnC9K4A) on the CUBA Platform channel.
 
 # 2. Installation <a name="installation"></a>
 
@@ -386,18 +388,12 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![parameter-editor](img/parameter-editor.png)
 
-## 4.4 Export and Import JSON file <a name='export-and-import-json-file'></a>
-
-You are able to export the created dashboard into JSON file, just click the *Export json* button in the *Dashboard Editor* screen and specify the path to the file.
-
-To import a dashboard from the file click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
-
-## 4.5. Integration of the Dashboard-UI Component <a name='integration-of-the-dashboard-ui-component'></a>
+## 4.4. Integration of the Dashboard-UI Component <a name='integration-of-the-dashboard-ui-component'></a>
 
 To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen.    
 Then add a namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
 
-### Usage Example
+Here is an example of adding dashboard to the screen:
 
 ```xml
  <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -406,14 +402,14 @@ Then add a namespace like `dashboard` for the schema. The schema contains inform
          xmlns:dashboard="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
      ...
          <dashboard:dashboard id="dashboardId"
-                         code="usersDashboard"
-                         timerDelay="60">
+                              code="usersDashboard"
+                              timerDelay="60">
               <dashboard:parameter name="role" value="Admin" type="string"/>           
          </dashboard:dashboard>
      ...
 ```
 
-#### Dashboard Tag Attributes
+Dashboard tag contains the following attributes:
 
 - `code` - the attribute which will serve for a dashboard search in a database;
 - `jsonPath` - the `classPath` to the dashboard JSON file;
@@ -422,10 +418,27 @@ Then add a namespace like `dashboard` for the schema. The schema contains inform
 
 **Note:** when embedding a dashboard, you must specify the `code` or `jsonPath` attribute. When specifying at the same time, the attribute `code` takes precedence over `jsonPath`.
 
-#### Parameter Tag Attributes
+Dashboard parameter tag has the following attributes:
 
 - `name` - the name of the parameter, required;
 - `value` - the value of the parameter, required;
 - `type` - the type of the value, can take one of the following values: boolean, date, dateTime, decimal, int, long, string, time, uuid.
 
 **Note:** by default, the parameter type is set to string.
+
+### 4.4.1. Loading a dashboard from JSON file <a name='loading-a-dashboard-from-json-file'></a>
+
+You can load a dashboard to the screen from JSON file. Use `jsonPath` attribute and set the relative path to the file in the XML descriptor. For example:
+
+```xml
+         <dashboard:dashboard id="dashboardId"
+                              jsonPath="com/haulmont/sample/petclinic/web/screens/main/Users Dashboard.json"
+                              timerDelay="60">
+              <dashboard:parameter name="role" value="Admin" type="string"/>           
+         </dashboard:dashboard>
+     ...
+```
+
+A dashboard created in the *Dashboard Editor* screen can be exported into JSON file, just click the *Export json* button and specify the path to the file.
+
+Also, you can import a dashboard from the file in the *Dashboard Editor* screen, just click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
