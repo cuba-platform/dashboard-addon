@@ -3,10 +3,12 @@
     <a href="https://travis-ci.org/cuba-platform/dashboard-addon"><img src="https://travis-ci.org/cuba-platform/dashboard-addon.svg?branch=master" alt="Build Status" title=""></a>
 </p>
 
-- [Introduction](#introduction)   
+# Dashboards
+
+- [Overview](#overview)   
 - [Installation](#installation)
-  - [Adding the Repository and the Component in CUBA Studio](#adding-cuba)  
-  - [Adding the Repository and the Component in build.gradle](#adding-build)
+  - [From the Marketplace](#from-the-marketplace)  
+  - [By coordinates](#by-coordinates)
 - [Configuration](#configuration)
   - [Extending Application Theme](#extending-application-theme)
   - [Adding Widget Types](#adding-widget-types)
@@ -29,7 +31,7 @@
    - [Loading a dashboard from JSON file](#loading-a-dashboard-from-json-file)
 
 
-# 1. Introduction <a name="introduction"></a>
+# 1. Overview <a name="overview"></a>
 
 This component enables creating and embedding dashboards into your application screens. Dashboards allow visualizing summarized information, data sets, charts and can be accessible only by authorized users.
 
@@ -43,55 +45,46 @@ See [webinar](https://www.youtube.com/watch?v=nl-wsnC9K4A) on the CUBA Platform 
 
 # 2. Installation <a name="installation"></a>
 
-To install the component it is necessary to add repository and component in CUBA Studio or in a build.gradle file. The complete add-ons installation guide see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/app_components_usage.html).
+The add-on can be added to your project in one of the ways described below.
 
-## 2.1. Adding the Repository and the Component in CUBA Studio <a name="adding-cuba"></a>
+## 2.1. From the Marketplace <a name="from-the-marketplace"></a>
 
-1. Open your application in CUBA Studio.
-2. Open *Project -> Properties* in the project tree.
-3. On the *App components* panel click the *Plus* button next to *Custom components*.
-4. Paste the add-on coordinates in the corresponding field as follows: `group:name:version`.
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the  [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
 
- - Artifact group: *com.haulmont.addon.dashboard*
- - Artifact name: *dashboard-global*
- - Version: *add-on version*
+  ![marketplace](img/marketplace.png)
 
-Specify the add-on version compatible with the used version of the CUBA platform.
+3. Find the Dashboards add-on there.
 
-| Platform Version  | Component Version |
-|-------------------|-------------------|
-| 7.1.X             | 3.1.1             |
-| 7.0.X             | 3.0.4             |
-| 6.10.X            | 2.0.1             |
+  ![addons](img/addons.png)
 
-5. Click *OK* in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
+4. Click *Install* and apply the changes.
+The addon corresponding to the used platform version will be installed.
 
-4. Save the project properties by clicking *OK*.
 
-## 2.2. Add the Repository and the Component in build.gradle <a name="adding-build"></a>
+## 2.2. By Coordinates <a name="by-coordinates"></a>
 
-Another way to install the add-on is to edit `build.gradle` file:
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
+3. Click the icon in the upper-right corner.
 
-1. Open `build.gradle` and specify the add-on coordinates in the root `dependencies` section:
+ ![by-coordinates](img/by-coordinates.png)
 
-```groovy
-dependencies {
-    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    // your add-ons go here
-    appComponent("com.haulmont.addon.dashboard:dashboard-global:2.0.0")
-}
-```
+4. Paste the add-on coordinates in the corresponding field as follows:
 
-2. Execute `gradlew idea` in the command line to include add-on in your project’s development environment.
+ `com.haulmont.addon.dashboard:dashboard-global:<add-on version>`
 
-3. Edit `web.xml` files of the **core** and **web** modules and add the add-on identifier (which is equal to Maven `groupId`) to the space-separated list of application components in the `appComponents` context parameter:
+ where `<add-on version>` is compatible with the used version of the CUBA platform.
 
-```xml
-<context-param>
-    <param-name>appComponents</param-name>
-    <param-value>com.haulmont.cuba com.haulmont.addon.dashboard</param-value>
-</context-param>
-```
+ | Platform Version | Add-on Version |
+|------------------|----------------|
+| 7.1.X            | 3.1.1          |
+| 7.0.X            | 3.0.4          |
+| 6.10.X           | 2.0.1          |
+
+5. Click *Install* and apply the changes. The add-on will be installed to your project.
+
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage).
 
 # 3.Configuration <a name="configuration"></a>
 
@@ -346,7 +339,7 @@ To open the *Dashboard Groups* browser, click the *Groups* button in the *Dashbo
 
  ![widget-template-browser](img/widget-template-browser.png)
 
-## 4.3.1 Widget Template Editor <a name="widget-template-editor"></a>
+### 4.3.1 Widget Template Editor <a name="widget-template-editor"></a>
 
 This screen allows editing a widget and consists of the following elements:
 
@@ -369,7 +362,7 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![widget-editor-customize](img/widget-editor-customize.png)
 
-## 4.3.2 Parameter Editor <a name='parameter-editor'></a>
+### 4.3.2 Parameter Editor <a name='parameter-editor'></a>
 
  This screen allows editing parameters. A parameter is a key-value pair, where the *Name* field is the key and the *Value* field is a value.
  The following types of values are available:
