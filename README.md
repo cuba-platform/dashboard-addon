@@ -45,7 +45,10 @@ See [webinar](https://www.youtube.com/watch?v=nl-wsnC9K4A) on the CUBA Platform 
 
 # 2. Installation <a name="installation"></a>
 
-The add-on can be added to your project in one of the ways described below.
+The add-on can be added to your project in one of the ways described below. Installation from the Marketplace is the simplest way. The last version of the add-on compatible with the used version of the platform will be installed.
+Also, you can install the add-on by coordinates choosing the required version of the add-on from the table.
+
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage)
 
 ## 2.1. From the Marketplace <a name="from-the-marketplace"></a>
 
@@ -59,7 +62,7 @@ The add-on can be added to your project in one of the ways described below.
   ![addons](img/addons.png)
 
 4. Click *Install* and apply the changes.
-The addon corresponding to the used platform version will be installed.
+The add-on corresponding to the used platform version will be installed.
 
 
 ## 2.2. By Coordinates <a name="by-coordinates"></a>
@@ -83,8 +86,6 @@ The addon corresponding to the used platform version will be installed.
 | 6.10.X           | 2.0.1          |
 
 5. Click *Install* and apply the changes. The add-on will be installed to your project.
-
-In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage).
 
 # 3.Configuration <a name="configuration"></a>
 
