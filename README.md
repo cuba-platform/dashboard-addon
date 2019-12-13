@@ -3,10 +3,12 @@
     <a href="https://travis-ci.org/cuba-platform/dashboard-addon"><img src="https://travis-ci.org/cuba-platform/dashboard-addon.svg?branch=master" alt="Build Status" title=""></a>
 </p>
 
-- [Introduction](#introduction)   
+# Dashboards
+
+- [Overview](#overview)   
 - [Installation](#installation)
-  - [Adding the Repository and the Component in CUBA Studio](#adding-cuba)  
-  - [Adding the Repository and the Component in build.gradle](#adding-build)
+  - [From the Marketplace](#from-the-marketplace)  
+  - [By coordinates](#by-coordinates)
 - [Configuration](#configuration)
   - [Extending Application Theme](#extending-application-theme)
   - [Adding Widget Types](#adding-widget-types)
@@ -25,11 +27,11 @@
   - [Widget Templates](#widget-templates)
    - [Widget Template Editor](#widget-template-editor)
    - [Parameter Editor](#parameter-editor)
- - [Export and Import JSON file](#export-and-import-json-file)
  - [Integration of the Component Dashboard-UI](#integration-of-the-dashboard-ui-component)
+   - [Loading a dashboard from JSON file](#loading-a-dashboard-from-json-file)
 
 
-# 1. Introduction <a name="introduction"></a>
+# 1. Overview <a name="overview"></a>
 
 This component enables creating and embedding dashboards into your application screens. Dashboards allow visualizing summarized information, data sets, charts and can be accessible only by authorized users.
 
@@ -39,57 +41,51 @@ You can add your own widgets or use  [Dashboard Chart Add-on](https://github.com
 
 See [sample application](https://github.com/cuba-platform/dashboard-addon-demo) using this add-on.
 
+See [webinar](https://www.youtube.com/watch?v=nl-wsnC9K4A) on the CUBA Platform channel.
+
 # 2. Installation <a name="installation"></a>
 
-To install the component it is necessary to add repository and component in CUBA Studio or in a build.gradle file. The complete add-ons installation guide see in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/app_components_usage.html).
+The add-on can be added to your project in one of the ways described below. Installation from the Marketplace is the simplest way. The last version of the add-on compatible with the used version of the platform will be installed.
+Also, you can install the add-on by coordinates choosing the required version of the add-on from the table.
 
-## 2.1. Adding the Repository and the Component in CUBA Studio <a name="adding-cuba"></a>
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage)
 
-1. Open your application in CUBA Studio.
-2. Open *Project -> Properties* in the project tree.
-3. On the *App components* panel click the *Plus* button next to *Custom components*.
-4. Paste the add-on coordinates in the corresponding field as follows: `group:name:version`.
+## 2.1. From the Marketplace <a name="from-the-marketplace"></a>
 
- - Artifact group: *com.haulmont.addon.dashboard*
- - Artifact name: *dashboard-global*
- - Version: *add-on version*
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the  [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
 
-Specify the add-on version compatible with the used version of the CUBA platform.
+  ![marketplace](img/marketplace.png)
 
-| Platform Version  | Component Version |
-|-------------------|-------------------|
-| 7.1.X             | 3.1.1             |
-| 7.0.X             | 3.0.4             |
-| 6.10.X            | 2.0.1             |
+3. Find the Dashboards add-on there.
 
-5. Click *OK* in the dialog. Studio will try to find the add-on binaries in the repository currently selected for the project. If it is found, the dialog will close and the add-on will appear in the list of custom components.
+  ![addons](img/addons.png)
 
-4. Save the project properties by clicking *OK*.
+4. Click *Install* and apply the changes.
+The add-on corresponding to the used platform version will be installed.
 
-## 2.2. Add the Repository and the Component in build.gradle <a name="adding-build"></a>
 
-Another way to install the add-on is to edit `build.gradle` file:
+## 2.2. By Coordinates <a name="by-coordinates"></a>
 
-1. Open `build.gradle` and specify the add-on coordinates in the root `dependencies` section:
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
+3. Click the icon in the upper-right corner.
 
-```groovy
-dependencies {
-    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    // your add-ons go here
-    appComponent("com.haulmont.addon.dashboard:dashboard-global:2.0.0")
-}
-```
+ ![by-coordinates](img/by-coordinates.png)
 
-2. Execute `gradlew idea` in the command line to include add-on in your project’s development environment.
+4. Paste the add-on coordinates in the corresponding field as follows:
 
-3. Edit `web.xml` files of the **core** and **web** modules and add the add-on identifier (which is equal to Maven `groupId`) to the space-separated list of application components in the `appComponents` context parameter:
+ `com.haulmont.addon.dashboard:dashboard-global:<add-on version>`
 
-```xml
-<context-param>
-    <param-name>appComponents</param-name>
-    <param-value>com.haulmont.cuba com.haulmont.addon.dashboard</param-value>
-</context-param>
-```
+ where `<add-on version>` is compatible with the used version of the CUBA platform.
+
+ | Platform Version | Add-on Version |
+|------------------|----------------|
+| 7.1.X            | 3.1.1          |
+| 7.0.X            | 3.0.4          |
+| 6.10.X           | 2.0.1          |
+
+5. Click *Install* and apply the changes. The add-on will be installed to your project.
 
 # 3.Configuration <a name="configuration"></a>
 
@@ -344,7 +340,7 @@ To open the *Dashboard Groups* browser, click the *Groups* button in the *Dashbo
 
  ![widget-template-browser](img/widget-template-browser.png)
 
-## 4.3.1 Widget Template Editor <a name="widget-template-editor"></a>
+### 4.3.1 Widget Template Editor <a name="widget-template-editor"></a>
 
 This screen allows editing a widget and consists of the following elements:
 
@@ -367,7 +363,7 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![widget-editor-customize](img/widget-editor-customize.png)
 
-## 4.3.2 Parameter Editor <a name='parameter-editor'></a>
+### 4.3.2 Parameter Editor <a name='parameter-editor'></a>
 
  This screen allows editing parameters. A parameter is a key-value pair, where the *Name* field is the key and the *Value* field is a value.
  The following types of values are available:
@@ -386,18 +382,12 @@ When a user clicks the *Customize* button, the enhanced widget editor will be op
 
  ![parameter-editor](img/parameter-editor.png)
 
-## 4.4 Export and Import JSON file <a name='export-and-import-json-file'></a>
-
-You are able to export the created dashboard into JSON file, just click the *Export json* button in the *Dashboard Editor* screen and specify the path to the file.
-
-To import a dashboard from the file click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
-
-## 4.5. Integration of the Dashboard-UI Component <a name='integration-of-the-dashboard-ui-component'></a>
+## 4.4. Integration of the Dashboard-UI Component <a name='integration-of-the-dashboard-ui-component'></a>
 
 To use the `dashboard-ui` component in your screen, you need to add the special scheme `http://schemas.haulmont.com/cubadshb/ui-component.xsd` in the XML descriptor of the screen.    
 Then add a namespace like `dashboard` for the schema. The schema contains information about the tag `dashboard`, which can contain the `parameter` elements.
 
-### Usage Example
+Here is an example of adding dashboard to the screen:
 
 ```xml
  <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -406,14 +396,14 @@ Then add a namespace like `dashboard` for the schema. The schema contains inform
          xmlns:dashboard="http://schemas.haulmont.com/cubadshb/ui-component.xsd">   
      ...
          <dashboard:dashboard id="dashboardId"
-                         code="usersDashboard"
-                         timerDelay="60">
+                              code="usersDashboard"
+                              timerDelay="60">
               <dashboard:parameter name="role" value="Admin" type="string"/>           
          </dashboard:dashboard>
      ...
 ```
 
-#### Dashboard Tag Attributes
+Dashboard tag contains the following attributes:
 
 - `code` - the attribute which will serve for a dashboard search in a database;
 - `jsonPath` - the `classPath` to the dashboard JSON file;
@@ -422,10 +412,27 @@ Then add a namespace like `dashboard` for the schema. The schema contains inform
 
 **Note:** when embedding a dashboard, you must specify the `code` or `jsonPath` attribute. When specifying at the same time, the attribute `code` takes precedence over `jsonPath`.
 
-#### Parameter Tag Attributes
+Dashboard parameter tag has the following attributes:
 
 - `name` - the name of the parameter, required;
 - `value` - the value of the parameter, required;
 - `type` - the type of the value, can take one of the following values: boolean, date, dateTime, decimal, int, long, string, time, uuid.
 
 **Note:** by default, the parameter type is set to string.
+
+### 4.4.1. Loading a dashboard from JSON file <a name='loading-a-dashboard-from-json-file'></a>
+
+You can load a dashboard to the screen from JSON file. Use `jsonPath` attribute and set the relative path to the file in the XML descriptor. For example:
+
+```xml
+         <dashboard:dashboard id="dashboardId"
+                              jsonPath="com/haulmont/sample/petclinic/web/screens/main/Users Dashboard.json"
+                              timerDelay="60">
+              <dashboard:parameter name="role" value="Admin" type="string"/>           
+         </dashboard:dashboard>
+     ...
+```
+
+A dashboard created in the *Dashboard Editor* screen can be exported into JSON file, just click the *Export json* button and specify the path to the file.
+
+Also, you can import a dashboard from the file in the *Dashboard Editor* screen, just click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
