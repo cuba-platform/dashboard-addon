@@ -15,6 +15,7 @@
  */
 package com.haulmont.addon.dashboard.web.dashboard.frames.view;
 
+import com.haulmont.addon.dashboard.gui.components.DashboardFrame;
 import com.haulmont.addon.dashboard.web.dashboard.frames.uicomponent.WebDashboardFrame;
 import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.AbstractWindow;
@@ -35,14 +36,20 @@ public class DashboardView extends AbstractWindow {
     @Inject
     protected Fragments fragments;
 
+    protected DashboardFrame dashboardFrame;
+
     @Override
     public void init(Map<String, Object> params) {
         if (params.containsKey(DISPLAY_NAME)) {
             setCaption((String) params.get(DISPLAY_NAME));
         }
-        add(fragments.create(this, WebDashboardFrame.class, new MapScreenOptions(params))
-                .init()
-                .getFragment());
+        WebDashboardFrame webDashboardFrame = (WebDashboardFrame) fragments.create(this, WebDashboardFrame.class, new MapScreenOptions(params)).init();
+        add(webDashboardFrame.getFragment());
+        dashboardFrame = webDashboardFrame;
+    }
+
+    public DashboardFrame getDashboardFrame() {
+        return dashboardFrame;
     }
 
 
