@@ -131,7 +131,7 @@ public class WebDashboardFrame extends AbstractFrame implements DashboardFrame {
     public void init(Map<String, Object> params) {
         super.init(params);
         setCode(StringUtils.isEmpty(code) ? (String) params.getOrDefault(CODE, "") : code);
-        refresh();
+        refresh(params);
         if (dashboard != null) {
             initAssistant(this);
             initTimer(getFrame());
