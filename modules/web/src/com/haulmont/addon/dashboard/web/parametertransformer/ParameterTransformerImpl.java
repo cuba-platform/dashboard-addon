@@ -231,12 +231,12 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         } else if (obj instanceof EnumClass) {
             return new EnumParameterValue(obj.getClass().toString());
         } else if (obj instanceof Entity) {
-            return new EntityParameterValue(obj.getClass().toString(), ((Entity) obj).getId().toString(), null);
+            return new EntityParameterValue(metadata.getClassNN(obj.getClass()).getName(), ((Entity) obj).getId().toString(), null);
         } else if (obj instanceof List) {
             List<?> list = (List) obj;
             List<EntityParameterValue> entityList = list.stream()
                     .filter(t -> t instanceof Entity)
-                    .map(entity -> new EntityParameterValue(entity.getClass().toString(), ((Entity) entity).getId().toString(), null))
+                    .map(entity -> new EntityParameterValue(metadata.getClassNN(obj.getClass()).getName(), ((Entity) entity).getId().toString(), null))
                     .collect(Collectors.toList());
             return new ListEntitiesParameterValue(entityList);
         }
