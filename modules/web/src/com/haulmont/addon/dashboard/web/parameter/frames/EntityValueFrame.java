@@ -30,10 +30,7 @@ import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -124,9 +121,9 @@ public class EntityValueFrame extends AbstractFrame implements ValueFrame {
     protected void metaClassValueChanged(MetaClass metaClass) {
         if (metaClass == null) {
             entitiesLookup.setValue(null);
-            entitiesLookup.setOptionsList(null);
+            entitiesLookup.setOptionsList(Collections.emptyList());
             viewLookup.setValue(null);
-            viewLookup.setOptionsList(null);
+            viewLookup.setOptionsList(Collections.emptyList());
         } else {
             loadEntities(metaClass);
             loadViewNames(metaClass);

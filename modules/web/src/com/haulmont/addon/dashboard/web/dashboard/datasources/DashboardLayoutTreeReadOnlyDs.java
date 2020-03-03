@@ -65,9 +65,6 @@ public class DashboardLayoutTreeReadOnlyDs extends CustomHierarchicalDatasource<
 
     @Override
     public UUID getParent(UUID itemId) {
-        if (itemId == null) {
-            return null;
-        }
         DashboardLayout item = findLayout(getRootLayout(), itemId);
         DashboardLayout root = getItems().stream()
                 .findFirst()
