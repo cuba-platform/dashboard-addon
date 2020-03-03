@@ -16,7 +16,7 @@
   -->
 
 <app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
-               dependsOn="com.haulmont.cuba, org.strangeway.responsive">
+               dependsOn="org.strangeway.responsive">
 
     <module name="global" blocks="*">
         <artifact name="dashboard-global" appJar="true"/>
