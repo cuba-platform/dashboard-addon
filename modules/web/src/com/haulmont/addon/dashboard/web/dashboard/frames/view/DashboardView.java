@@ -43,7 +43,10 @@ public class DashboardView extends AbstractWindow {
         if (params.containsKey(DISPLAY_NAME)) {
             setCaption((String) params.get(DISPLAY_NAME));
         }
-        WebDashboardFrame webDashboardFrame = (WebDashboardFrame) fragments.create(this, WebDashboardFrame.class, new MapScreenOptions(params)).init();
+        WebDashboardFrame webDashboardFrame =
+                (WebDashboardFrame) fragments.create(this, WebDashboardFrame.class,
+                        new MapScreenOptions(params)
+                ).init();
         add(webDashboardFrame.getFragment());
         dashboardFrame = webDashboardFrame;
     }
