@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.1.0'
+    ext.cubaVersion = rootProject.hasProperty('cubaVersion') ? rootProject['cubaVersion'] : '7.1-SNAPSHOT'
     repositories {
         mavenLocal()
 
@@ -85,7 +85,7 @@ limitations under the License.'''
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("org.strangeway.responsive:sw-responsive-global:1.3.0")
+    appComponent("org.strangeway.responsive:sw-responsive-global:1.4.0")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.4.1'
@@ -96,21 +96,13 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'cuba')
-    apply(plugin: 'groovy')
     apply(plugin: 'addon-gradle-plugin')
 
     sourceSets {
-        test {
-            groovy {
-                srcDirs = ['test']
-            }
-        }
     }
 
     dependencies {
-        compile('org.codehaus.groovy:groovy-all:2.4.11')
         testCompile('junit:junit:4.12')
-        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
         compile('org.javatuples:javatuples:1.2')
     }
 
