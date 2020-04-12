@@ -436,3 +436,10 @@ You can load a dashboard to the screen from JSON file. Use `jsonPath` attribute 
 A dashboard created in the *Dashboard Editor* screen can be exported into JSON file, just click the *Export json* button and specify the path to the file.
 
 Also, you can import a dashboard from the file in the *Dashboard Editor* screen, just click the *Import json* button, enter the path to the file, specify the unique code and click *OK* to save a dashboard.
+
+## 4.5. Predefined roles <a name='predefined-roles'></a>
+
+Predefined security roles:
+- **Dashboard admin role** - allows user to create or edit dashboards
+- **Dashboard view role** - allows user to see embedded dashboards
+- **Dashboard browse role** - allows user to browse a list of available dashboards
