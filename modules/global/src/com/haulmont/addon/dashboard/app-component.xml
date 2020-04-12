@@ -24,6 +24,8 @@
         <property name="cuba.persistenceConfig" value="+com/haulmont/addon/dashboard/persistence.xml"/>
         <property name="cuba.metadataConfig" value="+com/haulmont/addon/dashboard/metadata.xml"/>
         <property name="cuba.viewsConfig" value="+com/haulmont/addon/dashboard/views.xml"/>
+        <property name="cuba.creditsConfig"
+                  value="+com/haulmont/addon/dashboard/credits.xml"/>
     </module>
     <module name="core" dependsOn="global" blocks="core">
         <artifact name="dashboard-core" appJar="true"/>
