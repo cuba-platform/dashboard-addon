@@ -25,6 +25,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.screen.ScreenFragment;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.stereotype.Component;
 
@@ -73,8 +74,10 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         Class entityClass = metadata.getClass(parameter.getMetaClassName()).getJavaClass();
 
         LoadContext loadContext = LoadContext.create(entityClass)
-                .setId(java.util.UUID.fromString(parameter.getEntityId()))
-                .setView(parameter.getViewName());
+                .setId(java.util.UUID.fromString(parameter.getEntityId()));
+        if (parameter.getViewName() != null) {
+            loadContext.setView(parameter.getViewName());
+        }
 
         return dataManager.load(loadContext);
     }
@@ -142,14 +145,16 @@ public class ParameterTransformerImpl implements ParameterTransformer {
                 Entity entity = (Entity) FieldUtils.readField(field, widgetFrame, true);
                 if (entity != null) {
                     WidgetParam ann = field.getAnnotation(WidgetParam.class);
-                    parameterValue = new EntityParameterValue(field.getClass().toString(), entity.getId().toString(), ann.viewName());
+                    String viewName = StringUtils.isNoneBlank(ann.viewName()) ? ann.viewName() : null;
+                    parameterValue = new EntityParameterValue(entity.getMetaClass().getName(), entity.getId().toString(), viewName);
                 }
             } else if (parameterType == LIST_ENTITY) {
                 List<Entity> listEntity = (List) FieldUtils.readField(field, widgetFrame, true);
                 WidgetParam ann = field.getAnnotation(WidgetParam.class);
                 if (listEntity != null) {
+                    String viewName = StringUtils.isNoneBlank(ann.viewName()) ? ann.viewName() : null;
                     List<EntityParameterValue> resultList = listEntity.stream()
-                            .map(entity -> new EntityParameterValue(field.getClass().toString(), entity.getId().toString(), ann.viewName()))
+                            .map(entity -> new EntityParameterValue(entity.getMetaClass().getName(), entity.getId().toString(), viewName))
                             .collect(Collectors.toList());
                     parameterValue = new ListEntitiesParameterValue(resultList);
                 }
@@ -231,12 +236,14 @@ public class ParameterTransformerImpl implements ParameterTransformer {
         } else if (obj instanceof EnumClass) {
             return new EnumParameterValue(obj.getClass().toString());
         } else if (obj instanceof Entity) {
-            return new EntityParameterValue(obj.getClass().toString(), ((Entity) obj).getId().toString(), null);
+            Entity entity = (Entity) obj;
+            return new EntityParameterValue(entity.getMetaClass().getName(), entity.getId().toString(), null);
         } else if (obj instanceof List) {
             List<?> list = (List) obj;
             List<EntityParameterValue> entityList = list.stream()
                     .filter(t -> t instanceof Entity)
-                    .map(entity -> new EntityParameterValue(entity.getClass().toString(), ((Entity) entity).getId().toString(), null))
+                    .map(t -> (Entity) t)
+                    .map(entity -> new EntityParameterValue(entity.getMetaClass().getName(), entity.getId().toString(), null))
                     .collect(Collectors.toList());
             return new ListEntitiesParameterValue(entityList);
         }
