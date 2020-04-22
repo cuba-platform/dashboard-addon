@@ -27,7 +27,7 @@ import com.haulmont.cuba.security.role.EntityAttributePermissionsContainer;
 import com.haulmont.cuba.security.role.EntityPermissionsContainer;
 import com.haulmont.cuba.security.role.ScreenPermissionsContainer;
 
-@Role(name = "Dashboard view role")
+@Role(name = "Dashboard view")
 public class DashboardViewRole extends AnnotatedRoleDefinition {
 
     @ScreenAccess(screenIds = {"dashboard$PersistentDashboard.view"})

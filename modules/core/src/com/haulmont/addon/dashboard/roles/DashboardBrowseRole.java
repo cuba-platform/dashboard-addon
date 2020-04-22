@@ -26,7 +26,7 @@ import com.haulmont.cuba.security.role.EntityPermissionsContainer;
 import com.haulmont.cuba.security.role.ScreenComponentPermissionsContainer;
 import com.haulmont.cuba.security.role.ScreenPermissionsContainer;
 
-@Role(name = "Dashboard browse role")
+@Role(name = "Dashboard browse")
 public class DashboardBrowseRole extends AnnotatedRoleDefinition {
 
     @ScreenAccess(screenIds = {"dashboard",
@@ -53,7 +53,7 @@ public class DashboardBrowseRole extends AnnotatedRoleDefinition {
         return super.entityAttributePermissions();
     }
 
-    @ScreenComponentAccess(screenId = "dashboard$PersistentDashboard.browse", deny = {"edit"})
+    @ScreenComponentAccess(screenId = "dashboard$PersistentDashboard.browse", deny = {"create", "edit", "remove", "createBtn", "editBtn", "removeBtn", "dashboardGroupsBrowse"})
     @Override
     public ScreenComponentPermissionsContainer screenComponentPermissions() {
         return super.screenComponentPermissions();

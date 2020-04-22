@@ -441,6 +441,6 @@ Also, you can import a dashboard from the file in the *Dashboard Editor* screen,
 ## 4.5. Predefined roles <a name='predefined-roles'></a>
 
 Predefined security roles:
-- **Dashboard admin role** - allows user to create or edit dashboards
-- **Dashboard view role** - allows user to see embedded dashboards
-- **Dashboard browse role** - allows user to browse a list of available dashboards
+- **Dashboard admin** - allows user to create or edit dashboards
+- **Dashboard view** - allows user to see embedded dashboards
+- **Dashboard browse** - allows user to browse a list of available dashboards
