@@ -1,0 +1,5 @@
+@import "helium-ext";
+
+@mixin com_haulmont_addon_dashboard {
+  @include com_haulmont_addon_dashboard-helium-ext;
+}
