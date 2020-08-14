@@ -75,7 +75,7 @@ public class CanvasEditorFrame extends CanvasFrame implements DashboardLayoutHol
             }
         }
 
-        for (Component child : layout.getComponents()) {
+        for (Component child : layout.getOwnComponents()) {
             if (child instanceof ComponentContainer) {
                 selectLayout((ComponentContainer) child, layoutUuid, needSelect);
             }
