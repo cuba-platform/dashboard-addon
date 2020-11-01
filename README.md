@@ -29,6 +29,7 @@
    - [Parameter Editor](#parameter-editor)
  - [Integration of the Component Dashboard-UI](#integration-of-the-dashboard-ui-component)
    - [Loading a dashboard from JSON file](#loading-a-dashboard-from-json-file)
+ - [Predefined Roles](#predefined-roles)
 
 
 # 1. Overview <a name="overview"></a>
@@ -48,7 +49,7 @@ See [webinar](https://www.youtube.com/watch?v=nl-wsnC9K4A) on the CUBA Platform 
 The add-on can be added to your project in one of the ways described below. Installation from the Marketplace is the simplest way. The last version of the add-on compatible with the used version of the platform will be installed.
 Also, you can install the add-on by coordinates choosing the required version of the add-on from the table.
 
-In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage)
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage).
 
 ## 2.1. From the Marketplace <a name="from-the-marketplace"></a>
 
@@ -215,13 +216,13 @@ After installation the add-on in your project the *Dashboard* menu will appear c
 ### 4.1.1 Dashboard Fields <a name='dashboard-fields'></a>
 
 To save the created dashboard it is necessary to fill in at least the required fields:
-- *Title* - a name of the dashboard;
-- *Code* - a unique identifier for a more convenient search in a database;
+- *Title* - a name of the dashboard.
+- *Code* - a unique identifier for a more convenient search in a database.
 
 The following fields are available to set:
-- *Refresh period (sec)* - a time period in seconds for refresh a dashboard UI;
+- *Refresh period (sec)* - a time period in seconds for refresh a dashboard UI.
 - *Assistant bean name* - an optional reference to a Spring bean class that should be used for customizing the dashboard (assistance bean must have `prototype` bean scope).
-- *Group* - a dashboard group;
+- *Group* - a dashboard group.
 - *Available for all users* - a flag which defines the user access to the dashboard. If set to `false`, then only the user who created the dashboard can view and edit it. Otherwise, all users can view and edit the dashboard.
 
 ### 4.1.2 Dashboard Parameters <a name='dashboards-parameters'></a>
@@ -277,11 +278,11 @@ Click on a layout or a widget to select it. The selected element contains the pa
 
 ![layout-buttons](img/layout-buttons.png)    
 
-![trash](img/trash.png) - deletes a container from the canvas;
+![trash](img/trash.png) - deletes a container from the canvas.
 
-![gear](img/gear.png) - opens the *Widget Editor*;
+![gear](img/gear.png) - opens the *Widget Editor*.
 
-![template](img/template.png) - opens the *Template Weidget Editor*
+![template](img/template.png) - opens the *Template Weidget Editor*.
 
 ![arrows](img/arrows.png) - changes the weight (expand ratio) of a container in a parent container, or define `colspan` and `rowspan` attributes for the grid layout cells:
 
@@ -317,10 +318,10 @@ The following actions are available for the tree elements from the context menu:
 
 This panel contains the following buttons:
 
-- *OK* - saves the dashboard and close the editor;
-- *Cancel* - closes the editor without saving the dashboard;
-- *Propagate* - publishes event `com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent`;
-- *Export Json* - export the dashboard to a JSON file;
+- *OK* - saves the dashboard and close the editor.
+- *Cancel* - closes the editor without saving the dashboard.
+- *Propagate* - publishes event `com.haulmont.addon.dashboard.web.events.DashboardUpdatedEvent`.
+- *Export Json* - export the dashboard to a JSON file.
 - *Import Json* - import the dashboard from a JSON file and refresh the editor.
 
 ## 4.2 Dashboard Groups <a name='dashboard-groups'></a>
@@ -441,6 +442,6 @@ Also, you can import a dashboard from the file in the *Dashboard Editor* screen,
 ## 4.5. Predefined roles <a name='predefined-roles'></a>
 
 Predefined security roles:
-- **Dashboard admin** - allows user to create or edit dashboards
-- **Dashboard view** - allows user to see embedded dashboards
-- **Dashboard browse** - allows user to browse a list of available dashboards
+- **Dashboard admin** - allows user to create and edit dashboards and widget templates.
+- **Dashboard view** - allows user to see embedded dashboards.
+- **Dashboard browse** - allows user to view a list of available dashboards.
